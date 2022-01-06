@@ -1,4 +1,4 @@
-site_name: K3s
+site_name: K3s - Lightweight Kubernetes
 repo_url: https://github.com/k3s-io/k3s
 strict: false
 theme:

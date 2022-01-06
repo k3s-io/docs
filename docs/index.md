@@ -1,5 +1,5 @@
 
-# K3s - Lightweight Kubernetes
+![](./assets/logo-k3s.svg)
 
 Lightweight Kubernetes. Easy to install, half the memory, all in a binary of less than 100 MB.
 
