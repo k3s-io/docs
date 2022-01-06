@@ -1,0 +1,62 @@
+site_name: K3s
+repo_url: https://github.com/k3s-io/k3s
+strict: false
+theme:
+  name: material
+  palette:
+    primary: amber
+  font:
+    text: 'Poppins'
+  logo: 'assets/logo-inv.svg'
+  favicon: 'assets/favicon-32x32.png'
+plugins:
+  - search
+markdown_extensions:
+- codehilite
+- admonition
+- pymdownx.tabbed:
+   alternate_style: true 
+- pymdownx.superfences
+- toc:
+    permalink: true
+nav:
+  - index.md
+  - quick_start.md
+  - architecture.md
+  - Installation:
+    - Overview: install/installation.md
+    - Install Requirements:
+      - Overview: install/install-requirements/install_requirements.md
+      - install/install-requirements/resource_profiling.md
+    - Install Options:
+      - Overview: install/install-options/install_options.md
+      - install/install-options/server_config.md
+      - install/install-options/agent_config.md
+      - install/install-options/how_to_flags.md
+    - install/network_options.md
+    - install/ha_external.md
+    - install/ha_embedded.md
+    - install/datastore.md
+    - install/private_registry.md
+    - install/airgap.md
+    - install/disable_flags.md
+    - install/kubernetes_dashboard.md
+    - install/uninstall.md
+  - Upgrades:
+    - Overview: upgrades/upgrades.md
+    - upgrades/basic.md
+    - upgrades/automated.md
+    - upgrades/killall.md
+  - cluster_access.md
+  - backup_restore.md
+  - volumes_storage.md
+  - networking.md
+  - helm.md
+  - advanced.md
+  - faq.md
+  - known_issues.md
+  - Security:
+    - Overview: security/index.md
+    - security/hardening_guide.md
+    - security/self_assessment.md
+    - security/secrets_encryption.md
