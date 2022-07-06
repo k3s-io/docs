@@ -24,7 +24,8 @@ module.exports = {
       title: "",
       logo: {
         alt: 'logo',
-        src: 'img/k3s-horizontal-color.svg',
+        src: 'img/k3s-logo-light.svg',
+        srcDark: 'img/k3s-logo-dark.svg',
       },
       items: [
         {
