@@ -52,8 +52,8 @@ When running the K3s script with the `INSTALL_K3S_SKIP_DOWNLOAD` environment var
 
 You can install K3s on one or more servers as described below.
 
-{{% tabs %}}
-{{% tab "Single Server Configuration" %}}
+<Tabs>
+<TabItem value="Single Server Configuration" default>
 
 To install K3s on a single server, simply do the following on the server node:
 
@@ -67,8 +67,8 @@ Then, to optionally add additional agents do the following on each agent node. T
 INSTALL_K3S_SKIP_DOWNLOAD=true K3S_URL=https://myserver:6443 K3S_TOKEN=mynodetoken ./install.sh
 ```
 
-{{% /tab %}}
-{{% tab "High Availability Configuration" %}}
+</TabItem>
+<TabItem value="High Availability Configuration" default>
 
 Reference the [High Availability with an External DB](/installation/ha) or [High Availability with Embedded DB](/installation/ha-embedded) guides. You will be tweaking install commands so you specify `INSTALL_K3S_SKIP_DOWNLOAD=true` and run your install script locally instead of via curl. You will also utilize `INSTALL_K3S_EXEC='args'` to supply any arguments to k3s.
 
@@ -85,8 +85,8 @@ Instead, you would modify such examples like below:
 INSTALL_K3S_SKIP_DOWNLOAD=true INSTALL_K3S_EXEC='server' K3S_DATASTORE_ENDPOINT='mysql://username:password@tcp(hostname:3306)/database-name' ./install.sh
 ```
 
-{{% /tab %}}
-{{% /tabs %}}
+</TabItem>
+</Tabs>
 
 >**Note:** K3s additionally provides a `--resolv-conf` flag for kubelets, which may help with configuring DNS in air-gap networks.
 

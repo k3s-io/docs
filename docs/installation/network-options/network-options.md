@@ -3,6 +3,9 @@ title: "Network Options"
 weight: 25
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 > **Note:** Please reference the [Networking](/networking) page for information about CoreDNS, Traefik, and the Service LB.
 
 By default, K3s will run with flannel as the CNI, using VXLAN as the default backend. To change the CNI, refer to the section on configuring a [custom CNI](#custom-cni). To change the flannel backend, refer to the flannel options section.
@@ -15,18 +18,18 @@ If you wish to use WireGuard as your flannel backend it may require additional k
 
   CLI Flag and Value | Description
   -------------------|------------
- <span style="white-space: nowrap">`--flannel-backend=vxlan`</span> | (Default) Uses the VXLAN backend. |
- <span style="white-space: nowrap">`--flannel-backend=ipsec`</span> | Uses the IPSEC backend which encrypts network traffic. |
- <span style="white-space: nowrap">`--flannel-backend=host-gw`</span> |  Uses the host-gw backend. |
- <span style="white-space: nowrap">`--flannel-backend=wireguard`</span> | Uses the WireGuard backend which encrypts network traffic. May require additional kernel modules and configuration. |
- <span style="white-space: nowrap">`--flannel-ipv6-masq`</span> | Apply masquerading rules to IPv6 traffic (default for IPv4). Only applies on dual-stack or IPv6-only clusters |
+ `--flannel-backend=vxlan` | (Default) Uses the VXLAN backend. |
+ `--flannel-backend=ipsec` | Uses the IPSEC backend which encrypts network traffic. |
+ `--flannel-backend=host-gw` |  Uses the host-gw backend. |
+ `--flannel-backend=wireguard` | Uses the WireGuard backend which encrypts network traffic. May require additional kernel modules and configuration. |
+ `--flannel-ipv6-masq` | Apply masquerading rules to IPv6 traffic (default for IPv4). Only applies on dual-stack or IPv6-only clusters |
 
 ### Custom CNI
 
 Run K3s with `--flannel-backend=none` and install your CNI of choice. Most CNI plugins come with their own network policy engine, so it is recommended to set `--disable-network-policy` as well to avoid conflicts. IP Forwarding should be enabled for Canal and Calico. Please reference the steps below.
 
-{{% tabs %}}
-{{% tab "Canal" %}}
+<Tabs>
+<TabItem value="Canal" default>
 
 Visit the [Project Calico Docs](https://docs.projectcalico.org/) website. Follow the steps to install Canal. Modify the Canal YAML so that IP forwarding is allowed in the container_settings section, for example:
 
@@ -46,8 +49,8 @@ cat /etc/cni/net.d/10-canal.conflist
 
 You should see that IP forwarding is set to true.
 
-{{% /tab %}}
-{{% tab "Calico" %}}
+</TabItem>
+<TabItem value="Calico" default>
 
 Follow the [Calico CNI Plugins Guide](https://docs.projectcalico.org/master/reference/cni-plugin/configuration). Modify the Calico YAML so that IP forwarding is allowed in the container_settings section, for example:
 
@@ -68,8 +71,8 @@ cat /etc/cni/net.d/10-calico.conflist
 You should see that IP forwarding is set to true.
 
 
-{{% /tab %}}
-{{% /tabs %}}
+</TabItem>
+</Tabs>
 
 ### Dual-stack installation
 
