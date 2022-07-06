@@ -8,7 +8,7 @@ module.exports = {
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.png',
-  organizationName: 'rancher', // Usually your GitHub org/user name.
+  organizationName: 'k3s-io', // Usually your GitHub org/user name.
   projectName: 'k3s-docs', // Usually your repo name.
   trailingSlash: false,
   themeConfig: {
@@ -35,7 +35,7 @@ module.exports = {
           className: 'navbar__docs',
         },
         {
-          href: 'https://github.com/kubewarden/',
+          href: 'https://github.com/k3s-io/k3s/',
           label: 'GitHub',
           position: 'right',
           className: 'navbar__github btn btn-secondary icon-github',
@@ -57,7 +57,7 @@ module.exports = {
           /* other docs plugin options */
           sidebarPath: require.resolve('./sidebars.js'),
           showLastUpdateTime: true,
-          editUrl: 'https://github.com/kubewarden/docs/edit/main/',
+          editUrl: 'https://github.com/k3s-io/k3s/docs/edit/main/',
         },
         blog: false, // Optional: disable the blog plugin
         // ...

@@ -2,6 +2,9 @@
 title: "Private Registry Configuration"
 weight: 55
 ---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 _Available as of v1.0.0_
 
 Containerd can be configured to connect to private registries and use them to pull private images on the node.
@@ -76,8 +79,8 @@ Below are basic examples of using private registries in different modes:
 
 Below are examples showing how you may configure `/etc/rancher/k3s/registries.yaml` on each node when using TLS.
 
-{{% tabs %}}
-{{% tab "With Authentication" %}}
+<Tabs>
+<TabItem value="With Authentication">
 
 ```
 mirrors:
@@ -95,8 +98,8 @@ configs:
       ca_file:   # path to the ca file used in the registry
 ```
 
-{{% /tab %}}
-{{% tab "Without Authentication" %}}
+</TabItem>
+<TabItem value="Without Authentication">
 
 ```
 mirrors:
@@ -110,16 +113,15 @@ configs:
       key_file:  # path to the key file used in the registry
       ca_file:   # path to the ca file used in the registry
 ```
-
-{{% /tab %}}
-{{% /tabs %}}
+</TabItem>
+</Tabs>
 
 ### Without TLS
 
 Below are examples showing how you may configure `/etc/rancher/k3s/registries.yaml` on each node when _not_ using TLS.
 
-{{% tabs %}}
-{{% tab "With Authentication" %}}
+<Tabs>
+<TabItem value="With Authentication">
 
 ```
 mirrors:
@@ -133,8 +135,8 @@ configs:
       password: xxxxxx # this is the registry password
 ```
 
-{{% /tab %}}
-{{% tab "Without Authentication" %}}
+</TabItem>
+<TabItem value="Without Authentication">
 
 ```
 mirrors:
@@ -142,9 +144,8 @@ mirrors:
     endpoint:
       - "http://mycustomreg.com:5000"
 ```
-
-{{% /tab %}}
-{{% /tabs %}}
+</TabItem>
+</Tabs>
 
 > In case of no TLS communication, you need to specify `http://` for the endpoints, otherwise it will default to https.
  
