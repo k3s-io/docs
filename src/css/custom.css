@@ -37,15 +37,25 @@
 }
 /* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary-lightest: #ffdb71;
-  --ifm-color-primary-lighter: #ffd146;
-  --ifm-color-primary-light: #ffcd38	;
+  --ifm-color-primary: #06527a;
+  --ifm-color-primary-dark: #054a6e;
+  --ifm-color-primary-darker: #054668;
+  --ifm-color-primary-darkest: #043955;
+  --ifm-color-primary-light: #075a86;
+  --ifm-color-primary-lighter: #075e8c;
+  --ifm-color-primary-lightest: #086b9f;
+}
+/* Dark Mode Color Override */
+[data-theme='dark'] {
   --ifm-color-primary: #ffc61c;
   --ifm-color-primary-dark: #ffbf00;
   --ifm-color-primary-darker: #f1b400;
   --ifm-color-primary-darkest: #c69400;
-  --ifm-code-font-size: 95%;
+  --ifm-color-primary-light: #ffcd38;
+  --ifm-color-primary-lighter: #ffd146;
+  --ifm-color-primary-lightest: #ffdb71;
 }
+
 @media (max-width: 768px) {
   #theme-main h1 {
     font-size: 50px !important;
@@ -56,6 +66,8 @@
     margin-bottom: 20px;
   }
 }
+
+
 
 body {
   font-family: 'Lato', sans-serif;
