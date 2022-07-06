@@ -7,7 +7,7 @@ module.exports = {
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
-  favicon: 'img/favicon.png',
+  favicon: 'img/favicon.ico',
   organizationName: 'k3s-io', // Usually your GitHub org/user name.
   projectName: 'k3s-docs', // Usually your repo name.
   trailingSlash: false,
