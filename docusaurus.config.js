@@ -9,7 +9,7 @@ module.exports = {
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
   organizationName: 'k3s-io', // Usually your GitHub org/user name.
-  projectName: 'k3s-docs', // Usually your repo name.
+  projectName: 'docs', // Usually your repo name.
   trailingSlash: false,
   themeConfig: {
     colorMode: {
