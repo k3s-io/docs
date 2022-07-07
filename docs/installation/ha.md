@@ -35,7 +35,7 @@ K3s requires two or more server nodes for this HA configuration. See the [Instal
 
 When running the `k3s server` command on these nodes, you must set the `datastore-endpoint` parameter so that K3s knows how to connect to the external datastore. The `token` parameter can also be used to set a deterministic token when adding nodes. When empty, this token will be generated automatically for further use.
 
-For example, a command like the following could be used to install the K3s server with a MySQL database as the external datastore and [set a token](/installation/install-options/server-config/server-config#cluster-options):
+For example, a command like the following could be used to install the K3s server with a MySQL database as the external datastore and [set a token](/installation/install-options/server-config#cluster-options):
 
 ```bash
 curl -sfL https://get.k3s.io | sh -s - server \
@@ -43,12 +43,12 @@ curl -sfL https://get.k3s.io | sh -s - server \
   --datastore-endpoint="mysql://username:password@tcp(hostname:3306)/database-name"
 ```
 
-The datastore endpoint format differs based on the database type. For details, refer to the section on [datastore endpoint formats.](/installation/datastore/datastore#datastore-endpoint-format-and-functionality)
+The datastore endpoint format differs based on the database type. For details, refer to the section on [datastore endpoint formats.](/installation/datastore#datastore-endpoint-format-and-functionality)
 
-To configure TLS certificates when launching server nodes, refer to the [datastore configuration guide.](/installation/datastore/datastore#external-datastore-configuration-parameters)
+To configure TLS certificates when launching server nodes, refer to the [datastore configuration guide.](/installation/datastore#external-datastore-configuration-parameters)
 
 :::note
-The same installation options available to single-server installs are also available for high-availability installs. For more details, see the [Installation and Configuration Options](/installation/install-options/install-options) documentation.
+The same installation options available to single-server installs are also available for high-availability installs. For more details, see the [Installation and Configuration Options](/installation/install-options) documentation.
 :::
 
 By default, server nodes will be schedulable and thus your workloads can get launched on them. If you wish to have a dedicated control plane where no user workloads will run, you can use taints. The `node-taint` parameter will allow you to configure nodes with taints, for example `--node-taint CriticalAddonsOnly=true:NoExecute`.
@@ -74,7 +74,7 @@ If the first server node was started without the `--token` CLI flag or `K3S_TOKE
 cat /var/lib/rancher/k3s/server/token
 ```
 
-Additional server nodes can then be added [using the token](/installation/install-options/server-config/server-config#cluster-options):
+Additional server nodes can then be added [using the token](/installation/install-options/server-config#cluster-options):
 
 ```bash
 curl -sfL https://get.k3s.io | sh -s - server \

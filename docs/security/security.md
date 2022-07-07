@@ -7,5 +7,5 @@ This section describes the methodology and means of securing a K3s cluster. It's
 
 The documents below apply to CIS Kubernetes Benchmark v1.6.
 
-* [Hardening Guide](/security/hardening_guide/)
-* [CIS Benchmark Self-Assessment Guide](/security/self_assessment/)
+* [Hardening Guide](/security/hardening-guide)
+* [CIS Benchmark Self-Assessment Guide](/security/self-assessment)
