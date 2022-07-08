@@ -19,7 +19,6 @@ This section contains advanced information describing the different ways you can
 - [Running K3s with Rootless mode (Experimental)](#running-k3s-with-rootless-mode-experimental)
 - [Node labels and taints](#node-labels-and-taints)
 - [Starting the server with the installation script](#starting-the-server-with-the-installation-script)
-- [Additional preparation for Alpine Linux](#additional-preparation-for-alpine-linux-setup)
 - [Additional preparation for (Red Hat/CentOS) Enterprise Linux](#additional-preparation-for-red-hat/centos-enterprise-linux)
 - [Additional preparation for Raspberry Pi OS](#additional-preparation-for-raspberry-pi-os)
 - [Enabling vxlan on Ubuntu 21.10+ on Raspberry Pi](#enabling-vxlan-for-ubuntu-21.10+-on-raspberry-pi)
@@ -242,22 +241,6 @@ INFO[2019-01-22T15:16:20.541049100-07:00] Run: k3s kubectl
 The output will likely be much longer as the agent will create a lot of logs. By default the server
 will register itself as a node (run the agent).
 
-## Additional Preparation for Alpine Linux
-
-In order to set up Alpine Linux, you have to go through the following preparation:
-
-Update **/etc/update-extlinux.conf** by adding:
-
-```
-default_kernel_opts="...  cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory"
-```
-
-Then update the config and reboot:
-
-```bash
-update-extlinux
-reboot
-```
 ## Additional preparation for (Red Hat/CentOS) Enterprise Linux
 
 It is recommended to turn off firewalld:
