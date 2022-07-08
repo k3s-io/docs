@@ -19,29 +19,28 @@ This section contains advanced information describing the different ways you can
 - [Running K3s with Rootless mode (Experimental)](#running-k3s-with-rootless-mode-experimental)
 - [Node labels and taints](#node-labels-and-taints)
 - [Starting the server with the installation script](#starting-the-server-with-the-installation-script)
-- [Additional preparation for Alpine Linux setup](#additional-preparation-for-alpine-linux-setup)
+- [Additional preparation for Alpine Linux](#additional-preparation-for-alpine-linux-setup)
 - [Additional preparation for (Red Hat/CentOS) Enterprise Linux](#additional-preparation-for-red-hat/centos-enterprise-linux)
-- [Additional preparation for Raspberry Pi OS Setup](#additional-preparation-for-raspberry-pi-os-setup)
-- [Enabling vxlan on Ubuntu 21.10+ on Raspberry Pi](#enabling-vxlan-on-ubuntu-21.10+-on-raspberry-pi)
-- [Running K3d (K3s in Docker) and docker-compose](#running-k3d-k3s-in-docker-and-docker-compose)
+- [Additional preparation for Raspberry Pi OS](#additional-preparation-for-raspberry-pi-os)
+- [Enabling vxlan on Ubuntu 21.10+ on Raspberry Pi](#enabling-vxlan-for-ubuntu-21.10+-on-raspberry-pi)
+- [Running K3s in Docker](#running-k3s-in-docker)
 - [SELinux Support](#selinux-support)
 - [Enabling Lazy Pulling of eStargz (Experimental)](#enabling-lazy-pulling-of-estargz-experimental)
 - [Additional Logging Sources](#additional-logging-sources)
-- [Server and agent tokens](#server-and-agent-tokens)
 
-### Certificate Rotation
+## Certificate Rotation
 
 By default, certificates in K3s expire in 12 months.
 
 If the certificates are expired or have fewer than 90 days remaining before they expire, the certificates are rotated when K3s is restarted.
 
-### Auto-Deploying Manifests
+## Auto-Deploying Manifests
 
 Any file found in `/var/lib/rancher/k3s/server/manifests` will automatically be deployed to Kubernetes in a manner similar to `kubectl apply`, both on startup and when the file is changed on disk. Deleting files out of this directory will not delete the corresponding resources from the cluster.
 
 For information about deploying Helm charts, refer to the section about [Helm.](/helm)
 
-### Using Docker as the Container Runtime
+## Using Docker as the Container Runtime
 
 K3s includes and defaults to [containerd,](https://containerd.io/) an industry-standard container runtime.
 
@@ -122,7 +121,7 @@ rancher/metrics-server           v0.3.6              9dd718864ce61       39.9MB
 rancher/pause                    3.1                 da86e6ba6ca19       742kB
 ```
 
-# Using etcdctl
+## Using etcdctl
 
 etcdctl provides a CLI for etcd.
 
@@ -140,7 +139,7 @@ Then start using etcdctl commands with the appropriate K3s flags:
 $ sudo etcdctl --cacert=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt --cert=/var/lib/rancher/k3s/server/tls/etcd/client.crt --key=/var/lib/rancher/k3s/server/tls/etcd/client.key version
 ```
 
-# Configuring containerd
+## Configuring containerd
 
 K3s will generate config.toml for containerd in `/var/lib/rancher/k3s/agent/etc/containerd/config.toml`.
 
@@ -149,7 +148,7 @@ For advanced customization for this file you can create another file called `con
 The `config.toml.tmpl` will be treated as a Go template file, and the `config.Node` structure is being passed to the template. See [this folder](https://github.com/k3s-io/k3s/blob/master/pkg/agent/templates) for Linux and Windows examples on how to use the structure to customize the configuration file.
 
 
-# Running K3s with Rootless mode (Experimental)
+## Running K3s with Rootless mode (Experimental)
 
 > **Warning:** This feature is experimental.
 
@@ -203,13 +202,13 @@ See also https://rootlesscontaine.rs/ to learn about Rootless mode.
 * Run `journalctl --user -f -u k3s-rootless` to see the daemon log
 * See also https://rootlesscontaine.rs/
 
-# Node Labels and Taints
+## Node Labels and Taints
 
 K3s agents can be configured with the options `--node-label` and `--node-taint` which adds a label and taint to the kubelet. The two options only add labels and/or taints [at registration time,](/installation/install-options/agent-config#node-labels-and-taints-for-agents) so they can only be added once and not changed after that again by running K3s commands.
 
 If you want to change node labels and taints after node registration you should use `kubectl`. Refer to the official Kubernetes documentation for details on how to add [taints](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) and [node labels.](https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/#add-a-label-to-a-node)
 
-# Starting the Server with the Installation Script
+## Starting the Server with the Installation Script
 
 The installation script will auto-detect if your OS is using systemd or openrc and start the service.
 When running with openrc, logs will be created at `/var/log/k3s.log`. 
@@ -243,7 +242,7 @@ INFO[2019-01-22T15:16:20.541049100-07:00] Run: k3s kubectl
 The output will likely be much longer as the agent will create a lot of logs. By default the server
 will register itself as a node (run the agent).
 
-# Additional Preparation for Alpine Linux Setup
+## Additional Preparation for Alpine Linux
 
 In order to set up Alpine Linux, you have to go through the following preparation:
 
@@ -259,7 +258,7 @@ Then update the config and reboot:
 update-extlinux
 reboot
 ```
-### Additional preparation for (Red Hat/CentOS) Enterprise Linux
+## Additional preparation for (Red Hat/CentOS) Enterprise Linux
 
 It is recommended to turn off firewalld:
 ```
@@ -272,8 +271,8 @@ systemctl disable nm-cloud-setup.service nm-cloud-setup.timer
 reboot
 ```
 
-### Additional preparation for Raspberry Pi OS Setup
-#### Enabling legacy iptables on Raspberry Pi OS
+## Additional preparation for Raspberry Pi OS
+### Enabling legacy iptables on Raspberry Pi OS
 Raspberry Pi OS (formerly Raspbian) defaults to using `nftables` instead of `iptables`.  **K3S** networking features require `iptables` and do not work with `nftables`.  Follow the steps below to switch configure **Buster** to use `legacy iptables`:
 ```
 sudo iptables -F
@@ -286,16 +285,26 @@ sudo reboot
 
 Standard Raspberry Pi OS installations do not start with `cgroups` enabled. **K3S** needs `cgroups` to start the systemd service. `cgroups`can be enabled by appending `cgroup_memory=1 cgroup_enable=memory` to `/boot/cmdline.txt`.
 
-### Enabling vxlan on Ubuntu 21.10+ on Raspberry Pi
+Example cmdline.txt:
+```
+console=serial0,115200 console=tty1 root=PARTUUID=58b06195-02 rootfstype=ext4 elevator=deadline fsck.repair=yes rootwait cgroup_memory=1 cgroup_enable=memory
+```
+
+## Enabling vxlan for Ubuntu 21.10+ on Raspberry Pi
 
 Starting with Ubuntu 21.10, vxlan support on Raspberry Pi has been moved into a seperate kernel module. 
 ```
 sudo apt install linux-modules-extra-raspi
 ```
 
-### Running K3d (K3s in Docker) and docker-compose
+## Running K3s in Docker
 
-[k3d](https://github.com/rancher/k3d) is a utility designed to easily run K3s in Docker.
+There are several ways to run K3s in Docker:
+
+<Tabs>
+<TabItem value='K3d' default>
+
+[k3d](https://github.com/k3s-io/k3d) is a utility designed to easily run K3s in Docker.
 
 It can be installed via the the [brew](https://brew.sh/) utility on MacOS:
 
@@ -303,50 +312,55 @@ It can be installed via the the [brew](https://brew.sh/) utility on MacOS:
 brew install k3d
 ```
 
-`rancher/k3s` images are also available to run the K3s server and agent from Docker. 
+</TabItem>
+<TabItem value="Docker Compose">
 
-A `docker-compose.yml` is in the root of the K3s repo that serves as an example of how to run K3s from Docker. To run from `docker-compose` from this repo, run:
+A `docker-compose.yml` in the K3s repo serves as an [example](https://github.com/k3s-io/k3s/blob/master/docker-compose.yml) of how to run K3s from Docker. To run `docker-compose` in this repo, run:
 
-    docker-compose up --scale agent=3
-    # kubeconfig is written to current dir
-
-    kubectl --kubeconfig kubeconfig.yaml get node
-
-    NAME           STATUS   ROLES    AGE   VERSION
-    497278a2d6a2   Ready    <none>   11s   v1.13.2-k3s2
-    d54c8b17c055   Ready    <none>   11s   v1.13.2-k3s2
-    db7a5a5a5bdd   Ready    <none>   12s   v1.13.2-k3s2
-
-To run the agent only in Docker, use `docker-compose up agent`.
-
-Alternatively the `docker run` command can also be used:
-
-    sudo docker run \
-      -d --tmpfs /run \
-      --tmpfs /var/run \
-      -e K3S_URL=${SERVER_URL} \
-      -e K3S_TOKEN=${NODE_TOKEN} \
-      --privileged rancher/k3s:vX.Y.Z
-
-
-#### example of /boot/cmdline.txt
 ```
-console=serial0,115200 console=tty1 root=PARTUUID=58b06195-02 rootfstype=ext4 elevator=deadline fsck.repair=yes rootwait cgroup_memory=1 cgroup_enable=memory
+docker-compose up --scale agent=3
+# kubeconfig is written to current dir
+
+kubectl --kubeconfig kubeconfig.yaml get node
+
+NAME           STATUS   ROLES    AGE   VERSION
+497278a2d6a2   Ready    <none>   11s   v1.13.2-k3s2
+d54c8b17c055   Ready    <none>   11s   v1.13.2-k3s2
+db7a5a5a5bdd   Ready    <none>   12s   v1.13.2-k3s2
 ```
 
-### SELinux Support
+To only run the agent in Docker, use `docker-compose up agent`.
+
+</TabItem>
+<TabItem value="Docker">
+
+To use Docker, `rancher/k3s` images are also available to run the K3s server and agent. 
+Using the `docker run` command:
+
+```
+sudo docker run \
+  -d --tmpfs /run \
+  --tmpfs /var/run \
+  -e K3S_URL=${SERVER_URL} \
+  -e K3S_TOKEN=${NODE_TOKEN} \
+  --privileged rancher/k3s:vX.Y.Z
+```
+</TabItem>
+</Tabs>
+
+## SELinux Support
 
 _Supported as of v1.19.4+k3s1. Experimental as of v1.17.4+k3s1._
 
 If you are installing K3s on a system where SELinux is enabled by default (such as CentOS), you must ensure the proper SELinux policies have been installed. 
 
-#### Automatic Installation
+### Automatic Installation
 
 _Available as of v1.19.3+k3s2_
 
 The [install script](installation/install-options#options-for-installation-with-script) will automatically install the SELinux RPM from the Rancher RPM repository if on a compatible system if not performing an air-gapped install. Automatic installation can be skipped by setting `INSTALL_K3S_SKIP_SELINUX_RPM=true`.
 
-#### Manual Installation
+### Manual Installation
 
 The necessary policies can be installed with the following commands:
 ```
@@ -356,41 +370,41 @@ yum install -y https://rpm.rancher.io/k3s/latest/common/centos/7/noarch/k3s-seli
 
 To force the install script to log a warning rather than fail, you can set the following environment variable: `INSTALL_K3S_SELINUX_WARN=true`.
 
-#### Enabling and Disabling SELinux Enforcement
+### Enabling and Disabling SELinux Enforcement
 
 The way that SELinux enforcement is enabled or disabled depends on the K3s version.
 
 <Tabs>
-  <TabItem value="K3s v1.19.1+k3s1" label="K3s v1.19.1+k3s1" default>
-    
-  To leverage SELinux, specify the `--selinux` flag when starting K3s servers and agents.
-    
-  This option can also be specified in the K3s [configuration file](#).
+<TabItem value="K3s v1.19.1+k3s1" default>
+  
+To leverage SELinux, specify the `--selinux` flag when starting K3s servers and agents.
+  
+This option can also be specified in the K3s [configuration file](#).
 
 ```
 selinux: true
 ```
 
-  The `--disable-selinux` option should not be used. It is deprecated and will be either ignored or will be unrecognized, resulting in an error, in future minor releases.
+The `--disable-selinux` option should not be used. It is deprecated and will be either ignored or will be unrecognized, resulting in an error, in future minor releases.
 
-  Using a custom `--data-dir` under SELinux is not supported. To customize it, you would most likely need to write your own custom policy. For guidance, you could refer to the [containers/container-selinux](https://github.com/containers/container-selinux) repository, which contains the SELinux policy files for Container Runtimes, and the [rancher/k3s-selinux](https://github.com/rancher/k3s-selinux) repository, which contains the SELinux policy for K3s.
+Using a custom `--data-dir` under SELinux is not supported. To customize it, you would most likely need to write your own custom policy. For guidance, you could refer to the [containers/container-selinux](https://github.com/containers/container-selinux) repository, which contains the SELinux policy files for Container Runtimes, and the [rancher/k3s-selinux](https://github.com/rancher/k3s-selinux) repository, which contains the SELinux policy for K3s.
 
-  </TabItem>
-  
-  <TabItem value="K3s before v1.19.1+k3s1" label="K3s before v1.19.1+k3s1">
+</TabItem>
 
-  SELinux is automatically enabled for the built-in containerd.
+<TabItem value="K3s before v1.19.1+k3s1">
 
-  To turn off SELinux enforcement in the embedded containerd, launch K3s with the `--disable-selinux` flag.
+SELinux is automatically enabled for the built-in containerd.
 
-  Using a custom `--data-dir` under SELinux is not supported. To customize it, you would most likely need to write your own custom policy. For guidance, you could refer to the [containers/container-selinux](https://github.com/containers/container-selinux) repository, which contains the SELinux policy files for Container Runtimes, and the [rancher/k3s-selinux](https://github.com/rancher/k3s-selinux) repository, which contains the SELinux policy for K3s .
+To turn off SELinux enforcement in the embedded containerd, launch K3s with the `--disable-selinux` flag.
 
-  </TabItem>
+Using a custom `--data-dir` under SELinux is not supported. To customize it, you would most likely need to write your own custom policy. For guidance, you could refer to the [containers/container-selinux](https://github.com/containers/container-selinux) repository, which contains the SELinux policy files for Container Runtimes, and the [rancher/k3s-selinux](https://github.com/rancher/k3s-selinux) repository, which contains the SELinux policy for K3s .
+
+</TabItem>
 </Tabs>
 
-### Enabling Lazy Pulling of eStargz (Experimental)
+## Enabling Lazy Pulling of eStargz (Experimental)
 
-#### What's lazy pulling and eStargz?
+### What's lazy pulling and eStargz?
 
 Pulling images is known as one of the time-consuming steps in the container lifecycle.
 According to [Harter, et al.](https://www.usenix.org/conference/fast16/technical-sessions/presentation/harter),
@@ -409,7 +423,7 @@ Because of the compatibility, eStargz can be pushed to standard container regist
 eStargz is developed based on the [stargz format proposed by Google CRFS project](https://github.com/google/crfs) but comes with practical features including content verification and performance optimization.
 For more details about lazy pulling and eStargz, please refer to [Stargz Snapshotter project repository](https://github.com/containerd/stargz-snapshotter).
 
-#### Configure k3s for lazy pulling of eStargz
+### Configure k3s for lazy pulling of eStargz
 
 As shown in the following, `--snapshotter=stargz` option is needed for k3s server and agent.
 
@@ -442,9 +456,9 @@ spec:
     - containerPort: 80
 ```
 
-### Additional Logging Sources
+## Additional Logging Sources
 
-[Rancher logging](#) for K3s can be installed without using Rancher. The following instructions should be executed to do so:
+[Rancher logging](https://rancher.com/docs/rancher/v2.6/en/logging/helm-chart-options/) for K3s can be installed without using Rancher. The following instructions should be executed to do so:
 
 ```
 helm repo add rancher-charts https://charts.rancher.io
@@ -452,13 +466,3 @@ helm repo update
 helm install --create-namespace -n cattle-logging-system rancher-logging-crd rancher-charts/rancher-logging-crd
 helm install --create-namespace -n cattle-logging-system rancher-logging --set additionalLoggingSources.k3s.enabled=true rancher-charts/rancher-logging
 ```
-
-### Server and agent tokens
-
-In K3s, there are two types of tokens: K3S_TOKEN and K3S_AGENT_TOKEN.
-
-K3S_TOKEN: Defines the key required by the server to offer the HTTP config resources. These resources are requested by the other servers before joining the K3s HA cluster. If the K3S_AGENT_TOKEN is not defined, the agents use this token as well to access the required HTTP resources to join the cluster. Note that this token is also used to generate the encryption key for important content in the database (e.g., bootstrap data).
-
-K3S_AGENT_TOKEN: Optional. Defines the key required by the server to offer HTTP config resources to the agents. If not defined, agents will require K3S_TOKEN. Defining K3S_AGENT_TOKEN is encouraged to avoid agents having to know K3S_TOKEN, which is also used to encrypt data.
-
-If no K3S_TOKEN is defined, the first K3s server will generate a random one. The result is part of the content in `/var/lib/rancher/k3s/server/token`. For example, `K1070878408e06a827960208f84ed18b65fa10f27864e71a57d9e053c4caff8504b::server:df54383b5659b9280aa1e73e60ef78fc`, where `df54383b5659b9280aa1e73e60ef78fc` is the K3S_TOKEN.
