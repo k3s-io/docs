@@ -37,7 +37,7 @@ module.exports = {
       link: {type: 'doc', id: 'upgrades/upgrades',},
       items:[
         'upgrades/killall',
-        'upgrades/basic',
+        'upgrades/manual',
         'upgrades/automated',
         ],
     },

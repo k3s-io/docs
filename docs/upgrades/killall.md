@@ -1,7 +1,8 @@
 ---
-title: The k3s-killall.sh script
+title: Stopping K3s
 weight: 4
 ---
+
 
 To allow high availability during upgrades, the K3s containers continue running when the K3s service is stopped.
 

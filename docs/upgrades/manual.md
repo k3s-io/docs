@@ -1,5 +1,5 @@
 ---
-title: "Upgrade Basics"
+title: "Manual Upgrades"
 weight: 10
 ---
 
