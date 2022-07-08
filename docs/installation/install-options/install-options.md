@@ -85,7 +85,7 @@ For details on configuring the K3s agent, refer to the [agent configuration refe
 
 ### Configuration File
 
-_Available as of v1.19.1+k3s1_
+_Available as of [v1.19.1+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.19.1%2Bk3s1)_
 
 In addition to configuring K3s with environment variables and CLI arguments, K3s can also use a config file.
 
