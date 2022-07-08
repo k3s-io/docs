@@ -203,7 +203,7 @@ See also https://rootlesscontaine.rs/ to learn about Rootless mode.
 
 ## Node Labels and Taints
 
-K3s agents can be configured with the options `--node-label` and `--node-taint` which adds a label and taint to the kubelet. The two options only add labels and/or taints [at registration time,](/installation/install-options/agent-config#node-labels-and-taints-for-agents) so they can only be added once and not changed after that again by running K3s commands.
+K3s agents can be configured with the options `--node-label` and `--node-taint` which adds a label and taint to the kubelet. The two options only add labels and/or taints [at registration time,](/reference/agent-config#node-labels-and-taints-for-agents) so they can only be added once and not changed after that again by running K3s commands.
 
 If you want to change node labels and taints after node registration you should use `kubectl`. Refer to the official Kubernetes documentation for details on how to add [taints](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) and [node labels.](https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/#add-a-label-to-a-node)
 
