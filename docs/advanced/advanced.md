@@ -47,19 +47,19 @@ To use Docker instead of containerd,
 
 1. Install Docker on the K3s node. One of Rancher's [Docker installation scripts](https://github.com/rancher/install-docker) can be used to install Docker:
 
-    ```
+    ```bash
     curl https://releases.rancher.com/install-docker/19.03.sh | sh
     ```
 
 1. Install K3s using the `--docker` option:
 
-    ```
+    ```bash
     curl -sfL https://get.k3s.io | sh -s - --docker
     ```
 
 1. Confirm that the cluster is available:
 
-    ```
+    ```bash
     $ sudo k3s kubectl get pods --all-namespaces
     NAMESPACE     NAME                                     READY   STATUS      RESTARTS   AGE
     kube-system   local-path-provisioner-6d59f47c7-lncxn   1/1     Running     0          51s
@@ -72,7 +72,7 @@ To use Docker instead of containerd,
 
 1. Confirm that the Docker containers are running:
 
-    ```
+    ```bash
     $ sudo docker ps
     CONTAINER ID        IMAGE                     COMMAND                  CREATED              STATUS              PORTS               NAMES
     3e4d34729602        897ce3c5fc8f              "entry"                  About a minute ago   Up About a minute                       k8s_lb-port-443_svclb-traefik-jbmvl_kube-system_d46f10c6-073f-4c7e-8d7a-8e7ac18f9cb0_0
@@ -94,16 +94,15 @@ crictl provides a CLI for CRI-compatible container runtimes.
 
 If you would like to use crictl after installing K3s with the `--docker` option, install crictl using the [official documentation:](https://github.com/kubernetes-sigs/cri-tools/blob/master/docs/crictl.md) 
 
-```
+```bash
 $ VERSION="v1.17.0"
 $ curl -L https://github.com/kubernetes-sigs/cri-tools/releases/download/$VERSION/crictl-${VERSION}-linux-amd64.tar.gz --output crictl-${VERSION}-linux-amd64.tar.gz
-$ sudo tar zxvf crictl-$VERSION-linux-amd64.tar.gz -C /usr/local/bin
-crictl
+$ sudo tar zxvf crictl-$VERSION-linux-amd64.tar.gz -C /usr/local/bin/crictl
 ```
 
 Then start using crictl commands:
 
-```
+```bash
 $ sudo crictl version
 Version:  0.1.0
 RuntimeName:  docker
@@ -126,7 +125,7 @@ etcdctl provides a CLI for etcd.
 
 If you would like to use etcdctl after installing K3s with embedded etcd, install etcdctl using the [official documentation.](https://etcd.io/docs/latest/install/) 
 
-```
+```bash
 $ VERSION="v3.5.0"
 $ curl -L https://github.com/etcd-io/etcd/releases/download/${VERSION}/etcd-${VERSION}-linux-amd64.tar.gz --output etcdctl-linux-amd64.tar.gz
 $ sudo tar -zxvf etcdctl-linux-amd64.tar.gz --strip-components=1 -C /usr/local/bin etcd-${VERSION}-linux-amd64/etcdctl
@@ -134,8 +133,8 @@ $ sudo tar -zxvf etcdctl-linux-amd64.tar.gz --strip-components=1 -C /usr/local/b
 
 Then start using etcdctl commands with the appropriate K3s flags:
 
-```
-$ sudo etcdctl --cacert=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt --cert=/var/lib/rancher/k3s/server/tls/etcd/client.crt --key=/var/lib/rancher/k3s/server/tls/etcd/client.key version
+```bash
+sudo etcdctl --cacert=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt --cert=/var/lib/rancher/k3s/server/tls/etcd/client.crt --key=/var/lib/rancher/k3s/server/tls/etcd/client.key version
 ```
 
 ## Configuring containerd
@@ -222,7 +221,7 @@ curl -sfL https://get.k3s.io | sh -
 
 When running the server manually you should get an output similar to the following:
 
-```
+```bash
 $ k3s server
 INFO[2019-01-22T15:16:19.908493986-07:00] Starting k3s dev                             
 INFO[2019-01-22T15:16:19.908934479-07:00] Running kube-apiserver --allow-privileged=true --authorization-mode Node,RBAC --service-account-signing-key-file /var/lib/rancher/k3s/server/tls/service.key --service-cluster-ip-range 10.43.0.0/16 --advertise-port 6445 --advertise-address 127.0.0.1 --insecure-port 0 --secure-port 6444 --bind-address 127.0.0.1 --tls-cert-file /var/lib/rancher/k3s/server/tls/localhost.crt --tls-private-key-file /var/lib/rancher/k3s/server/tls/localhost.key --service-account-key-file /var/lib/rancher/k3s/server/tls/service.key --service-account-issuer k3s --api-audiences unknown --basic-auth-file /var/lib/rancher/k3s/server/cred/passwd --kubelet-client-certificate /var/lib/rancher/k3s/server/tls/token-node.crt --kubelet-client-key /var/lib/rancher/k3s/server/tls/token-node.key 
@@ -244,12 +243,12 @@ will register itself as a node (run the agent).
 ## Additional preparation for (Red Hat/CentOS) Enterprise Linux
 
 It is recommended to turn off firewalld:
-```
+```bash
 systemctl disable firewalld --now
 ```
 
 If enabled, it is required to disable nm-cloud-setup and reboot the node:
-```
+```bash
 systemctl disable nm-cloud-setup.service nm-cloud-setup.timer
 reboot
 ```
@@ -257,7 +256,7 @@ reboot
 ## Additional preparation for Raspberry Pi OS
 ### Enabling legacy iptables on Raspberry Pi OS
 Raspberry Pi OS (formerly Raspbian) defaults to using `nftables` instead of `iptables`.  **K3S** networking features require `iptables` and do not work with `nftables`.  Follow the steps below to switch configure **Buster** to use `legacy iptables`:
-```
+```bash
 sudo iptables -F
 sudo update-alternatives --set iptables /usr/sbin/iptables-legacy
 sudo update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
@@ -276,7 +275,7 @@ console=serial0,115200 console=tty1 root=PARTUUID=58b06195-02 rootfstype=ext4 el
 ## Enabling vxlan for Ubuntu 21.10+ on Raspberry Pi
 
 Starting with Ubuntu 21.10, vxlan support on Raspberry Pi has been moved into a seperate kernel module. 
-```
+```bash
 sudo apt install linux-modules-extra-raspi
 ```
 
@@ -291,7 +290,7 @@ There are several ways to run K3s in Docker:
 
 It can be installed via the the [brew](https://brew.sh/) utility on MacOS:
 
-```
+```bash
 brew install k3d
 ```
 
@@ -300,7 +299,7 @@ brew install k3d
 
 A `docker-compose.yml` in the K3s repo serves as an [example](https://github.com/k3s-io/k3s/blob/master/docker-compose.yml) of how to run K3s from Docker. To run `docker-compose` in this repo, run:
 
-```
+```bash
 docker-compose up --scale agent=3
 # kubeconfig is written to current dir
 
@@ -320,7 +319,7 @@ To only run the agent in Docker, use `docker-compose up agent`.
 To use Docker, `rancher/k3s` images are also available to run the K3s server and agent. 
 Using the `docker run` command:
 
-```
+```bash
 sudo docker run \
   -d --tmpfs /run \
   --tmpfs /var/run \
@@ -346,7 +345,7 @@ The [install script](installation/install-options#options-for-installation-with-
 ### Manual Installation
 
 The necessary policies can be installed with the following commands:
-```
+```bash
 yum install -y container-selinux selinux-policy-base
 yum install -y https://rpm.rancher.io/k3s/latest/common/centos/7/noarch/k3s-selinux-0.2-1.el7_8.noarch.rpm
 ```
@@ -410,7 +409,7 @@ For more details about lazy pulling and eStargz, please refer to [Stargz Snapsho
 
 As shown in the following, `--snapshotter=stargz` option is needed for k3s server and agent.
 
-```
+```bash
 k3s server --snapshotter=stargz
 ```
 
@@ -418,7 +417,7 @@ With this configuration, you can perform lazy pulling for eStargz-formatted imag
 The following Pod manifest uses eStargz-formatted `node:13.13.0` image (`ghcr.io/stargz-containers/node:13.13.0-esgz`).
 k3s performs lazy pulling for this image.
 
-```
+```yaml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -443,7 +442,7 @@ spec:
 
 [Rancher logging](https://rancher.com/docs/rancher/v2.6/en/logging/helm-chart-options/) for K3s can be installed without using Rancher. The following instructions should be executed to do so:
 
-```
+```bash
 helm repo add rancher-charts https://charts.rancher.io
 helm repo update
 helm install --create-namespace -n cattle-logging-system rancher-logging-crd rancher-charts/rancher-logging-crd

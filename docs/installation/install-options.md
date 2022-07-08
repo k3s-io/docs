@@ -23,7 +23,7 @@ As mentioned in the [Quick-Start Guide](/quick-start), you can use the installat
 
 The simplest form of this command is as follows:
 
-```sh
+```bash
 curl -sfL https://get.k3s.io | sh -
 ```
 
@@ -49,7 +49,7 @@ When using this method to install K3s, the following environment variables can b
 
 This example shows where to place aforementioned environment variables as options (after the pipe):
 
-```
+```bash
 curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL=latest sh -
 ```
 

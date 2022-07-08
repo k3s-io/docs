@@ -12,6 +12,6 @@ The killall script cleans up containers, K3s directories, and networking compone
 
 To run the killall script from a server node, run:
 
-```
+```bash
 /usr/local/bin/k3s-killall.sh
 ```

@@ -103,7 +103,7 @@ Below we cover a simple example. For more information, refer to the official doc
 
 Apply the longhorn.yaml to install Longhorn:
 
-```
+```bash
 kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/master/deploy/longhorn.yaml
 ```
 
@@ -111,14 +111,14 @@ Longhorn will be installed in the namespace `longhorn-system`.
 
 Apply the yaml to create the PVC and pod:
 
-```
+```bash
 kubectl create -f pvc.yaml
 kubectl create -f pod.yaml
 ```
 
 ### pvc.yaml
 
-```
+```yaml
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -134,7 +134,7 @@ spec:
 
 ### pod.yaml
 
-```
+```yaml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -158,7 +158,7 @@ spec:
 
 Confirm the PV and PVC are created:
 
-```
+```bash
 kubectl get pv
 kubectl get pvc
 ```

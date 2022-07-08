@@ -37,7 +37,7 @@ To automate upgrades in this manner, you must do the following:
 
 ### Install the system-upgrade-controller
  The system-upgrade-controller can be installed as a deployment into your cluster. The deployment requires a service-account, clusterRoleBinding, and a configmap. To install these components, run the following command:
-```
+```bash
 kubectl apply -f https://github.com/rancher/system-upgrade-controller/releases/latest/download/system-upgrade-controller.yaml
 ```
 The controller can be configured and customized via the previously mentioned configmap, but the controller must be redeployed for the changes to be applied.
@@ -45,7 +45,7 @@ The controller can be configured and customized via the previously mentioned con
 
 ### Configure plans
 It is recommended that you minimally create two plans: a plan for upgrading server (master) nodes and a plan for upgrading agent (worker) nodes. As needed, you can create additional plans to control the rollout of the upgrade across nodes. The following two example plans will upgrade your cluster to K3s v1.22.11+k3s2. Once the plans are created, the controller will pick them up and begin to upgrade your cluster.
-```
+```yaml
 # Server plan
 apiVersion: upgrade.cattle.io/v1
 kind: Plan
@@ -100,7 +100,7 @@ Third, the server-plan targets server nodes by specifying a label selector that 
 Fourth, the `prepare` step in the agent-plan will cause upgrade jobs for that plan to wait for the server-plan to complete before they execute.
 
 Fifth, both plans have the `version` field set to v1.22.11+k3s2. Alternatively, you can omit the `version` field and set the `channel` field to a URL that resolves to a release of K3s. This will cause the controller to monitor that URL and upgrade the cluster any time it resolves to a new release. This works well with the [release channels](/upgrades/manual/#release-channels). Thus, you can configure your plans with the following channel to ensure your cluster is always automatically upgraded to the newest stable release of K3s:
-```
+```yaml
 apiVersion: upgrade.cattle.io/v1
 kind: Plan
 ...
@@ -113,7 +113,7 @@ spec:
 As stated, the upgrade will begin as soon as the controller detects that a plan was created. Updating a plan will cause the controller to re-evaluate the plan and determine if another upgrade is needed.
 
 You can monitor the progress of an upgrade by viewing the plan and jobs via kubectl:
-```
+```bash
 kubectl -n system-upgrade get plans -o yaml
 kubectl -n system-upgrade get jobs -o yaml
 ```

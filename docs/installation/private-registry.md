@@ -80,7 +80,7 @@ Below are examples showing how you may configure `/etc/rancher/k3s/registries.ya
 <Tabs>
 <TabItem value="With Authentication">
 
-```
+```yaml
 mirrors:
   docker.io:
     endpoint:
@@ -99,7 +99,7 @@ configs:
 </TabItem>
 <TabItem value="Without Authentication">
 
-```
+```yaml
 mirrors:
   docker.io:
     endpoint:
@@ -121,7 +121,7 @@ Below are examples showing how you may configure `/etc/rancher/k3s/registries.ya
 <Tabs>
 <TabItem value="With Authentication">
 
-```
+```yaml
 mirrors:
   docker.io:
     endpoint:
@@ -136,7 +136,7 @@ configs:
 </TabItem>
 <TabItem value="Without Authentication">
 
-```
+```yaml
 mirrors:
   docker.io:
     endpoint:

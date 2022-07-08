@@ -40,7 +40,7 @@ Before installing k3s, you can create a file called `config.yaml` containing fie
 
 The fields in the config file drop the starting `--` from the matching CLI flag. For example:
 
-```
+```yaml
 write-kubeconfig-mode: 644
 token: "secret"
 node-ip: 10.0.10.22,2a05:d012:c6f:4655:d73c:c825:a184:1b75 
