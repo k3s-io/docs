@@ -3,7 +3,7 @@
 module.exports = {
   title: 'K3s',
   tagline: '',
-  url: 'https://rancher.com/docs/k3s/latest/en',
+  url: 'https://k3s-io.github.io',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
