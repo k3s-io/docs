@@ -39,7 +39,7 @@ If the certificates are expired or have fewer than 90 days remaining before they
 
 Any file found in `/var/lib/rancher/k3s/server/manifests` will automatically be deployed to Kubernetes in a manner similar to `kubectl apply`, both on startup and when the file is changed on disk. Deleting files out of this directory will not delete the corresponding resources from the cluster.
 
-For information about deploying Helm charts, refer to the section about [Helm.](../helm)
+For information about deploying Helm charts, refer to the section about [Helm.](/helm)
 
 ### Using Docker as the Container Runtime
 
