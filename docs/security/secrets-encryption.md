@@ -6,7 +6,6 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 # Secrets Encryption Config
-_Available as of [v1.17.4+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.17.4%2Bk3s1)_
 
 K3s supports enabling secrets encryption at rest by passing the flag `--secrets-encryption` on a server; this flag will do the following automatically:
 
@@ -46,7 +45,12 @@ Example of the encryption config file:
 
 
 ## Secrets Encryption Tool
-_Available as of [v1.21.8+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.21.8%2Bk3s1)_
+
+:::info Version Gate
+
+Available as of [v1.21.8+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.21.8%2Bk3s1)
+
+:::
 
 K3s contains a utility tool `secrets-encrypt`, which enables automatic control over the following:
 

@@ -22,7 +22,11 @@ For details on taking database snapshots and restoring your database from them, 
 
 ### Backup and Restore with Embedded etcd Datastore (Experimental)
 
-_Available as of [v1.19.1+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.19.1%2Bk3s1)_
+:::info Version Gate
+
+Available as of [v1.19.1+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.19.1%2Bk3s1)
+
+:::
 
 In this section, you'll learn how to create backups of the K3s cluster data and to restore the cluster from backup.
 

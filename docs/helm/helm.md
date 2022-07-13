@@ -82,7 +82,11 @@ used for validation is '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]
 
 ### Customizing Packaged Components with HelmChartConfig
 
-_Available as of [v1.19.0+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.19.0%2Bk3s1)_
+:::info Version Gate
+
+Available as of [v1.19.0+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.19.0%2Bk3s1)
+
+:::
 
 To allow overriding values for packaged components that are deployed as HelmCharts (such as Traefik), K3s supports customizing deployments via a HelmChartConfig resources. The HelmChartConfig resource must match the name and namespace of its corresponding HelmChart, and supports providing additional `valuesContent`, which is passed to the `helm` command as an additional value file.
 
