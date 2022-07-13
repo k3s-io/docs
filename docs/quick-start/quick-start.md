@@ -3,7 +3,7 @@ title: "Quick-Start Guide"
 weight: 10
 ---
 
-This guide will help you quickly launch a cluster with default options. The [installation section](../installation) covers in greater detail how K3s can be set up.
+This guide will help you quickly launch a cluster with default options. The [installation section](/installation) covers in greater detail how K3s can be set up.
 
 For information on how K3s components work together, refer to the [architecture section.](/architecture/#high-availability-with-an-external-db)
 
