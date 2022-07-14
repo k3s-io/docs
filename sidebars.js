@@ -14,8 +14,8 @@ module.exports = {
     label: 'Installation',
     link: {type: 'doc', id: 'installation/installation',},
     items:[
-      'installation/installation-requirements',
-      'installation/install-options',
+      'installation/requirements',
+      'installation/configuration',
       'installation/network-options',
       'installation/ha',
       'installation/ha-embedded',
@@ -72,7 +72,8 @@ module.exports = {
       items: [
         'reference/server-config',
         'reference/agent-config',
-        'reference/how-to-flags',
+        'reference/env-variables',
+        `reference/binary-tools`,
         'reference/resource-profiling',
       ],
     },

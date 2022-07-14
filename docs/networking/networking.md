@@ -7,7 +7,7 @@ This page explains how CoreDNS, the Traefik Ingress controller, and Klipper serv
 
 Refer to the [Installation Network Options](/installation/network-options/) page for details on Flannel configuration options and backend selection, or how to set up your own CNI.
 
-For information on which ports need to be opened for K3s, refer to the [Installation Requirements.](/installation/installation-requirements/#networking)
+For information on which ports need to be opened for K3s, refer to the [Installation Requirements.](/installation/requirements/#networking)
 
 - [CoreDNS](#coredns)
 - [Traefik Ingress Controller](#traefik-ingress-controller)

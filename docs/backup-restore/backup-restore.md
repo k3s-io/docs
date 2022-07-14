@@ -56,7 +56,7 @@ k3s server \
 
 #### Options
 
-These options can be passed in with the command line, or in the [configuration file,](/installation/install-options/#configuration-file ) which may be easier to use.
+These options can be passed in with the command line, or in the [configuration file,](/installation/configuration/#configuration-file ) which may be easier to use.
 
 | Options | Description |
 | ----------- | --------------- |
