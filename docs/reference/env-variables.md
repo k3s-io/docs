@@ -41,4 +41,4 @@ Environment variables which begin with `K3S_` will be preserved for the systemd 
 
 Setting `K3S_URL` without explicitly setting an exec command will default the command to "agent".
 
-When running the agent `K3S_TOKEN` must also be set.
+When running the agent, `K3S_TOKEN` must also be set.

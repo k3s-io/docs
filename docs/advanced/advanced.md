@@ -274,7 +274,7 @@ console=serial0,115200 console=tty1 root=PARTUUID=58b06195-02 rootfstype=ext4 el
 
 ## Enabling vxlan for Ubuntu 21.10+ on Raspberry Pi
 
-Starting with Ubuntu 21.10, vxlan support on Raspberry Pi has been moved into a seperate kernel module. 
+Starting with Ubuntu 21.10, vxlan support on Raspberry Pi has been moved into a separate kernel module. 
 ```bash
 sudo apt install linux-modules-extra-raspi
 ```

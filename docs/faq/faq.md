@@ -5,9 +5,9 @@ weight: 60
 
 The FAQ is updated periodically and designed to answer the questions our users most frequently ask about K3s.
 
-### Is K3s a suitable replacement for k8s?
+### Is K3s a suitable replacement for Kubernetes?
 
-K3s is capable of nearly everything k8s can do. It is just a more lightweight version. See the [main](/) docs page for more details.
+K3s is capable of nearly everything Kubernetes can do. It is just a more lightweight version. See the [main](/) docs page for more details.
 
 ### How can I use my own Ingress instead of Traefik?
 

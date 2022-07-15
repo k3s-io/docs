@@ -15,7 +15,7 @@ For more advanced options, refer to [this page](/advanced).
 
 As mentioned in the [Quick-Start Guide](/quick-start), you can use the installation script available at https://get.k3s.io to install K3s as a service on systemd and openrc based systems.
 
-You can use a combination of `INSTALL_K3S_EXEC`, `K3S_` enviromental variables and command flags to configure the installation.
+You can use a combination of `INSTALL_K3S_EXEC`, `K3S_` environment variables, and command flags to configure the installation.
 
 To illustrate this, the following commands all result in the same behavior of registering a server without flannel and with a token:
 
@@ -27,7 +27,7 @@ curl -sfL https://get.k3s.io | K3S_TOKEN=12345 sh -s - server --flannel-backend 
 curl -sfL https://get.k3s.io | sh -s - --flannel-backend none --token 12345
 ```
 
-For details on all enviromental variables, see [Enviromental Variables.](/reference/env-variables)
+For details on all environment variables, see [Environment Variables.](/reference/env-variables)
 
 ## Configuing with binary
 
@@ -37,19 +37,19 @@ If you choose to not use the script, you can run K3s simply by downloading the b
 curl -sfL https://get.k3s.io | INSTALL_K3S_SKIP_ENABLE=true sh -
 ```
 
-You can configure K3s in this manner through `K3S_` enviromental variables:
+You can configure K3s in this manner through `K3S_` environmental variables:
 ```bash
-$ K3S_KUBECONFIG_MODE="644" k3s server
+K3S_KUBECONFIG_MODE="644" k3s server
 ```
 Or command flags:
 ```bash
-$ k3s server --write-kubeconfig-mode 644
+k3s server --write-kubeconfig-mode 644
 ```
 
 The k3s agent can also be configured this way:
 
 ```bash
-$ k3s agent --server https://k3s.example.com --token mypassword
+k3s agent --server https://k3s.example.com --token mypassword
 ```
 
 For details on configuring the K3s server, see [Server Configuration.](/reference/server-config)  
@@ -93,11 +93,11 @@ k3s server \
 
 It is also possible to use both a configuration file and CLI arguments.  In these situations, values will be loaded from both sources, but CLI arguments will take precedence.  For repeatable arguments such as `--node-label`, the CLI arguments will overwrite all values in the list.
 
-Finally, the location of the config file can be changed either through the cli argument `--config FILE, -c FILE`, or the environment variable `$K3S_CONFIG_FILE`.
+Finally, the location of the config file can be changed either through the CLI argument `--config FILE, -c FILE`, or the environment variable `$K3S_CONFIG_FILE`.
 
 ## Putting it all together
 
-A combination of all the above options can be combined into a single example.
+All of the above options can be combined into a single example.
 
 A `config.yaml` file is created at `/etc/rancher/k3s/config.yaml`:
 
@@ -106,7 +106,7 @@ token: "secret"
 debug: true
 ```
 
-Then the installation script is run with combination of environment variables and flags:
+Then the installation script is run with a combination of environment variables and flags:
 
 ```bash
 curl -sfL https://get.k3s.io | K3S_KUBECONFIG_MODE="644" INSTALL_K3S_EXEC="server" sh -s - --flannel-backend none
