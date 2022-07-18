@@ -20,13 +20,13 @@ In this section, you'll learn how to configure the K3s server.
     - [Listeners](#listeners)
     - [Data](#data)
     - [Networking](#networking)
-    - [Customized Options](#customized-options)
+    - [Customized Flags](#customized-flags)
     - [Storage Class](#storage-class)
     - [Kubernetes Components](#kubernetes-components)
     - [Customized Flags for Kubernetes Processes](#customized-flags-for-kubernetes-processes)
     - [Experimental Options](#experimental-options)
     - [Deprecated Options](#deprecated-options)
-- [K3s Server Cli Help](#k3s-server-cli-help)
+- [K3s Server CLI Help](#k3s-server-cli-help)
 
 
 # Commonly Used Options
@@ -147,6 +147,7 @@ the agent options are there because the server has the agent process embedded wi
 |  `--cluster-dns` value   | "10.43.0.10"         | Cluster IP for coredns service. Should be in your service-cidr range |
 |  `--cluster-domain` value  | "cluster.local"        | Cluster Domain       | 
 |  `--flannel-backend` value   | "vxlan"      | One of 'none', 'vxlan', 'ipsec', 'host-gw', or 'wireguard'       |
+|  `----egress-selector-mode` value | "pod" | One of 'agent', 'cluster', 'pod', or 'disabled' |
 
 ### Customized Flags
 
