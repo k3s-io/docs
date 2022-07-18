@@ -23,7 +23,7 @@ In this section, you'll learn how to configure the K3s server.
   - [Customized Flags for Kubernetes Processes](#customized-flags-for-kubernetes-processes)
   - [Experimental Options](#experimental-options)
   - [Deprecated Options](#deprecated-options)
-- [K3s Server Cli Help](#k3s-server-cli-help)
+- [K3s Server CLI Help](#k3s-server-cli-help)
 
 ## Commonly Used Options
 

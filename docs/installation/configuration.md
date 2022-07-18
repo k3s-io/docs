@@ -29,7 +29,7 @@ curl -sfL https://get.k3s.io | sh -s - --flannel-backend none --token 12345
 
 For details on all environment variables, see [Environment Variables.](/reference/env-variables)
 
-## Configuing with binary
+## Configuration with binary
 
 As stated, the installation script is primarily concerned with configuring K3s to run as a service.  
 If you choose to not use the script, you can run K3s simply by downloading the binary from our [release page](https://github.com/rancher/k3s/releases/latest), placing it on your path, and executing it. Or you can install K3s without enabling it as a service:
@@ -37,7 +37,7 @@ If you choose to not use the script, you can run K3s simply by downloading the b
 curl -sfL https://get.k3s.io | INSTALL_K3S_SKIP_ENABLE=true sh -
 ```
 
-You can configure K3s in this manner through `K3S_` environmental variables:
+You can configure K3s in this manner through `K3S_` environment variables:
 ```bash
 K3S_KUBECONFIG_MODE="644" k3s server
 ```
@@ -54,7 +54,7 @@ k3s agent --server https://k3s.example.com --token mypassword
 
 For details on configuring the K3s server, see [Server Configuration.](/reference/server-config)  
 For details on configuring the K3s agent, see [Agent Configuration.](/reference/agent-config)  
-Or use the `--help` flag to see a list of all available options.
+You can also use the `--help` flag to see a list of all available options.
 
 ## Configuration File
 
@@ -81,7 +81,7 @@ node-label:
 
 In general, CLI arguments map to their respective YAML key, with repeatable CLI arguments being represented as YAML lists.
 
-An identical configuration using solely CLI arguments is shown below to demonstrate this:
+An identical configuration using only CLI arguments is shown below to demonstrate this:
 
 ```bash
 k3s server \
@@ -91,7 +91,7 @@ k3s server \
   --node-label "something=amazing"
 ```
 
-It is also possible to use both a configuration file and CLI arguments.  In these situations, values will be loaded from both sources, but CLI arguments will take precedence.  For repeatable arguments such as `--node-label`, the CLI arguments will overwrite all values in the list.
+It is also possible to use both a configuration file and CLI arguments. In these situations, values will be loaded from both sources, but CLI arguments will take precedence. For repeatable arguments such as `--node-label`, the CLI arguments will overwrite all values in the list.
 
 Finally, the location of the config file can be changed either through the CLI argument `--config FILE, -c FILE`, or the environment variable `$K3S_CONFIG_FILE`.
 
