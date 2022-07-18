@@ -18,7 +18,6 @@ In this section, you'll learn how to configure the K3s server.
   - [Listeners](#listeners)
   - [Data](#data)
   - [Networking](#networking)
-  - [Customized Options](#customized-options)
   - [Storage Class](#storage-class)
   - [Kubernetes Components](#kubernetes-components)
   - [Customized Flags for Kubernetes Processes](#customized-flags-for-kubernetes-processes)
@@ -155,16 +154,8 @@ the agent options are there because the server has the agent process embedded wi
 | `--flannel-backend` value         | "vxlan"         | One of 'none', 'vxlan', 'ipsec', 'host-gw', 'wireguard-native', or 'wireguard'(deprecated) |
 | `--flannel-ipv6-masq`             | "N/A"           | Enable IPv6 masquerading for pod                                                           |
 | `--servicelb-namespace` value     | "kube-system"   | Namespace of the pods for the servicelb component                                          |
+| `--egress-selector-mode` value    | "agent"         | Must be one of the following: <ul><li>disabled: The apiserver does not use agent tunnels to communicate with nodes. Requires that servers run agents, and have direct connectivity to the kubelet on agents, or the apiserver will not be able to function access service endpoints or perform kubectl exec and kubectl logs.</li><li>agent: The apiserver uses agent tunnels to communicate with nodes. Nodes allow the tunnel connection from loopback addresses. Requires that servers also run agents, or the apiserver will not be able to access service endpoints. The historical default for k3s.</li><li> pod: The apiserver uses agent tunnels to communicate with nodes and service endpoints, routing endpoint connections to the correct agent by watching Nodes. Nodes allow the tunnel connection from loopback addresses, or a CIDR assigned to their node.</li><li>  cluster: The apiserver uses agent tunnels to communicate with nodes and service endpoints, routing endpoint connections to the correct agent by watching Endpoints. Nodes allow the tunnel connection from loopback addresses, or the configured cluster CIDR range.</li></ul> |
 
-### Customized Flags
-
-| Flag                                        | Description                                               |
-| ------------------------------------------- | --------------------------------------------------------- |
-| `--etcd-arg` value                          | Customized flag for etcd process                          |
-| `--kube-apiserver-arg` value                | Customized flag for kube-apiserver process                |
-| `--kube-scheduler-arg` value                | Customized flag for kube-scheduler process                |
-| `--kube-controller-manager-arg` value       | Customized flag for kube-controller-manager process       |
-| `--kube-cloud-controller-manager-arg` value | Customized flag for kube-cloud-controller-manager process |
 
 ### Storage Class
 
@@ -186,8 +177,13 @@ the agent options are there because the server has the agent process embedded wi
 
 ### Customized Flags for Kubernetes Processes
 
-| Flag                     | Description                            |
-| ------------------------ | -------------------------------------- |
+| Flag                                        | Description                                               |
+| ------------------------------------------- | --------------------------------------------------------- |
+| `--etcd-arg` value                          | Customized flag for etcd process                          |
+| `--kube-apiserver-arg` value                | Customized flag for kube-apiserver process                |
+| `--kube-scheduler-arg` value                | Customized flag for kube-scheduler process                |
+| `--kube-controller-manager-arg` value       | Customized flag for kube-controller-manager process       |
+| `--kube-cloud-controller-manager-arg` value | Customized flag for kube-cloud-controller-manager process |
 | `--kubelet-arg` value    | Customized flag for kubelet process    |
 | `--kube-proxy-arg` value | Customized flag for kube-proxy process |
 
