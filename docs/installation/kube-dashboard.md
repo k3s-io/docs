@@ -3,6 +3,9 @@ title: "Kubernetes Dashboard"
 weight: 60
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 This installation guide will help you to deploy and configure the [Kubernetes Dashboard](https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/) on K3s.
 
 ### Deploying the Kubernetes Dashboard
@@ -51,10 +54,22 @@ sudo k3s kubectl create -f dashboard.admin-user.yml -f dashboard.admin-user-role
 ```
 
 ### Obtain the Bearer Token
+<Tabs>
+<TabItem value="v1.24 and newer">
+
+```bash
+sudo k3s kubectl -n kubernetes-dashboard create token admin-user
+```
+</TabItem>
+<TabItem value="v1.23 and older">
 
 ```bash
 sudo k3s kubectl -n kubernetes-dashboard describe secret admin-user-token | grep '^token'
 ```
+
+</TabItem>
+</Tabs>
+
 
 ### Local Access to the Dashboard
 

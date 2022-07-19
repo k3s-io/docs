@@ -3,9 +3,9 @@ title: "Installation"
 weight: 20
 ---
 
-This section contains instructions for installing K3s in various environments. Please ensure you have met the [Installation Requirements](/installation/requirements/) before you begin installing K3s.
+This section contains instructions for installing K3s in various environments. Please ensure you have met the [Requirements](/installation/requirements/) before you begin installing K3s.
 
-[Installation and Configuration Options](/installation/configuration/) provides guidance on the options available to you when installing K3s.
+[Configuration Options](/installation/configuration/) provides guidance on the options available to you when installing K3s.
 
 [High Availability with an External DB](/installation/ha/) details how to set up an HA K3s cluster backed by an external datastore such as MySQL, PostgreSQL, or etcd.
 
