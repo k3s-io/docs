@@ -30,7 +30,7 @@ Obtain the images tar file for your architecture from the [releases](https://git
 
 Place the tar file in the `images` directory, for example:
 
-```sh
+```bash
 sudo mkdir -p /var/lib/rancher/k3s/agent/images/
 sudo cp ./k3s-airgap-images-$ARCH.tar /var/lib/rancher/k3s/agent/images/
 ```
@@ -59,13 +59,13 @@ You can install K3s on one or more servers as described below.
 
 To install K3s on a single server, simply do the following on the server node:
 
-```
+```bash
 INSTALL_K3S_SKIP_DOWNLOAD=true ./install.sh
 ```
 
 Then, to optionally add additional agents do the following on each agent node. Take care to ensure you replace `myserver` with the IP or valid DNS of the server and replace `mynodetoken` with the node token from the server typically at `/var/lib/rancher/k3s/server/node-token`
 
-```
+```bash
 INSTALL_K3S_SKIP_DOWNLOAD=true K3S_URL=https://myserver:6443 K3S_TOKEN=mynodetoken ./install.sh
 ```
 
@@ -76,14 +76,14 @@ Reference the [High Availability with an External DB](/installation/ha) or [High
 
 For example, step two of the High Availability with an External DB guide mentions the following:
 
-```
+```bash
 curl -sfL https://get.k3s.io | sh -s - server \
   --datastore-endpoint='mysql://username:password@tcp(hostname:3306)/database-name'
 ```
 
 Instead, you would modify such examples like below:
 
-```
+```bash
 INSTALL_K3S_SKIP_DOWNLOAD=true INSTALL_K3S_EXEC='server' K3S_DATASTORE_ENDPOINT='mysql://username:password@tcp(hostname:3306)/database-name' ./install.sh
 ```
 

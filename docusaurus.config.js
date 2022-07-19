@@ -58,7 +58,7 @@ module.exports = {
           /* other docs plugin options */
           sidebarPath: require.resolve('./sidebars.js'),
           showLastUpdateTime: true,
-          editUrl: 'https://github.com/k3s-io/k3s/docs/edit/main/',
+          editUrl: 'https://github.com/k3s-io/docs/edit/main/',
         },
         blog: false, // Optional: disable the blog plugin
         // ...

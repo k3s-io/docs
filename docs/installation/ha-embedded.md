@@ -13,12 +13,12 @@ Embedded etcd (HA) may have performance issues on slower disks such as Raspberry
 To run K3s in this mode, you must have an odd number of server nodes. We recommend starting with three nodes.
 
 To get started, first launch a server node with the `cluster-init` flag to enable clustering and a token that will be used as a shared secret to join additional servers to the cluster.
-```
+```bash
 curl -sfL https://get.k3s.io | K3S_TOKEN=SECRET sh -s - server --cluster-init
 ```
 
 After launching the first server, join the second and third servers to the cluster using the shared secret:
-```
+```bash
 K3S_TOKEN=SECRET k3s server --server https://<ip or hostname of server1>:6443
 ```
 

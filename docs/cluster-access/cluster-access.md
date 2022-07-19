@@ -7,7 +7,7 @@ The kubeconfig file stored at `/etc/rancher/k3s/k3s.yaml` is used to configure a
 
 Leverage the KUBECONFIG environment variable:
 
-```
+```bash
 export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 kubectl get pods --all-namespaces
 helm ls --all-namespaces
@@ -15,7 +15,7 @@ helm ls --all-namespaces
 
 Or specify the location of the kubeconfig file in the command:
 
-```
+```bash
 kubectl --kubeconfig /etc/rancher/k3s/k3s.yaml get pods --all-namespaces
 helm --kubeconfig /etc/rancher/k3s/k3s.yaml ls --all-namespaces
 ```

@@ -5,9 +5,9 @@ weight: 25
 
 ### Upgrading your K3s cluster
 
-[Upgrade basics](/upgrades/basic/) describes several techniques for upgrading your cluster manually. It can also be used as a basis for upgrading through third-party Infrastructure-as-Code tools like [Terraform](https://www.terraform.io/).
+[Manual Upgrades](/upgrades/manual) describes several techniques for upgrading your cluster manually. It can also be used as a basis for upgrading through third-party Infrastructure-as-Code tools like [Terraform](https://www.terraform.io/).
 
-[Automated upgrades](/upgrades/automated/) describes how to perform Kubernetes-native automated upgrades using Rancher's [system-upgrade-controller](https://github.com/rancher/system-upgrade-controller).
+[Automated Upgrades](/upgrades/automated) describes how to perform Kubernetes-native automated upgrades using Rancher's [system-upgrade-controller](https://github.com/rancher/system-upgrade-controller).
 
 ### Version-specific caveats
 
@@ -17,7 +17,7 @@ weight: 25
     - The affected versions are <= v1.19.12+k3s1, v1.20.8+k3s1, v1.21.2+k3s1; the patched versions are v1.19.13+k3s1, v1.20.9+k3s1, v1.21.3+k3s1.
 
     - You may retrieve the token value from any server already joined to the cluster as follows:
-```
+```bash
 cat /var/lib/rancher/k3s/server/token
 ```
 

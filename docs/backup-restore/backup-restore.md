@@ -22,7 +22,11 @@ For details on taking database snapshots and restoring your database from them, 
 
 ### Backup and Restore with Embedded etcd Datastore (Experimental)
 
-_Available as of v1.19.1+k3s1_
+:::info Version Gate
+
+Available as of [v1.19.1+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.19.1%2Bk3s1)
+
+:::
 
 In this section, you'll learn how to create backups of the K3s cluster data and to restore the cluster from backup.
 
@@ -42,8 +46,8 @@ When K3s is restored from backup, the old data directory will be moved to `${dat
 
 To restore the cluster from backup, run K3s with the `--cluster-reset` option, with the `--cluster-reset-restore-path` also given:
 
-```
-./k3s server \
+```bash
+k3s server \
   --cluster-reset \
   --cluster-reset-restore-path=<PATH-TO-SNAPSHOT>
 ```
@@ -52,7 +56,7 @@ To restore the cluster from backup, run K3s with the `--cluster-reset` option, w
 
 #### Options
 
-These options can be passed in with the command line, or in the [configuration file,](/installation/install-options/#configuration-file ) which may be easier to use.
+These options can be passed in with the command line, or in the [configuration file,](/installation/configuration/#configuration-file ) which may be easier to use.
 
 | Options | Description |
 | ----------- | --------------- |
@@ -83,7 +87,7 @@ The arguments below have been added to the `server` subcommand. These flags exis
 
 To perform an on-demand etcd snapshot and save it to S3:
 
-```
+```bash
 k3s etcd-snapshot \
   --s3 \
   --s3-bucket=<S3-BUCKET-NAME> \
@@ -93,7 +97,7 @@ k3s etcd-snapshot \
 
 To perform an on-demand etcd snapshot restore from S3, first make sure that K3s isn't running. Then run the following commands:
 
-```
+```bash
 k3s server \
   --cluster-init \
   --cluster-reset \
@@ -123,7 +127,7 @@ For additional information on the etcd snapshot subcommands, run `k3s etcd-snaps
 
 Delete a snapshot from S3.
 
-```
+```bash
 k3s etcd-snapshot delete          \
   --s3                            \
   --s3-bucket=<S3-BUCKET-NAME>    \
@@ -134,10 +138,10 @@ k3s etcd-snapshot delete          \
 
 Prune local snapshots with the default retention policy (5). The `prune` subcommand takes an additional flag `--snapshot-retention` that allows for overriding the default retention policy.
 
-```
+```bash
 k3s etcd-snapshot prune
 ```
 
-```
+```bash
 k3s etcd-snapshot prune --snapshot-retention 10
 ```

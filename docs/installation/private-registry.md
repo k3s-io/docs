@@ -5,8 +5,6 @@ weight: 55
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-_Available as of v1.0.0_
-
 Containerd can be configured to connect to private registries and use them to pull private images on the node.
 
 Upon startup, K3s will check to see if a `registries.yaml` file exists at `/etc/rancher/k3s/` and instruct containerd to use any registries defined in the file. If you wish to use a private registry, then you will need to create this file as root on each node that will be using the registry.
@@ -82,7 +80,7 @@ Below are examples showing how you may configure `/etc/rancher/k3s/registries.ya
 <Tabs>
 <TabItem value="With Authentication">
 
-```
+```yaml
 mirrors:
   docker.io:
     endpoint:
@@ -101,7 +99,7 @@ configs:
 </TabItem>
 <TabItem value="Without Authentication">
 
-```
+```yaml
 mirrors:
   docker.io:
     endpoint:
@@ -123,7 +121,7 @@ Below are examples showing how you may configure `/etc/rancher/k3s/registries.ya
 <Tabs>
 <TabItem value="With Authentication">
 
-```
+```yaml
 mirrors:
   docker.io:
     endpoint:
@@ -138,7 +136,7 @@ configs:
 </TabItem>
 <TabItem value="Without Authentication">
 
-```
+```yaml
 mirrors:
   docker.io:
     endpoint:

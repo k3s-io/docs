@@ -2,9 +2,10 @@
 title: Secrets Encryption
 weight: 26
 ---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 # Secrets Encryption Config
-_Available as of v1.17.4+k3s1_
 
 K3s supports enabling secrets encryption at rest by passing the flag `--secrets-encryption` on a server; this flag will do the following automatically:
 
@@ -13,7 +14,7 @@ K3s supports enabling secrets encryption at rest by passing the flag `--secrets-
 - Pass the config to the KubeAPI as encryption-provider-config
 
 Example of the encryption config file:
-```
+```json
 {
   "kind": "EncryptionConfiguration",
   "apiVersion": "apiserver.config.k8s.io/v1",
@@ -44,7 +45,12 @@ Example of the encryption config file:
 
 
 ## Secrets Encryption Tool
-_Available as of v1.21.8+k3s1_
+
+:::info Version Gate
+
+Available as of [v1.21.8+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.21.8%2Bk3s1)
+
+:::
 
 K3s contains a utility tool `secrets-encrypt`, which enables automatic control over the following:
 
@@ -55,8 +61,12 @@ K3s contains a utility tool `secrets-encrypt`, which enables automatic control o
 
 >**Warning:** Failure to follow proper procedure for rotating encryption keys can leave your cluster permanently corrupted. Proceed with caution.
 
-### Single-Server Encryption Key Rotation
-To rotate secrets encryption keys on a single-node cluster:
+### Encryption Key Rotation
+
+<Tabs>
+<TabItem value="Single-Server" default>
+
+To rotate secrets encryption keys on a single-server cluster:
 
 - Start the K3s server with the flag `--secrets-encryption`
 
@@ -64,25 +74,27 @@ To rotate secrets encryption keys on a single-node cluster:
 
 1. Prepare
 
-    ```
+    ```bash
     k3s secrets-encrypt prepare
     ```
 
 2. Kill and restart the K3s server with same arguments
 3. Rotate
 
-    ```
+    ```bash
     k3s secrets-encrypt rotate
     ```
 
 4. Kill and restart the K3s server with same arguments
 5. Reencrypt
 
-    ```
+    ```bash
     k3s secrets-encrypt reencrypt
     ```
 
-### High-Availability Encryption Key Rotation
+</TabItem>
+<TabItem value="High-Availability" default>
+
 The steps are the same for both embedded DB and external DB clusters.
 
 To rotate secrets encryption keys on HA setups:
@@ -97,7 +109,7 @@ To rotate secrets encryption keys on HA setups:
 
 1. Prepare on S1
 
-    ```
+    ```bash
     k3s secrets-encrypt prepare
     ```
 
@@ -106,7 +118,7 @@ To rotate secrets encryption keys on HA setups:
 
 4. Rotate on S1
 
-    ```
+    ```bash
     k3s secrets-encrypt rotate
     ```
 
@@ -115,21 +127,27 @@ To rotate secrets encryption keys on HA setups:
 
 7. Reencrypt on S1
 
-    ```
+    ```bash
     k3s secrets-encrypt reencrypt
     ```
 
 8. Kill and restart S1 with same arguments
 9. Once S1 is up, kill and restart the S2 and S3
 
-### Single-Server Secrets Encryption Disable/Enable
+</TabItem>
+</Tabs>
+
+### Secrets Encryption Disable/Enable
+<Tabs>
+<TabItem value="Single-Server" default>
+
 After launching a server with `--secrets-encryption` flag, secrets encryption can be disabled.
 
 To disable secrets encryption on a single-node cluster:
 
 1. Disable
 
-    ```
+    ```bash
     k3s secrets-encrypt disable
     ```
 
@@ -137,7 +155,7 @@ To disable secrets encryption on a single-node cluster:
 
 3. Reencrypt with flags
 
-    ```
+    ```bash
     k3s secrets-encrypt reencrypt --force --skip
     ```
 
@@ -145,7 +163,7 @@ To re-enable secrets encryption on a single node cluster:
 
 1. Enable
 
-    ```
+    ```bash
     k3s secrets-encrypt enable
     ```
 
@@ -153,11 +171,13 @@ To re-enable secrets encryption on a single node cluster:
 
 3. Reencrypt with flags
 
-    ```
+    ```bash
     k3s secrets-encrypt reencrypt --force --skip
     ```
 
-### High-Availability Secrets Encryption Disable/Enable
+</TabItem>
+<TabItem value="High-Availability" default>
+
 After launching a HA cluster with `--secrets-encryption` flags, secrets encryption can be disabled.
 >**Note:** While not required, it is recommended that you pick one server node from which to run the `secrets-encrypt` commands.
 
@@ -167,7 +187,7 @@ To disable secrets encryption on a HA cluster:
 
 1. Disable on S1
 
-    ```
+    ```bash
     k3s secrets-encrypt disable
     ```
 
@@ -177,7 +197,7 @@ To disable secrets encryption on a HA cluster:
 
 4. Reencrypt with flags on S1
 
-    ```
+    ```bash
     k3s secrets-encrypt reencrypt --force --skip
     ```
 
@@ -185,7 +205,7 @@ To re-enable secrets encryption on a HA cluster:
 
 1. Enable on S1
 
-    ```
+    ```bash
     k3s secrets-encrypt enable
     ```
 
@@ -194,16 +214,18 @@ To re-enable secrets encryption on a HA cluster:
 
 4. Reencrypt with flags on S1
 
-    ```
+    ```bash
     k3s secrets-encrypt reencrypt --force --skip
     ```
 
+</TabItem>
+</Tabs>
 
 ### Secrets Encryption Status
 The secrets-encrypt tool includes a `status` command that displays information about the current status of secrets encryption on the node.
 
 An example of the command on a single-server node:  
-```
+```bash
 $ k3s secrets-encrypt status
 Encryption Status: Enabled
 Current Rotation Stage: start
@@ -216,7 +238,7 @@ Active  Key Type  Name
 ```
 
 Another example on HA cluster, after rotating the keys, but before restarting the servers:  
-```
+```bash
 $ k3s secrets-encrypt status
 Encryption Status: Enabled
 Current Rotation Stage: rotate

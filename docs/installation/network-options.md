@@ -33,7 +33,7 @@ Run K3s with `--flannel-backend=none` and install your CNI of choice. Most CNI p
 
 Visit the [Project Calico Docs](https://docs.projectcalico.org/) website. Follow the steps to install Canal. Modify the Canal YAML so that IP forwarding is allowed in the container_settings section, for example:
 
-```
+```yaml
 "container_settings": {
               "allow_ip_forwarding": true
           }
@@ -43,7 +43,7 @@ Apply the Canal YAML.
 
 Ensure the settings were applied by running the following command on the host:
 
-```
+```bash
 cat /etc/cni/net.d/10-canal.conflist
 ```
 
@@ -54,7 +54,7 @@ You should see that IP forwarding is set to true.
 
 Follow the [Calico CNI Plugins Guide](https://docs.projectcalico.org/master/reference/cni-plugin/configuration). Modify the Calico YAML so that IP forwarding is allowed in the container_settings section, for example:
 
-```
+```yaml
 "container_settings": {
               "allow_ip_forwarding": true
           }
@@ -64,7 +64,7 @@ Apply the Calico YAML.
 
 Ensure the settings were applied by running the following command on the host:
 
-```
+```bash
 cat /etc/cni/net.d/10-calico.conflist
 ```
 
@@ -82,7 +82,7 @@ Dual-stack is supported on k3s v1.21 or above.
 
 To enable dual-stack in K3s, you must provide valid dual-stack `cluster-cidr` and `service-cidr` on all server nodes. Both servers and agents must provide valid dual-stack `node-ip` settings. Node address auto-detection is not supported on dual-stack clusters, because kubelet fetches only the first IP address that it finds. Additionally, only vxlan backend is supported currently. This is an example of a valid configuration:
 
-```
+```bash
 k3s server --node-ip 10.0.10.7,2a05:d012:c6f:4611:5c2:5602:eed2:898c --cluster-cidr 10.42.0.0/16,2001:cafe:42:0::/56 --service-cidr 10.43.0.0/16,2001:cafe:42:1::/112
 ```
 
@@ -94,6 +94,6 @@ If you are using a custom cni plugin, i.e. a cni plugin different from flannel, 
 
 IPv6 only setup is supported on k3s v1.22 or above. Note that network policy enforcement is not supported on IPv6-only clusters when using the default flannel CNI. This is an example of a valid configuration:
 
-```
+```bash
 k3s server --disable-network-policy
 ```

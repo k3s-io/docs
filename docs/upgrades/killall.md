@@ -1,7 +1,8 @@
 ---
-title: The k3s-killall.sh script
+title: Stopping K3s
 weight: 4
 ---
+
 
 To allow high availability during upgrades, the K3s containers continue running when the K3s service is stopped.
 
@@ -11,6 +12,6 @@ The killall script cleans up containers, K3s directories, and networking compone
 
 To run the killall script from a server node, run:
 
-```
+```bash
 /usr/local/bin/k3s-killall.sh
 ```
