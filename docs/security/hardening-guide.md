@@ -332,7 +332,7 @@ metadata:
 spec:
   podSelector: 
     matchLabels:
-      app: svclb-traefik
+      svccontroller.k3s.cattle.io/svcname: traefik
   ingress:
   - {}
   policyTypes:
