@@ -1,0 +1,170 @@
+/* --------------------------------
+Below is used for the k3s.io landing page 
+----------------------------------*/
+
+* {
+  box-sizing:inherit
+}
+html,
+body {
+ font-size:10px
+}
+
+.bgPrimary {
+  background-color:var(--ifm-color-secondary)
+}
+
+.bgPrimary a {
+  color:var(--dark)
+ }
+
+.bgLight {
+  background-color:var(--light)
+}
+
+h1 {
+  margin-bottom:3rem;
+  font-size:5em;
+  line-height:6rem
+}
+h4 {
+  margin-bottom:2rem;
+  font-size:2em;
+  line-height:3rem
+}
+h5 {
+  margin-bottom:2rem;
+  font-size:1.75em;
+  line-height:2.75rem
+}
+h6 {
+  margin-bottom:2rem;
+  font-size:1.4em;
+  line-height:2.25rem
+}
+p,
+li {
+ margin-bottom:2rem;
+ font-size:1.4em;
+ line-height:2.25rem
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+ font-family:poppins,sans-serif;
+ color:var(--dark);
+ margin-top:0;
+ hyphens:none
+}
+
+.cncf .cncf-logo {
+    display: block;
+    width: 300px;
+    margin: auto;
+    padding-bottom: 2rem;
+  }
+  .cncf p {
+    font-size: 22px;
+  }
+
+.textCenter {
+  text-align: center;
+}
+
+.intro {
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  padding: 0;
+  align-items:end;
+  column-gap:2rem;
+  position:relative
+}
+.intro .gridTwo {
+  grid-template-columns:60% auto
+}
+.intro .wrap {
+  padding:5rem 0 15rem
+}
+.intro .folder {
+  grid-row:5/span 3;
+  grid-column:2/span 4;
+  z-index:2
+}
+.intro .bgPrimary {
+  grid-row:2/span 4;
+  grid-column:1/span 6;
+  color:var(--dark)
+}
+
+.folder h4 {
+  display:inline-block;
+  margin:0;
+  padding:10px 20px;
+  background-color:var(--ifm-color-primary-dark);
+  color:var(--light);
+  position:relative
+ }
+
+.folder .bgLight {
+  background-color:var(--light);
+  padding:40px;
+  border-top:solid var(--ifm-color-primary-dark) 14px;
+  box-shadow:rgba(51,49,59,.5) 0 0 20px
+}
+
+.wrap {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.gridTwo {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 2rem;
+  align-items: center;
+}
+
+.gridThree {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 2rem;
+}
+
+.gridFour {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-gap: 2rem;
+}
+
+.gridDynamic {
+  display:flex
+}
+
+.gridDynamic h5 {
+  margin:0;
+  flex-grow:1;
+  flex-basis:0
+}
+
+pre {
+  background:var(--dark);
+  color:var(--light);
+  page-break-inside:avoid;
+  font-family:monospace;
+  font-size:15px;
+  line-height:1.6;
+  margin-bottom:1.6em;
+  max-width:100%;
+  overflow:auto;
+  padding:1em 1.5em;
+  display:block;
+  word-wrap:break-word;
+  border-radius:3px;
+  white-space:pre-wrap
+}

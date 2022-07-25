@@ -44,6 +44,9 @@
   --ifm-color-primary-light: #075a86;
   --ifm-color-primary-lighter: #075e8c;
   --ifm-color-primary-lightest: #086b9f;
+  --ifm-color-secondary: #FFC61C;
+  --dark            : #33313b;
+  --light           : #F3F3F3;
 }
 /* Dark Mode Color Override */
 [data-theme='dark'] {
@@ -54,6 +57,9 @@
   --ifm-color-primary-light: #ffcd38;
   --ifm-color-primary-lighter: #ffd146;
   --ifm-color-primary-lightest: #ffdb71;
+  --ifm-color-secondary: #06527a;
+  --light            : #33313b;
+  --dark           : #F3F3F3;
 }
 
 @media (max-width: 768px) {
