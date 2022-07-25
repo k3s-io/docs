@@ -10,13 +10,17 @@ body {
  font-size:10px
 }
 
+a {
+  text-decoration: underline;
+}
+
 .bgPrimary {
   background-color:var(--ifm-color-secondary)
 }
 
 .bgPrimary a {
   color:var(--dark)
- }
+}
 
 .bgLight {
   background-color:var(--light)
@@ -118,7 +122,7 @@ h6 {
 
 .wrap {
   box-sizing: border-box;
-  width: 100%;
+  width: 75%;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -153,8 +157,6 @@ h6 {
 }
 
 pre {
-  background:var(--dark);
-  color:var(--light);
   page-break-inside:avoid;
   font-family:monospace;
   font-size:15px;
@@ -165,6 +167,7 @@ pre {
   padding:1em 1.5em;
   display:block;
   word-wrap:break-word;
+  overflow-wrap: break-word;
   border-radius:3px;
   white-space:pre-wrap
 }

@@ -1,4 +1,5 @@
 import Layout from '@theme/Layout';
+import CodeBlock from '@theme/CodeBlock';
 import React from 'react';
 import style from './index.module.css';
 
@@ -14,12 +15,11 @@ function Landing() {
           </div>
           <div>
             <h4>This won't take long…</h4>
-            <pre><code>
-curl -sfL https://get.k3s.io | sh -
-# Check for Ready node,
-takes maybe 30 seconds
-k3s kubectl get node
-            </code></pre>
+            <CodeBlock className="language-sh">{
+`curl -sfL https://get.k3s.io | sh - 
+# Check for Ready node, takes ~30 seconds 
+k3s kubectl get node `
+            }</CodeBlock>
             <p>For detailed installation, <a href="https://rancher.com/docs/k3s/latest/en/">refer to the docs</a></p>
           </div>
         </div>

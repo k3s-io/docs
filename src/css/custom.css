@@ -44,7 +44,8 @@
   --ifm-color-primary-light: #075a86;
   --ifm-color-primary-lighter: #075e8c;
   --ifm-color-primary-lightest: #086b9f;
-  --ifm-color-secondary: #FFC61C;
+  --ifm-color-secondary: #ffc61c;
+  --ifm-color-secondary-light: #ffcd38;
   --dark            : #33313b;
   --light           : #F3F3F3;
 }
@@ -58,6 +59,7 @@
   --ifm-color-primary-lighter: #ffd146;
   --ifm-color-primary-lightest: #ffdb71;
   --ifm-color-secondary: #06527a;
+  --ifm-color-secondary-light: #075a86;
   --light            : #33313b;
   --dark           : #F3F3F3;
 }
