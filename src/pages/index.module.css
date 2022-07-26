@@ -2,23 +2,8 @@
 Below is used for the k3s.io landing page 
 ----------------------------------*/
 
-
 * {
-  box-sizing:inherit
-}
-
-html,
-body {
- font-size:10px;
- font-family: 'roboto', sans-serif;
-}
-
-section {
-  padding:10rem 0;
-}
-
-a {
-  text-decoration: underline;
+ box-sizing:inherit
 }
 
 .bgPrimary {
@@ -29,54 +14,57 @@ a {
   background-color:var(--light)
 }
 
-h1 {
+.wrap {
+  box-sizing: border-box;
+  width: 75%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-top: 8rem;
+}
+
+/* These need to be wrapped to prevent the markdown docs from 
+ pulling in these basic definitions */
+.landing {
+  font-family: 'roboto', sans-serif;
+  font-size:10px;
+}
+
+.landing p {
+  margin-bottom:2rem;
+  font-size:1.4em;
+  line-height:1.5rem
+}
+
+.landing h1 {
   margin-bottom:3rem;
   font-size:5em;
-  line-height:6rem
+  line-height:4rem
 }
-h2 {
+.landing h2 {
   margin-bottom:3rem;
   font-size:3em;
   line-height:4rem;
-  text-align:center
+  text-align:center;
 }
-h3 {
+.landing h3 {
   margin-bottom:3rem;
   font-size:2.5em;
   line-height:3.5rem
 }
-h4 {
-  margin-bottom:2rem;
+.landing h4 {
+  margin-bottom:1rem;
   font-size:2em;
-  line-height:3rem
+  line-height:2rem
 }
-h5 {
+.landing h5 {
   margin-bottom:2rem;
   font-size:1.75em;
   line-height:2.75rem
 }
-h6 {
+.landing h6 {
   margin-bottom:2rem;
   font-size:1.4em;
   line-height:2.25rem
-}
-p,
-li {
- margin-bottom:2rem;
- font-size:1.4em;
- line-height:2.25rem
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
- font-family:poppins,sans-serif;
- color:var(--dark);
- margin-top:0;
- hyphens:none
 }
 
 .cncf .cncfLogo {
@@ -117,6 +105,9 @@ h6 {
   grid-column:1/span 6;
   color:var(--dark)
 }
+.intro a {
+  text-decoration: underline;
+}
 
 .getStarted {
   display:grid;
@@ -154,13 +145,6 @@ h6 {
   padding:40px;
   border-top:solid var(--ifm-color-primary-dark) 14px;
   box-shadow:rgba(51,49,59,.5) 0 0 20px
-}
-
-.wrap {
-  box-sizing: border-box;
-  width: 75%;
-  max-width: 1200px;
-  margin: 0 auto;
 }
 
 .gridTwo {

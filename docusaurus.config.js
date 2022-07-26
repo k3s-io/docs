@@ -31,7 +31,7 @@ module.exports = {
         {
           type: 'doc',
           docId: 'introduction',
-          position: 'left',
+          position: 'right',
           label: 'Docs',
           className: 'navbar__docs',
         },

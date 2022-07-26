@@ -1,14 +1,15 @@
 import Layout from '@theme/Layout';
 import CodeBlock from '@theme/CodeBlock';
 import React from 'react';
-import style from './index.module.css';
+import index from './index.module.css';
 
 function Landing() {
   return (
     <Layout>
-    <section className={style.intro}>
-      <div className={style.bgPrimary}>
-        <div className={`${style.wrap} ${style.gridTwo}`}>
+    <main className={index.landing}>
+    <section className={index.intro}>
+      <div className={index.bgPrimary}>
+        <div className={`${index.wrap} ${index.gridTwo}`}>
           <div>
             <h1>Lightweight Kubernetes</h1>
             <h4>The certified Kubernetes distribution built for IoT & Edge computing</h4>
@@ -24,9 +25,9 @@ k3s kubectl get node `
           </div>
         </div>
       </div>
-      <div className={style.folder}>
+      <div className={index.folder}>
         <h4>Great For</h4>
-        <div className={`${style.bgLight} ${style.gridDynamic} ${style.textCenter}`}>
+        <div className={`${index.bgLight} ${index.gridDynamic} ${index.textCenter}`}>
           <h5>Edge</h5>
           <h5>IoT</h5>
           <h5>CI</h5>
@@ -35,9 +36,9 @@ k3s kubectl get node `
       </div>
     </section>
 
-    <section className={style.wrap}>
+    <section className={index.wrap}>
       <h2>Why Use K3s</h2>
-      <div className={style.gridThree}>
+      <div className={index.gridThree}>
         <div>
           <h5>Perfect for Edge</h5>
           <p>K3s is a highly available, certified
@@ -70,7 +71,7 @@ k3s kubectl get node `
       </div>
     </section>
     <hr />
-    <section className={style.wrap}>
+    <section className={index.wrap}>
       <h2>How it Works</h2>
       <img src="/img/how-it-works-k3s-revised.svg" alt="{{ .Site.Title }}"></img>
       <p>The above figure shows the difference 
@@ -80,28 +81,28 @@ k3s kubectl get node `
         architecture documentation.</a>
       </p>
     </section>
-    <section className={style.getStarted}>
-      <div className={style.white}>
-        <h2 className={style.textCenter}>Get Started</h2>
+    <section className={index.getStarted}>
+      <div className={index.white}>
+        <h2 className={index.textCenter}>Get Started</h2>
         <h5>
           1. Download K3s - <a href="https://github.com/k3s-io/k3s/releases/latest">latest release</a>, x86_64, ARMv7, and
           ARM64 are supported
           2. Run server
         </h5>
         <CodeBlock className="language-sh">{
-` sudo k3s server &amp;
+`sudo k3s server &
 # Kubeconfig is written to /etc/rancher/k3s/k3s.yaml
 sudo k3s kubectl get node
 
-# On a different node run the below. NODE_TOKEN comes from /var/lib/rancher/k3s/server/node-token
-# on your server
+# On a different node run the below command. 
+# NODE_TOKEN comes from /var/lib/rancher/k3s/server/node-token on your server
 sudo k3s agent --server https://myserver:6443 --token \${NODE_TOKEN}`
         }</CodeBlock>
       </div>
-      <div className={style.bgPrimary}>
-        <div className={style.wrap}>
+      <div className={index.bgPrimary}>
+        <div className={index.wrap}>
           <h2>Learn More</h2>
-          <div className={style.gridTwo}>
+          <div className={index.gridTwo}>
             <div>
               <p>Watch our recorded K3s demo on-demand, and get a copy of our slides here</p>
               <a href="https://info.rancher.com/meetup-k3s-lightweight-kubernetes" class="button button--lg button--primary">Watch
@@ -115,14 +116,13 @@ sudo k3s agent --server https://myserver:6443 --token \${NODE_TOKEN}`
         </div>
       </div>
     </section>
-    <section className={`${style.bgLight} ${style.cncf} ${style.textCenter}`}>
-      <div className={style.wrap}>
-        <img className={style.cncfLogo} src="/img/cncf-color.png"></img>
-        <p>
-          We are a Cloud Native Computing Foundation sandbox project.
-        </p>
-      </div>
+    <section className={`${index.bgLight} ${index.cncf} ${index.textCenter}`}>
+      <img className={index.cncfLogo} src="/img/cncf-color.png"></img>
+      <p>
+        We are a Cloud Native Computing Foundation sandbox project.
+      </p>
     </section>
+    </main>
     </Layout>
   );
 }
