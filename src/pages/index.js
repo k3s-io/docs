@@ -109,7 +109,7 @@ sudo k3s agent --server https://myserver:6443 --token \${NODE_TOKEN}`
               <a href="https://www.suse.com/c/rancher_blog/introduction-to-k3s/" class="button button--lg button--primary">Blog</a>
             </div>
             <div>
-              <p>Join the latest "Up and Running: K3s" Online Training.</p>
+              <p>Watch the latest "Up and Running: K3s" Online Training.</p>
               <a href="https://community.suse.com/courses/6599524" class="button button--lg button--primary">Watch Training</a>
             </div>
           </div>

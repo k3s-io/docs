@@ -124,9 +124,6 @@ a.btn.navbar__github {
   line-height: 1.66;
   font-weight: 400;
   position: relative;
-}
-
-a.btn.navbar__github {
   font-family: poppins,sans-serif;
   text-decoration: none;
   align-items: center;

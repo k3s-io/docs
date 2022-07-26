@@ -36,7 +36,7 @@ module.exports = {
           className: 'navbar__docs',
         },
         {
-          href: 'https://github.com/k3s-io/k3s/',
+          to: 'https://github.com/k3s-io/k3s/',
           label: 'GitHub',
           position: 'right',
           className: 'navbar__github btn btn-secondary icon-github',
