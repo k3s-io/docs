@@ -63,7 +63,7 @@ k3s kubectl get node `
           <p>Both ARM64 and ARMv7 are
             supported with binaries and
             multiarch images available for
-            both. K3s works great from
+            both. K3s works great on
             something as small as a
             Raspberry Pi to an AWS
             a1.4xlarge 32GiB server.</p>

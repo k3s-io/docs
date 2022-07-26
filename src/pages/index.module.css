@@ -31,7 +31,7 @@ Below is used for the k3s.io landing page
 
 .landing p {
   margin-bottom:2rem;
-  font-size:1.4em;
+  font-size:1.5em;
   line-height:1.5rem
 }
 
@@ -67,6 +67,10 @@ Below is used for the k3s.io landing page
   line-height:2.25rem
 }
 
+.cncf {
+  padding-top: 5rem;
+  padding-bottom: 4rem;
+}
 .cncf .cncfLogo {
   display: block;
   width: 300px;
@@ -131,6 +135,18 @@ Below is used for the k3s.io landing page
   padding:20rem 0 5rem
 }
 
+@media screen and (max-width: 996px) {
+  .getStarted {
+    grid-template-columns:repeat(8,1fr);
+  }
+  .getStarted .white {
+    grid-column:2/span 6;
+  }
+  .getStarted .bgPrimary {
+    grid-column:1/span 8;
+  }
+}
+
 .folder h4 {
   display:inline-block;
   margin:0;
@@ -174,6 +190,15 @@ Below is used for the k3s.io landing page
   margin:0;
   flex-grow:1;
   flex-basis:0
+}
+
+/** In mobile view */
+@media screen and (max-width: 996px) {
+  .gridTwo,
+  .gridThree,
+  .intro .gridTwo {
+    grid-template-columns:1fr
+  }
 }
 
 pre {
