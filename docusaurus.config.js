@@ -41,12 +41,6 @@ module.exports = {
           position: 'right',
           className: 'navbar__github btn btn-secondary icon-github',
         },
-        {
-          href: 'https://github.com/facebook/docusaurus',
-          position: 'left',
-          className: 'header-github-link',
-          'aria-label': 'GitHub repository',
-        },
       ],
     },
     footer: {

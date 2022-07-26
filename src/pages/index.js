@@ -104,12 +104,12 @@ sudo k3s agent --server https://myserver:6443 --token \${NODE_TOKEN}`
           <div className={style.gridTwo}>
             <div>
               <p>Watch our recorded K3s demo on-demand, and get a copy of our slides here</p>
-              <a href="https://info.rancher.com/meetup-k3s-lightweight-kubernetes" class="btn" target="_blank">Watch
+              <a href="https://info.rancher.com/meetup-k3s-lightweight-kubernetes" class="button button--lg button--primary">Watch
                 Demo</a>
             </div>
             <div>
               <p>Get the recording and slides for the last Introduction to K3s Online Training</p>
-              <a href="https://info.rancher.com/k3s-online-training" target="_blank" class="btn">Watch On Demand</a>
+              <a href="https://info.rancher.com/k3s-online-training" class="button button--lg button--primary">Watch On Demand</a>
             </div>
           </div>
         </div>

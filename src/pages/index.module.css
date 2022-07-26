@@ -2,6 +2,7 @@
 Below is used for the k3s.io landing page 
 ----------------------------------*/
 
+
 * {
   box-sizing:inherit
 }
@@ -22,10 +23,6 @@ a {
 
 .bgPrimary {
   background-color:var(--ifm-color-secondary)
-}
-
-.bgPrimary a {
-  color:var(--dark)
 }
 
 .bgLight {
