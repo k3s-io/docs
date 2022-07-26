@@ -34,7 +34,95 @@ k3s kubectl get node `
         </div>
       </div>
     </section>
-    
+
+    <section className={style.wrap}>
+      <h2>Why Use K3s</h2>
+      <div className={style.gridThree}>
+        <div>
+          <h5>Perfect for Edge</h5>
+          <p>K3s is a highly available, certified
+            Kubernetes distribution designed
+            for production workloads in
+            unattended, resource-constrained,
+            remote locations or inside
+            IoT appliances.</p>
+        </div>
+
+        <div>
+          <h5>Simplified &amp; Secure</h5>
+          <p>K3s is packaged as a single
+            &lt;50MB binary that reduces the
+            dependencies and steps needed
+            to install, run and auto-update a
+            production Kubernetes cluster.</p>
+        </div>
+
+        <div>
+          <h5>Optimized for ARM</h5>
+          <p>Both ARM64 and ARMv7 are
+            supported with binaries and
+            multiarch images available for
+            both. K3s works great from
+            something as small as a
+            Raspberry Pi to an AWS
+            a1.4xlarge 32GiB server.</p>
+        </div>
+      </div>
+    </section>
+    <hr />
+    <section className={style.wrap}>
+      <h2>How it Works</h2>
+      <img src="/img/how-it-works-k3s-revised.svg" alt="{{ .Site.Title }}"></img>
+      <p>The above figure shows the difference 
+        between K3s server and K3s agent nodes. 
+        For more information,
+        see the <a href="https://k3s-io.github.io/docs/architecture">
+        architecture documentation.</a>
+      </p>
+    </section>
+    <section className={style.getStarted}>
+      <div className={style.white}>
+        <h2 className={style.textCenter}>Get Started</h2>
+        <h5>
+          1. Download K3s - <a href="https://github.com/k3s-io/k3s/releases/latest">latest release</a>, x86_64, ARMv7, and
+          ARM64 are supported
+          2. Run server
+        </h5>
+        <CodeBlock className="language-sh">{
+` sudo k3s server &amp;
+# Kubeconfig is written to /etc/rancher/k3s/k3s.yaml
+sudo k3s kubectl get node
+
+# On a different node run the below. NODE_TOKEN comes from /var/lib/rancher/k3s/server/node-token
+# on your server
+sudo k3s agent --server https://myserver:6443 --token \${NODE_TOKEN}`
+        }</CodeBlock>
+      </div>
+      <div className={style.bgPrimary}>
+        <div className={style.wrap}>
+          <h2>Learn More</h2>
+          <div className={style.gridTwo}>
+            <div>
+              <p>Watch our recorded K3s demo on-demand, and get a copy of our slides here</p>
+              <a href="https://info.rancher.com/meetup-k3s-lightweight-kubernetes" class="btn" target="_blank">Watch
+                Demo</a>
+            </div>
+            <div>
+              <p>Get the recording and slides for the last Introduction to K3s Online Training</p>
+              <a href="https://info.rancher.com/k3s-online-training" target="_blank" class="btn">Watch On Demand</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section className={`${style.bgLight} ${style.cncf} ${style.textCenter}`}>
+      <div className={style.wrap}>
+        <img className={style.cncfLogo} src="/img/cncf-color.png"></img>
+        <p>
+          We are a Cloud Native Computing Foundation sandbox project.
+        </p>
+      </div>
+    </section>
     </Layout>
   );
 }

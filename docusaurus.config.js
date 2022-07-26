@@ -31,7 +31,7 @@ module.exports = {
         {
           type: 'doc',
           docId: 'introduction',
-          position: 'right',
+          position: 'left',
           label: 'Docs',
           className: 'navbar__docs',
         },
@@ -40,6 +40,12 @@ module.exports = {
           label: 'GitHub',
           position: 'right',
           className: 'navbar__github btn btn-secondary icon-github',
+        },
+        {
+          href: 'https://github.com/facebook/docusaurus',
+          position: 'left',
+          className: 'header-github-link',
+          'aria-label': 'GitHub repository',
         },
       ],
     },

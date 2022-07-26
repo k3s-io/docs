@@ -64,6 +64,11 @@
   --dark           : #F3F3F3;
 }
 
+[data-theme='dark'] .footer--dark {
+  background-color: var(--light);
+  color: var(--ifm-color-primary);
+}
+
 @media (max-width: 768px) {
   #theme-main h1 {
     font-size: 50px !important;
@@ -130,6 +135,10 @@ a.btn.navbar__github {
   border-radius: 3px;
 }
 
+.clear-btn {
+  padding: 100px;
+}
+
 .btn-secondary.navbar__github:hover {
   color: #fff;
   background-color: #273230;
@@ -145,7 +154,6 @@ a.btn.navbar__github::before {
   left: 15px;
   top: 10px;
 }
-
 
 .icon-github.navbar__github {
   margin-left: 20px;
