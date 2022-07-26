@@ -81,6 +81,14 @@ Below is used for the k3s.io landing page
   font-size: 22px;
 }
 
+.cncfFooter {
+  background-color: var(--dark);
+  color: var(--ifm-color-secondary);
+  padding: var(--ifm-footer-padding-vertical)
+    var(--ifm-footer-padding-horizontal);
+  text-align: center;
+}
+
 .textCenter {
   text-align: center;
 }

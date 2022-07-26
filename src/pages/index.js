@@ -1,4 +1,5 @@
 import Layout from '@theme/Layout';
+import ThemedImage from '@theme/ThemedImage';
 import CodeBlock from '@theme/CodeBlock';
 import React from 'react';
 import index from './index.module.css';
@@ -52,7 +53,7 @@ k3s kubectl get node `
         <div>
           <h5>Simplified &amp; Secure</h5>
           <p>K3s is packaged as a single
-            &lt;50MB binary that reduces the
+            &lt;60MB binary that reduces the
             dependencies and steps needed
             to install, run and auto-update a
             production Kubernetes cluster.</p>
@@ -104,20 +105,25 @@ sudo k3s agent --server https://myserver:6443 --token \${NODE_TOKEN}`
           <h2>Learn More</h2>
           <div className={index.gridTwo}>
             <div>
-              <p>Watch our recorded K3s demo on-demand, and get a copy of our slides here</p>
-              <a href="https://info.rancher.com/meetup-k3s-lightweight-kubernetes" class="button button--lg button--primary">Watch
-                Demo</a>
+              <p>Read the latest SUSE Rancher blog on K3s.</p>
+              <a href="https://www.suse.com/c/rancher_blog/introduction-to-k3s/" class="button button--lg button--primary">Blog</a>
             </div>
             <div>
-              <p>Get the recording and slides for the last Introduction to K3s Online Training</p>
-              <a href="https://info.rancher.com/k3s-online-training" class="button button--lg button--primary">Watch On Demand</a>
+              <p>Join the latest "Up and Running: K3s" Online Training.</p>
+              <a href="https://community.suse.com/courses/6599524" class="button button--lg button--primary">Watch Training</a>
             </div>
           </div>
         </div>
       </div>
     </section>
     <section className={`${index.bgLight} ${index.cncf} ${index.textCenter}`}>
-      <img className={index.cncfLogo} src="/img/cncf-color.png"></img>
+      <a href='https://www.cncf.io/'><ThemedImage className={index.cncfLogo}
+        alt="Docusaurus themed image"
+        sources={{
+          light: '/img/cncf-color.png',
+          dark: '/img/cncf-white.png',
+        }}
+      /></a>
       <p>
         We are a Cloud Native Computing Foundation sandbox project.
       </p>
