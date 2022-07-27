@@ -100,7 +100,7 @@ sudo k3s kubectl get node
 sudo k3s agent --server https://myserver:6443 --token \${NODE_TOKEN}`
         }</CodeBlock>
       </div>
-      <div className={index.bgPrimary}>
+      <div className={`${index.learnMore} ${index.bgPrimary}`}>
         <div className={index.wrap}>
           <h2>Learn More</h2>
           <div className={index.gridTwo}>

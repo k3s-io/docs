@@ -10,6 +10,11 @@ Below is used for the k3s.io landing page
   background-color:var(--ifm-color-secondary)
 }
 
+[data-theme='dark'] .bgPrimary {
+  background-color:var(--ifm-color-primary)
+}
+
+
 .bgLight {
   background-color:var(--light)
 }
@@ -121,6 +126,17 @@ Below is used for the k3s.io landing page
   text-decoration: underline;
 }
 
+[data-theme='dark'] 
+.intro h1,
+.intro h4,
+.intro p {
+  color:var(--light)
+}
+[data-theme='dark'] .intro a {
+  color: var(--ifm-color-secondary)
+}
+
+
 .getStarted {
   display:grid;
   grid-template-columns:repeat(6,1fr);
@@ -155,6 +171,11 @@ Below is used for the k3s.io landing page
   }
 }
 
+[data-theme='dark'] .learnMore {
+  background-color:var(--ifm-color-secondary)
+}
+
+
 .folder h4 {
   display:inline-block;
   margin:0;
@@ -163,12 +184,19 @@ Below is used for the k3s.io landing page
   color:var(--light);
   position:relative
  }
+ [data-theme='dark'] .folder h4 {
+  background-color:var(--ifm-color-secondary-light);
+  color:var(--dark);
+ }
 
 .folder .bgLight {
   background-color:var(--light);
   padding:40px;
   border-top:solid var(--ifm-color-primary-dark) 14px;
   box-shadow:rgba(51,49,59,.5) 0 0 20px
+}
+[data-theme='dark'] .folder .bgLight {
+  border-top:solid var(--ifm-color-secondary-light) 14px;
 }
 
 .gridTwo {
@@ -224,3 +252,5 @@ pre {
   border-radius:3px;
   white-space:pre-wrap
 }
+
+
