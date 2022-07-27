@@ -5,9 +5,9 @@ weight: 25
 
 ### Upgrading your K3s cluster
 
-[Manual Upgrades](/upgrades/manual) describes several techniques for upgrading your cluster manually. It can also be used as a basis for upgrading through third-party Infrastructure-as-Code tools like [Terraform](https://www.terraform.io/).
+[Manual Upgrades](/docs/upgrades/manual) describes several techniques for upgrading your cluster manually. It can also be used as a basis for upgrading through third-party Infrastructure-as-Code tools like [Terraform](https://www.terraform.io/).
 
-[Automated Upgrades](/upgrades/automated) describes how to perform Kubernetes-native automated upgrades using Rancher's [system-upgrade-controller](https://github.com/rancher/system-upgrade-controller).
+[Automated Upgrades](/docs/upgrades/automated) describes how to perform Kubernetes-native automated upgrades using Rancher's [system-upgrade-controller](https://github.com/rancher/system-upgrade-controller).
 
 ### Version-specific caveats
 

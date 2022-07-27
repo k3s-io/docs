@@ -31,7 +31,7 @@ When running with systemd, logs will be created in `/var/log/syslog` and viewed 
 
 ### Can I run K3s in Docker?
 
-Yes, there are multiple ways to run K3s in Docker. See [Advanced Options](/advanced#running-k3s-in-docker) for more details.
+Yes, there are multiple ways to run K3s in Docker. See [Advanced Options](/docs/advanced#running-k3s-in-docker) for more details.
 ### What is the difference between K3s Server and Agent Tokens?
 
 In K3s, there are two types of tokens: K3S_TOKEN and K3S_AGENT_TOKEN.

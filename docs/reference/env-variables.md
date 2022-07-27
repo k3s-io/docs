@@ -3,7 +3,7 @@ title: Environment Variables
 weight: 3
 ---
 
-As mentioned in the [Quick-Start Guide](/quick-start), you can use the installation script available at https://get.k3s.io to install K3s as a service on systemd and openrc based systems.
+As mentioned in the [Quick-Start Guide](/docs/quick-start), you can use the installation script available at https://get.k3s.io to install K3s as a service on systemd and openrc based systems.
 
 The simplest form of this command is as follows:
 
@@ -23,7 +23,7 @@ When using this method to install K3s, the following environment variables can b
 | `INSTALL_K3S_BIN_DIR` | Directory to install K3s binary, links, and uninstall script to, or use `/usr/local/bin` as the default. |
 | `INSTALL_K3S_BIN_DIR_READ_ONLY` | If set to true will not write files to `INSTALL_K3S_BIN_DIR`, forces setting `INSTALL_K3S_SKIP_DOWNLOAD=true`. |
 | `INSTALL_K3S_SYSTEMD_DIR` | Directory to install systemd service and environment files to, or use `/etc/systemd/system` as the default. |
-| `INSTALL_K3S_EXEC` | Command with flags to use for launching K3s in the service. If the command is not specified, and the `K3S_URL` is set, it will default to "agent." If `K3S_URL` not set, it will default to "server." For help, refer to [this example.](/installation/configuration#configuration-with-install-script) |
+| `INSTALL_K3S_EXEC` | Command with flags to use for launching K3s in the service. If the command is not specified, and the `K3S_URL` is set, it will default to "agent." If `K3S_URL` not set, it will default to "server." For help, refer to [this example.](/docs/installation/configuration#configuration-with-install-script) |
 | `INSTALL_K3S_NAME` | Name of systemd service to create, will default to 'k3s' if running k3s as a server and 'k3s-agent' if running k3s as an agent. If specified the name will be prefixed with 'k3s-'. |
 | `INSTALL_K3S_TYPE` | Type of systemd service to create, will default from the K3s exec command if not specified. |
 | `INSTALL_K3S_SELINUX_WARN` | If set to true will continue if k3s-selinux policy is not found. |

@@ -14,4 +14,4 @@ If you are running iptables in nftables mode instead of legacy you might encount
 
 ### Rootless Mode
 
-Running K3s with Rootless mode is experimental and has several [known issues.](/advanced/#known-issues-with-rootless-mode)
+Running K3s with Rootless mode is experimental and has several [known issues.](/docs/advanced#known-issues-with-rootless-mode)
