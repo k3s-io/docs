@@ -3,6 +3,9 @@ title: Architecture
 weight: 1
 ---
 
+import ThemedImage from '@theme/ThemedImage';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
 This page describes the architecture of a high-availability K3s server cluster and how it differs from a single-node server cluster.
 
 It also describes how agent nodes are registered with K3s servers.
@@ -23,7 +26,13 @@ The following diagram shows an example of a cluster that has a single-node K3s s
 
 In this configuration, each agent node is registered to the same server node. A K3s user can manipulate Kubernetes resources by calling the K3s API on the server node.
 
-![K3s Architecture with a Single Server](/img/k3s-architecture-single-server.png)
+<ThemedImage
+  alt="K3s Architecture with a Single Server"
+  sources={{
+    light: useBaseUrl('/img/k3s-architecture-single-server.svg'),
+    dark: useBaseUrl('/img/k3s-architecture-single-server-dark.svg'),
+  }}
+/>
 
 
 ### High-Availability K3s Server with an External DB
@@ -33,7 +42,13 @@ Single server clusters can meet a variety of use cases, but for environments whe
 * Two or more **server nodes** that will serve the Kubernetes API and run other control plane services
 * An **external datastore** (as opposed to the embedded SQLite datastore used in single-server setups)
 
-![K3s Architecture with a High-availability Server](/img/k3s-architecture-ha-server.png)
+<ThemedImage
+  alt="K3s Architecture with High-availability Servers"
+  sources={{
+    light: useBaseUrl('/img/k3s-architecture-ha-server.svg'),
+    dark: useBaseUrl('/img/k3s-architecture-ha-server-dark.svg'),
+  }}
+/>
 
 ### Fixed Registration Address for Agent Nodes
 
