@@ -6,13 +6,15 @@
    viewBox="0 0 6756.000000 3183.000000"
    preserveAspectRatio="xMidYMid meet"
    id="svg494"
-   sodipodi:docname="k3s-architecture-ha-server_1.svg"
+   sodipodi:docname="k3s-architecture-ha-server.svg"
    inkscape:version="1.2 (56b05e47e7, 2022-06-09, custom)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
-   <style type="text/css">
+  <style
+     type="text/css"
+     id="style18">
 	.st0{fill:#FFF4D2;}
 	.st1{fill:#FFE8A4;}
 	.st3{fill:#FFC61C;}
@@ -32,15 +34,23 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="pt"
      showgrid="false"
-     inkscape:zoom="0.1767767"
-     inkscape:cx="4361.4346"
-     inkscape:cy="2050.6097"
+     inkscape:zoom="0.125"
+     inkscape:cx="5187.9999"
+     inkscape:cy="835.99998"
      inkscape:window-width="2247"
      inkscape:window-height="1376"
      inkscape:window-x="1193"
      inkscape:window-y="27"
      inkscape:window-maximized="0"
      inkscape:current-layer="svg494" />
+  <path
+     class="st1"
+     d="m -78.677107,795.52652 0.05528,-696.665326 c 2.15e-4,-2.713761 1.702827,-4.863767 5.178005,-4.863724 L 1308.5881,94.0145 c 5.1689,6.4e-5 6.4653,2.191348 6.4653,4.877516 V 795.61879 c 0,2.68616 -1.5039,5.05411 -6.6728,5.05412 l -1379.781273,0.002 c -5.168941,1e-5 -7.276643,-2.46248 -7.27643,-5.14864 z"
+     id="path1175"
+     style="fill:#ffffff;stroke-width:1.12448"
+     transform="matrix(4.7077363,0,0,4.3007922,457.36348,-331.25535)"
+     sodipodi:nodetypes="ssssssssss"
+     inkscape:label="background" />
   <g
      id="g4080"
      transform="matrix(4.7077363,0,0,12.776796,457.36348,-5306.6511)"
@@ -59,7 +69,7 @@
      inkscape:label="nodes">
     <path
        d="M 91.352806,341.50012 H 252.7528 c 3.29999,0 6,2.69995 6,6 v 79.3999 c 0,3.30005 -2.70001,6 -6,6 H 91.352806 c -3.300003,0 -6,-2.69995 -6,-6 v -79.3999 c 0,-3.30005 2.700012,-6 6,-6 z"
-       id="path1189"/>
+       id="path1189" />
     <g
        id="g4143"
        style="fill-opacity:1">
@@ -1049,7 +1059,7 @@
        cx="6330.8315"
        cy="993.84772"
        r="130.92914"
-       id="circle2295"/>
+       id="circle2295" />
     <circle
        id="circle1219-4-6"
        cy="2267.2517"
@@ -1079,7 +1089,7 @@
        cx="454.57513"
        cy="1331.3687"
        r="130.92914"
-       id="circle22423"/>
+       id="circle22423" />
   </g>
   <g
      id="g924"
