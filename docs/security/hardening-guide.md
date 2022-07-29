@@ -496,7 +496,7 @@ Ensure that the `--encryption-provider-config` argument is set as appropriate.
 <summary>Rationale</summary>
 `etcd` is a highly available key-value store used by Kubernetes deployments for persistent storage of all of its REST API objects. These objects are sensitive in nature and should be encrypted at rest to avoid any disclosures.
 
-Detailed steps on how to configure secrets encryption in K3s are available in [Secrets Encryption](/docs/security/secrets-encryption).
+Detailed steps on how to configure secrets encryption in K3s are available in [Secrets Encryption](secrets-encryption.md).
 </details>
 
 ### Control 1.2.34
@@ -505,7 +505,7 @@ Ensure that encryption providers are appropriately configured.
 <summary>Rationale</summary>
 Where `etcd` encryption is used, it is important to ensure that the appropriate set of encryption providers is used. Currently, the `aescbc`, `kms` and `secretbox` are likely to be appropriate options.
 
-This can be remediated by passing a valid configuration to `k3s` as outlined above. Detailed steps on how to configure secrets encryption in K3s are available in [Secrets Encryption](/docs/security/secrets-encryption).
+This can be remediated by passing a valid configuration to `k3s` as outlined above. Detailed steps on how to configure secrets encryption in K3s are available in [Secrets Encryption](secrets-encryption.md).
 </details>
 
 ### Control 1.3.1
@@ -674,4 +674,4 @@ k3s server \
 
 ## Conclusion
 
-If you have followed this guide, your K3s cluster will be configured to comply with the CIS Kubernetes Benchmark. You can review the [CIS Benchmark Self-Assessment Guide](/docs/security/self-assessment) to understand the expectations of each of the benchmark's checks and how you can do the same on your cluster.
+If you have followed this guide, your K3s cluster will be configured to comply with the CIS Kubernetes Benchmark. You can review the [CIS Benchmark Self-Assessment Guide](self-assessment.md) to understand the expectations of each of the benchmark's checks and how you can do the same on your cluster.

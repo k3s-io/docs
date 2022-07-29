@@ -14,7 +14,7 @@ Single server clusters can meet a variety of use cases, but for environments whe
 * An **external datastore** (as opposed to the embedded SQLite datastore used in single-server setups)
 * A **fixed registration address** that is placed in front of the server nodes to allow agent nodes to register with the cluster
 
-For more details on how these components work together, refer to the [architecture section.](/docs/architecture#high-availability-with-an-external-db)
+For more details on how these components work together, refer to the [architecture section.](architecture/architecture.md#high-availability-with-an-external-db)
 
 Agents register through the fixed registration address, but after registration they establish a connection directly to one of the server nodes. This is a websocket connection initiated by the `k3s agent` process and it is maintained by a client-side load balancer running as part of the agent process.
 
@@ -28,14 +28,14 @@ Setting up an HA cluster requires the following steps:
 4. [Join agent nodes](#4-optional-join-agent-nodes)
 
 ### 1. Create an External Datastore
-You will first need to create an external datastore for the cluster. See the [Cluster Datastore Options](/docs/installation/datastore) documentation for more details.
+You will first need to create an external datastore for the cluster. See the [Cluster Datastore Options](datastore.md) documentation for more details.
 
 ### 2. Launch Server Nodes
-K3s requires two or more server nodes for this HA configuration. See the [Requirements](/docs/installation/requirements) guide for minimum machine requirements.
+K3s requires two or more server nodes for this HA configuration. See the [Requirements](requirements.md) guide for minimum machine requirements.
 
 When running the `k3s server` command on these nodes, you must set the `datastore-endpoint` parameter so that K3s knows how to connect to the external datastore. The `token` parameter can also be used to set a deterministic token when adding nodes. When empty, this token will be generated automatically for further use.
 
-For example, a command like the following could be used to install the K3s server with a MySQL database as the external datastore and [set a token](/docs/reference/server-config#cluster-options):
+For example, a command like the following could be used to install the K3s server with a MySQL database as the external datastore and [set a token](reference/server-config.md#cluster-options):
 
 ```bash
 curl -sfL https://get.k3s.io | sh -s - server \
@@ -43,12 +43,12 @@ curl -sfL https://get.k3s.io | sh -s - server \
   --datastore-endpoint="mysql://username:password@tcp(hostname:3306)/database-name"
 ```
 
-The datastore endpoint format differs based on the database type. For details, refer to the section on [datastore endpoint formats.](/docs/installation/datastore#datastore-endpoint-format-and-functionality)
+The datastore endpoint format differs based on the database type. For details, refer to the section on [datastore endpoint formats.](datastore.md#datastore-endpoint-format-and-functionality)
 
-To configure TLS certificates when launching server nodes, refer to the [datastore configuration guide.](/docs/installation/datastore#external-datastore-configuration-parameters)
+To configure TLS certificates when launching server nodes, refer to the [datastore configuration guide.](datastore.md#external-datastore-configuration-parameters)
 
 :::note
-The same installation options available to single-server installs are also available for high-availability installs. For more details, see the [Configuration Options](/docs/installation/configuration) documentation.
+The same installation options available to single-server installs are also available for high-availability installs. For more details, see the [Configuration Options](configuration.md) documentation.
 :::
 
 By default, server nodes will be schedulable and thus your workloads can get launched on them. If you wish to have a dedicated control plane where no user workloads will run, you can use taints. The `node-taint` parameter will allow you to configure nodes with taints, for example `--node-taint CriticalAddonsOnly=true:NoExecute`.
@@ -74,7 +74,7 @@ If the first server node was started without the `--token` CLI flag or `K3S_TOKE
 cat /var/lib/rancher/k3s/server/token
 ```
 
-Additional server nodes can then be added [using the token](/docs/reference/server-config#cluster-options):
+Additional server nodes can then be added [using the token](reference/server-config.md#cluster-options):
 
 ```bash
 curl -sfL https://get.k3s.io | sh -s - server \
