@@ -56,7 +56,13 @@ In the high-availability server configuration, each node must also register with
 
 After registration, the agent nodes establish a connection directly to one of the server nodes.
 
-![Agent Registration HA](/img/k3s-production-setup.svg)
+<ThemedImage
+  alt="Agent Registration HA"
+  sources={{
+    light: useBaseUrl('/img/k3s-production-setup.svg'),
+    dark: useBaseUrl('/img/k3s-production-setup-dark.svg'),
+  }}
+/>
 
 ### How Agent Node Registration Works
 
