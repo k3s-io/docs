@@ -6,7 +6,7 @@ weight: 25
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-> **Note:** Please reference the [Networking](/networking) page for information about CoreDNS, Traefik, and the Service LB.
+> **Note:** Please reference the [Networking](/docs/networking) page for information about CoreDNS, Traefik, and the Service LB.
 
 By default, K3s will run with flannel as the CNI, using VXLAN as the default backend. To change the CNI, refer to the section on configuring a [custom CNI](#custom-cni). To change the flannel backend, refer to the flannel options section.
 
@@ -52,7 +52,7 @@ You should see that IP forwarding is set to true.
 </TabItem>
 <TabItem value="Calico" default>
 
-Follow the [Calico CNI Plugins Guide](https://docs.projectcalico.org/master/reference/cni-plugin/configuration). Modify the Calico YAML so that IP forwarding is allowed in the container_settings section, for example:
+Follow the [Calico CNI Plugins Guide](https://docs.projectcalico.org/master/docs/reference/cni-plugin/configuration). Modify the Calico YAML so that IP forwarding is allowed in the container_settings section, for example:
 
 ```yaml
 "container_settings": {

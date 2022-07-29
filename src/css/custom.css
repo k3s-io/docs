@@ -44,6 +44,10 @@
   --ifm-color-primary-light: #075a86;
   --ifm-color-primary-lighter: #075e8c;
   --ifm-color-primary-lightest: #086b9f;
+  --ifm-color-secondary: #ffc61c;
+  --ifm-color-secondary-light: #ffcd38;
+  --dark            : #33313b;
+  --light           : #F3F3F3;
 }
 /* Dark Mode Color Override */
 [data-theme='dark'] {
@@ -54,6 +58,16 @@
   --ifm-color-primary-light: #ffcd38;
   --ifm-color-primary-lighter: #ffd146;
   --ifm-color-primary-lightest: #ffdb71;
+  --ifm-color-secondary-dark: #054a6e;
+  --ifm-color-secondary: #06527a;
+  --ifm-color-secondary-light: #075a86;
+  --light            : #33313b;
+  --dark           : #F3F3F3;
+}
+
+[data-theme='dark'] .footer--dark {
+  background-color: var(--light);
+  color: var(--ifm-color-primary);
 }
 
 @media (max-width: 768px) {
@@ -66,8 +80,6 @@
     margin-bottom: 20px;
   }
 }
-
-
 
 body {
   font-family: 'Lato', sans-serif;
@@ -113,13 +125,14 @@ a.btn.navbar__github {
   line-height: 1.66;
   font-weight: 400;
   position: relative;
-}
-
-a.btn.navbar__github {
   font-family: poppins,sans-serif;
   text-decoration: none;
   align-items: center;
   border-radius: 3px;
+}
+
+.clear-btn {
+  padding: 100px;
 }
 
 .btn-secondary.navbar__github:hover {
@@ -137,7 +150,6 @@ a.btn.navbar__github::before {
   left: 15px;
   top: 10px;
 }
-
 
 .icon-github.navbar__github {
   margin-left: 20px;

@@ -4,7 +4,7 @@ module.exports = {
   title: 'K3s',
   tagline: '',
   url: 'https://k3s-io.github.io',
-  baseUrl: '/docs/',
+  baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
@@ -36,7 +36,7 @@ module.exports = {
           className: 'navbar__docs',
         },
         {
-          href: 'https://github.com/k3s-io/k3s/',
+          to: 'https://github.com/k3s-io/k3s/',
           label: 'GitHub',
           position: 'right',
           className: 'navbar__github btn btn-secondary icon-github',
@@ -46,7 +46,9 @@ module.exports = {
     footer: {
       style: 'dark',
       links: [],
-      copyright: `Copyright © ${new Date().getFullYear()} SUSE Rancher. All Rights Reserved.`,
+      copyright: `Copyright © ${new Date().getFullYear()} K3s Project Authors. All rights reserved. <br>The Linux Foundation has registered trademarks
+      and uses trademarks. For a list of trademarks of The Linux Foundation, 
+      please see our <a href="https://www.linuxfoundation.org/trademark-usage"> Trademark Usage</a> page.`,
     },
   },
   presets: [
@@ -54,7 +56,6 @@ module.exports = {
       '@docusaurus/preset-classic',
       {
         docs: {
-          routeBasePath: '/', // Serve the docs at the site's root
           /* other docs plugin options */
           sidebarPath: require.resolve('./sidebars.js'),
           showLastUpdateTime: true,

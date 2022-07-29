@@ -9,7 +9,7 @@ You can upgrade K3s by using the installation script, or by manually installing 
 
 ### Release Channels
 
-Upgrades performed via the installation script or using our [automated upgrades](/upgrades/automated/) feature can be tied to different release channels. The following channels are available:
+Upgrades performed via the installation script or using our [automated upgrades](/docs/upgrades/automated/) feature can be tied to different release channels. The following channels are available:
 
 | Channel |   Description  |
 |---------------|---------|
