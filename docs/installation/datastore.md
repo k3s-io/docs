@@ -15,10 +15,10 @@ The ability to run Kubernetes using a datastore other than etcd sets K3s apart f
 K3s supports the following datastore options:
 
 * Embedded [SQLite](https://www.sqlite.org/index.html)
-* [PostgreSQL](https://www.postgresql.org/) (certified against versions 10.7 and 11.5)
-* [MySQL](https://www.mysql.com/) (certified against version 5.7)
-* [MariaDB](https://mariadb.org/) (certified against version 10.3.20)
-* [etcd](https://etcd.io/) (certified against version 3.3.15)
+* [PostgreSQL](https://www.postgresql.org/) (certified against versions 10.7, 11.5, and 14.2)
+* [MySQL](https://www.mysql.com/) (certified against versions 5.7 and 8.0)
+* [MariaDB](https://mariadb.org/) (certified against version 10.6.8)
+* [etcd](https://etcd.io/) (certified against version 3.5.4)
 * Embedded etcd for High Availability
 
 ### External Datastore Configuration Parameters
