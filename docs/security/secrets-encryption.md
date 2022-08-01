@@ -7,11 +7,18 @@ import TabItem from '@theme/TabItem';
 
 # Secrets Encryption Config
 
-K3s supports enabling secrets encryption at rest by passing the flag `--secrets-encryption` on a server; this flag will do the following automatically:
+K3s supports enabling secrets encryption at rest. When first starting the server, passing the flag `--secrets-encryption` will do the following automatically:
 
 - Generate an AES-CBC key
 - Generate an encryption config file with the generated key
 - Pass the config to the KubeAPI as encryption-provider-config
+
+:::tip 
+
+Secrets-encryption cannot be enabled on an existing server without restarting it.  
+Use `curl -sfL https://get.k3s.io | sh -s - server --secrets-encryption` if installing from script, or other methods described in [Configuration Options](installation/configuration.md#configuration-with-install-script).
+
+:::
 
 Example of the encryption config file:
 ```json
@@ -42,7 +49,6 @@ Example of the encryption config file:
   ]
 }
 ```
-
 
 ## Secrets Encryption Tool
 
