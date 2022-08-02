@@ -51,7 +51,7 @@ If you are having an issue with deploying K3s, you should:
 
 2) Check that you have resolved any [Additional OS Preparation](advanced/advanced.md#additional-os-preparations). Run `k3s check-config` and ensure that it passes.
 
-3) Search the [K3s GitHub existing issues](https://github.com/k3s-io/k3s/issues) that match your problem.
+3) Search the [K3s GitHub existing issues](https://github.com/k3s-io/k3s/issues) for one that matches your problem.
 
 4) Join the [Rancher K3s Slack](https://rancher-users.slack.com/archives/CGGQEHPPW) channel to get help. 
 
