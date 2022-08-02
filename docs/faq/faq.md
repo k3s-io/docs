@@ -7,7 +7,7 @@ The FAQ is updated periodically and designed to answer the questions our users m
 
 ### Is K3s a suitable replacement for Kubernetes?
 
-K3s is capable of nearly everything Kubernetes can do. It is just a more lightweight version. See the [main](/) docs page for more details.
+K3s is capable of nearly everything Kubernetes can do. It is just a more lightweight version. See the [main](introduction.md) docs page for more details.
 
 ### How can I use my own Ingress instead of Traefik?
 
@@ -32,6 +32,7 @@ When running with systemd, logs will be created in `/var/log/syslog` and viewed 
 ### Can I run K3s in Docker?
 
 Yes, there are multiple ways to run K3s in Docker. See [Advanced Options](advanced/advanced.md#running-k3s-in-docker) for more details.
+
 ### What is the difference between K3s Server and Agent Tokens?
 
 In K3s, there are two types of tokens: K3S_TOKEN and K3S_AGENT_TOKEN.
@@ -41,3 +42,17 @@ K3S_TOKEN: Defines the key required by the server to offer the HTTP config resou
 K3S_AGENT_TOKEN: Optional. Defines the key required by the server to offer HTTP config resources to the agents. If not defined, agents will require K3S_TOKEN. Defining K3S_AGENT_TOKEN is encouraged to avoid agents having to know K3S_TOKEN, which is also used to encrypt data.
 
 If no K3S_TOKEN is defined, the first K3s server will generate a random one. The result is part of the content in `/var/lib/rancher/k3s/server/token`. For example, `K1070878408e06a827960208f84ed18b65fa10f27864e71a57d9e053c4caff8504b::server:df54383b5659b9280aa1e73e60ef78fc`, where `df54383b5659b9280aa1e73e60ef78fc` is the K3S_TOKEN.
+
+### I'm having an issue, where can I get help?
+ 
+If you are having an issue with deploying K3s, you should:
+
+1) Check the [Known Issues](known-issues/known-issues.md) page.
+
+2) Check that you have resolved any [Additional OS Preparation](advanced/advanced.md#additional-os-preparations). Run `k3s check-config` and ensure that it passes.
+
+3) Search the [K3s GitHub existing issues](https://github.com/k3s-io/k3s/issues) that match your problem.
+
+4) Join the [Rancher K3s Slack](https://rancher-users.slack.com/archives/CGGQEHPPW) channel to get help. 
+
+5) Submit a [New Issue](https://github.com/k3s-io/k3s/issues/new/choose) on the K3s Github describing your setup and the issue you are experiencing.
