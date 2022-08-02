@@ -245,7 +245,7 @@ will register itself as a node (run the agent).
 
 ### Additional preparation for Debian "buster" based distributions
 
-Several popular OSes based on Debian "buster" ship a version of iptables, between v1.8.0-v1.8.4. These versions contain a bug which cause the accumulation of too many rules which will bog down and crash the K3s server. See [this issue](https://github.com/k3s-io/k3s/issues/3117) for more background. 
+Several popular Linux distributions based on Debian "buster" ship a version of iptables between v1.8.0-v1.8.4. These versions contain a bug which causes the accumulation of duplicate rules, which negatively affects the performance and stability of the node. See [Issue #3117](https://github.com/k3s-io/k3s/issues/3117) for more background. 
 
 Switching from nftables mode to legacy iptables mode will bypass this issue.
 
@@ -256,7 +256,7 @@ sudo update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
 sudo reboot
 ```
 
-Alternatively, K3s ships which a working version of ipTables (v1.8.6) which does not cause a crash. You can replace iptables on your system:
+Alternatively, K3s ships which a working version of ipTables (v1.8.6) which functions properly. You can replace iptables on your system:
 
 ```bash
 sudo apt remove iptables nftables -y
@@ -264,7 +264,7 @@ sudo reboot
 export PATH="/var/lib/rancher/k3s/data/current/bin/:/var/lib/rancher/k3s/data/current/bin/aux:$PATH"
 ```
 
-K3s will now use it's packaged version of iptables.
+K3s will now use its packaged version of iptables.
 
 ```bash
 $ which iptables
