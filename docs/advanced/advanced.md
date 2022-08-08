@@ -19,7 +19,8 @@ This section contains advanced information describing the different ways you can
 - [Running K3s with Rootless mode (Experimental)](#running-k3s-with-rootless-mode-experimental)
 - [Node labels and taints](#node-labels-and-taints)
 - [Starting the server with the installation script](#starting-the-server-with-the-installation-script)
-- [Additional preparation for (Red Hat/CentOS) Enterprise Linux](#additional-preparation-for-red-hat/centos-enterprise-linux)
+- [Additional OS preparations](#additional-os-preparations)
+- [Additional preparation for (Red Hat/CentOS) Enterprise Linux](#additional-preparation-for-red-hatcentos-enterprise-linux)
 - [Additional preparation for Raspberry Pi OS](#additional-preparation-for-raspberry-pi-os)
 - [Enabling vxlan on Ubuntu 21.10+ on Raspberry Pi](#enabling-vxlan-for-ubuntu-21.10+-on-raspberry-pi)
 - [Running K3s in Docker](#running-k3s-in-docker)
@@ -237,10 +238,40 @@ INFO[2019-01-22T15:16:20.541027133-07:00] Wrote kubeconfig /etc/rancher/k3s/k3s.
 INFO[2019-01-22T15:16:20.541049100-07:00] Run: k3s kubectl                             
 ```
 
-The output will likely be much longer as the agent will create a lot of logs. By default the server
+The output will likely be much longer as the agent will create a lot of logs. By default, the server
 will register itself as a node (run the agent).
 
-## Additional preparation for (Red Hat/CentOS) Enterprise Linux
+## Additional OS Preparations
+
+### Additional preparation for Debian "buster" based distributions
+
+Several popular Linux distributions based on Debian "buster" ship a version of iptables between v1.8.0-v1.8.4. These versions contain a bug which causes the accumulation of duplicate rules, which negatively affects the performance and stability of the node. See [Issue #3117](https://github.com/k3s-io/k3s/issues/3117) for more background. 
+
+Switching from nftables mode to legacy iptables mode will bypass this issue.
+
+```bash
+sudo iptables -F
+sudo update-alternatives --set iptables /usr/sbin/iptables-legacy
+sudo update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
+sudo reboot
+```
+
+Alternatively, K3s ships which a working version of ipTables (v1.8.6) which functions properly. You can replace iptables on your system:
+
+```bash
+sudo apt remove iptables nftables -y
+sudo reboot
+export PATH="/var/lib/rancher/k3s/data/current/bin/:/var/lib/rancher/k3s/data/current/bin/aux:$PATH"
+```
+
+K3s will now use its packaged version of iptables.
+
+```bash
+$ which iptables
+/var/lib/rancher/k3s/data/current/bin/aux/iptables
+```
+
+### Additional preparation for (Red Hat/CentOS) Enterprise Linux
 
 It is recommended to turn off firewalld:
 ```bash
@@ -253,17 +284,9 @@ systemctl disable nm-cloud-setup.service nm-cloud-setup.timer
 reboot
 ```
 
-## Additional preparation for Raspberry Pi OS
-### Enabling legacy iptables on Raspberry Pi OS
-Raspberry Pi OS (formerly Raspbian) defaults to using `nftables` instead of `iptables`.  **K3S** networking features require `iptables` and do not work with `nftables`.  Follow the steps below to switch configure **Buster** to use `legacy iptables`:
-```bash
-sudo iptables -F
-sudo update-alternatives --set iptables /usr/sbin/iptables-legacy
-sudo update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
-sudo reboot
-```
+### Additional preparation for Raspberry Pi OS
 
-### Enabling cgroups for Raspberry Pi OS
+Raspberry Pi OS is Debian based, and may suffer from an old iptables version. See [workarounds](#additional-preparation-for-debian-buster-based-distributions).
 
 Standard Raspberry Pi OS installations do not start with `cgroups` enabled. **K3S** needs `cgroups` to start the systemd service. `cgroups`can be enabled by appending `cgroup_memory=1 cgroup_enable=memory` to `/boot/cmdline.txt`.
 

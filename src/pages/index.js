@@ -22,7 +22,7 @@ function Landing() {
 # Check for Ready node, takes ~30 seconds 
 k3s kubectl get node `
             }</CodeBlock>
-            <p>For detailed installation, <a href="https://rancher.com/docs/k3s/latest/en/">refer to the docs</a></p>
+            <p>For detailed installation, <a href="docs">refer to the docs</a></p>
           </div>
         </div>
       </div>
