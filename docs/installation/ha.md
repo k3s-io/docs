@@ -18,7 +18,7 @@ For more details on how these components work together, refer to the [architectu
 
 Agents register through the fixed registration address, but after registration they establish a connection directly to one of the server nodes. This is a websocket connection initiated by the `k3s agent` process and it is maintained by a client-side load balancer running as part of the agent process.
 
-# Installation Outline
+## Installation Outline
 
 Setting up an HA cluster requires the following steps:
 

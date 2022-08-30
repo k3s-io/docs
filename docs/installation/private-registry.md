@@ -13,7 +13,7 @@ Note that server nodes are schedulable by default. If you have not tainted the s
 
 Configuration in containerd can be used to connect to a private registry with a TLS connection and with registries that enable authentication as well. The following section will explain the `registries.yaml` file and give different examples of using private registry configuration in K3s.
 
-# Registries Configuration File
+## Registries Configuration File
 
 The file consists of two main sections:
 
@@ -149,7 +149,7 @@ mirrors:
  
 In order for the registry changes to take effect, you need to restart K3s on each node.
 
-# Adding Images to the Private Registry
+## Adding Images to the Private Registry
 
 First, obtain the k3s-images.txt file from GitHub for the release you are working with.
 Pull the K3s images listed on the k3s-images.txt file from docker.io
