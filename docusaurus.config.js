@@ -57,6 +57,7 @@ module.exports = {
       {
         docs: {
           /* other docs plugin options */
+          routeBasePath: '/', // Serve the docs at the site's root
           sidebarPath: require.resolve('./sidebars.js'),
           showLastUpdateTime: true,
           editUrl: 'https://github.com/k3s-io/docs/edit/main/',
