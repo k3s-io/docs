@@ -1,6 +1,8 @@
-# Website
+# K3s Website and Docs
 
-This website is built using [Docusaurus 2](https://docusaurus.io/), a modern static website generator.
+This repo contains the content of the K3s landing page and documentation. Please open an issue if you have suggestions for new content or edits. We also gladly accept community PRs. 
+
+The website is built using [Docusaurus 2](https://docusaurus.io/), a modern static website generator.
 
 ### Installation
 
@@ -31,16 +33,4 @@ This command generates static content into the `build` directory and can be serv
 
 ### Deployment
 
-Using SSH:
-
-```
-$ USE_SSH=true yarn deploy
-```
-
-Not using SSH:
-
-```
-$ GIT_USER=<Your GitHub username> yarn deploy
-```
-
-If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
+An automated GH action will deploy the website to GitHub Pages once a PR has been merged to `main`.
