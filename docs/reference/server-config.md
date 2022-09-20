@@ -193,7 +193,7 @@ the agent options are there because the server has the agent process embedded wi
 | `--rootless`           | Run rootless                             |
 | `--secrets-encryption` | Enable Secret encryption at rest         |
 | `--enable-pprof`       | Enable pprof endpoint on supervisor port |
-| `--docker`             | Use cir-dockerd instead of containerd    |
+| `--docker`             | Use cri-dockerd instead of containerd    |
 
 ### Deprecated Options
 

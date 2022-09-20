@@ -80,7 +80,7 @@ In this section, you'll learn how to configure the K3s agent.
 | Flag         | Description  |
 | ------------ | ------------ |
 | `--rootless` | Run rootless |
-| `--docker`   | Use cir-dockerd instead of containerd   |
+| `--docker`   | Use cri-dockerd instead of containerd   |
 
 ### Deprecated
 
