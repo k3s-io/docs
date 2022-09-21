@@ -197,11 +197,13 @@ the agent options are there because the server has the agent process embedded wi
 
 ### Deprecated Options
 
-| Flag                     | Environment Variable | Description                                                                                                 |
-| ------------------------ | -------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `--no-flannel`           | N/A                  | Use --flannel-backend=none                                                                                  |
-| `--no-deploy` value      | N/A                  | Do not deploy packaged components (valid items: coredns, servicelb, traefik, local-storage, metrics-server) |
-| `--cluster-secret` value | `K3S_CLUSTER_SECRET` | Use --token                                                                                                 |
+| Flag                                    | Environment Variable | Description                                                                                                 |
+| --------------------------------------- | -------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `--no-flannel`                          | N/A                  | Use --flannel-backend=none                                                                                  |
+| `--no-deploy` value                     | N/A                  | Do not deploy packaged components (valid items: coredns, servicelb, traefik, local-storage, metrics-server) |
+| `--cluster-secret` value                | `K3S_CLUSTER_SECRET` | Use --token                                                                                                 |
+| `--flannel-backend` wireguard           | N/A                  | Use --flannel-backend=wireguard-native                                                                      |
+| `--flannel-backend` value=option1=value | N/A                  | Use --flannel-conf to specify the flannel config file with the backend config                               |
 
 # K3s Server CLI Help
 
