@@ -86,7 +86,14 @@ Starting K3s without encryption and enabling it at a later time is currently *no
   k3s secrets-encrypt prepare
   ```
 
-2. Kill and restart the K3s server with same arguments. If running k3s as a service you can use `systemctl restart k3s` or `rc-service k3s restart`.
+2. Kill and restart the K3s server with same arguments. If running K3s as a service:
+  ```bash
+  # If using systemd
+  systemctl restart k3s
+  # If using openrc
+  rc-service k3s restart
+  ```
+
 3. Rotate
 
   ```bash
@@ -124,7 +131,14 @@ To rotate secrets encryption keys on HA setups:
     k3s secrets-encrypt prepare
     ```
 
-3. Kill and restart S1 with same arguments. If running k3s as a service you can use `systemctl restart k3s` or `rc-service k3s restart`.
+3. Kill and restart S1 with same arguments. If running K3s as a service:
+  ```bash
+  # If using systemd
+  systemctl restart k3s
+  # If using openrc
+  rc-service k3s restart
+  ```
+
 4. Once S1 is up, kill and restart the S2 and S3
 
 5. Rotate on S1
@@ -165,7 +179,13 @@ To disable secrets encryption on a single-node cluster:
     k3s secrets-encrypt disable
     ```
 
-2. Kill and restart the K3s server with same arguments
+2. Kill and restart the K3s server with same arguments. If running K3s as a service:
+  ```bash
+  # If using systemd
+  systemctl restart k3s
+  # If using openrc
+  rc-service k3s restart
+  ```
 
 3. Reencrypt with flags
 
@@ -208,7 +228,14 @@ To disable secrets encryption on a HA cluster:
     k3s secrets-encrypt disable
     ```
 
-2. Kill and restart S1 with same arguments
+2. Kill and restart S1 with same arguments. If running K3s as a service:
+  ```bash
+  # If using systemd
+  systemctl restart k3s
+  # If using openrc
+  rc-service k3s restart
+  ```
+
 3. Once S1 is up, kill and restart the S2 and S3
 
 

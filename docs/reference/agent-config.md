@@ -80,12 +80,12 @@ In this section, you'll learn how to configure the K3s agent.
 | Flag         | Description  |
 | ------------ | ------------ |
 | `--rootless` | Run rootless |
+| `--docker`   | Use cri-dockerd instead of containerd   |
 
 ### Deprecated
 
 | Flag                     | Environment Variable | Description                      |
 | ------------------------ | -------------------- | -------------------------------- |
-| `--docker`               | N/A                  | Use docker instead of containerd |
 | `--no-flannel`           | N/A                  | Use `--flannel-backend=none`     |
 | `--cluster-secret` value | `K3S_CLUSTER_SECRET` | Use `--token`                    |
 

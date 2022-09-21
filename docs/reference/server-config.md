@@ -94,7 +94,6 @@ K3s agent options are available as server options because the server has the age
 
 | Flag                                 | Default                            | Description                                                        |
 | ------------------------------------ | ---------------------------------- | ------------------------------------------------------------------ | 
-| `--docker`                           | N/A                                | Use docker instead of containerd                                   |
 | `--container-runtime-endpoint` value | N/A                                | Disable embedded containerd and use alternative CRI implementation |
 | `--pause-image` value                | "docker.io/rancher/pause:3.1"      | Customized pause image for containerd or Docker sandbox            |
 | `--snapshotter` value                | N/A                                | Override default containerd snapshotter (default: "overlayfs")     |
@@ -194,6 +193,7 @@ the agent options are there because the server has the agent process embedded wi
 | `--rootless`           | Run rootless                             |
 | `--secrets-encryption` | Enable Secret encryption at rest         |
 | `--enable-pprof`       | Enable pprof endpoint on supervisor port |
+| `--docker`             | Use cri-dockerd instead of containerd    |
 
 ### Deprecated Options
 
