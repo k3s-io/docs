@@ -3,7 +3,7 @@
 module.exports = {
   title: 'K3s',
   tagline: '',
-  url: 'https://k3s-io.github.io', // Seperate CNAME redirects docs.k3s.io to k3s-io.github.io
+  url: 'https://docs.k3s.io',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
