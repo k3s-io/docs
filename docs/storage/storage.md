@@ -93,13 +93,16 @@ The status should be Bound for each.
 
 # Setting up Longhorn
 
-:::caution (pending change - longhorn may support arm64 and armhf in the future.)
+:::caution
 
-> **Note:** At this time Longhorn only supports amd64 and arm64 (experimental).
+At this time Longhorn only supports amd64 and arm64 (experimental).
+
+::: 
+
 
 K3s supports [Longhorn](https://github.com/longhorn/longhorn). Longhorn is an open-source distributed block storage system for Kubernetes.
 
-Below we cover a simple example. For more information, refer to the official documentation [here](https://github.com/longhorn/longhorn/blob/master/README.md).
+Below we cover a simple example. For more information, refer to the official documentation [here](https://longhorn.io/docs/latest/).
 
 Apply the longhorn.yaml to install Longhorn:
 
