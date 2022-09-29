@@ -30,9 +30,32 @@ This section contains advanced information describing the different ways you can
 
 ## Certificate Rotation
 
+### Automatic rotation
 By default, certificates in K3s expire in 12 months.
 
 If the certificates are expired or have fewer than 90 days remaining before they expire, the certificates are rotated when K3s is restarted.
+
+### Manual rotation
+
+To rotate the certificates manually, use the `k3s certificate rotate` subcommand:
+
+```bash
+# Stop K3s
+systemctl stop k3s
+# Rotate certificates
+k3s certificate rotate
+# Start K3s
+systemctl start k3s
+```
+
+Individual or lists of certificates can be rotated by specifying the certificate name:
+
+```bash
+k3s certificate rotate --service <SERVICE>,<SERVICE>
+```
+
+The following certificates can be rotated: `admin`, `api-server`, `controller-manager`, `scheduler`, `k3s-controller`, `k3s-server`, `cloud-controller`, `etcd`, `auth-proxy`, `kubelet`, `kube-proxy`.
+
 
 ## Auto-Deploying Manifests
 

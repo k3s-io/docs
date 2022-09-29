@@ -42,7 +42,7 @@ The controller can be configured and customized via the previously mentioned con
 
 
 ### Configure plans
-It is recommended that you minimally create two plans: a plan for upgrading server (master) nodes and a plan for upgrading agent (worker) nodes. As needed, you can create additional plans to control the rollout of the upgrade across nodes. The following two example plans will upgrade your cluster to K3s v1.22.11+k3s2. Once the plans are created, the controller will pick them up and begin to upgrade your cluster.
+It is recommended that you minimally create two plans: a plan for upgrading server (master) nodes and a plan for upgrading agent (worker) nodes. As needed, you can create additional plans to control the rollout of the upgrade across nodes. The following two example plans will upgrade your cluster to K3s v1.24.6+k3s1. Once the plans are created, the controller will pick them up and begin to upgrade your cluster.
 ```yaml
 # Server plan
 apiVersion: upgrade.cattle.io/v1
@@ -62,7 +62,7 @@ spec:
   serviceAccountName: system-upgrade
   upgrade:
     image: rancher/k3s-upgrade
-  version: v1.22.11+k3s2
+  version: v1.24.6+k3s1
 ---
 # Agent plan
 apiVersion: upgrade.cattle.io/v1
@@ -85,7 +85,7 @@ spec:
   serviceAccountName: system-upgrade
   upgrade:
     image: rancher/k3s-upgrade
-  version: v1.22.11+k3s2
+  version: v1.24.6+k3s1
 ```
 There are a few important things to call out regarding these plans:
 
@@ -97,7 +97,7 @@ Third, the server-plan targets server nodes by specifying a label selector that 
 
 Fourth, the `prepare` step in the agent-plan will cause upgrade jobs for that plan to wait for the server-plan to complete before they execute.
 
-Fifth, both plans have the `version` field set to v1.22.11+k3s2. Alternatively, you can omit the `version` field and set the `channel` field to a URL that resolves to a release of K3s. This will cause the controller to monitor that URL and upgrade the cluster any time it resolves to a new release. This works well with the [release channels](manual.md#release-channels). Thus, you can configure your plans with the following channel to ensure your cluster is always automatically upgraded to the newest stable release of K3s:
+Fifth, both plans have the `version` field set to v1.24.6+k3s1. Alternatively, you can omit the `version` field and set the `channel` field to a URL that resolves to a release of K3s. This will cause the controller to monitor that URL and upgrade the cluster any time it resolves to a new release. This works well with the [release channels](manual.md#release-channels). Thus, you can configure your plans with the following channel to ensure your cluster is always automatically upgraded to the newest stable release of K3s:
 ```yaml
 apiVersion: upgrade.cattle.io/v1
 kind: Plan
