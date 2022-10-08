@@ -66,7 +66,7 @@ In this section, you'll learn how to configure the K3s agent.
 | `--resolv-conf` value       | `K3S_RESOLV_CONF`    | Kubelet resolv.conf file                  |
 | `--flannel-iface` value     | N/A                  | Override default flannel interface        |
 | `--flannel-conf` value      | N/A                  | Override default flannel config file      |
-| `--flannel-cni-conf value   | N/A                  | Override default flannel cni config file  |
+| `--flannel-cni-conf` value   | N/A                  | Override default flannel cni config file  |
 
 ### Customized Flags
 
