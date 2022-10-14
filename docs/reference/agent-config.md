@@ -66,7 +66,7 @@ In this section, you'll learn how to configure the K3s agent.
 | `--resolv-conf` value       | `K3S_RESOLV_CONF`    | Kubelet resolv.conf file                  |
 | `--flannel-iface` value     | N/A                  | Override default flannel interface        |
 | `--flannel-conf` value      | N/A                  | Override default flannel config file      |
-| `--flannel-cni-conf value   | N/A                  | Override default flannel cni config file  |
+| `--flannel-cni-conf` value  | N/A                  | Override default flannel cni config file  |
 
 ### Customized Flags
 
@@ -77,17 +77,17 @@ In this section, you'll learn how to configure the K3s agent.
 
 ### Experimental
 
-| Flag         | Description  |
-| ------------ | ------------ |
-| `--rootless` | Run rootless |
-| `--docker`   | Use cri-dockerd instead of containerd   |
+| Flag         | Description                           |
+| ------------ | ------------------------------------- |
+| `--rootless` | Run rootless                          |
+| `--docker`   | Use cri-dockerd instead of containerd |
 
 ### Deprecated
 
-| Flag                     | Environment Variable | Description                      |
-| ------------------------ | -------------------- | -------------------------------- |
-| `--no-flannel`           | N/A                  | Use `--flannel-backend=none`     |
-| `--cluster-secret` value | `K3S_CLUSTER_SECRET` | Use `--token`                    |
+| Flag                     | Environment Variable | Description                  |
+| ------------------------ | -------------------- | ---------------------------- |
+| `--no-flannel`           | N/A                  | Use `--flannel-backend=none` |
+| `--cluster-secret` value | `K3S_CLUSTER_SECRET` | Use `--token`                |
 
 ### Node Labels and Taints for Agents
 
