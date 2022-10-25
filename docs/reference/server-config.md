@@ -57,12 +57,12 @@ In this section, you'll learn how to configure the K3s server.
 
 | Flag                      | Environment Variable | Description                                               |
 | ------------------------- | -------------------- | --------------------------------------------------------- |
-| `--token value, -t` value | `K3S_TOKEN`          | Shared secret used to join a server or agent to a cluster |
+| `--token` value, `-t` value | `K3S_TOKEN`          | Shared secret used to join a server or agent to a cluster |
 | `--token-file` value      | `K3S_TOKEN_FILE`     | File containing the cluster-secret/token                  |
-| `--agent-token` value        |`K3S_AGENT_TOKEN` |           Shared secret used to join agents to the cluster, but not servers 
-| `--agent-token-file` value   |`K3S_AGENT_TOKEN_FILE` |           File containing the agent secret 
-| `--server` value             | `K3S_URL` | Server to connect to, used to join a cluster 
-| `--cluster-init`             | `K3S_CLUSTER_INIT` |           Initialize a new cluster using embedded Etcd 
+| `--agent-token` value        |`K3S_AGENT_TOKEN` |           Shared secret used to join agents to the cluster, but not servers
+| `--agent-token-file` value   |`K3S_AGENT_TOKEN_FILE` |           File containing the agent secret
+| `--server` value             | `K3S_URL` | Server to connect to, used to join a cluster
+| `--cluster-init`             | `K3S_CLUSTER_INIT` |           Initialize a new cluster using embedded Etcd
 | `--cluster-reset`            |  `K3S_CLUSTER_RESET` |           Forget all peers and become sole member of a new cluster
 
 ### Client Options
@@ -70,7 +70,7 @@ In this section, you'll learn how to configure the K3s server.
 | Flag | Environment Variable | Description |
 |------|----------------------|-------------|
 |  `--write-kubeconfig value, -o` value  | `K3S_KUBECONFIG_OUTPUT` | Write kubeconfig for admin client to this file |
-|  `--write-kubeconfig-mode` value       | `K3S_KUBECONFIG_MODE`   | Write kubeconfig with this [mode.](https://en.wikipedia.org/wiki/Chmod) The option to allow writing to the kubeconfig file is useful for allowing a K3s cluster to be imported into Rancher. An example value is 644. | 
+|  `--write-kubeconfig-mode` value       | `K3S_KUBECONFIG_MODE`   | Write kubeconfig with this [mode.](https://en.wikipedia.org/wiki/Chmod) The option to allow writing to the kubeconfig file is useful for allowing a K3s cluster to be imported into Rancher. An example value is 644. |
 
 ## Agent Options
 
@@ -81,8 +81,8 @@ K3s agent options are available as server options because the server has the age
 | Flag | Environment Variable | Description |
 |------|----------------------|-------------|
 |   `--node-name` value      | `K3S_NODE_NAME`        | Node name       |
-|   `--with-node-id`     |  N/A           | Append id to node name         | (agent/node) 
-|   `--node-label` value   | N/A         | Registering and starting kubelet with set of labels        | 
+|   `--with-node-id`     |  N/A           | Append id to node name         | (agent/node)
+|   `--node-label` value   | N/A         | Registering and starting kubelet with set of labels        |
 |   `--node-taint` value    | N/A        | Registering kubelet with set of taints         |
 |   `--image-credential-provider-bin-dir` value | N/A |  The path to the directory where credential provider plugin binaries are located (default: "/var/lib/rancher/credentialprovider/bin") |
 |   `--image-credential-provider-config` value | N/A | The path to the credential provider plugin config file (default: "/var/lib/rancher/credentialprovider/config.yaml") |
@@ -93,7 +93,7 @@ K3s agent options are available as server options because the server has the age
 ### Agent Runtime
 
 | Flag                                 | Default                            | Description                                                        |
-| ------------------------------------ | ---------------------------------- | ------------------------------------------------------------------ | 
+| ------------------------------------ | ---------------------------------- | ------------------------------------------------------------------ |
 | `--container-runtime-endpoint` value | N/A                                | Disable embedded containerd and use alternative CRI implementation |
 | `--pause-image` value                | "docker.io/rancher/pause:3.1"      | Customized pause image for containerd or Docker sandbox            |
 | `--snapshotter` value                | N/A                                | Override default containerd snapshotter (default: "overlayfs")     |
