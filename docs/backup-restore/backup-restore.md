@@ -119,7 +119,9 @@ k3s supports a set of subcommands for working with your etcd snapshots.
 | prune       |  Remove snapshots that exceed the configured retention count |
 | save        |  Trigger an immediate etcd snapshot |
 
-*note* The `save` subcommand is the same as `k3s etcd-snapshot`. The latter will eventually be deprecated in favor of the former.
+:::note
+The `save` subcommand is the same as `k3s etcd-snapshot`. The latter will eventually be deprecated in favor of the former.
+:::
 
 These commands will perform as expected whether the etcd snapshots are stored locally or in an S3 compatible object store.
 
