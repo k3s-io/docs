@@ -6,11 +6,17 @@ weight: 25
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
+This page describes the following networking options:
+
+- [Flannel options](#flannel-options)
+- [Custom CNI](#custom-cni)
+- [Dual-stack installation](#dual-stack-installation)
+- [IPv6-only-installation](#ipv6-only-installation)
+- [Distributed hybrid or multicloud cluster](#distributed-hybrid-or-multicloud-cluster)
+
 > **Note:** Please reference the [Networking](networking/networking.md) page for information about CoreDNS, Traefik, and the Service LB.
 
-By default, K3s will run with flannel as the CNI, using VXLAN as the default backend. To change the CNI, refer to the section on configuring a [custom CNI](#custom-cni). To change the flannel backend, refer to the flannel options section.
-
-### Flannel Options
+## Flannel Options
 
 The default backend for flannel is VXLAN. To enable encryption, pass the IPSec (Internet Protocol Security) or WireGuard options below.
 
@@ -32,7 +38,7 @@ We recommend that users migrate to the new backend as soon as possible. The migr
  `--flannel-backend=wireguard-native` | Uses the WireGuard backend which encrypts network traffic. May require additional kernel modules and configuration. |
  `--flannel-ipv6-masq` | Apply masquerading rules to IPv6 traffic (default for IPv4). Only applies on dual-stack or IPv6-only clusters |
 
-### Custom CNI
+## Custom CNI
 
 Run K3s with `--flannel-backend=none` and install your CNI of choice. Most CNI plugins come with their own network policy engine, so it is recommended to set `--disable-network-policy` as well to avoid conflicts. IP Forwarding should be enabled for Canal and Calico. Please reference the steps below.
 
@@ -82,7 +88,7 @@ You should see that IP forwarding is set to true.
 </TabItem>
 </Tabs>
 
-### Dual-stack installation
+## Dual-stack installation
 
 Dual-stack networking must be configured when the cluster is first created. It cannot be enabled on an existing single-stack cluster.
 
@@ -104,8 +110,27 @@ If you are using a custom cni plugin, i.e. a cni plugin different from flannel, 
 --kubelet-arg "--node-ip=0.0.0.0" # If you want to prioritize IPv6 traffic, use "--node-ip=::" instead of "--node-ip=0.0.0.0".
 ```
 
-### IPv6 only installation
+## IPv6 only installation
 
 IPv6 only setup is supported on k3s v1.22 or above.
 
 > **Warning:** If your IPv6 default route is set by a router advertisement (RA), you will need to set `net.ipv6.conf.all.accept_ra = 2`; otherwise, the node will drop the default route once it expires. Be aware that accepting RAs could increase the risk of [man-in-the-middle attacks](https://github.com/kubernetes/kubernetes/issues/91507).
+
+## Distributed hybrid or multicloud cluster
+
+A k3s cluster can still be deployed on nodes which use different private networks and are not directly connected (e.g. nodes in different public clouds). To achieve this, k3s sets a mesh of tunnels that become a vpn mesh. These nodes must have have an assigned IP through which they can be reached (e.g. a public IP). The server traffic will use a websocket tunnel and the data-plane traffic will use a wireguard tunnel.
+
+To enable this type of deployment, you must add the following parameters in the server:
+```bash
+--node-external-ip <SERVER_EXTERNAL_IP> --flannel-backend wireguard-native --flannel-external-ip
+```
+and in the agents/workers:
+```bash
+--node-external-ip <AGENT_EXTERNAL_IP>
+```
+
+where `SERVER_EXTERNAL_IP` is the IP through which we can reach the server node and `AGENT_EXTERNAL_IP` is the IP through which we can reach the agent/worker node. Note that the `K3S_URL` config parameter in the agent/worker should use the `SERVER_EXTERNAL_IP` to be able to connect to it. Remember to allow ingress traffic on the external ips on the operated k3s ports (e.g. tcp/6443 for server nodes)
+
+Both `SERVER_EXTERNAL_IP` and `AGENT_EXTERNAL_IP` must have connectivity between them and are normally public IPs.
+
+> **Warning:** The latency between nodes will increase as the connectivity requires more hops. This will reduce the network performance and could also impact the health of the cluster if latency is too high

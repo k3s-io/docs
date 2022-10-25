@@ -7,6 +7,8 @@ This section contains instructions for installing K3s in various environments. P
 
 [Configuration Options](configuration.md) provides guidance on the options available to you when installing K3s.
 
+[Network Options](network-options.md) provides guidance on the networking options available in k3s.
+
 [High Availability with an External DB](ha.md) details how to set up an HA K3s cluster backed by an external datastore such as MySQL, PostgreSQL, or etcd.
 
 [High Availability with Embedded DB](ha-embedded.md) details how to set up an HA K3s cluster that leverages a built-in distributed database.
