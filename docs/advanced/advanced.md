@@ -355,21 +355,22 @@ sudo docker run \
 
 ## SELinux Support
 
-_Supported as of v1.19.4+k3s1. Experimental as of v1.17.4+k3s1._
-
-If you are installing K3s on a system where SELinux is enabled by default (such as CentOS), you must ensure the proper SELinux policies have been installed. 
-
-### Automatic Installation
-
 :::info Version Gate
 
-Available as of v1.19.3+k3s2
+Available as of v1.19.4+k3s1
 
 :::
 
+If you are installing K3s on a system where SELinux is enabled by default (such as CentOS), you must ensure the proper SELinux policies have been installed. 
+
+<Tabs>
+<TabItem value="Automatic Installation" default>
+
 The [install script](installation/configuration#options-for-installation-with-script) will automatically install the SELinux RPM from the Rancher RPM repository if on a compatible system if not performing an air-gapped install. Automatic installation can be skipped by setting `INSTALL_K3S_SKIP_SELINUX_RPM=true`.
 
-### Manual Installation
+</TabItem>
+
+<TabItem value="Manual Installation" default>
 
 The necessary policies can be installed with the following commands:
 ```bash
@@ -378,14 +379,11 @@ yum install -y https://rpm.rancher.io/k3s/latest/common/centos/7/noarch/k3s-seli
 ```
 
 To force the install script to log a warning rather than fail, you can set the following environment variable: `INSTALL_K3S_SELINUX_WARN=true`.
+</TabItem>
+</Tabs>
 
-### Enabling and Disabling SELinux Enforcement
+### Enabling SELinux Enforcement
 
-The way that SELinux enforcement is enabled or disabled depends on the K3s version.
-
-<Tabs>
-<TabItem value="K3s v1.19.1+k3s1" default>
-  
 To leverage SELinux, specify the `--selinux` flag when starting K3s servers and agents.
   
 This option can also be specified in the K3s [configuration file](#).
@@ -394,22 +392,7 @@ This option can also be specified in the K3s [configuration file](#).
 selinux: true
 ```
 
-The `--disable-selinux` option should not be used. It is deprecated and will be either ignored or will be unrecognized, resulting in an error, in future minor releases.
-
 Using a custom `--data-dir` under SELinux is not supported. To customize it, you would most likely need to write your own custom policy. For guidance, you could refer to the [containers/container-selinux](https://github.com/containers/container-selinux) repository, which contains the SELinux policy files for Container Runtimes, and the [rancher/k3s-selinux](https://github.com/rancher/k3s-selinux) repository, which contains the SELinux policy for K3s.
-
-</TabItem>
-
-<TabItem value="K3s before v1.19.1+k3s1">
-
-SELinux is automatically enabled for the built-in containerd.
-
-To turn off SELinux enforcement in the embedded containerd, launch K3s with the `--disable-selinux` flag.
-
-Using a custom `--data-dir` under SELinux is not supported. To customize it, you would most likely need to write your own custom policy. For guidance, you could refer to the [containers/container-selinux](https://github.com/containers/container-selinux) repository, which contains the SELinux policy files for Container Runtimes, and the [rancher/k3s-selinux](https://github.com/rancher/k3s-selinux) repository, which contains the SELinux policy for K3s .
-
-</TabItem>
-</Tabs>
 
 ## Enabling Lazy Pulling of eStargz (Experimental)
 
