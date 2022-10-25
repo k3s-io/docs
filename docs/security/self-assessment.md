@@ -464,7 +464,7 @@ journalctl -D /var/log/journal -u k3s | grep 'Running kube-apiserver' | tail -n1
 **Remediation:**
 Follow the documentation and configure alternate mechanisms for authentication. Then,
 edit the API server pod specification file /etc/kubernetes/manifests/kube-apiserver.yaml
-on the control plane node and remove the --token-auth-file=<filename> parameter.
+on the control plane node and remove the `--token-auth-file=<filename>` parameter.
 
 **Audit:**
 
@@ -561,8 +561,8 @@ Sep 13 13:26:40 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:
 Follow the Kubernetes documentation and setup the TLS connection between
 the apiserver and kubelets. Then, edit the API server pod specification file
 /etc/kubernetes/manifests/kube-apiserver.yaml on the control plane node and set the
---kubelet-certificate-authority parameter to the path to the cert file for the certificate authority.
---kubelet-certificate-authority=<ca-string>
+--kubelet-certificate-authority parameter to the path to the cert file for the certificate authority
+`--kubelet-certificate-authority=<ca-string>`.
 
 **Audit:**
 
@@ -1008,7 +1008,7 @@ Sep 13 13:26:40 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:
 Edit the API server pod specification file /etc/kubernetes/manifests/kube-apiserver.yaml
 on the control plane node and set the --service-account-key-file parameter
 to the public key file for service accounts. For example,
---service-account-key-file=<filename>
+`--service-account-key-file=<filename>`.
 
 ### 1.2.26 Ensure that the --etcd-certfile and --etcd-keyfile arguments are set as appropriate (Automated)
 
@@ -1327,8 +1327,8 @@ Sep 13 13:26:40 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:
 **Remediation:**
 Edit the Controller Manager pod specification file /etc/kubernetes/manifests/kube-controller-manager.yaml
 on the control plane node and set the --service-account-private-key-file parameter
-to the private key file for service accounts.
---service-account-private-key-file=<filename>
+to the private key file for service accounts. For example,
+`--service-account-private-key-file=<filename>`.
 
 **Audit:**
 
@@ -2294,7 +2294,7 @@ root:root root:root
 
 **Remediation:**
 Run the following command to modify the file permissions of the
---client-ca-file chmod 644 <filename>
+--client-ca-file: `chmod 644 <filename>`
 
 **Audit:**
 
@@ -2320,8 +2320,8 @@ stat -c %a /var/lib/rancher/k3s/server/tls/server-ca.crt
 **Result:** pass
 
 **Remediation:**
-Run the following command to modify the ownership of the --client-ca-file.
-chown root:root <filename>
+Run the following command to modify the ownership of the --client-ca-file:
+`chown root:root <filename>`.
 
 **Audit:**
 
