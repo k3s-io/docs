@@ -64,7 +64,9 @@ spec:
 
 Content placed in `/var/lib/rancher/k3s/server/static/` can be accessed anonymously via the Kubernetes APIServer from within the cluster. This URL can be templated using the special variable `%{KUBERNETES_API}%` in the `spec.chart` field. For example, the packaged Traefik component loads its chart from `https://%{KUBERNETES_API}%/static/charts/traefik-12.0.000.tgz`.
 
-**Note:** The `name` field should follow the Helm chart naming conventions. Refer [here](https://helm.sh/docs/chart_best_practices/conventions/#chart-names) to learn more.
+:::note
+The `name` field should follow the Helm chart naming conventions. Refer [here](https://helm.sh/docs/chart_best_practices/conventions/#chart-names) to learn more.
+:::
 
 >**Notice on File Naming Requirements:** `HelmChart` and `HelmChartConfig` manifest filenames should adhere to Kubernetes object [naming restrictions](https://kubernetes.io/docs/concepts/overview/working-with-objects/names/). The Helm Controller uses filenames to create objects; therefore, the filename must also align with the restrictions. Any related errors can be observed in the k3s-server logs. The example below is an error generated from using underscores:
 ```
@@ -82,13 +84,15 @@ used for validation is '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]
 
 :::info Version Gate
 
-Available as of [v1.19.0+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.19.0%2Bk3s1)
+Available as of [v1.19.1+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.19.1%2Bk3s1)
 
 :::
 
 To allow overriding values for packaged components that are deployed as HelmCharts (such as Traefik), K3s supports customizing deployments via a HelmChartConfig resources. The HelmChartConfig resource must match the name and namespace of its corresponding HelmChart, and it supports providing additional `valuesContent`, which is passed to the `helm` command as an additional value file.
 
-> **Note:** HelmChart `spec.set` values override HelmChart and HelmChartConfig `spec.valuesContent` settings.
+:::note
+HelmChart `spec.set` values override HelmChart and HelmChartConfig `spec.valuesContent` settings.
+:::
 
 For example, to customize the packaged Traefik ingress configuration, you can create a file named `/var/lib/rancher/k3s/server/manifests/traefik-config.yaml` and populate it with the following content:
 
@@ -115,9 +119,11 @@ spec:
 ### Migrating from Helm v2
 
 :::info Version Gate
-K3s versions starting with v1.17.0+k3s.1 support Helm v3, and use it by default. Helm v2 charts are still supported by setting `helmVersion: v2` in the spec.
+As of [v1.17.0+k3s.1](https://github.com/k3s-io/k3s/releases/tag/v1.17.0%2Bk3s.1) Helm v3 is supported and used by default.
 :::
 
 K3s can handle either Helm v2 or Helm v3. If you wish to migrate to Helm v3, [this](https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/) blog post by Helm explains how to use a plugin to successfully migrate. Refer to the official Helm 3 documentation [here](https://helm.sh/docs/) for more information. Just be sure you have properly set your kubeconfig as per the section about [cluster access.](../cluster-access/cluster-access.md)
 
-Note that Helm 3 no longer requires Tiller and the `helm init` command. Refer to the official documentation for details.
+:::note
+Helm 3 no longer requires Tiller and the `helm init` command. Refer to the official documentation for details.
+:::
