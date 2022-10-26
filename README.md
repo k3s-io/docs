@@ -1,6 +1,6 @@
 # K3s Website and Docs
 
-This repo contains the content of the K3s landing page and documentation. Please open an issue if you have suggestions for new content or edits. We also gladly accept community PRs. 
+This repo contains the content of the K3s documentation website found at https://docs.k3s.io. Please open an issue if you have suggestions for new content or edits. We also gladly accept community PRs. 
 
 The website is built using [Docusaurus 2](https://docusaurus.io/), a modern static website generator.
 

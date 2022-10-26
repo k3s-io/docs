@@ -49,16 +49,16 @@ To use Docker instead of containerd,
 1. Install Docker on the K3s node. One of Rancher's [Docker installation scripts](https://github.com/rancher/install-docker) can be used to install Docker:
 
     ```bash
-    curl https://releases.rancher.com/install-docker/19.03.sh | sh
+    curl https://releases.rancher.com/install-docker/20.10.sh | sh
     ```
 
-1. Install K3s using the `--docker` option:
+2. Install K3s using the `--docker` option:
 
     ```bash
     curl -sfL https://get.k3s.io | sh -s - --docker
     ```
 
-1. Confirm that the cluster is available:
+3. Confirm that the cluster is available:
 
     ```bash
     $ sudo k3s kubectl get pods --all-namespaces
@@ -71,7 +71,7 @@ To use Docker instead of containerd,
     kube-system   traefik-758cd5fc85-2wz97                 1/1     Running     0          43s
     ```
 
-1. Confirm that the Docker containers are running:
+4. Confirm that the Docker containers are running:
 
     ```bash
     $ sudo docker ps
@@ -88,37 +88,6 @@ To use Docker instead of containerd,
     4b1fddbe6ca6        rancher/pause:3.1         "/pause"                 About a minute ago   Up About a minute                       k8s_POD_local-path-provisioner-6d59f47c7-lncxn_kube-system_2dbd22bf-6ad9-4bea-a73d-620c90a6c1c1_0
     64d3517d4a95        rancher/pause:3.1         "/pause"
     ```
-
-#### Optional: Use crictl with Docker
-
-crictl provides a CLI for CRI-compatible container runtimes.
-
-If you would like to use crictl after installing K3s with the `--docker` option, install crictl using the [official documentation:](https://github.com/kubernetes-sigs/cri-tools/blob/master/docs/crictl.md) 
-
-```bash
-$ VERSION="v1.17.0"
-$ curl -L https://github.com/kubernetes-sigs/cri-tools/releases/download/$VERSION/crictl-${VERSION}-linux-amd64.tar.gz --output crictl-${VERSION}-linux-amd64.tar.gz
-$ sudo tar zxvf crictl-$VERSION-linux-amd64.tar.gz -C /usr/local/bin/crictl
-```
-
-Then start using crictl commands:
-
-```bash
-$ sudo crictl version
-Version:  0.1.0
-RuntimeName:  docker
-RuntimeVersion:  19.03.9
-RuntimeApiVersion:  1.40.0
-$ sudo crictl images
-IMAGE                            TAG                 IMAGE ID            SIZE
-rancher/coredns-coredns          1.6.3               c4d3d16fe508b       44.3MB
-rancher/klipper-helm             v0.2.5              6207e2a3f5225       136MB
-rancher/klipper-lb               v0.1.2              897ce3c5fc8ff       6.1MB
-rancher/library-traefik          1.7.19              aa764f7db3051       85.7MB
-rancher/local-path-provisioner   v0.0.11             9d12f9848b99f       36.2MB
-rancher/metrics-server           v0.3.6              9dd718864ce61       39.9MB
-rancher/pause                    3.1                 da86e6ba6ca19       742kB
-```
 
 ## Using etcdctl
 
