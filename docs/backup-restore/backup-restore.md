@@ -6,7 +6,7 @@ weight: 26
 The way K3s is backed up and restored depends on which type of datastore is used.
 
 - [Backup and Restore with External Datastore](#backup-and-restore-with-external-datastore)
-- [Backup and Restore with Embedded etcd Datastore (Experimental)](#backup-and-restore-with-embedded-etcd-datastore-experimental)
+- [Backup and Restore with Embedded etcd Datastore](#backup-and-restore-with-embedded-etcd-datastore)
 
 ### Backup and Restore with External Datastore
 
@@ -20,7 +20,7 @@ For details on taking database snapshots and restoring your database from them, 
 - [Official PostgreSQL documentation](https://www.postgresql.org/docs/8.3/backup-dump.html)
 - [Official etcd documentation](https://etcd.io/docs/latest/op-guide/recovery/)
 
-### Backup and Restore with Embedded etcd Datastore (Experimental)
+### Backup and Restore with Embedded etcd Datastore
 
 :::info Version Gate
 
@@ -52,7 +52,7 @@ k3s server \
   --cluster-reset-restore-path=<PATH-TO-SNAPSHOT>
 ```
 
-**Result:**  A message in the logs says that K3s can be restarted without the flags. Start k3s again and should run successfully and be restored from the specified snapshot.
+**Result:** A message in the logs says that K3s can be restarted without the flags. Start k3s again and should run successfully and be restored from the specified snapshot.
 
 #### Options
 

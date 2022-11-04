@@ -3,12 +3,18 @@ title: "High Availability with Embedded DB"
 weight: 40
 ---
 
->**Notice:**
-K3s has added full support for embedded etcd as of release v1.19.5+k3s1. Versions v1.19.1 thru v1.19.4 provide only experimental support for embedded etcd.
-Embedded etcd replaced experimental Dqlite in the K3s v1.19.1 release. This is a breaking change. Please note that upgrades from experimental Dqlite to embedded etcd are not supported. If you attempt an upgrade it will not succeed and data will be lost.
+:::info Version Gate
+Full support as of [v1.19.5+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.19.5%2Bk3s1)  
+Experimental support as of [v1.19.1+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.19.1%2Bk3s1)
+:::
 
->**Warning:**
+:::note Notice: Deprecated Dqlite
+Embedded etcd replaced experimental Dqlite in the K3s v1.19.1 release. This is a breaking change. Please note that upgrades from experimental Dqlite to embedded etcd are not supported. If you attempt an upgrade it will not succeed and data will be lost.
+:::
+
+:::caution
 Embedded etcd (HA) may have performance issues on slower disks such as Raspberry Pis running with SD cards.
+:::
 
 ## New cluster
 To run K3s in this mode, you must have an odd number of server nodes. We recommend starting with three nodes.
