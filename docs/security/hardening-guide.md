@@ -3,12 +3,15 @@ title: "CIS Hardening Guide"
 weight: 80
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 This document provides prescriptive guidance for hardening a production installation of K3s. It outlines the configurations and controls required to address Kubernetes benchmark controls from the Center for Internet Security (CIS).
 
 K3s has a number of security mitigations applied and turned on by default and will pass a number of the Kubernetes CIS controls without modification. There are some notable exceptions to this that require manual intervention to fully comply with the CIS Benchmark:
 
 1. K3s will not modify the host operating system. Any host-level modifications will need to be done manually.
-2. Certain CIS policy controls for `PodSecurityPolicies` and `NetworkPolicies` will restrict the functionality of the cluster. You must opt into having K3s configure these by adding the appropriate options (enabling of admission plugins) to your command-line flags or configuration file as well as manually applying appropriate policies. Further details are presented in the sections below.
+2. Certain CIS policy controls for `NetworkPolicies` and `PodSecurityStandards` (`PodSecurityPolicies` on v1.24 and older) will restrict the functionality of the cluster. You must opt into having K3s configure these by adding the appropriate options (enabling of admission plugins) to your command-line flags or configuration file as well as manually applying appropriate policies. Further details are presented in the sections below.
 
 The first section (1.1) of the CIS Benchmark concerns itself primarily with pod manifest permissions and ownership. K3s doesn't utilize these for the core components since everything is packaged into a single binary.
 
@@ -36,13 +39,56 @@ kernel.keys.root_maxbytes=25000000
 
 ## Kubernetes Runtime Requirements
 
-The runtime requirements to comply with the CIS Benchmark are centered around pod security (PSPs), network policies and API Server auditing logs. These are outlined in this section. K3s doesn't apply any default PSPs or network policies. However, K3s ships with a controller that is meant to apply a given set of network policies. By default, K3s runs with the `NodeRestriction` admission controller. To enable PSPs, add the following to the K3s start command: `--kube-apiserver-arg="enable-admission-plugins=NodeRestriction,PodSecurityPolicy,ServiceAccount"`. This will have the effect of maintaining the `NodeRestriction` plugin as well as enabling the `PodSecurityPolicy`. The same happens with the API Server auditing logs, K3s doesn't enable them by default, so audit log configuration and audit policy must be created manually.
+The runtime requirements to comply with the CIS Benchmark are centered around pod security (via PSP or PSA), network policies and API Server auditing logs. These are outlined in this section.
 
-### Pod Security Policies
+By default, K3s does not apply any pod security or network policies. However, K3s ships with a controller that is meant to apply a given set of network policies. The same setup applies API Server auditing logs, K3s doesn't enable them by default, so audit log configuration and audit policy must be created manually. By default, K3s runs with the `NodeRestriction` admission controller. 
+
+### Pod Security
+
+<Tabs>
+<TabItem value="v1.25 and Newer" default>
+
+K3s v1.25 and newer support [Pod Security Admissions (PSAs)](https://kubernetes.io/docs/concepts/security/pod-security-admission/) for controlling pod security. PSAs are enabled by passing the following flag to the K3s server:
+```
+--kube-apiserver-arg="enable-admission-plugins=NodeRestriction,admission-control-config-file=<PATH_TO_POLICY_YAML>"
+```
+
+Here is an example of a complaint PSA:
+```yaml
+apiVersion: apiserver.config.k8s.io/v1
+kind: AdmissionConfiguration
+plugins:
+- name: PodSecurity
+  configuration:
+    apiVersion: pod-security.admission.config.k8s.io/v1beta1
+    kind: PodSecurityConfiguration
+    defaults:
+      enforce: "restricted"
+      enforce-version: "latest"
+      audit: "restricted"
+      audit-version: "latest"
+      warn: "restricted"
+      warn-version: "latest"
+    exemptions:
+      usernames: []
+      runtimeClasses: []
+      namespaces: [kube-system, cis-operator-system, tigera-operator]
+```
+
+
+</TabItem>
+<TabItem value="v1.24 and Older" default>
+
+K3s v1.24 and older support [Pod Security Policies (PSPs)](https://v1-24.docs.kubernetes.io/docs/concepts/security/pod-security-policy/) for controlling pod security. PSPs are enabled by passing the following flag to the K3s server:
+
+```
+--kube-apiserver-arg="enable-admission-plugins=NodeRestriction,PodSecurityPolicy"
+```
+This will have the effect of maintaining the `NodeRestriction` plugin as well as enabling the `PodSecurityPolicy`. 
 
 When PSPs are enabled, a policy can be applied to satisfy the necessary controls described in section 5.2 of the CIS Benchmark.
 
-Here is an example of a compliant PSP.
+Here is an example of a compliant PSP:
 
 ```yaml
 apiVersion: policy/v1beta1
@@ -85,7 +131,7 @@ spec:
 
 For the above PSP to be effective, we need to create a ClusterRole and a ClusterRoleBinding. We also need to include a "system unrestricted policy" which is needed for system-level pods that require additional privileges, and an additional policy that allows sysctls necessary for servicelb to function properly.
 
-These can be combined with the PSP yaml above and NetworkPolicy yaml below into a single file and placed in the `/var/lib/rancher/k3s/server/manifests` directory. Below is an example of a `policy.yaml` file. 
+Combining the configuration above with the [Network Policy](#networkpolicies) described in the next section, a single file can be placed in the `/var/lib/rancher/k3s/server/manifests` directory. Here is an example of a `policy.yaml` file. 
 
 ```yaml
 apiVersion: policy/v1beta1
@@ -313,7 +359,11 @@ spec:
             name: kube-public
 ```
 
-> **Note:** The Kubernetes critical additions such as CNI, DNS, and Ingress are ran as pods in the `kube-system` namespace. Therefore, this namespace will have a policy that is less restrictive so that these components can run properly.
+</TabItem>
+</Tabs>
+
+
+> **Note:** The Kubernetes critical additions such as CNI, DNS, and Ingress are run as pods in the `kube-system` namespace. Therefore, this namespace will have a policy that is less restrictive so that these components can run properly.
 
 ### NetworkPolicies
 
