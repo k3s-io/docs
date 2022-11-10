@@ -28,6 +28,10 @@ module.exports = {
         srcDark: 'img/k3s-logo-dark.svg',
       },
       items: [
+        { 
+          type: 'search',
+          position: 'right',
+        },
         {
           type: 'doc',
           docId: 'introduction',
@@ -70,4 +74,15 @@ module.exports = {
       },
     ],
   ], 
+  themes: [
+    [
+      "@easyops-cn/docusaurus-search-local",
+      /** @type {import("@easyops-cn/docusaurus-search-local").PluginOptions} */
+      ({
+        docsRouteBasePath: "/",
+        hashed: true,
+        highlightSearchTermsOnTargetPage: true,
+      }),
+    ],
+  ],
 };
