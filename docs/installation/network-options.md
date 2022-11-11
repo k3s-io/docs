@@ -66,7 +66,7 @@ You should see that IP forwarding is set to true.
 </TabItem>
 <TabItem value="Calico" default>
 
-Follow the [Calico CNI Plugins Guide](https://docs.projectcalico.org/master/docs/reference/cni-plugin/configuration). Modify the Calico YAML so that IP forwarding is allowed in the container_settings section, for example:
+Follow the [Calico CNI Plugins Guide](https://projectcalico.docs.tigera.io/master/reference/cni-plugin/configuration). Modify the Calico YAML so that IP forwarding is allowed in the container_settings section, for example:
 
 ```yaml
 "container_settings": {
