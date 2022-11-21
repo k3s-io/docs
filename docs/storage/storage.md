@@ -9,7 +9,7 @@ A persistent volume (PV) is a piece of storage in the Kubernetes cluster, while 
 
 This page describes how to set up persistent storage with a local storage provider, or with [Longhorn.](#setting-up-longhorn)
 
-# What's changed in K3s storage?
+## What's different about K3s storage?
 
 K3s removes several optional volume plugins and all built-in (sometimes referred to as "in-tree") cloud providers. We do this in order to achieve a smaller binary size and to avoid dependence on third-party cloud or data center technologies and services, which may not be available in many K3s use cases. We are able to do this because their removal affects neither core Kubernetes functionality nor conformance.
 
@@ -29,7 +29,7 @@ Both components have out-of-tree alternatives that can be used with K3s: The Kub
 
 Kubernetes maintainers are actively migrating in-tree volume plugins to CSI drivers. For more information on this migration, please refer [here](https://kubernetes.io/blog/2021/12/10/storage-in-tree-to-csi-migration-status-update/).
 
-# Setting up the Local Storage Provider
+## Setting up the Local Storage Provider
 K3s comes with Rancher's Local Path Provisioner and this enables the ability to create persistent volume claims out of the box using local storage on the respective node. Below we cover a simple example. For more information please reference the official documentation [here](https://github.com/rancher/local-path-provisioner/blob/master/README.md#usage).
 
 Create a hostPath backed persistent volume claim and a pod to utilize it:
@@ -91,18 +91,18 @@ kubectl get pvc
 
 The status should be Bound for each.
 
-# Setting up Longhorn
+## Setting up Longhorn
 
 :::caution
 
-At this time Longhorn only supports amd64 and arm64 (experimental).
+Longhorn does not support ARM32.
 
 ::: 
 
 
-K3s supports [Longhorn](https://github.com/longhorn/longhorn). Longhorn is an open-source distributed block storage system for Kubernetes.
+K3s supports [Longhorn](https://github.com/longhorn/longhorn), an open-source distributed block storage system for Kubernetes.
 
-Below we cover a simple example. For more information, refer to the official documentation [here](https://longhorn.io/docs/latest/).
+Below we cover a simple example. For more information, refer to the [official documentation](https://longhorn.io/docs/latest/).
 
 Apply the longhorn.yaml to install Longhorn:
 
