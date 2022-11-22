@@ -1,0 +1,22 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.mySidebar.category.Installation": {
+    "message": "安装",
+    "description": "The label for category Installation in sidebar mySidebar"
+  },
+  "sidebar.mySidebar.category.Upgrades": {
+    "message": "升级",
+    "description": "The label for category Upgrades in sidebar mySidebar"
+  },
+  "sidebar.mySidebar.category.Reference": {
+    "message": "参考",
+    "description": "The label for category Reference in sidebar mySidebar"
+  },
+  "sidebar.mySidebar.category.Security": {
+    "message": "安全",
+    "description": "The label for category Security in sidebar mySidebar"
+  }
+}

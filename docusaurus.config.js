@@ -11,6 +11,18 @@ module.exports = {
   organizationName: 'k3s-io', // Usually your GitHub org/user name.
   projectName: 'docs', // Usually your repo name.
   trailingSlash: false,
+  i18n: {
+    defaultLocale: "en",
+    locales: ["en", "zh"],
+    localeConfigs: {
+      en: {
+        label: "English",
+      },
+      zh: {
+        label: "简体中文",
+      },
+    },
+  },
   themeConfig: {
     colorMode: {
       // "light" | "dark"
@@ -38,6 +50,10 @@ module.exports = {
           position: 'right',
           label: 'Docs',
           className: 'navbar__docs',
+        },
+        {
+          type: "localeDropdown",
+          position: "right",
         },
         {
           to: 'https://github.com/k3s-io/k3s/',
