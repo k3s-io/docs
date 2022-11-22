@@ -82,6 +82,7 @@ module.exports = {
         docsRouteBasePath: "/",
         hashed: true,
         highlightSearchTermsOnTargetPage: true,
+        indexBlog: false,
       }),
     ],
   ],
