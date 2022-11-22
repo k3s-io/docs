@@ -45,13 +45,6 @@ module.exports = {
           position: 'right',
         },
         {
-          type: 'doc',
-          docId: 'introduction',
-          position: 'right',
-          label: 'Docs',
-          className: 'navbar__docs',
-        },
-        {
           type: "localeDropdown",
           position: "right",
         },
