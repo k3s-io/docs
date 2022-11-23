@@ -14,6 +14,6 @@ Command | Description
 `k3s ctr`| Run an embedded [ctr](https://github.com/projectatomic/containerd/blob/master/docs/cli.md). This is a CLI for containerd, the container daemon used by K3s. Useful for debugging.
 `k3s etcd-snapshot` | Perform on demand backups of the K3s cluster data and upload to S3. See [Backup and Restore](backup-restore/backup-restore.md#backup-and-restore-with-embedded-etcd-datastore-experimental) for more information.
 `k3s secrets-encrypt` | Configure K3s to encrypt secrets when storing them in the cluster. See [Secrets Encryption](security/secrets-encryption.md) for more information.
-`k3s certificate` | Certificates management
+`k3s certificate` | Certificates management. See [Certificate Rotation](advanced/advanced.md#certificate-rotation) for more information.
 `k3s completion` | Generate shell completion scripts for k3s
 `k3s help`| Shows a list of commands or help for one command
