@@ -48,10 +48,13 @@ By default, K3s does not apply any pod security or network policies. However, K3
 <Tabs>
 <TabItem value="v1.25 and Newer" default>
 
-K3s v1.25 and newer support [Pod Security Admissions (PSAs)](https://kubernetes.io/docs/concepts/security/pod-security-admission/) for controlling pod security. PSAs are enabled by passing the following flag to the K3s server:
+K3s v1.25 and newer support [Pod Security Admissions (PSAs)](https://kubernetes.io/docs/concepts/security/pod-security-admission/) for controlling pod security. PSAs are enabled by passing the following flags to the K3s server:
 ```
---kube-apiserver-arg="enable-admission-plugins=NodeRestriction,admission-control-config-file=<PATH_TO_POLICY_YAML>"
+--kube-apiserver-arg="enable-admission-plugins=NodeRestriction"
+--kube-apiserver-arg="admission-control-config-file=/var/lib/rancher/k3s/server/psa.yaml"
 ```
+
+The policy should be written to a file named `psa.yaml` in `/var/lib/rancher/k3s/server` directory. 
 
 Here is an example of a complaint PSA:
 ```yaml
@@ -72,10 +75,8 @@ plugins:
     exemptions:
       usernames: []
       runtimeClasses: []
-      namespaces: [kube-system, cis-operator-system, tigera-operator]
+      namespaces: [kube-system, cis-operator-system]
 ```
-
-
 </TabItem>
 <TabItem value="v1.24 and Older" default>
 
@@ -369,6 +370,8 @@ spec:
 
 CIS requires that all namespaces have a network policy applied that reasonably limits traffic into namespaces and pods.
 
+Network policies should be placed the `/var/lib/rancher/k3s/server/manifests` directory, where they will automatically be deployed on startup.
+
 Here is an example of a compliant network policy.
 
 ```yaml
@@ -410,6 +413,9 @@ spec:
 
 The metrics-server and Traefik ingress controller will be blocked by default if network policies are not created to allow access. Traefik v1 as packaged in K3s version 1.20 and below uses different labels than Traefik v2. Ensure that you only use the sample yaml below that is associated with the version of Traefik present on your cluster.
 
+<Tabs>
+<TabItem value="v1.21 and Newer" default>
+
 ```yaml
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -439,7 +445,55 @@ spec:
   policyTypes:
   - Ingress
 ---
-# Below is for 1.20 ONLY -- remove if on 1.21 or above
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-all-traefik-v121-ingress
+  namespace: kube-system
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: traefik
+  ingress:
+  - {}
+  policyTypes:
+  - Ingress
+---
+
+```
+</TabItem>
+
+<TabItem value="v1.20 and Older" default>
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-all-metrics-server
+  namespace: kube-system
+spec:
+  podSelector:
+    matchLabels:
+      k8s-app: metrics-server
+  ingress:
+  - {}
+  policyTypes:
+  - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-all-svclbtraefik-ingress
+  namespace: kube-system
+spec:
+  podSelector: 
+    matchLabels:
+      svccontroller.k3s.cattle.io/svcname: traefik
+  ingress:
+  - {}
+  policyTypes:
+  - Ingress
+---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -454,23 +508,15 @@ spec:
   policyTypes:
   - Ingress
 ---
-# Below is for 1.21 and above ONLY -- remove if on 1.20 or below
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: allow-all-traefik-v121-ingress
-  namespace: kube-system
-spec:
-  podSelector:
-    matchLabels:
-      app.kubernetes.io/name: traefik
-  ingress:
-  - {}
-  policyTypes:
-  - Ingress
-```
 
-> **Note:** Operators must manage network policies as normal for additional namespaces that are created.
+```
+</TabItem>
+</Tabs>
+
+:::info
+Operators must manage network policies as normal for additional namespaces that are created.
+:::
+
 
 ### API Server audit configuration
 
@@ -755,6 +801,31 @@ kubelet
 
 The command below is an example of how the outlined remediations can be applied to harden K3s.
 
+<Tabs>
+<TabItem value="v1.25 and Newer" default>
+
+```bash
+k3s server \
+    --protect-kernel-defaults=true \
+    --secrets-encryption=true \
+    --kube-apiserver-arg="admission-control-config-file=/var/lib/rancher/k3s/server/psa.yaml"
+    --kube-apiserver-arg='audit-log-path=/var/lib/rancher/k3s/server/logs/audit.log' \
+    --kube-apiserver-arg='audit-policy-file=/var/lib/rancher/k3s/server/audit.yaml' \
+    --kube-apiserver-arg='audit-log-maxage=30' \
+    --kube-apiserver-arg='audit-log-maxbackup=10' \
+    --kube-apiserver-arg='audit-log-maxsize=100' \
+    --kube-apiserver-arg='request-timeout=300s' \
+    --kube-apiserver-arg='service-account-lookup=true' \
+    --kube-apiserver-arg='enable-admission-plugins=NodeRestriction,NamespaceLifecycle,ServiceAccount' \
+    --kube-controller-manager-arg='terminated-pod-gc-threshold=10' \
+    --kube-controller-manager-arg='use-service-account-credentials=true' \
+    --kubelet-arg='streaming-connection-idle-timeout=5m' \
+    --kubelet-arg='make-iptables-util-chains=true'
+```
+</TabItem>
+
+<TabItem value="v1.24 and Older" default>
+
 ```bash
 k3s server \
     --protect-kernel-defaults=true \
@@ -772,6 +843,8 @@ k3s server \
     --kubelet-arg='streaming-connection-idle-timeout=5m' \
     --kubelet-arg='make-iptables-util-chains=true'
 ```
+</TabItem>
+</Tabs>
 
 ## Conclusion
 
