@@ -45,13 +45,6 @@ module.exports = {
           position: 'right',
         },
         {
-          type: 'doc',
-          docId: 'introduction',
-          position: 'right',
-          label: 'Docs',
-          className: 'navbar__docs',
-        },
-        {
           type: "localeDropdown",
           position: "right",
         },
@@ -59,7 +52,7 @@ module.exports = {
           to: 'https://github.com/k3s-io/k3s/',
           label: 'GitHub',
           position: 'right',
-          className: 'navbar__github btn btn-secondary icon-github',
+          className: 'navbar__github btn',
         },
       ],
     },
