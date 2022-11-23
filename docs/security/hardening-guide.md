@@ -132,7 +132,7 @@ spec:
 
 For the above PSP to be effective, we need to create a ClusterRole and a ClusterRoleBinding. We also need to include a "system unrestricted policy" which is needed for system-level pods that require additional privileges, and an additional policy that allows sysctls necessary for servicelb to function properly.
 
-Combining the configuration above with the [Network Policy](#networkpolicies) described in the next section, a single file can be placed in the `/var/lib/rancher/k3s/server/manifests` directory. Here is an example of a `policy.yaml` file. 
+Combining the configuration above with the [Network Policy](#networkpolicies) described in the next section, a single file can be placed in the `/var/lib/rancher/k3s/server/manifests` directory. Here is an example of a `policy.yaml` file: 
 
 ```yaml
 apiVersion: policy/v1beta1
