@@ -88,11 +88,12 @@ The arguments below have been added to the `server` subcommand. These flags exis
 To perform an on-demand etcd snapshot and save it to S3:
 
 ```bash
+# Specify also --etcd-s3-endpoint if you have a custom endpoints otherwise it would be defaulted to s3.amazonaws.com
 k3s etcd-snapshot \
   --s3 \
-  --s3-bucket=<S3-BUCKET-NAME> \
-  --s3-access-key=<S3-ACCESS-KEY> \
-  --s3-secret-key=<S3-SECRET-KEY>
+  --etcd-s3-bucket=<S3-BUCKET-NAME> \
+  --etcd-s3-access-key=<S3-ACCESS-KEY> \
+  --etcd-s3-secret-key=<S3-SECRET-KEY>
 ```
 
 To perform an on-demand etcd snapshot restore from S3, first make sure that K3s isn't running. Then run the following commands:
