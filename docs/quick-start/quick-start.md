@@ -13,7 +13,7 @@ New to Kubernetes? The official Kubernetes docs already have some great tutorial
 
 Install Script
 --------------
-K3s provides an installation script that is a convenient way to install it as a service on systemd or openrc based systems. This script is available at https://get.k3s.io. To install K3s using this method, just run:
+K3s provides an installation script that is a convenient way to install it as a service on systemd or openrc based systems. This script is available at [https://get.k3s.io](https://get.k3s.io). To install K3s using this method, just run:
 ```bash
 curl -sfL https://get.k3s.io | sh -
 ```
