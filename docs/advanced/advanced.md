@@ -9,24 +9,7 @@ aliases:
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-This section contains advanced information describing the different ways you can run and manage K3s:
-
-- [Certificate rotation](#certificate-rotation)
-- [Auto-deploying manifests](#auto-deploying-manifests)
-- [Using Docker as the container runtime](#using-docker-as-the-container-runtime)
-- [Using etcdctl](#using-etcdctl)
-- [Configuring containerd](#configuring-containerd)
-- [Running K3s with Rootless mode (Experimental)](#running-k3s-with-rootless-mode-experimental)
-- [Node labels and taints](#node-labels-and-taints)
-- [Starting the server with the installation script](#starting-the-server-with-the-installation-script)
-- [Additional OS preparations](#additional-os-preparations)
-- [Additional preparation for (Red Hat/CentOS) Enterprise Linux](#additional-preparation-for-red-hatcentos-enterprise-linux)
-- [Additional preparation for Raspberry Pi OS](#additional-preparation-for-raspberry-pi-os)
-- [Enabling vxlan on Ubuntu 21.10+ on Raspberry Pi](#enabling-vxlan-for-ubuntu-21.10+-on-raspberry-pi)
-- [Running K3s in Docker](#running-k3s-in-docker)
-- [SELinux Support](#selinux-support)
-- [Enabling Lazy Pulling of eStargz (Experimental)](#enabling-lazy-pulling-of-estargz-experimental)
-- [Additional Logging Sources](#additional-logging-sources)
+This section contains advanced information describing the different ways you can run and manage K3s, as well as steps necessary to prepare the host OS for K3s use.
 
 ## Certificate Rotation
 
