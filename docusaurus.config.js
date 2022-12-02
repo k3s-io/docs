@@ -56,6 +56,11 @@ module.exports = {
         },
       ],
     },
+    algolia: {
+      appId: 'LLOD7N3LJA',
+      apiKey: '4637c26b2ca6b8aeaf99a3ee421fb35c',
+      indexName: 'k3s',
+    },
     footer: {
       style: 'dark',
       links: [],
@@ -83,16 +88,4 @@ module.exports = {
       },
     ],
   ], 
-  themes: [
-    [
-      "@easyops-cn/docusaurus-search-local",
-      /** @type {import("@easyops-cn/docusaurus-search-local").PluginOptions} */
-      ({
-        docsRouteBasePath: "/",
-        hashed: true,
-        highlightSearchTermsOnTargetPage: true,
-        indexBlog: false,
-      }),
-    ],
-  ],
 };
