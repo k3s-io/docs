@@ -11,7 +11,7 @@ Whether you're configuring K3s to run in a container or as a native Linux servic
 
 Two nodes cannot have the same hostname.
 
-If multiple nodes may have the same hostname, or if hostnames may be reused by an automated provisioning system, use the `--with-node-id` option to append a random suffix for each node, or devise a unique name to pass with `--node-name` or `$K3S_NODE_NAME` for each node you add to the cluster.
+If multiple nodes will have the same hostname, or if hostnames may be reused by an automated provisioning system, use the `--with-node-id` option to append a random suffix for each node, or devise a unique name to pass with `--node-name` or `$K3S_NODE_NAME` for each node you add to the cluster.
 
 ## Operating Systems
 
