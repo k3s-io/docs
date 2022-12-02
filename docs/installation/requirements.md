@@ -5,13 +5,13 @@ weight: 1
 
 K3s is very lightweight, but has some minimum requirements as outlined below.
 
-Whether you're configuring a K3s cluster to run in a Docker or Kubernetes setup, each node running K3s should meet the following minimum requirements. You may need more resources to fit your needs.
+Whether you're configuring K3s to run in a container or as a native Linux service, each node running K3s should meet the following minimum requirements. These requirements are baseline for K3s and its packaged components, and do not include resources consumed by the workload itself.
 
 ## Prerequisites
 
 Two nodes cannot have the same hostname.
 
-If all your nodes have the same hostname, use the `--with-node-id` option to append a random suffix for each node, or otherwise devise a unique name to pass with `--node-name` or `$K3S_NODE_NAME` for each node you add to the cluster.
+If multiple nodes will have the same hostname, or if hostnames may be reused by an automated provisioning system, use the `--with-node-id` option to append a random suffix for each node, or devise a unique name to pass with `--node-name` or `$K3S_NODE_NAME` for each node you add to the cluster.
 
 ## Operating Systems
 
@@ -43,7 +43,7 @@ The K3s server needs port 6443 to be accessible by all nodes.
 
 The nodes need to be able to reach other nodes over UDP port 8472 when Flannel VXLAN is used or over UDP ports 51820 and 51821 (when using IPv6) when Flannel Wireguard backend is used. The node should not listen on any other port. K3s uses reverse tunneling such that the nodes make outbound connections to the server and all kubelet traffic runs through that tunnel. However, if you do not use Flannel and provide your own custom CNI, then the ports needed by Flannel are not needed by K3s.
 
-If you wish to utilize the metrics server, you will need to open port 10250 on each node.
+If you wish to utilize the metrics server, all nodes must be accessible to each other on port 10250.
 
 If you plan on achieving high availability with embedded etcd, server nodes must be accessible to each other on ports 2379 and 2380.
 
@@ -52,14 +52,14 @@ If you plan on achieving high availability with embedded etcd, server nodes must
 
 <figcaption>Inbound Rules for K3s Server Nodes</figcaption>
 
-| Protocol | Port | Source | Description
-|-----|-----|----------------|---|
-| TCP | 6443 | K3s agent nodes | Kubernetes API Server
-| UDP | 8472 | K3s server and agent nodes | Required only for Flannel VXLAN
-| UDP | 51820 | K3s server and agent nodes | Required only for Flannel Wireguard backend
-| UDP | 51821 | K3s server and agent nodes | Required only for Flannel Wireguard backend with IPv6
-| TCP | 10250 | K3s server and agent nodes | Kubelet metrics
-| TCP | 2379-2380 | K3s server nodes | Required only for HA with embedded etcd
+| Protocol | Port      | Source    | Destination | Description
+|----------|-----------|-----------|-------------|------------
+| TCP      | 2379-2380 | Servers   | Servers     | Required only for HA with embedded etcd
+| TCP      | 6443      | Agents    | Servers     | K3s supervisor and Kubernetes API Server
+| UDP      | 8472      | All nodes | All nodes   | Required only for Flannel VXLAN
+| TCP      | 10250     | All nodes | All nodes   | Kubelet metrics
+| UDP      | 51820     | All nodes | All nodes   | Required only for Flannel Wireguard with IPv4
+| UDP      | 51821     | All nodes | All nodes   | Required only for Flannel Wireguard with IPv6
 
 Typically all outbound traffic is allowed.
 

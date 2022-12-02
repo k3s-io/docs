@@ -9,24 +9,7 @@ aliases:
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-This section contains advanced information describing the different ways you can run and manage K3s:
-
-- [Certificate rotation](#certificate-rotation)
-- [Auto-deploying manifests](#auto-deploying-manifests)
-- [Using Docker as the container runtime](#using-docker-as-the-container-runtime)
-- [Using etcdctl](#using-etcdctl)
-- [Configuring containerd](#configuring-containerd)
-- [Running K3s with Rootless mode (Experimental)](#running-k3s-with-rootless-mode-experimental)
-- [Node labels and taints](#node-labels-and-taints)
-- [Starting the server with the installation script](#starting-the-server-with-the-installation-script)
-- [Additional OS preparations](#additional-os-preparations)
-- [Additional preparation for (Red Hat/CentOS) Enterprise Linux](#additional-preparation-for-red-hatcentos-enterprise-linux)
-- [Additional preparation for Raspberry Pi OS](#additional-preparation-for-raspberry-pi-os)
-- [Enabling vxlan on Ubuntu 21.10+ on Raspberry Pi](#enabling-vxlan-for-ubuntu-21.10+-on-raspberry-pi)
-- [Running K3s in Docker](#running-k3s-in-docker)
-- [SELinux Support](#selinux-support)
-- [Enabling Lazy Pulling of eStargz (Experimental)](#enabling-lazy-pulling-of-estargz-experimental)
-- [Additional Logging Sources](#additional-logging-sources)
+This section contains advanced information describing the different ways you can run and manage K3s, as well as steps necessary to prepare the host OS for K3s use.
 
 ## Certificate Rotation
 
@@ -235,35 +218,19 @@ will register itself as a node (run the agent).
 
 ## Additional OS Preparations
 
-### Additional preparation for Debian "buster" based distributions
+### Old iptables versions
 
-Several popular Linux distributions based on Debian "buster" ship a version of iptables between v1.8.0-v1.8.4. These versions contain a bug which causes the accumulation of duplicate rules, which negatively affects the performance and stability of the node. See [Issue #3117](https://github.com/k3s-io/k3s/issues/3117) for more background. 
+Several popular Linux distributions ship a version of iptables that contain a bug which causes the accumulation of duplicate rules, which negatively affects the performance and stability of the node. See [Issue #3117](https://github.com/k3s-io/k3s/issues/3117) for information on how to determine if you are affected by this problem.
 
-Switching from nftables mode to legacy iptables mode will bypass this issue.
+K3s includes a working version of iptables (v1.8.8) which functions properly. You can tell K3s to use its bundled version of iptables by starting K3s with the `--prefer-bundled-bin` option, or by uninstalling the iptables/nftables packages from your operating system.
 
-```bash
-sudo iptables -F
-sudo update-alternatives --set iptables /usr/sbin/iptables-legacy
-sudo update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
-sudo reboot
-```
+:::info Version Gate
 
-Alternatively, K3s ships which a working version of ipTables (v1.8.6) which functions properly. You can replace iptables on your system:
+The `--prefer-bundled-bin` flag is available starting with the 2022-12 releases (v1.26.0+k3s1, v1.25.5+k3s1, v1.24.9+k3s1, v1.23.15+k3s1).
 
-```bash
-sudo apt remove iptables nftables -y
-sudo reboot
-export PATH="/var/lib/rancher/k3s/data/current/bin/:/var/lib/rancher/k3s/data/current/bin/aux:$PATH"
-```
+:::
 
-K3s will now use its packaged version of iptables.
-
-```bash
-$ which iptables
-/var/lib/rancher/k3s/data/current/bin/aux/iptables
-```
-
-### Additional preparation for (Red Hat/CentOS) Enterprise Linux
+### Red Hat Enterprise Linux / CentOS
 
 It is recommended to turn off firewalld:
 ```bash
@@ -276,9 +243,9 @@ systemctl disable nm-cloud-setup.service nm-cloud-setup.timer
 reboot
 ```
 
-### Additional preparation for Raspberry Pi OS
+### Raspberry Pi
 
-Raspberry Pi OS is Debian based, and may suffer from an old iptables version. See [workarounds](#additional-preparation-for-debian-buster-based-distributions).
+Raspberry Pi OS is Debian based, and may suffer from an old iptables version. See [workarounds](#old-iptables-versions).
 
 Standard Raspberry Pi OS installations do not start with `cgroups` enabled. **K3S** needs `cgroups` to start the systemd service. `cgroups`can be enabled by appending `cgroup_memory=1 cgroup_enable=memory` to `/boot/cmdline.txt`.
 
@@ -286,8 +253,6 @@ Example cmdline.txt:
 ```
 console=serial0,115200 console=tty1 root=PARTUUID=58b06195-02 rootfstype=ext4 elevator=deadline fsck.repair=yes rootwait cgroup_memory=1 cgroup_enable=memory
 ```
-
-## Enabling vxlan for Ubuntu 21.10+ on Raspberry Pi
 
 Starting with Ubuntu 21.10, vxlan support on Raspberry Pi has been moved into a separate kernel module. 
 ```bash
@@ -416,8 +381,8 @@ k3s server --snapshotter=stargz
 ```
 
 With this configuration, you can perform lazy pulling for eStargz-formatted images.
-The following Pod manifest uses eStargz-formatted `node:13.13.0` image (`ghcr.io/stargz-containers/node:13.13.0-esgz`).
-k3s performs lazy pulling for this image.
+The following example Pod manifest uses eStargz-formatted `node:13.13.0` image (`ghcr.io/stargz-containers/node:13.13.0-esgz`).
+When the stargz snapshotter is enabled, K3s performs lazy pulling for this image.
 
 ```yaml
 apiVersion: v1
