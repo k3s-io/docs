@@ -9,15 +9,6 @@ Refer to the [Installation Network Options](installation/network-options.md) pag
 
 For information on which ports need to be opened for K3s, refer to the [Networking Requirements](installation/requirements.md#networking).
 
-- [CoreDNS](#coredns)
-- [Traefik Ingress Controller](#traefik-ingress-controller)
-- [Service Load Balancer](#service-load-balancer)
-  - [How the Service LB Works](#how-the-service-lb-works)
-  - [Usage](#usage)
-  - [Excluding the Service LB from Nodes](#excluding-the-service-lb-from-nodes)
-  - [Disabling the Service LB](#disabling-the-service-lb)
-- [Nodes Without a Hostname](#nodes-without-a-hostname)
-
 ## CoreDNS
 
 CoreDNS is deployed automatically on server startup. To disable it, configure all servers in the cluster with the `--disable=coredns` option.
