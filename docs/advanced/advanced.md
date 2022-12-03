@@ -134,19 +134,19 @@ See also https://rootlesscontaine.rs/ to learn about Rootless mode.
 
 * **Ports**
 
-    When running rootless a new network namespace is created.  This means that K3s instance is running with networking fairly detached from the host.  The only way to access services run in K3s from the host is to set up port forwards to the K3s network namespace. We have a controller that will automatically bind 6443 and service port below 1024 to the host with an offset of 10000. 
+  When running rootless a new network namespace is created.  This means that K3s instance is running with networking fairly detached from the host.
+  The only way to access Services run in K3s from the host is to set up port forwards to the K3s network namespace.
+  Rootless K3s includes controller that will automatically bind 6443 and service ports below 1024 to the host with an offset of 10000.
 
-    That means service port 80 will become 10080 on the host, but 8080 will become 8080 without any offset.
-
-    Currently, only `LoadBalancer` services are automatically bound.
+  For example, a Service on port 80 will become 10080 on the host, but 8080 will become 8080 without any offset. Currently, only LoadBalancer Services are automatically bound.
 
 * **Cgroups**
 
-    Cgroup v1 is not supported. v2 is supported.
+  Cgroup v1 and Hybrid v1/v2 are not supported; only pure Cgroup v2 is supported. If K3s fails to start due to missing cgroups when running rootless, it is likely that your node is in Hybrid mode, and the "missing" cgroups are still bound to a v1 controller.
 
-* **Multi-node cluster**
+* **Multi-node/multi-process cluster**
 
-    Multi-cluster installation is untested and undocumented.
+  Multi-node rootless clusters, or multiple rootless k3s processes on the same node, are not currently supported. See [#6488](https://github.com/k3s-io/k3s/issues/6488#issuecomment-1314998091) for more details.
 
 ### Running Servers and Agents with Rootless
 * Enable cgroup v2 delegation, see https://rootlesscontaine.rs/getting-started/common/cgroup2/ .
@@ -169,6 +169,19 @@ See also https://rootlesscontaine.rs/ to learn about Rootless mode.
 > If you really need to try it on a terminal, prepend `systemd-run --user -p Delegate=yes --tty` to create a systemd scope.
 >
 > i.e., `systemd-run --user -p Delegate=yes --tty k3s server --rootless`
+
+### Advanced Rootless Configuration
+
+Rootless K3s uses [rootlesskit](https://github.com/rootless-containers/rootlesskit) and [slirp4netns](https://github.com/rootless-containers/slirp4netns) to communicate betwen host and user network namespaces.
+Some of the configuration used by rootlesskit and slirp4nets can be set by environment variables. The best way to set these is to add them to the `Environment` field of the k3s-rootless systemd unit.
+
+| Variable                             | Default      | Description
+|--------------------------------------|--------------|------------
+| `K3S_ROOTLESS_MTU`                   | 1500         | Sets the MTU for the slirp4netns virtual interfaces.
+| `K3S_ROOTLESS_CIDR`                  | 10.41.0.0/16 | Sets the CIDR used by slirp4netns virtual interfaces.
+| `K3S_ROOTLESS_ENABLE_IPV6`           | autotedected | Enables slirp4netns IPv6 support. If not specified, it is automatically enabled if K3s is configured for dual-stack operation.
+| `K3S_ROOTLESS_PORT_DRIVER`           | builtin      | Selects the rootless port driver; either `builtin` or `slirp4netns`. Builtin is faster, but masquerades the original source address of inbound packets.
+| `K3S_ROOTLESS_DISABLE_HOST_LOOPBACK` | true         | Controls whether or not access to the hosts's loopback address via the gateway interface is enabled. It is recommended that this not be changed, for security reasons.
 
 ### Troubleshooting
 
