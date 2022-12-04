@@ -11,7 +11,7 @@ This page describes the following networking options:
 - [Flannel options](#flannel-options)
 - [Custom CNI](#custom-cni)
 - [Dual-stack installation](#dual-stack-installation)
-- [IPv6-only-installation](#ipv6-only-installation)
+- [IPv6-only-installation](#single-stack-ipv6-installation)
 - [Distributed hybrid or multicloud cluster](#distributed-hybrid-or-multicloud-cluster)
 
 > **Note:** Please reference the [Networking](networking/networking.md) page for information about CoreDNS, Traefik, and the Service LB.
