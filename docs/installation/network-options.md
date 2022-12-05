@@ -6,13 +6,7 @@ weight: 25
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-This page describes the following networking options:
-
-- [Flannel options](#flannel-options)
-- [Custom CNI](#custom-cni)
-- [Dual-stack installation](#dual-stack-installation)
-- [IPv6-only-installation](#ipv6-only-installation)
-- [Distributed hybrid or multicloud cluster](#distributed-hybrid-or-multicloud-cluster)
+This page describes K3s network configuration options, including configuration or replacement of Flannel, and configuring IPv6.
 
 > **Note:** Please reference the [Networking](networking/networking.md) page for information about CoreDNS, Traefik, and the Service LB.
 
