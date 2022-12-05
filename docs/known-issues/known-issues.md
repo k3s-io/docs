@@ -12,8 +12,8 @@ If you plan to use K3s with docker, Docker installed via a snap package is not r
 
 If you are running iptables in nftables mode instead of legacy you might encounter issues. We recommend utilizing newer iptables (such as 1.6.1+) to avoid issues. 
 
-Additionally, versions 1.8.0-1.8.4 have known issues that can cause K3s to fail. See [Additional OS Preparation](advanced/advanced.md#additional-preparation-for-debian-buster-based-distributions) for workarounds. 
+Additionally, versions 1.8.0-1.8.4 have known issues that can cause K3s to fail. See [Additional OS Preparation](../advanced/advanced.md#additional-preparation-for-debian-buster-based-distributions) for workarounds. 
 
 ### Rootless Mode
 
-Running K3s with Rootless mode is experimental and has several [known issues.](advanced/advanced.md#known-issues-with-rootless-mode)
+Running K3s with Rootless mode is experimental and has several [known issues.](../advanced/advanced.md#known-issues-with-rootless-mode)

@@ -7,7 +7,7 @@ The FAQ is updated periodically and designed to answer the questions our users m
 
 ### Is K3s a suitable replacement for Kubernetes?
 
-K3s is a CNCF-certified Kubernetes distribution, and can do everything required of a standard Kubernetes cluster. It is just a more lightweight version. See the [main](introduction.md) docs page for more details.
+K3s is a CNCF-certified Kubernetes distribution, and can do everything required of a standard Kubernetes cluster. It is just a more lightweight version. See the [main](../introduction.md) docs page for more details.
 
 ### How can I use my own Ingress instead of Traefik?
 
@@ -31,7 +31,7 @@ The installation script will auto-detect if your OS is using systemd or openrc a
 
 ### Can I run K3s in Docker?
 
-Yes, there are multiple ways to run K3s in Docker. See [Advanced Options](advanced/advanced.md#running-k3s-in-docker) for more details.
+Yes, there are multiple ways to run K3s in Docker. See [Advanced Options](../advanced/advanced.md#running-k3s-in-docker) for more details.
 
 ### What is the difference between K3s Server and Agent Tokens?
 
@@ -47,9 +47,9 @@ If no `K3S_TOKEN` is defined, the first K3s server will generate a random token 
  
 If you are having an issue with deploying K3s, you should:
 
-1) Check the [Known Issues](known-issues/known-issues.md) page.
+1) Check the [Known Issues](../known-issues/known-issues.md) page.
 
-2) Check that you have resolved any [Additional OS Preparation](advanced/advanced.md#additional-os-preparations). Run `k3s check-config` and ensure that it passes.
+2) Check that you have resolved any [Additional OS Preparation](../advanced/advanced.md#additional-os-preparations). Run `k3s check-config` and ensure that it passes.
 
 3) Search the [K3s GitHub existing issues](https://github.com/k3s-io/k3s/issues) for one that matches your problem.
 
