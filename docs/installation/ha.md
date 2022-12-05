@@ -14,18 +14,13 @@ Single server clusters can meet a variety of use cases, but for environments whe
 * An **external datastore** (as opposed to the embedded SQLite datastore used in single-server setups)
 * A **fixed registration address** that is placed in front of the server nodes to allow agent nodes to register with the cluster
 
-For more details on how these components work together, refer to the [architecture section.](../architecture/architecture.md#high-availability-with-an-external-db)
+For more details on how these components work together, refer to the [architecture section.](../architecture/architecture.md#high-availability-k3s-server-with-an-external-db)
 
-Agents register through the fixed registration address, but after registration they establish a connection directly to one of the server nodes. This is a websocket connection initiated by the `k3s agent` process and it is maintained by a client-side load balancer running as part of the agent process.
+Agents register through the fixed registration address, but after registration they establish a connection directly to one of the server nodes. This is a websocket connection initiated by the `k3s agent` process, it is maintained by a client-side load balancer running as part of the agent process.
 
 ## Installation Outline
 
 Setting up an HA cluster requires the following steps:
-
-1. [Create an external datastore](#1-create-an-external-datastore)
-2. [Launch server nodes](#2-launch-server-nodes)
-3. [Configure the fixed registration address](#3-configure-the-fixed-registration-address)
-4. [Join agent nodes](#4-optional-join-agent-nodes)
 
 ### 1. Create an External Datastore
 You will first need to create an external datastore for the cluster. See the [Cluster Datastore Options](datastore.md) documentation for more details.

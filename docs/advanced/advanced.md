@@ -336,7 +336,7 @@ If you are installing K3s on a system where SELinux is enabled by default (such 
 <Tabs>
 <TabItem value="Automatic Installation" default>
 
-The [install script](../installation/configuration.md#options-for-installation-with-script) will automatically install the SELinux RPM from the Rancher RPM repository if on a compatible system if not performing an air-gapped install. Automatic installation can be skipped by setting `INSTALL_K3S_SKIP_SELINUX_RPM=true`.
+The [install script](../installation/configuration.md#configuration-with-install-script) will automatically install the SELinux RPM from the Rancher RPM repository if on a compatible system if not performing an air-gapped install. Automatic installation can be skipped by setting `INSTALL_K3S_SKIP_SELINUX_RPM=true`.
 
 </TabItem>
 
