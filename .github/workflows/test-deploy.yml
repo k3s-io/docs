@@ -18,7 +18,8 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-      - name: Test build website
-        run: yarn build
       - name: Check internal links
         run: yarn run remark --quiet --frail ./docs
+      - name: Test build website
+        run: yarn build
+      
