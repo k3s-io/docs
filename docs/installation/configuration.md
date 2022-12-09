@@ -9,11 +9,11 @@ This page focuses on the options that can be used when you set up K3s for the fi
 - [K3s Binary](#configuration-with-binary)
 - [Configuration File](#configuration-file)
 
-For more advanced options, refer to [this page](advanced/advanced.md).
+For more advanced options, refer to [this page](../advanced/advanced.md).
 
 ## Configuration with install script
 
-As mentioned in the [Quick-Start Guide](quick-start/quick-start.md), you can use the installation script available at https://get.k3s.io to install K3s as a service on systemd and openrc based systems.
+As mentioned in the [Quick-Start Guide](../quick-start/quick-start.md), you can use the installation script available at https://get.k3s.io to install K3s as a service on systemd and openrc based systems.
 
 You can use a combination of `INSTALL_K3S_EXEC`, `K3S_` environment variables, and command flags to configure the installation.
 
@@ -27,7 +27,7 @@ curl -sfL https://get.k3s.io | K3S_TOKEN=12345 sh -s - server --flannel-backend 
 curl -sfL https://get.k3s.io | sh -s - --flannel-backend none --token 12345
 ```
 
-For details on all environment variables, see [Environment Variables.](reference/env-variables.md)
+For details on all environment variables, see [Environment Variables.](../reference/env-variables.md)
 
 ## Configuration with binary
 
@@ -52,8 +52,8 @@ The k3s agent can also be configured this way:
 k3s agent --server https://k3s.example.com --token mypassword
 ```
 
-For details on configuring the K3s server, see [Server Configuration.](reference/server-config.md)  
-For details on configuring the K3s agent, see [Agent Configuration.](reference/agent-config.md)  
+For details on configuring the K3s server, see [Server Configuration.](../reference/server-config.md)  
+For details on configuring the K3s agent, see [Agent Configuration.](../reference/agent-config.md)  
 You can also use the `--help` flag to see a list of all available options.
 
 :::info Matching Flags

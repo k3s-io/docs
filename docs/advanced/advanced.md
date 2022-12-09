@@ -44,7 +44,7 @@ The following certificates can be rotated: `admin`, `api-server`, `controller-ma
 
 Any file found in `/var/lib/rancher/k3s/server/manifests` will automatically be deployed to Kubernetes in a manner similar to `kubectl apply`, both on startup and when the file is changed on disk. Deleting files out of this directory will not delete the corresponding resources from the cluster.
 
-For information about deploying Helm charts, refer to the section about [Helm.](helm/helm.md)
+For information about deploying Helm charts, refer to the section about [Helm.](../helm/helm.md)
 
 ## Using Docker as the Container Runtime
 
@@ -191,7 +191,7 @@ Some of the configuration used by rootlesskit and slirp4nets can be set by envir
 
 ## Node Labels and Taints
 
-K3s agents can be configured with the options `--node-label` and `--node-taint` which adds a label and taint to the kubelet. The two options only add labels and/or taints [at registration time,](reference/agent-config.md#node-labels-and-taints-for-agents) so they can only be added once and not changed after that again by running K3s commands.
+K3s agents can be configured with the options `--node-label` and `--node-taint` which adds a label and taint to the kubelet. The two options only add labels and/or taints [at registration time,](../reference/agent-config.md#node-labels-and-taints-for-agents) so they can only be added once and not changed after that again by running K3s commands.
 
 If you want to change node labels and taints after node registration you should use `kubectl`. Refer to the official Kubernetes documentation for details on how to add [taints](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) and [node labels.](https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/#add-a-label-to-a-node)
 
@@ -336,7 +336,7 @@ If you are installing K3s on a system where SELinux is enabled by default (such 
 <Tabs>
 <TabItem value="Automatic Installation" default>
 
-The [install script](installation/configuration#options-for-installation-with-script) will automatically install the SELinux RPM from the Rancher RPM repository if on a compatible system if not performing an air-gapped install. Automatic installation can be skipped by setting `INSTALL_K3S_SKIP_SELINUX_RPM=true`.
+The [install script](../installation/configuration.md#configuration-with-install-script) will automatically install the SELinux RPM from the Rancher RPM repository if on a compatible system if not performing an air-gapped install. Automatic installation can be skipped by setting `INSTALL_K3S_SKIP_SELINUX_RPM=true`.
 
 </TabItem>
 

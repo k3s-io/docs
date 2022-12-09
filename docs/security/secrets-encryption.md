@@ -16,7 +16,7 @@ K3s supports enabling secrets encryption at rest. When first starting the server
 :::tip 
 
 Secrets-encryption cannot be enabled on an existing server without restarting it.  
-Use `curl -sfL https://get.k3s.io | sh -s - server --secrets-encryption` if installing from script, or other methods described in [Configuration Options](installation/configuration.md#configuration-with-install-script).
+Use `curl -sfL https://get.k3s.io | sh -s - server --secrets-encryption` if installing from script, or other methods described in [Configuration Options](../installation/configuration.md#configuration-with-install-script).
 
 :::
 

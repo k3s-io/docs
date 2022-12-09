@@ -19,8 +19,8 @@ K3s is expected to work on most modern Linux systems.
 
 Some OSs have specific requirements:
 
-- If you are using **(Red Hat/CentOS) Enterprise Linux**, follow [these steps](advanced/advanced.md#additional-preparation-for-red-hatcentos-enterprise-linux) for additional setup.
-- If you are using **Raspberry Pi OS**, follow [these steps](advanced/advanced.md#additional-preparation-for-raspberry-pi-os) to switch to legacy iptables.
+- If you are using **(Red Hat/CentOS) Enterprise Linux**, follow [these steps](../advanced/advanced.md#red-hat-enterprise-linux--centos) for additional setup.
+- If you are using **Raspberry Pi OS**, follow [these steps](../advanced/advanced.md#raspberry-pi) to switch to legacy iptables.
 
 For more information on which OSs were tested with Rancher managed K3s clusters, refer to the [Rancher support and maintenance terms.](https://rancher.com/support-maintenance-terms/)
 
@@ -31,7 +31,7 @@ Hardware requirements scale based on the size of your deployments. Minimum recom
 *    RAM: 512MB Minimum (we recommend at least 1GB)
 *    CPU: 1 Minimum
 
-[K3s Resource Profiling](reference/resource-profiling.md) captures the results of tests to determine minimum resource requirements for the K3s agent, the K3s server with a workload, and the K3s server with one agent. It also contains analysis about what has the biggest impact on K3s server and agent utilization, and how the cluster datastore can be protected from interference from agents and workloads.
+[K3s Resource Profiling](../reference/resource-profiling.md) captures the results of tests to determine minimum resource requirements for the K3s agent, the K3s server with a workload, and the K3s server with one agent. It also contains analysis about what has the biggest impact on K3s server and agent utilization, and how the cluster datastore can be protected from interference from agents and workloads.
 
 #### Disks
 

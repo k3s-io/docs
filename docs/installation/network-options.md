@@ -8,7 +8,7 @@ import TabItem from '@theme/TabItem';
 
 This page describes K3s network configuration options, including configuration or replacement of Flannel, and configuring IPv6.
 
-> **Note:** Please reference the [Networking](networking/networking.md) page for information about CoreDNS, Traefik, and the Service LB.
+> **Note:** Please reference the [Networking](../networking/networking.md) page for information about CoreDNS, Traefik, and the Service LB.
 
 ## Flannel Options
 
@@ -16,7 +16,7 @@ This page describes K3s network configuration options, including configuration o
 
 * Flannel options can only be set on server nodes, and must be identical on all servers in the cluster.
 * The default backend for Flannel is `vxlan`. To enable encryption, use the `wireguard-native` backend.
-* Using `vxlan` on Rasperry Pi with recent versions of Ubuntu requires [additional preparation](advanced/advanced.md/#raspberry-pi).
+* Using `vxlan` on Rasperry Pi with recent versions of Ubuntu requires [additional preparation](../advanced/advanced.md#raspberry-pi).
 * Using `wireguard-native` as the Flannel backend may require additional modules on some Linux distributions. Please see the [WireGuard Install Guide](https://www.wireguard.com/install/) for details.
   The WireGuard install steps will ensure the appropriate kernel modules are installed for your operating system.
   You must ensure that WireGuard kernel modules are available on every node, both servers and agents, before attempting to use the WireGuard Flannel backend.
@@ -149,7 +149,7 @@ and on agents:
 --node-external-ip=<AGENT_EXTERNAL_IP>
 ```
 
-where `SERVER_EXTERNAL_IP` is the IP through which we can reach the server node and `AGENT_EXTERNAL_IP` is the IP through which we can reach the agent/worker node. Note that the `K3S_URL` config parameter in the agent/worker should use the `SERVER_EXTERNAL_IP` to be able to connect to it. Remember to check the [Networking Requirements](installation/requirements.md#networking) and allow access to the listed ports on both internal and external addresses.
+where `SERVER_EXTERNAL_IP` is the IP through which we can reach the server node and `AGENT_EXTERNAL_IP` is the IP through which we can reach the agent/worker node. Note that the `K3S_URL` config parameter in the agent/worker should use the `SERVER_EXTERNAL_IP` to be able to connect to it. Remember to check the [Networking Requirements](../installation/requirements.md#networking) and allow access to the listed ports on both internal and external addresses.
 
 Both `SERVER_EXTERNAL_IP` and `AGENT_EXTERNAL_IP` must have connectivity between them and are normally public IPs.
 

@@ -5,9 +5,9 @@ weight: 35
 
 This page explains how CoreDNS, the Traefik Ingress controller, and Klipper service load balancer work within K3s.
 
-Refer to the [Installation Network Options](installation/network-options.md) page for details on Flannel configuration options and backend selection, or how to set up your own CNI.
+Refer to the [Installation Network Options](../installation/network-options.md) page for details on Flannel configuration options and backend selection, or how to set up your own CNI.
 
-For information on which ports need to be opened for K3s, refer to the [Networking Requirements](installation/requirements.md#networking).
+For information on which ports need to be opened for K3s, refer to the [Networking Requirements](../installation/requirements.md#networking).
 
 ## CoreDNS
 
@@ -19,11 +19,11 @@ If you don't install CoreDNS, you will need to install a cluster DNS provider yo
 
 [Traefik](https://traefik.io/) is a modern HTTP reverse proxy and load balancer made to deploy microservices with ease. It simplifies networking complexity while designing, deploying, and running applications.
 
-Traefik is deployed by default when starting the server. For more information see [Auto Deploying Manifests](advanced/advanced.md#auto-deploying-manifests). The default config file is found in `/var/lib/rancher/k3s/server/manifests/traefik.yaml`.
+Traefik is deployed by default when starting the server. For more information see [Auto Deploying Manifests](../advanced/advanced.md#auto-deploying-manifests). The default config file is found in `/var/lib/rancher/k3s/server/manifests/traefik.yaml`.
 
 The Traefik ingress controller will use ports 80 and 443 on the host (i.e. these will not be usable for HostPort or NodePort).
 
-The `traefik.yaml` file should not be edited manually, because k3s would overwrite it again once it is restarted. Instead you can customize Traefik by creating an additional `HelmChartConfig` manifest in `/var/lib/rancher/k3s/server/manifests`. For more details and an example see [Customizing Packaged Components with HelmChartConfig](helm/helm.md#customizing-packaged-components-with-helmchartconfig). For more information on the possible configuration values, refer to the official [Traefik Helm Configuration Parameters.](https://github.com/traefik/traefik-helm-chart/tree/master/traefik).
+The `traefik.yaml` file should not be edited manually, because k3s would overwrite it again once it is restarted. Instead you can customize Traefik by creating an additional `HelmChartConfig` manifest in `/var/lib/rancher/k3s/server/manifests`. For more details and an example see [Customizing Packaged Components with HelmChartConfig](../helm/helm.md#customizing-packaged-components-with-helmchartconfig). For more information on the possible configuration values, refer to the official [Traefik Helm Configuration Parameters.](https://github.com/traefik/traefik-helm-chart/tree/master/traefik).
 
 To disable it, start each server with the `--disable traefik` option.
 
