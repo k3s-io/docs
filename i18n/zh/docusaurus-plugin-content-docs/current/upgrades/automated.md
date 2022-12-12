@@ -97,7 +97,7 @@ spec:
 
 第四，`agent-plan` 中的 `prepare` 步骤会使该计划等待 `server-plan` 完成后再执行升级 job。
 
-第五，两个计划都将 `version` 字段设置为 v1.22.11+k3s2。或者，你可以省略 `version` 字段并将 `channel` 字段设置为解析到 K3s 版本的 URL。这将导致控制器监控该 URL，并在它解析到新版本时随时升级集群。这适用于[发布 channels](manual.md#发布-channels)。因此，你可以用下面的 channel 配置计划，从而确保你的集群总是自动升级到 K3s 的最新稳定版本。
+第五，两个计划都将 `version` 字段设置为 v1.22.11+k3s2。或者，你可以省略 `version` 字段并将 `channel` 字段设置为解析到 K3s 版本的 URL。这将导致控制器监控该 URL，并在它解析到新版本时随时升级集群。这适用于[版本 channels](manual.md#版本-channels)。因此，你可以用下面的 channel 配置计划，从而确保你的集群总是自动升级到 K3s 的最新稳定版本。
 ```yaml
 apiVersion: upgrade.cattle.io/v1
 kind: Plan

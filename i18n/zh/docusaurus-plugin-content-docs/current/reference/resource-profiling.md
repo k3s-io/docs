@@ -19,7 +19,7 @@ weight: 1
 
 - [资源测试范围](#资源测试范围)
 - [用于基线测量的组件](#用于基线测量的组件)
-- [方法论](#方法论)
+- [方法](#方法)
 - [环境](#环境)
 - [基准资源要求](#基准资源要求)
    - [具有工作负载的 K3s Server](#具有工作负载的-k3s-server)
@@ -48,7 +48,7 @@ weight: 1
 
 包括 IOPS 在内的资源数据仅用于 Kubernetes 数据存储和 control plane，不包括系统级 management agent 或 logging、容器镜像管理或任何工作负载要求的开销。
 
-## 方法论
+## 方法
 
 Prometheus v2.21.0 的独立实例可以通过 apt 安装的 `prometheus-node-exporter` 收集主机 CPU、内存和磁盘 IO 统计信息。
 
