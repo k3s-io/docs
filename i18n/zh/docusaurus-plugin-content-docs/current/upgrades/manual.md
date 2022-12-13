@@ -7,9 +7,9 @@ weight: 10
 
 > **注意**：升级时会先升级 Server 节点，然后再升级 Worker 节点。
 
-### 发布 Channels
+### 版本 Channels
 
-通过安装脚本或使用我们的[自动升级](automated.md)功能执行的升级可以绑定到不同的发布 channels。以下是可用的 channels：
+通过安装脚本或使用我们的[自动升级](automated.md)功能执行的升级可以绑定到不同的版本 channels。以下是可用的 channels：
 
 | Channel | 描述 |
 |---------------|---------|
@@ -28,7 +28,7 @@ curl -sfL https://get.k3s.io | sh -
 ```
 默认情况下将升级到 stable channel 中的较新版本。
 
-如果你想在特定 channel（例如 latest）中升级到较新版本，你可以指定 channel：
+如果想升级到特定 channel（如 latest）中的更新版本，你可以指定 channel：
 ```sh
 curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL=latest sh -
 ```
