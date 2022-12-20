@@ -41,16 +41,15 @@ kernel.keys.root_maxbytes=25000000
 
 The runtime requirements to comply with the CIS Benchmark are centered around pod security (via PSP or PSA), network policies and API Server auditing logs. These are outlined in this section.
 
-By default, K3s does not apply any pod security or network policies. However, K3s ships with a controller that is meant to apply a given set of network policies. The same setup applies API Server auditing logs, K3s doesn't enable them by default, so audit log configuration and audit policy must be created manually. By default, K3s runs with the `NodeRestriction` admission controller. 
+By default, K3s does not include any pod security or network policies. However, K3s ships with a controller that will enforce network policies, if any are created. K3s doesn't enable auditing by default, so audit log configuration and audit policy must be created manually. By default, K3s runs with the both the `PodSecurity` and `NodeRestriction` admission controllers enabled, among others.
 
 ### Pod Security
 
 <Tabs>
 <TabItem value="v1.25 and Newer" default>
 
-K3s v1.25 and newer support [Pod Security Admissions (PSAs)](https://kubernetes.io/docs/concepts/security/pod-security-admission/) for controlling pod security. PSAs are enabled by passing the following flags to the K3s server:
+K3s v1.25 and newer support [Pod Security Admissions (PSAs)](https://kubernetes.io/docs/concepts/security/pod-security-admission/) for controlling pod security. PSAs are enabled by passing the following flag to the K3s server:
 ```
---kube-apiserver-arg="enable-admission-plugins=NodeRestriction"
 --kube-apiserver-arg="admission-control-config-file=/var/lib/rancher/k3s/server/psa.yaml"
 ```
 
@@ -573,7 +572,6 @@ The configuration below should be placed in the [configuration file](../installa
 protect-kernel-defaults: true
 secrets-encryption: true
 kube-apiserver-arg:
-  - 'enable-admission-plugins=NodeRestriction,NamespaceLifecycle,ServiceAccount'
   - 'admission-control-config-file=/var/lib/rancher/k3s/server/psa.yaml'
   - 'audit-log-path=/var/lib/rancher/k3s/server/logs/audit.log'
   - 'audit-policy-file=/var/lib/rancher/k3s/server/audit.yaml'
