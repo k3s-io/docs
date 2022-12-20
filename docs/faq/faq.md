@@ -53,6 +53,6 @@ If you are having an issue with deploying K3s, you should:
 
 3) Search the [K3s GitHub existing issues](https://github.com/k3s-io/k3s/issues) for one that matches your problem.
 
-4) Join the [Rancher K3s Slack](https://rancher-users.slack.com/archives/CGGQEHPPW) channel to get help. 
+4) Join the [Rancher Slack](https://rancher-users.slack.com/) K3s channel to get help. 
 
 5) Submit a [New Issue](https://github.com/k3s-io/k3s/issues/new/choose) on the K3s Github describing your setup and the issue you are experiencing.

@@ -279,7 +279,7 @@ There are several ways to run K3s in Docker:
 <Tabs>
 <TabItem value='K3d' default>
 
-[k3d](https://github.com/k3s-io/k3d) is a utility designed to easily run K3s in Docker.
+[k3d](https://github.com/k3d-io/k3d) is a utility designed to easily run K3s in Docker.
 
 It can be installed via the the [brew](https://brew.sh/) utility on MacOS:
 
