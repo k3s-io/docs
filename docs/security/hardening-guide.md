@@ -3,12 +3,15 @@ title: "CIS Hardening Guide"
 weight: 80
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 This document provides prescriptive guidance for hardening a production installation of K3s. It outlines the configurations and controls required to address Kubernetes benchmark controls from the Center for Internet Security (CIS).
 
 K3s has a number of security mitigations applied and turned on by default and will pass a number of the Kubernetes CIS controls without modification. There are some notable exceptions to this that require manual intervention to fully comply with the CIS Benchmark:
 
 1. K3s will not modify the host operating system. Any host-level modifications will need to be done manually.
-2. Certain CIS policy controls for `PodSecurityPolicies` and `NetworkPolicies` will restrict the functionality of the cluster. You must opt into having K3s configure these by adding the appropriate options (enabling of admission plugins) to your command-line flags or configuration file as well as manually applying appropriate policies. Further details are presented in the sections below.
+2. Certain CIS policy controls for `NetworkPolicies` and `PodSecurityStandards` (`PodSecurityPolicies` on v1.24 and older) will restrict the functionality of the cluster. You must opt into having K3s configure these by adding the appropriate options (enabling of admission plugins) to your command-line flags or configuration file as well as manually applying appropriate policies. Further details are presented in the sections below.
 
 The first section (1.1) of the CIS Benchmark concerns itself primarily with pod manifest permissions and ownership. K3s doesn't utilize these for the core components since everything is packaged into a single binary.
 
@@ -36,13 +39,56 @@ kernel.keys.root_maxbytes=25000000
 
 ## Kubernetes Runtime Requirements
 
-The runtime requirements to comply with the CIS Benchmark are centered around pod security (PSPs), network policies and API Server auditing logs. These are outlined in this section. K3s doesn't apply any default PSPs or network policies. However, K3s ships with a controller that is meant to apply a given set of network policies. By default, K3s runs with the `NodeRestriction` admission controller. To enable PSPs, add the following to the K3s start command: `--kube-apiserver-arg="enable-admission-plugins=NodeRestriction,PodSecurityPolicy,ServiceAccount"`. This will have the effect of maintaining the `NodeRestriction` plugin as well as enabling the `PodSecurityPolicy`. The same happens with the API Server auditing logs, K3s doesn't enable them by default, so audit log configuration and audit policy must be created manually.
+The runtime requirements to comply with the CIS Benchmark are centered around pod security (via PSP or PSA), network policies and API Server auditing logs. These are outlined in this section.
 
-### Pod Security Policies
+By default, K3s does not include any pod security or network policies. However, K3s ships with a controller that will enforce network policies, if any are created. K3s doesn't enable auditing by default, so audit log configuration and audit policy must be created manually. By default, K3s runs with the both the `PodSecurity` and `NodeRestriction` admission controllers enabled, among others.
+
+### Pod Security
+
+<Tabs>
+<TabItem value="v1.25 and Newer" default>
+
+K3s v1.25 and newer support [Pod Security Admissions (PSAs)](https://kubernetes.io/docs/concepts/security/pod-security-admission/) for controlling pod security. PSAs are enabled by passing the following flag to the K3s server:
+```
+--kube-apiserver-arg="admission-control-config-file=/var/lib/rancher/k3s/server/psa.yaml"
+```
+
+The policy should be written to a file named `psa.yaml` in `/var/lib/rancher/k3s/server` directory. 
+
+Here is an example of a complaint PSA:
+```yaml
+apiVersion: apiserver.config.k8s.io/v1
+kind: AdmissionConfiguration
+plugins:
+- name: PodSecurity
+  configuration:
+    apiVersion: pod-security.admission.config.k8s.io/v1beta1
+    kind: PodSecurityConfiguration
+    defaults:
+      enforce: "restricted"
+      enforce-version: "latest"
+      audit: "restricted"
+      audit-version: "latest"
+      warn: "restricted"
+      warn-version: "latest"
+    exemptions:
+      usernames: []
+      runtimeClasses: []
+      namespaces: [kube-system, cis-operator-system]
+```
+</TabItem>
+<TabItem value="v1.24 and Older" default>
+
+K3s v1.24 and older support [Pod Security Policies (PSPs)](https://v1-24.docs.kubernetes.io/docs/concepts/security/pod-security-policy/) for controlling pod security. PSPs are enabled by passing the following flag to the K3s server:
+
+```
+--kube-apiserver-arg="enable-admission-plugins=NodeRestriction,PodSecurityPolicy"
+```
+This will have the effect of maintaining the `NodeRestriction` plugin as well as enabling the `PodSecurityPolicy`. 
 
 When PSPs are enabled, a policy can be applied to satisfy the necessary controls described in section 5.2 of the CIS Benchmark.
 
-Here is an example of a compliant PSP.
+Here is an example of a compliant PSP:
 
 ```yaml
 apiVersion: policy/v1beta1
@@ -85,7 +131,7 @@ spec:
 
 For the above PSP to be effective, we need to create a ClusterRole and a ClusterRoleBinding. We also need to include a "system unrestricted policy" which is needed for system-level pods that require additional privileges, and an additional policy that allows sysctls necessary for servicelb to function properly.
 
-These can be combined with the PSP yaml above and NetworkPolicy yaml below into a single file and placed in the `/var/lib/rancher/k3s/server/manifests` directory. Below is an example of a `policy.yaml` file. 
+Combining the configuration above with the [Network Policy](#networkpolicies) described in the next section, a single file can be placed in the `/var/lib/rancher/k3s/server/manifests` directory. Here is an example of a `policy.yaml` file: 
 
 ```yaml
 apiVersion: policy/v1beta1
@@ -313,11 +359,17 @@ spec:
             name: kube-public
 ```
 
-> **Note:** The Kubernetes critical additions such as CNI, DNS, and Ingress are ran as pods in the `kube-system` namespace. Therefore, this namespace will have a policy that is less restrictive so that these components can run properly.
+</TabItem>
+</Tabs>
+
+
+> **Note:** The Kubernetes critical additions such as CNI, DNS, and Ingress are run as pods in the `kube-system` namespace. Therefore, this namespace will have a policy that is less restrictive so that these components can run properly.
 
 ### NetworkPolicies
 
 CIS requires that all namespaces have a network policy applied that reasonably limits traffic into namespaces and pods.
+
+Network policies should be placed the `/var/lib/rancher/k3s/server/manifests` directory, where they will automatically be deployed on startup.
 
 Here is an example of a compliant network policy.
 
@@ -360,6 +412,9 @@ spec:
 
 The metrics-server and Traefik ingress controller will be blocked by default if network policies are not created to allow access. Traefik v1 as packaged in K3s version 1.20 and below uses different labels than Traefik v2. Ensure that you only use the sample yaml below that is associated with the version of Traefik present on your cluster.
 
+<Tabs>
+<TabItem value="v1.21 and Newer" default>
+
 ```yaml
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -389,7 +444,55 @@ spec:
   policyTypes:
   - Ingress
 ---
-# Below is for 1.20 ONLY -- remove if on 1.21 or above
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-all-traefik-v121-ingress
+  namespace: kube-system
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: traefik
+  ingress:
+  - {}
+  policyTypes:
+  - Ingress
+---
+
+```
+</TabItem>
+
+<TabItem value="v1.20 and Older" default>
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-all-metrics-server
+  namespace: kube-system
+spec:
+  podSelector:
+    matchLabels:
+      k8s-app: metrics-server
+  ingress:
+  - {}
+  policyTypes:
+  - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-all-svclbtraefik-ingress
+  namespace: kube-system
+spec:
+  podSelector: 
+    matchLabels:
+      svccontroller.k3s.cattle.io/svcname: traefik
+  ingress:
+  - {}
+  policyTypes:
+  - Ingress
+---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -404,23 +507,15 @@ spec:
   policyTypes:
   - Ingress
 ---
-# Below is for 1.21 and above ONLY -- remove if on 1.20 or below
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: allow-all-traefik-v121-ingress
-  namespace: kube-system
-spec:
-  podSelector:
-    matchLabels:
-      app.kubernetes.io/name: traefik
-  ingress:
-  - {}
-  policyTypes:
-  - Ingress
-```
 
-> **Note:** Operators must manage network policies as normal for additional namespaces that are created.
+```
+</TabItem>
+</Tabs>
+
+:::info
+Operators must manage network policies as normal for additional namespaces that are created.
+:::
+
 
 ### API Server audit configuration
 
@@ -464,6 +559,164 @@ sudo systemctl daemon-reload
 sudo systemctl restart k3s.service
 ```
 
+## Configuration for Kubernetes Components
+
+
+The configuration below should be placed in the [configuration file](../installation/configuration.md#configuration-file), and contains all the necessary remediations to harden the Kubernetes components.
+
+
+<Tabs>
+<TabItem value="v1.25 and Newer" default>
+
+```yaml
+protect-kernel-defaults: true
+secrets-encryption: true
+kube-apiserver-arg:
+  - 'admission-control-config-file=/var/lib/rancher/k3s/server/psa.yaml'
+  - 'audit-log-path=/var/lib/rancher/k3s/server/logs/audit.log'
+  - 'audit-policy-file=/var/lib/rancher/k3s/server/audit.yaml'
+  - 'audit-log-maxage=30'
+  - 'audit-log-maxbackup=10'
+  - 'audit-log-maxsize=100'
+  - 'request-timeout=300s'
+  - 'service-account-lookup=true'
+kube-controller-manager-arg:
+  - 'terminated-pod-gc-threshold=10'
+  - 'use-service-account-credentials=true'
+kubelet-arg:
+  - 'streaming-connection-idle-timeout=5m'
+  - 'make-iptables-util-chains=true'
+```
+
+</TabItem>
+
+<TabItem value="v1.24 and Older" default>
+
+```yaml
+protect-kernel-defaults: true
+secrets-encryption: true
+kube-apiserver-arg:
+  - 'enable-admission-plugins=NodeRestriction,PodSecurityPolicy,NamespaceLifecycle,ServiceAccount'
+  - 'audit-log-path=/var/lib/rancher/k3s/server/logs/audit.log'
+  - 'audit-policy-file=/var/lib/rancher/k3s/server/audit.yaml'
+  - 'audit-log-maxage=30'
+  - 'audit-log-maxbackup=10'
+  - 'audit-log-maxsize=100'
+  - 'request-timeout=300s'
+  - 'service-account-lookup=true'
+kube-controller-manager-arg:
+  - 'terminated-pod-gc-threshold=10'
+  - 'use-service-account-credentials=true'
+kubelet-arg:
+  - 'streaming-connection-idle-timeout=5m'
+  - 'make-iptables-util-chains=true'
+```
+
+</TabItem>
+</Tabs>
+
+
+## Control Plane Execution and Arguments
+
+Listed below are the K3s control plane components and the arguments they are given at start, by default. Commented to their right is the CIS 1.6 control that they satisfy.
+
+```bash
+kube-apiserver 
+    --advertise-port=6443 
+    --allow-privileged=true 
+    --anonymous-auth=false                                                            # 1.2.1
+    --api-audiences=unknown 
+    --authorization-mode=Node,RBAC 
+    --bind-address=127.0.0.1 
+    --cert-dir=/var/lib/rancher/k3s/server/tls/temporary-certs
+    --client-ca-file=/var/lib/rancher/k3s/server/tls/client-ca.crt                    # 1.2.31
+    --enable-admission-plugins=NodeRestriction,PodSecurityPolicy                      # 1.2.17
+    --etcd-cafile=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt                  # 1.2.32
+    --etcd-certfile=/var/lib/rancher/k3s/server/tls/etcd/client.crt                   # 1.2.29
+    --etcd-keyfile=/var/lib/rancher/k3s/server/tls/etcd/client.key                    # 1.2.29
+    --etcd-servers=https://127.0.0.1:2379 
+    --insecure-port=0                                                                 # 1.2.19
+    --kubelet-certificate-authority=/var/lib/rancher/k3s/server/tls/server-ca.crt 
+    --kubelet-client-certificate=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.crt 
+    --kubelet-client-key=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.key 
+    --profiling=false                                                                 # 1.2.21
+    --proxy-client-cert-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.crt 
+    --proxy-client-key-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.key 
+    --requestheader-allowed-names=system:auth-proxy 
+    --requestheader-client-ca-file=/var/lib/rancher/k3s/server/tls/request-header-ca.crt 
+    --requestheader-extra-headers-prefix=X-Remote-Extra- 
+    --requestheader-group-headers=X-Remote-Group 
+    --requestheader-username-headers=X-Remote-User 
+    --secure-port=6444                                                                # 1.2.20
+    --service-account-issuer=k3s 
+    --service-account-key-file=/var/lib/rancher/k3s/server/tls/service.key            # 1.2.28
+    --service-account-signing-key-file=/var/lib/rancher/k3s/server/tls/service.key 
+    --service-cluster-ip-range=10.43.0.0/16 
+    --storage-backend=etcd3 
+    --tls-cert-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.crt        # 1.2.30
+    --tls-private-key-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.key # 1.2.30
+```
+
+```bash
+kube-controller-manager 
+    --address=127.0.0.1 
+    --allocate-node-cidrs=true 
+    --bind-address=127.0.0.1                                                       # 1.3.7
+    --cluster-cidr=10.42.0.0/16 
+    --cluster-signing-cert-file=/var/lib/rancher/k3s/server/tls/client-ca.crt 
+    --cluster-signing-key-file=/var/lib/rancher/k3s/server/tls/client-ca.key 
+    --kubeconfig=/var/lib/rancher/k3s/server/cred/controller.kubeconfig 
+    --port=10252 
+    --profiling=false                                                              # 1.3.2
+    --root-ca-file=/var/lib/rancher/k3s/server/tls/server-ca.crt                   # 1.3.5
+    --secure-port=0 
+    --service-account-private-key-file=/var/lib/rancher/k3s/server/tls/service.key # 1.3.4 
+    --use-service-account-credentials=true                                         # 1.3.3
+```
+
+```bash
+kube-scheduler 
+    --address=127.0.0.1 
+    --bind-address=127.0.0.1                                              # 1.4.2
+    --kubeconfig=/var/lib/rancher/k3s/server/cred/scheduler.kubeconfig 
+    --port=10251 
+    --profiling=false                                                     # 1.4.1
+    --secure-port=0
+```
+
+```bash
+kubelet 
+    --address=0.0.0.0 
+    --anonymous-auth=false                                                # 4.2.1
+    --authentication-token-webhook=true 
+    --authorization-mode=Webhook                                          # 4.2.2
+    --cgroup-driver=cgroupfs 
+    --client-ca-file=/var/lib/rancher/k3s/agent/client-ca.crt             # 4.2.3
+    --cloud-provider=external 
+    --cluster-dns=10.43.0.10 
+    --cluster-domain=cluster.local 
+    --cni-bin-dir=/var/lib/rancher/k3s/data/223e6420f8db0d8828a8f5ed3c44489bb8eb47aa71485404f8af8c462a29bea3/bin 
+    --cni-conf-dir=/var/lib/rancher/k3s/agent/etc/cni/net.d 
+    --container-runtime-endpoint=/run/k3s/containerd/containerd.sock 
+    --container-runtime=remote 
+    --containerd=/run/k3s/containerd/containerd.sock 
+    --eviction-hard=imagefs.available<5%,nodefs.available<5% 
+    --eviction-minimum-reclaim=imagefs.available=10%,nodefs.available=10% 
+    --fail-swap-on=false 
+    --healthz-bind-address=127.0.0.1 
+    --hostname-override=hostname01 
+    --kubeconfig=/var/lib/rancher/k3s/agent/kubelet.kubeconfig 
+    --kubelet-cgroups=/systemd/system.slice 
+    --node-labels= 
+    --pod-manifest-path=/var/lib/rancher/k3s/agent/pod-manifests 
+    --protect-kernel-defaults=true                                        # 4.2.6
+    --read-only-port=0                                                    # 4.2.4
+    --resolv-conf=/run/systemd/resolve/resolv.conf 
+    --runtime-cgroups=/systemd/system.slice 
+    --serialize-image-pulls=false 
+    --tls-cert-file=/var/lib/rancher/k3s/agent/serving-kubelet.crt        # 4.2.10
+    --tls-private-key-file=/var/lib/rancher/k3s/agent/serving-kubelet.key # 4.2.10
+```
 Additional information about CIS requirements 1.2.22 to 1.2.25 is presented below.
 
 ## Known Issues
@@ -600,128 +853,6 @@ This can be remediated by updating the `automountServiceAccountToken` field to `
 
 For `default` service accounts in the built-in namespaces (`kube-system`, `kube-public`, `kube-node-lease`, and `default`), K3s does not automatically do this. You can manually update this field on these service accounts to pass the control.
 </details>
-
-## Control Plane Execution and Arguments
-
-Listed below are the K3s control plane components and the arguments they are given at start, by default. Commented to their right is the CIS 1.6 control that they satisfy.
-
-```bash
-kube-apiserver 
-    --advertise-port=6443 
-    --allow-privileged=true 
-    --anonymous-auth=false                                                            # 1.2.1
-    --api-audiences=unknown 
-    --authorization-mode=Node,RBAC 
-    --bind-address=127.0.0.1 
-    --cert-dir=/var/lib/rancher/k3s/server/tls/temporary-certs
-    --client-ca-file=/var/lib/rancher/k3s/server/tls/client-ca.crt                    # 1.2.31
-    --enable-admission-plugins=NodeRestriction,PodSecurityPolicy                      # 1.2.17
-    --etcd-cafile=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt                  # 1.2.32
-    --etcd-certfile=/var/lib/rancher/k3s/server/tls/etcd/client.crt                   # 1.2.29
-    --etcd-keyfile=/var/lib/rancher/k3s/server/tls/etcd/client.key                    # 1.2.29
-    --etcd-servers=https://127.0.0.1:2379 
-    --insecure-port=0                                                                 # 1.2.19
-    --kubelet-certificate-authority=/var/lib/rancher/k3s/server/tls/server-ca.crt 
-    --kubelet-client-certificate=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.crt 
-    --kubelet-client-key=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.key 
-    --profiling=false                                                                 # 1.2.21
-    --proxy-client-cert-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.crt 
-    --proxy-client-key-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.key 
-    --requestheader-allowed-names=system:auth-proxy 
-    --requestheader-client-ca-file=/var/lib/rancher/k3s/server/tls/request-header-ca.crt 
-    --requestheader-extra-headers-prefix=X-Remote-Extra- 
-    --requestheader-group-headers=X-Remote-Group 
-    --requestheader-username-headers=X-Remote-User 
-    --secure-port=6444                                                                # 1.2.20
-    --service-account-issuer=k3s 
-    --service-account-key-file=/var/lib/rancher/k3s/server/tls/service.key            # 1.2.28
-    --service-account-signing-key-file=/var/lib/rancher/k3s/server/tls/service.key 
-    --service-cluster-ip-range=10.43.0.0/16 
-    --storage-backend=etcd3 
-    --tls-cert-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.crt        # 1.2.30
-    --tls-private-key-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.key # 1.2.30
-```
-
-```bash
-kube-controller-manager 
-    --address=127.0.0.1 
-    --allocate-node-cidrs=true 
-    --bind-address=127.0.0.1                                                       # 1.3.7
-    --cluster-cidr=10.42.0.0/16 
-    --cluster-signing-cert-file=/var/lib/rancher/k3s/server/tls/client-ca.crt 
-    --cluster-signing-key-file=/var/lib/rancher/k3s/server/tls/client-ca.key 
-    --kubeconfig=/var/lib/rancher/k3s/server/cred/controller.kubeconfig 
-    --port=10252 
-    --profiling=false                                                              # 1.3.2
-    --root-ca-file=/var/lib/rancher/k3s/server/tls/server-ca.crt                   # 1.3.5
-    --secure-port=0 
-    --service-account-private-key-file=/var/lib/rancher/k3s/server/tls/service.key # 1.3.4 
-    --use-service-account-credentials=true                                         # 1.3.3
-```
-
-```bash
-kube-scheduler 
-    --address=127.0.0.1 
-    --bind-address=127.0.0.1                                              # 1.4.2
-    --kubeconfig=/var/lib/rancher/k3s/server/cred/scheduler.kubeconfig 
-    --port=10251 
-    --profiling=false                                                     # 1.4.1
-    --secure-port=0
-```
-
-```bash
-kubelet 
-    --address=0.0.0.0 
-    --anonymous-auth=false                                                # 4.2.1
-    --authentication-token-webhook=true 
-    --authorization-mode=Webhook                                          # 4.2.2
-    --cgroup-driver=cgroupfs 
-    --client-ca-file=/var/lib/rancher/k3s/agent/client-ca.crt             # 4.2.3
-    --cloud-provider=external 
-    --cluster-dns=10.43.0.10 
-    --cluster-domain=cluster.local 
-    --cni-bin-dir=/var/lib/rancher/k3s/data/223e6420f8db0d8828a8f5ed3c44489bb8eb47aa71485404f8af8c462a29bea3/bin 
-    --cni-conf-dir=/var/lib/rancher/k3s/agent/etc/cni/net.d 
-    --container-runtime-endpoint=/run/k3s/containerd/containerd.sock 
-    --container-runtime=remote 
-    --containerd=/run/k3s/containerd/containerd.sock 
-    --eviction-hard=imagefs.available<5%,nodefs.available<5% 
-    --eviction-minimum-reclaim=imagefs.available=10%,nodefs.available=10% 
-    --fail-swap-on=false 
-    --healthz-bind-address=127.0.0.1 
-    --hostname-override=hostname01 
-    --kubeconfig=/var/lib/rancher/k3s/agent/kubelet.kubeconfig 
-    --kubelet-cgroups=/systemd/system.slice 
-    --node-labels= 
-    --pod-manifest-path=/var/lib/rancher/k3s/agent/pod-manifests 
-    --protect-kernel-defaults=true                                        # 4.2.6
-    --read-only-port=0                                                    # 4.2.4
-    --resolv-conf=/run/systemd/resolve/resolv.conf 
-    --runtime-cgroups=/systemd/system.slice 
-    --serialize-image-pulls=false 
-    --tls-cert-file=/var/lib/rancher/k3s/agent/serving-kubelet.crt        # 4.2.10
-    --tls-private-key-file=/var/lib/rancher/k3s/agent/serving-kubelet.key # 4.2.10
-```
-
-The command below is an example of how the outlined remediations can be applied to harden K3s.
-
-```bash
-k3s server \
-    --protect-kernel-defaults=true \
-    --secrets-encryption=true \
-    --kube-apiserver-arg='audit-log-path=/var/lib/rancher/k3s/server/logs/audit.log' \
-    --kube-apiserver-arg='audit-policy-file=/var/lib/rancher/k3s/server/audit.yaml' \
-    --kube-apiserver-arg='audit-log-maxage=30' \
-    --kube-apiserver-arg='audit-log-maxbackup=10' \
-    --kube-apiserver-arg='audit-log-maxsize=100' \
-    --kube-apiserver-arg='request-timeout=300s' \
-    --kube-apiserver-arg='service-account-lookup=true' \
-    --kube-apiserver-arg='enable-admission-plugins=NodeRestriction,PodSecurityPolicy,NamespaceLifecycle,ServiceAccount' \
-    --kube-controller-manager-arg='terminated-pod-gc-threshold=10' \
-    --kube-controller-manager-arg='use-service-account-credentials=true' \
-    --kubelet-arg='streaming-connection-idle-timeout=5m' \
-    --kubelet-arg='make-iptables-util-chains=true'
-```
 
 ## Conclusion
 
