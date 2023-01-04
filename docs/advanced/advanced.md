@@ -428,3 +428,24 @@ helm repo update
 helm install --create-namespace -n cattle-logging-system rancher-logging-crd rancher-charts/rancher-logging-crd
 helm install --create-namespace -n cattle-logging-system rancher-logging --set additionalLoggingSources.k3s.enabled=true rancher-charts/rancher-logging
 ```
+
+## Additional Network Policy Logging
+
+Packets dropped by network policies can be logged. The packet is sent to the iptables NFLOG action, which shows the packet details, including the network policy that blocked it.
+
+To convert NFLOG to log entries, install ulogd2 and configure `[log1]` to read on `group=100`. Then, restart the ulogd2 service for the new config to be committed.
+
+Packets hitting the NFLOG action can also be read by using tcpdump:
+```bash
+tcpdump -ni nflog:100
+```
+Note however that in this case, the network policy that blocked the packet will not be shown.
+
+
+When a packet is blocked by network policy rules, a log message will appear in `/var/log/ulog/syslogemu.log`. If there is a lot of traffic, the logging file could grow very fast. To control that, set the "limit" and "limit-burst" iptables parameters approprietly by adding the following annotations to the network policy in question:
+```bash
+* kube-router.io/netpol-nflog-limit=<LIMIT-VALUE>
+* kube-router.io.io/netpol-nflog-limit-burst=<LIMIT-BURST-VALUE>
+```
+
+Default values are `limit=10/minute` and `limit-burst=10`. Check the iptables manual for more information on the format and possible values for these fields.
