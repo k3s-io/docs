@@ -172,7 +172,7 @@ See also https://rootlesscontaine.rs/ to learn about Rootless mode.
 
 ### Advanced Rootless Configuration
 
-Rootless K3s uses [rootlesskit](https://github.com/rootless-containers/rootlesskit) and [slirp4netns](https://github.com/rootless-containers/slirp4netns) to communicate betwen host and user network namespaces.
+Rootless K3s uses [rootlesskit](https://github.com/rootless-containers/rootlesskit) and [slirp4netns](https://github.com/rootless-containers/slirp4netns) to communicate between host and user network namespaces.
 Some of the configuration used by rootlesskit and slirp4nets can be set by environment variables. The best way to set these is to add them to the `Environment` field of the k3s-rootless systemd unit.
 
 | Variable                             | Default      | Description
