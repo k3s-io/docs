@@ -100,6 +100,21 @@ You should see that IP forwarding is set to true.
 </TabItem>
 </Tabs>
 
+## Control-Plane Egress Selector configuration
+
+K3s agents and servers maintain websocket tunnels between nodes that are used to encapsulate bidirectional communication between the control-plane (apiserver) and agent (kubelet and containerd) components.
+This allows agents to operate without exposing the kubelet and container runtime streaming ports to incoming connections, and for the control-plane to connect to cluster services when operating with the agent disabled.
+This functionality is equivalent to the [Konnectivity](https://kubernetes.io/docs/tasks/extend-kubernetes/setup-konnectivity/) service commonly used on other Kubernetes distributions, and is managed via the apiserver's egress selector configuration.
+
+The egress selector mode may be configured on servers via the `--egress-selector-mode` flag, and offers four modes:
+* `disabled`: The apiserver does not use agent tunnels to communicate with kubelets or cluster endpoints.
+  This mode requires that servers run the kubelet, CNI, and kube-proxy, and have direct connectivity to agents, or the apiserver will not be able to access service endpoints or perform `kubectl exec` and `kubectl logs`.
+* `agent`: The apiserver uses agent tunnels to communicate with kubelets.
+  This is mode requires that servers also run the kubelet, CNI, and kube-proxy, or the apiserver will not be able to access service endpoints.
+* `pod` (default): The apiserver uses agent tunnels to communicate with kubelets and service endpoints, routing endpoint connections to the correct agent by watching Nodes.
+  **NOTE**: This will not work when using a CNI that uses its own IPAM and does not respect the node's PodCIDR allocation. `cluster` or `agent` should be used with these CNIs instead.
+* `cluster`: The apiserver uses agent tunnels to communicate with kubelets and service endpoints, routing endpoint connections to the correct agent by watching Endpoints.
+
 ## Dual-stack installation
 
 :::info Version Gate
@@ -156,3 +171,5 @@ Both `SERVER_EXTERNAL_IP` and `AGENT_EXTERNAL_IP` must have connectivity between
 > **Warning:** The latency between nodes will increase as external connectivity requires more hops. This will reduce the network performance and could also impact the health of the cluster if latency is too high.
 
 > **Warning:** Embedded etcd will not use external IPs for communication. If using embedded etcd; all server nodes must be reachable to each other via their private IPs.
+
+

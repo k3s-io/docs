@@ -48,9 +48,11 @@ For information about deploying Helm charts, refer to the section about [Helm.](
 
 ## Using Docker as the Container Runtime
 
-K3s includes and defaults to [containerd,](https://containerd.io/) an industry-standard container runtime.
+K3s includes and defaults to [containerd](https://containerd.io/), an industry-standard container runtime.
+As of Kubernetes 1.24, the Kubelet no longer includes dockershim, the component that allows the kubelet to communicate with dockerd.
+K3s 1.24 and higher include [cri-dockerd](https://github.com/Mirantis/cri-dockerd), which allows seamless upgrade from prior releases of K3s while continuing to use the Docker container runtime.
 
-To use Docker instead of containerd,
+To use Docker instead of containerd:
 
 1. Install Docker on the K3s node. One of Rancher's [Docker installation scripts](https://github.com/rancher/install-docker) can be used to install Docker:
 
@@ -97,20 +99,23 @@ To use Docker instead of containerd,
 
 ## Using etcdctl
 
-etcdctl provides a CLI for etcd.
+etcdctl provides a CLI for interacting with etcd servers. K3s does not bundle etcdctl.
 
-If you would like to use etcdctl after installing K3s with embedded etcd, install etcdctl using the [official documentation.](https://etcd.io/docs/latest/install/) 
+If you would like to use etcdctl to interact with K3s's embedded etcd, install etcdctl using the [official documentation](https://etcd.io/docs/latest/install/).
 
 ```bash
-$ VERSION="v3.5.0"
-$ curl -L https://github.com/etcd-io/etcd/releases/download/${VERSION}/etcd-${VERSION}-linux-amd64.tar.gz --output etcdctl-linux-amd64.tar.gz
-$ sudo tar -zxvf etcdctl-linux-amd64.tar.gz --strip-components=1 -C /usr/local/bin etcd-${VERSION}-linux-amd64/etcdctl
+ETCD_VERSION="v3.5.5"
+ETCD_URL="https://github.com/etcd-io/etcd/releases/download/${ETCD_VERSION}/etcd-${ETCD_VERSION}-linux-amd64.tar.gz"
+curl -sL ${ETCD_URL} | sudo tar -zxv --strip-components=1 -C /usr/local/bin
 ```
 
-Then start using etcdctl commands with the appropriate K3s flags:
+You may then use etcdctl by configuring it to use the K3s-managed certs and keys for authentication:
 
 ```bash
-sudo etcdctl --cacert=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt --cert=/var/lib/rancher/k3s/server/tls/etcd/client.crt --key=/var/lib/rancher/k3s/server/tls/etcd/client.key version
+sudo etcdctl version \
+  --cacert=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt \
+  --cert=/var/lib/rancher/k3s/server/tls/etcd/client.crt \
+  --key=/var/lib/rancher/k3s/server/tls/etcd/client.key
 ```
 
 ## Configuring containerd
@@ -121,14 +126,66 @@ For advanced customization for this file you can create another file called `con
 
 The `config.toml.tmpl` will be treated as a Go template file, and the `config.Node` structure is being passed to the template. See [this folder](https://github.com/k3s-io/k3s/blob/master/pkg/agent/templates) for Linux and Windows examples on how to use the structure to customize the configuration file.
 
+## NVIDIA Container Runtime Support
 
-## Running K3s with Rootless mode (Experimental)
+K3s will automatically detect and configure the NVIDIA container runtime if it is present when K3s starts.
 
+1. Install the nvidia-container package repository on the node by following the instructions at:
+    https://nvidia.github.io/libnvidia-container/
+1. Install the nvidia container runtime packages. For example:
+   `apt install -y nvidia-container-runtime cuda-drivers-fabricmanager-515 nvidia-headless-515-server`
+1. Install K3s, or restart it if already installed:
+    `curl -ksL get.k3s.io | sh -`
+1. Confirm that the nvidia container runtime has been found by k3s:
+    `grep nvidia /var/lib/rancher/k3s/agent/etc/containerd/config.toml`
+
+This will automatically add `nvidia` and/or `nvidia-experimental` runtimes to the containerd configuration, depending on what runtime executables are found.
+You must still add a RuntimeClass definition to your cluster, and deploy Pods that explicitly request the appropriate runtime by setting `runtimeClassName: nvidia` in the Pod spec:
+```yaml
+apiVersion: node.k8s.io/v1
+kind: RuntimeClass
+metadata:
+  name: nvidia
+handler: nvidia
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nbody-gpu-benchmark
+  namespace: default
+spec:
+  restartPolicy: OnFailure
+  runtimeClassName: nvidia
+  containers:
+  - name: cuda-container
+    image: nvcr.io/nvidia/k8s/cuda-sample:nbody
+    args: ["nbody", "-gpu", "-benchmark"]
+    resources:
+      limits:
+        nvidia.com/gpu: 1
+    env:
+    - name: NVIDIA_VISIBLE_DEVICES
+      value: all
+    - name: NVIDIA_DRIVER_CAPABILITIES
+      value: all
+```
+
+Note that the NVIDIA Container Runtime is also frequently used with the [NVIDIA Device Plugin](https://github.com/NVIDIA/k8s-device-plugin/) and [GPU Feature Discovery](https://github.com/NVIDIA/gpu-feature-discovery/), which must be installed separately, with modifications to ensure that pod specs include `runtimeClassName: nvidia`, as mentioned above.
+
+## Running Agentless Servers (Experimental)
 > **Warning:** This feature is experimental.
 
-Rootless mode allows running the entire k3s an unprivileged user, so as to protect the real root on the host from potential container-breakout attacks.
+When started with the `--disable-agent` flag, servers do not run the kubelet, container runtime, or CNI. They do not register a Node resource in the cluster, and will not appear in `kubectl get nodes` output.
+Because they do not host a kubelet, they cannot run pods or be managed by operators that rely on enumerating cluster nodes, including the embedded etcd controller and the system upgrade controller.
 
-See also https://rootlesscontaine.rs/ to learn about Rootless mode.
+Running agentless servers may be advantageous if you want to obscure your control-plane nodes from discovery by agents and workloads, at the cost of increased administrative overhead caused by lack of cluster operator support.
+
+## Running Rootless Servers (Experimental)
+> **Warning:** This feature is experimental.
+
+Rootless mode allows running K3s servers as an unprivileged user, so as to protect the real root on the host from potential container-breakout attacks.
+
+See https://rootlesscontaine.rs/ to learn more about Rootless Kubernetes.
 
 ### Known Issues with Rootless mode
 
@@ -148,9 +205,9 @@ See also https://rootlesscontaine.rs/ to learn about Rootless mode.
 
   Multi-node rootless clusters, or multiple rootless k3s processes on the same node, are not currently supported. See [#6488](https://github.com/k3s-io/k3s/issues/6488#issuecomment-1314998091) for more details.
 
-### Running Servers and Agents with Rootless
+### Starting Rootless Servers
 * Enable cgroup v2 delegation, see https://rootlesscontaine.rs/getting-started/common/cgroup2/ .
-  This step is optional, but highly recommended for enabling CPU and memory resource limtitation.
+  This step is required; the rootless kubelet will fail to start without the proper cgroups delegated.
 
 * Download `k3s-rootless.service` from [`https://github.com/k3s-io/k3s/blob/<VERSION>/k3s-rootless.service`](https://github.com/k3s-io/k3s/blob/master/k3s-rootless.service).
   Make sure to use the same version of `k3s-rootless.service` and `k3s`.
@@ -165,10 +222,8 @@ See also https://rootlesscontaine.rs/ to learn about Rootless mode.
 
 * Run `KUBECONFIG=~/.kube/k3s.yaml kubectl get pods -A`, and make sure the pods are running.
 
-> **Note:** Don't try to run `k3s server --rootless` on a terminal, as it doesn't enable cgroup v2 delegation.
-> If you really need to try it on a terminal, prepend `systemd-run --user -p Delegate=yes --tty` to create a systemd scope.
->
-> i.e., `systemd-run --user -p Delegate=yes --tty k3s server --rootless`
+> **Note:** Don't try to run `k3s server --rootless` on a terminal, as terminal sessions do not allow cgroup v2 delegation.
+> If you really need to try it on a terminal, use `systemd-run --user -p Delegate=yes --tty k3s server --rooless` to wrap it in a systemd scope.
 
 ### Advanced Rootless Configuration
 
@@ -183,7 +238,7 @@ Some of the configuration used by rootlesskit and slirp4nets can be set by envir
 | `K3S_ROOTLESS_PORT_DRIVER`           | builtin      | Selects the rootless port driver; either `builtin` or `slirp4netns`. Builtin is faster, but masquerades the original source address of inbound packets.
 | `K3S_ROOTLESS_DISABLE_HOST_LOOPBACK` | true         | Controls whether or not access to the hosts's loopback address via the gateway interface is enabled. It is recommended that this not be changed, for security reasons.
 
-### Troubleshooting
+### Troubleshooting Rootless
 
 * Run `systemctl --user status k3s-rootless` to check the daemon status
 * Run `journalctl --user -f -u k3s-rootless` to see the daemon log
@@ -191,43 +246,27 @@ Some of the configuration used by rootlesskit and slirp4nets can be set by envir
 
 ## Node Labels and Taints
 
-K3s agents can be configured with the options `--node-label` and `--node-taint` which adds a label and taint to the kubelet. The two options only add labels and/or taints [at registration time,](../reference/agent-config.md#node-labels-and-taints-for-agents) so they can only be added once and not changed after that again by running K3s commands.
+K3s agents can be configured with the options `--node-label` and `--node-taint` which adds a label and taint to the kubelet. The two options only add labels and/or taints [at registration time](../reference/agent-config.md#node-labels-and-taints-for-agents), so they can only be set when the node is first joined to the cluster.
 
-If you want to change node labels and taints after node registration you should use `kubectl`. Refer to the official Kubernetes documentation for details on how to add [taints](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) and [node labels.](https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/#add-a-label-to-a-node)
+All current versions of Kubernetes restrict nodes from registering with most labels with `kubernetes.io` and `k8s.io` prefixes, specifically including the `kubernetes.io/role` label. If you attempt to start a node with a disallowed label, K3s will fail to start. As stated by the Kubernetes authors:
 
-## Starting the Server with the Installation Script
+> Nodes are not permitted to assert their own role labels. Node roles are typically used to identify privileged or control plane types of nodes, and allowing nodes to label themselves into that pool allows a compromised node to trivially attract workloads (like control plane daemonsets) that confer access to higher privilege credentials.
 
-The installation script will auto-detect if your OS is using systemd or openrc and start the service.
-When running with openrc, logs will be created at `/var/log/k3s.log`. 
+See [SIG-Auth KEP 279](https://github.com/kubernetes/enhancements/blob/master/keps/sig-auth/279-limit-node-access/README.md#proposal) for more information.
 
-When running with systemd, logs will be created in `/var/log/syslog` and viewed using `journalctl -u k3s`.
+If you want to change node labels and taints after node registration, or add reserved labels, you should use `kubectl`. Refer to the official Kubernetes documentation for details on how to add [taints](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) and [node labels.](https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/#add-a-label-to-a-node)
 
-An example of installing and auto-starting with the install script:
+## Starting the Service with the Installation Script
+
+The installation script will auto-detect if your OS is using systemd or openrc and enable and start the service as part of the installation process.
+* When running with openrc, logs will be created at `/var/log/k3s.log`. 
+* When running with systemd, logs will be created in `/var/log/syslog` and viewed using `journalctl -u k3s` (or `journalctl -u k3s-agent` on agents).
+
+An example of disabling auto-starting and service enablement with the install script:
 
 ```bash
-curl -sfL https://get.k3s.io | sh -
+curl -sfL https://get.k3s.io | INSTALL_K3S_SKIP_START=true INSTALL_K3S_SKIP_ENABLE=true sh -
 ```
-
-When running the server manually you should get an output similar to the following:
-
-```bash
-$ k3s server
-INFO[2019-01-22T15:16:19.908493986-07:00] Starting k3s dev                             
-INFO[2019-01-22T15:16:19.908934479-07:00] Running kube-apiserver --allow-privileged=true --authorization-mode Node,RBAC --service-account-signing-key-file /var/lib/rancher/k3s/server/tls/service.key --service-cluster-ip-range 10.43.0.0/16 --advertise-port 6445 --advertise-address 127.0.0.1 --insecure-port 0 --secure-port 6444 --bind-address 127.0.0.1 --tls-cert-file /var/lib/rancher/k3s/server/tls/localhost.crt --tls-private-key-file /var/lib/rancher/k3s/server/tls/localhost.key --service-account-key-file /var/lib/rancher/k3s/server/tls/service.key --service-account-issuer k3s --api-audiences unknown --basic-auth-file /var/lib/rancher/k3s/server/cred/passwd --kubelet-client-certificate /var/lib/rancher/k3s/server/tls/token-node.crt --kubelet-client-key /var/lib/rancher/k3s/server/tls/token-node.key 
-Flag --insecure-port has been deprecated, This flag will be removed in a future version.
-INFO[2019-01-22T15:16:20.196766005-07:00] Running kube-scheduler --kubeconfig /var/lib/rancher/k3s/server/cred/kubeconfig-system.yaml --port 0 --secure-port 0 --leader-elect=false
-INFO[2019-01-22T15:16:20.196880841-07:00] Running kube-controller-manager --kubeconfig /var/lib/rancher/k3s/server/cred/kubeconfig-system.yaml --service-account-private-key-file /var/lib/rancher/k3s/server/tls/service.key --allocate-node-cidrs --cluster-cidr 10.42.0.0/16 --root-ca-file /var/lib/rancher/k3s/server/tls/token-ca.crt --port 0 --secure-port 0 --leader-elect=false 
-Flag --port has been deprecated, see --secure-port instead.
-INFO[2019-01-22T15:16:20.273441984-07:00] Listening on :6443                           
-INFO[2019-01-22T15:16:20.278383446-07:00] Writing manifest: /var/lib/rancher/k3s/server/manifests/coredns.yaml 
-INFO[2019-01-22T15:16:20.474454524-07:00] Node token is available at /var/lib/rancher/k3s/server/node-token 
-INFO[2019-01-22T15:16:20.474471391-07:00] To join node to cluster: k3s agent -s https://10.20.0.3:6443 -t ${NODE_TOKEN} 
-INFO[2019-01-22T15:16:20.541027133-07:00] Wrote kubeconfig /etc/rancher/k3s/k3s.yaml
-INFO[2019-01-22T15:16:20.541049100-07:00] Run: k3s kubectl                             
-```
-
-The output will likely be much longer as the agent will create a lot of logs. By default, the server
-will register itself as a node (run the agent).
 
 ## Additional OS Preparations
 
