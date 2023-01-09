@@ -5,7 +5,7 @@ weight: 10
 
 You can upgrade K3s by using the installation script, or by manually installing the binary of the desired version.
 
->**Note:** When upgrading, upgrade server nodes first one at a time, then any worker nodes.
+>**Note:** When upgrading, upgrade server nodes first one at a time, then any agent nodes.
 
 ### Release Channels
 
