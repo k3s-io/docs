@@ -5,13 +5,13 @@ weight: 1
 
 K3s 非常轻量，但也有一些最低要求，如下所述。
 
-无论 K3s 在 Docker 还是 Kubernetes 中运行，运行 K3s 的每个节点都应该满足以下最低要求。你可能需要更多资源来满足你的需求。
+无论 K3s 在容器中运行还是作为原生 Linux 服务运行，每个运行 K3s 的节点都应满足以下最低要求。这些要求是 K3s 及其打包组件的基准，不包括工作负载本身消耗的资源。
 
 ## 先决条件
 
 两个节点不能具有相同的主机名。
 
-如果你的所有节点都具有相同的主机名，请使用 `--with-node-id` 选项为每个节点附加一个随机后缀，或者使用 `--node-name` 或 `$K3S_NODE_NAME` 为添加到集群的每个节点设计一个独特的名称。
+如果多个节点将具有相同的主机名，或者主机名可以被自动配置系统重复使用，请使用 `--with-node-id` 选项为每个节点附加一个随机后缀，或者使用 `--node-name` 或 `$K3S_NODE_NAME` 为添加到集群的每个节点设计一个独特的名称。
 
 ## 操作系统
 
@@ -19,8 +19,8 @@ K3s 有望在大多数现代 Linux 系统上运行。
 
 一些操作系统有特定的要求：
 
-- 如果你使用 **Red Hat/CentOS Enterprise Linux**，请按照[这些步骤](advanced/advanced.md#red-hatcentos-enterprise-linux-的额外准备工作)进行其他设置。
-- 如果你使用 **Raspberry Pi OS**，请按照[这些步骤](advanced/advanced.md#raspberry-pi-os-的额外准备工作)切换到旧版 iptables。
+- 如果你使用 **Red Hat/CentOS Enterprise Linux**，请按照[这些步骤](../advanced/advanced.md#red-hat-enterprise-linux--centos)进行其他设置。
+- 如果你使用 **Raspberry Pi OS**，请按照[这些步骤](../advanced/advanced.md#raspberry-pi)切换到旧版 iptables。
 
 关于 Rancher 管理的 K3s 集群测试了哪些操作系统，请参阅 [Rancher 支持和维护条款](https://rancher.com/support-maintenance-terms/)。
 
@@ -31,7 +31,7 @@ K3s 有望在大多数现代 Linux 系统上运行。
 * RAM：最低 512MB（建议至少为 1GB）
 * CPU：最低 1
 
-[K3s 资源分析](reference/resource-profiling.md)的测试结果用于确定 K3s Agent、具有工作负载的 K3s Server 和具有一个 Agent 的 K3s Server 的最低资源要求。它还包含了有关对 K3s Server 和 Agent 利用率产生最大影响的分析，以及如何保护集群数据存储免受 Agent 和工作负载的干扰。
+[K3s 资源分析](../reference/resource-profiling.md)的测试结果用于确定 K3s Agent、具有工作负载的 K3s Server 和具有一个 Agent 的 K3s Server 的最低资源要求。它还包含了有关对 K3s Server 和 Agent 利用率产生最大影响的分析，以及如何保护集群数据存储免受 Agent 和工作负载的干扰。
 
 #### 磁盘
 
@@ -43,7 +43,7 @@ K3s Server 需要 6443 端口才能被所有节点访问。
 
 使用 Flannel VXLAN 时，节点需要能够通过 UDP 端口 8472 访问其他节点，使用 Flannel Wireguard 后端时，节点需要能够通过 UDP 端口 51820 和 51821（使用 IPv6 时）访问其他节点。该节点不应侦听任何其他端口。K3s 使用反向隧道建立节点与 Server 的出站连接，所有 kubelet 流量都通过该隧道进行。但是，如果你不使用 Flannel 并提供自己的自定义 CNI，那么 K3s 不需要 Flannel 所需的端口。
 
-如果要使用 Metrics Server，则需要在每个节点上打开端口 10250。
+如果要使用 Metrics Server，所有节点必须可以在端口 10250 上相互访问。
 
 如果你计划使用嵌入式 etcd 来实现高可用性，则 Server 节点必须可以在端口 2379 和 2380 上相互访问。
 
@@ -52,14 +52,14 @@ K3s Server 需要 6443 端口才能被所有节点访问。
 
 <figcaption>K3s Server 节点的入站规则</figcaption>
 
-| 协议 | 端口 | 源 | 描述 |
-|-----|-----|----------------|---|
-| TCP | 6443 | K3s agent 节点 | Kubernetes API Server |
-| UDP | 8472 | K3s Server 和 Agent 节点 | 只有 Flannel VXLAN 需要 |
-| UDP | 51820 | K3s Server 和 Agent 节点 | 只有 Flannel Wireguard 后端需要 |
-| UDP | 51821 | K3s Server 和 Agent 节点 | 只有使用 IPv6 的 Flannel Wireguard 后端需要 |
-| TCP | 10250 | K3s Server 和 Agent 节点 | Kubelet 指标 |
-| TCP | 2379-2380 | K3s Server 节点 | 只有具有嵌入式 etcd 的 HA 需要 |
+| 协议 | 端口 | 源 | 目标 | 描述 |
+|----------|-----------|-----------|-------------|------------
+| TCP | 2379-2380 | Servers | Servers | 只有具有嵌入式 etcd 的 HA 需要 |
+| TCP | 6443 | Agents | Servers | K3s supervisor 和 Kubernetes API Server |
+| UDP | 8472 | 所有节点 | 所有节点 | 只有 Flannel VXLAN 需要 |
+| TCP | 10250 | 所有节点 | 所有节点 | Kubelet 指标 |
+| UDP | 51820 | 所有节点 | 所有节点 | 只有使用 IPv4 的 Flannel Wireguard 才需要 |
+| UDP | 51821 | 所有节点 | 所有节点 | 只有使用 IPv6 的 Flannel Wireguard 才需要 |
 
 所有出站流量通常都是允许的。
 

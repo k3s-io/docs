@@ -1,30 +1,37 @@
 ---
-title: "CIS 强化指南"
+title: "CIS Hardening Guide"
 weight: 80
 ---
 
-本文档提供了用于强化 K3s 集群生产安装的说明。此处概述了为解决 CIS Kubernetes Benchmark 管控所需的配置和控制。
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-K3s 默认应用并启用了许多安全缓解措施，无需修改即可通过许多 Kubernetes CIS 管控。但是也有一些例外情况是需要人工干预才能完全通过 CIS Benchmark：
+:::info
+请知悉，本文仅提供英文版。
+:::
 
-1. K3s 不会修改主机操作系统。任何主机级别的修改都需要手动完成。
-2. `PodSecurityPolicies` 和 `NetworkPolicies` 的某些 CIS 策略会限制集群功能。你必须在命令行标志或配置文件中添加适当的选项（启用准入插件）以及手动应用策略，K3s 才能配置这它们。以下各节将介绍更多详细的信息。
+This document provides prescriptive guidance for hardening a production installation of K3s. It outlines the configurations and controls required to address Kubernetes benchmark controls from the Center for Internet Security (CIS).
 
-CIS Benchmark 的第一部分 (1.1) 主要关注 Pod 清单权限和所有权。K3s 没有将它们用于核心组件，因为所有内容都打包成了一个二进制文件。
+K3s has a number of security mitigations applied and turned on by default and will pass a number of the Kubernetes CIS controls without modification. There are some notable exceptions to this that require manual intervention to fully comply with the CIS Benchmark:
 
-## 主机级别要求
+1. K3s will not modify the host operating system. Any host-level modifications will need to be done manually.
+2. Certain CIS policy controls for `NetworkPolicies` and `PodSecurityStandards` (`PodSecurityPolicies` on v1.24 and older) will restrict the functionality of the cluster. You must opt into having K3s configure these by adding the appropriate options (enabling of admission plugins) to your command-line flags or configuration file as well as manually applying appropriate policies. Further details are presented in the sections below.
 
-主机级别的要求有两个方面，分别是内核参数和 etcd 进程/目录配置。本节会概述这些内容。
+The first section (1.1) of the CIS Benchmark concerns itself primarily with pod manifest permissions and ownership. K3s doesn't utilize these for the core components since everything is packaged into a single binary.
 
-### 确保设置了 `protect-kernel-defaults`
+## Host-level Requirements
 
-这是一个 kubelet 标志，如果所需的内核参数未设置或设置为与 kubelet 默认值不同的值，它会导致 kubelet 退出。
+There are two areas of host-level requirements: kernel parameters and etcd process/directory configuration. These are outlined in this section.
 
-> **注意**：`protect-kernel-defaults` 作为 K3s 的顶层标志公开。
+### Ensure `protect-kernel-defaults` is set
 
-#### 设置内核参数
+This is a kubelet flag that will cause the kubelet to exit if the required kernel parameters are unset or are set to values that are different from the kubelet's defaults.
 
-创建一个名为 `/etc/sysctl.d/90-kubelet.conf` 的文件并添加下面的代码片段。然后运行 `sysctl -p /etc/sysctl.d/90-kubelet.conf`。
+> **Note:** `protect-kernel-defaults` is exposed as a top-level flag for K3s.
+
+#### Set kernel parameters
+
+Create a file called `/etc/sysctl.d/90-kubelet.conf` and add the snippet below. Then run `sysctl -p /etc/sysctl.d/90-kubelet.conf`.
 
 ```bash
 vm.panic_on_oom=0
@@ -34,15 +41,58 @@ kernel.panic_on_oops=1
 kernel.keys.root_maxbytes=25000000
 ```
 
-## Kubernetes 运行时要求
+## Kubernetes Runtime Requirements
 
-要符合 CIS Benchmark 的运行时要求，则需要以 pod 安全性 (PSP)、网络策略和 ​​API Server 审计日志为中心。本节会概述这些内容。K3s 不会应用任何默认的 PSP 或网络策略。然而，K3s 附带了一个控制器，用于应用一组给定的网络策略。默认情况下，K3s 使用 `NodeRestriction` 准入控制器运行。要启用 PSP，请将以下内容添加到 K3s 启动命令：`--kube-apiserver-arg="enable-admission-plugins=NodeRestriction,PodSecurityPolicy,ServiceAccount"`。这将能维护 `NodeRestriction` 插件以及启用 `PodSecurityPolicy`。API Server 审计日志也是如此，K3s 默认不启用它们，因此你必须手动创建审计日志配置和审计策略。
+The runtime requirements to comply with the CIS Benchmark are centered around pod security (via PSP or PSA), network policies and API Server auditing logs. These are outlined in this section.
 
-### Pod 安全策略
+By default, K3s does not include any pod security or network policies. However, K3s ships with a controller that will enforce network policies, if any are created. K3s doesn't enable auditing by default, so audit log configuration and audit policy must be created manually. By default, K3s runs with the both the `PodSecurity` and `NodeRestriction` admission controllers enabled, among others.
 
-启用 PSP 后可以应用策略，从而满足 CIS Benchmark 第 5.2 节中描述的必要管控。
+### Pod Security
 
-以下是一个符合要求的 PSP 示例：
+<Tabs>
+<TabItem value="v1.25 and Newer" default>
+
+K3s v1.25 and newer support [Pod Security Admissions (PSAs)](https://kubernetes.io/docs/concepts/security/pod-security-admission/) for controlling pod security. PSAs are enabled by passing the following flag to the K3s server:
+```
+--kube-apiserver-arg="admission-control-config-file=/var/lib/rancher/k3s/server/psa.yaml"
+```
+
+The policy should be written to a file named `psa.yaml` in `/var/lib/rancher/k3s/server` directory. 
+
+Here is an example of a complaint PSA:
+```yaml
+apiVersion: apiserver.config.k8s.io/v1
+kind: AdmissionConfiguration
+plugins:
+- name: PodSecurity
+  configuration:
+    apiVersion: pod-security.admission.config.k8s.io/v1beta1
+    kind: PodSecurityConfiguration
+    defaults:
+      enforce: "restricted"
+      enforce-version: "latest"
+      audit: "restricted"
+      audit-version: "latest"
+      warn: "restricted"
+      warn-version: "latest"
+    exemptions:
+      usernames: []
+      runtimeClasses: []
+      namespaces: [kube-system, cis-operator-system]
+```
+</TabItem>
+<TabItem value="v1.24 and Older" default>
+
+K3s v1.24 and older support [Pod Security Policies (PSPs)](https://v1-24.docs.kubernetes.io/docs/concepts/security/pod-security-policy/) for controlling pod security. PSPs are enabled by passing the following flag to the K3s server:
+
+```
+--kube-apiserver-arg="enable-admission-plugins=NodeRestriction,PodSecurityPolicy"
+```
+This will have the effect of maintaining the `NodeRestriction` plugin as well as enabling the `PodSecurityPolicy`. 
+
+When PSPs are enabled, a policy can be applied to satisfy the necessary controls described in section 5.2 of the CIS Benchmark.
+
+Here is an example of a compliant PSP:
 
 ```yaml
 apiVersion: policy/v1beta1
@@ -83,9 +133,9 @@ spec:
   readOnlyRootFilesystem: false
 ```
 
-要使上述 PSP 生效，我们需要创建一个 ClusterRole 和一个 ClusterRoleBinding。此外，还需要包括一个“不受系统限制的策略”（用于需要额外权限的系统级 pod）以及一个 servicelb 正常运行所需的 sysctls 策略。
+For the above PSP to be effective, we need to create a ClusterRole and a ClusterRoleBinding. We also need to include a "system unrestricted policy" which is needed for system-level pods that require additional privileges, and an additional policy that allows sysctls necessary for servicelb to function properly.
 
-上面的 PSP yaml 和下面的 NetworkPolicy yaml 可以组合成一个文件，放在 `/var/lib/rancher/k3s/server/manifests` 目录中。以下是 `policy.yaml` 文件的示例：
+Combining the configuration above with the [Network Policy](#networkpolicies) described in the next section, a single file can be placed in the `/var/lib/rancher/k3s/server/manifests` directory. Here is an example of a `policy.yaml` file: 
 
 ```yaml
 apiVersion: policy/v1beta1
@@ -313,13 +363,19 @@ spec:
             name: kube-public
 ```
 
-> **注意**：CNI、DNS 和 Ingress 等 Kubernetes 关键添加项会在 `kube-system` 命名空间中作为 pod 运行。因此，此命名空间的策略限制会更低，以便这些组件可以正常运行。
+</TabItem>
+</Tabs>
+
+
+> **Note:** The Kubernetes critical additions such as CNI, DNS, and Ingress are run as pods in the `kube-system` namespace. Therefore, this namespace will have a policy that is less restrictive so that these components can run properly.
 
 ### NetworkPolicies
 
-CIS 要求所有命名空间都应用网络策略，从而合理限制进入命名空间和 pod 的流量。
+CIS requires that all namespaces have a network policy applied that reasonably limits traffic into namespaces and pods.
 
-以下是一个符合要求的网络策略示例：
+Network policies should be placed the `/var/lib/rancher/k3s/server/manifests` directory, where they will automatically be deployed on startup.
+
+Here is an example of a compliant network policy.
 
 ```yaml
 kind: NetworkPolicy
@@ -336,7 +392,7 @@ spec:
             name: kube-system
 ```
 
-应用限制后，除非有额外允许，否则 DNS 将被阻止。以下是允许 DNS 流量存在的网络策略：
+With the applied restrictions, DNS will be blocked unless purposely allowed. Below is a network policy that will allow for traffic to exist for DNS.
 
 ```yaml
 apiVersion: networking.k8s.io/v1
@@ -358,7 +414,10 @@ spec:
   - Ingress
 ```
 
-如果未创建允许访问的网络策略，metrics-server 和 Traefik ingress controller 将被默认阻止。K3s 1.20 及以下版本中打包的 Traefik v1 使用的标签与 Traefik v2 不同。请确保你只使用了与集群上的 Traefik 版本相关联的以下 YAML 示例。
+The metrics-server and Traefik ingress controller will be blocked by default if network policies are not created to allow access. Traefik v1 as packaged in K3s version 1.20 and below uses different labels than Traefik v2. Ensure that you only use the sample yaml below that is associated with the version of Traefik present on your cluster.
+
+<Tabs>
+<TabItem value="v1.21 and Newer" default>
 
 ```yaml
 apiVersion: networking.k8s.io/v1
@@ -381,7 +440,7 @@ metadata:
   name: allow-all-svclbtraefik-ingress
   namespace: kube-system
 spec:
-  podSelector:
+  podSelector: 
     matchLabels:
       svccontroller.k3s.cattle.io/svcname: traefik
   ingress:
@@ -389,7 +448,55 @@ spec:
   policyTypes:
   - Ingress
 ---
-# Below is for 1.20 ONLY -- remove if on 1.21 or above
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-all-traefik-v121-ingress
+  namespace: kube-system
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: traefik
+  ingress:
+  - {}
+  policyTypes:
+  - Ingress
+---
+
+```
+</TabItem>
+
+<TabItem value="v1.20 and Older" default>
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-all-metrics-server
+  namespace: kube-system
+spec:
+  podSelector:
+    matchLabels:
+      k8s-app: metrics-server
+  ingress:
+  - {}
+  policyTypes:
+  - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-all-svclbtraefik-ingress
+  namespace: kube-system
+spec:
+  podSelector: 
+    matchLabels:
+      svccontroller.k3s.cattle.io/svcname: traefik
+  ingress:
+  - {}
+  policyTypes:
+  - Ingress
+---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -404,35 +511,27 @@ spec:
   policyTypes:
   - Ingress
 ---
-# Below is for 1.21 and above ONLY -- remove if on 1.20 or below
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: allow-all-traefik-v121-ingress
-  namespace: kube-system
-spec:
-  podSelector:
-    matchLabels:
-      app.kubernetes.io/name: traefik
-  ingress:
-  - {}
-  policyTypes:
-  - Ingress
+
 ```
+</TabItem>
+</Tabs>
 
-> **注意**：操作人员需要照常管理其他命名空间的网络策略。
+:::info
+Operators must manage network policies as normal for additional namespaces that are created.
+:::
 
-### API Server 审计配置
 
-CIS 1.2.22 到 1.2.25 要求为 API Server 配置审计日志。默认情况下，K3s 不会创建日志目录和审计策略，因为审计要求是取决于每个用户的策略和环境的。
+### API Server audit configuration
 
-理想情况下，必须在启动 K3s 之前创建日志目录。建议使用限制性访问权限，避免泄露敏感信息。
+CIS requirements 1.2.22 to 1.2.25 are related to configuring audit logs for the API Server. K3s doesn't create by default the log directory and audit policy, as auditing requirements are specific to each user's policies and environment.
+
+The log directory, ideally, must be created before starting K3s. A restrictive access permission is recommended to avoid leaking potential sensitive information.
 
 ```bash
 sudo mkdir -p -m 700 /var/lib/rancher/k3s/server/logs
 ```
 
-以下是用于记录请求元数据的初始审核策略。策略需要写入到 `/var/lib/rancher/k3s/server` 目录中名为 `audit.yaml` 的文件。有关 API Server 策略配置的详细信息，请参阅 [Kubernetes 文档](https://kubernetes.io/docs/tasks/debug-application-cluster/audit/)。
+A starter audit policy to log request metadata is provided below. The policy should be written to a file named `audit.yaml` in `/var/lib/rancher/k3s/server` directory. Detailed information about policy configuration for the API server can be found in the Kubernetes [documentation](https://kubernetes.io/docs/tasks/debug-application-cluster/audit/).
 
 ```yaml
 apiVersion: audit.k8s.io/v1
@@ -441,14 +540,14 @@ rules:
 - level: Metadata
 ```
 
-两种配置都必须作为参数传递给 API Server，如下所示：
+Both configurations must be passed as arguments to the API Server as:
 
 ```bash
 --kube-apiserver-arg='audit-log-path=/var/lib/rancher/k3s/server/logs/audit.log'
 --kube-apiserver-arg='audit-policy-file=/var/lib/rancher/k3s/server/audit.yaml'
 ```
 
-如果配置是在安装 K3s 之后创建的，则必须将它们添加到 `/etc/systemd/system/k3s.service` 中的 K3s systemd 服务中。
+If the configurations are created after K3s is installed, they must be added to K3s' systemd service in `/etc/systemd/system/k3s.service`.
 
 ```bash
 ExecStart=/usr/local/bin/k3s \
@@ -457,272 +556,308 @@ ExecStart=/usr/local/bin/k3s \
 	'--kube-apiserver-arg=audit-policy-file=/var/lib/rancher/k3s/server/audit.yaml' \
 ```
 
-必须重启 K3s 才能加载新配置。
+K3s must be restarted to load the new configuration.
 
 ```bash
 sudo systemctl daemon-reload
 sudo systemctl restart k3s.service
 ```
 
-下面介绍了 CIS 1.2.22 到 1.2.25 要求的其他信息。
+## Configuration for Kubernetes Components
 
-## 已知问题
-以下是 K3s 目前默认没有通过的管控。此处将解释各个差距，以及这些差距是否可以通过手动干预或在未来的 K3s 版本中解决。
 
-### 管控 1.2.15
-确保准入控制插件 `NamespaceLifecycle` 已设置。
-<details>
-<summary>原理</summary>
-将准入控制策略设置为 NamespaceLifecycle 可以确保无法在不存在的命名空间中创建对象，而且正在终止的命名空间不会用于创建新对象。这是我们建议的操作，能确保命名空间终止过程的完整性以及更新对象的可用性。
+The configuration below should be placed in the [configuration file](../installation/configuration.md#configuration-file), and contains all the necessary remediations to harden the Kubernetes components.
 
-可以将此参数作为值传递给 `enable-admission-plugins=`，然后再将其传递给  `k3s server` 的 `--kube-apiserver-arg=` 参数来解决此问题。你可以在下方找到示例。
-</details>
 
-### 管控 1.2.16
-确保准入控制插件 `PodSecurityPolicy` 已设置。
-<details>
-<summary>原理</summary>
-Pod 安全策略是集群级资源，它控制 Pod 可以执行的操作以及它可以访问的内容。`PodSecurityPolicy` 对象定义了一组条件，一个 pod 必须满足这些条件才能被系统接受。Pod 安全策略由控制 Pod 有权访问的安全功能设置和策略组成，因此必须用来控制 Pod 访问权限。
+<Tabs>
+<TabItem value="v1.25 and Newer" default>
 
-可以将此参数作为值传递给 `enable-admission-plugins=`，然后再将其传递给  `k3s server` 的 `--kube-apiserver-arg=` 参数来解决此问题。你可以在下方找到示例。
-</details>
+```yaml
+protect-kernel-defaults: true
+secrets-encryption: true
+kube-apiserver-arg:
+  - 'admission-control-config-file=/var/lib/rancher/k3s/server/psa.yaml'
+  - 'audit-log-path=/var/lib/rancher/k3s/server/logs/audit.log'
+  - 'audit-policy-file=/var/lib/rancher/k3s/server/audit.yaml'
+  - 'audit-log-maxage=30'
+  - 'audit-log-maxbackup=10'
+  - 'audit-log-maxsize=100'
+  - 'request-timeout=300s'
+  - 'service-account-lookup=true'
+kube-controller-manager-arg:
+  - 'terminated-pod-gc-threshold=10'
+  - 'use-service-account-credentials=true'
+kubelet-arg:
+  - 'streaming-connection-idle-timeout=5m'
+  - 'make-iptables-util-chains=true'
+```
 
-### 管控 1.2.22
-确保设置了 `--audit-log-path` 参数。
-<details>
-<summary>原理</summary>
-审计 Kubernetes API Server 提供了一组与安全相关的，按时间顺序排列的记录，记录了单个用户、管理员或系统其他组件对系统造成影响的活动序列。虽然目前 Kubernetes 仅提供基本的审计功能，但你还是应该启用它。你可以通过设置适当的审计日志路径来启用它。
+</TabItem>
 
-可以将此参数作为值传递给 `k3s server` 的 `--kube-apiserver-arg=` 参数来解决此问题。你可以在下方找到示例。
-</details>
+<TabItem value="v1.24 and Older" default>
 
-### 管控 1.2.23
-确保将 `--audit-log-maxage` 参数设置为 30 或适当的值。
-<details>
-<summary>原理</summary>
-将日志保留至少 30 天可以确保你能及时调查或关联任何事件。将审计日志保留期设置为 30 天，或根据你的业务要求进行设置。
+```yaml
+protect-kernel-defaults: true
+secrets-encryption: true
+kube-apiserver-arg:
+  - 'enable-admission-plugins=NodeRestriction,PodSecurityPolicy,NamespaceLifecycle,ServiceAccount'
+  - 'audit-log-path=/var/lib/rancher/k3s/server/logs/audit.log'
+  - 'audit-policy-file=/var/lib/rancher/k3s/server/audit.yaml'
+  - 'audit-log-maxage=30'
+  - 'audit-log-maxbackup=10'
+  - 'audit-log-maxsize=100'
+  - 'request-timeout=300s'
+  - 'service-account-lookup=true'
+kube-controller-manager-arg:
+  - 'terminated-pod-gc-threshold=10'
+  - 'use-service-account-credentials=true'
+kubelet-arg:
+  - 'streaming-connection-idle-timeout=5m'
+  - 'make-iptables-util-chains=true'
+```
 
-可以将此参数作为值传递给 `k3s server` 的 `--kube-apiserver-arg=` 参数来解决此问题。你可以在下方找到示例。
-</details>
+</TabItem>
+</Tabs>
 
-### 管控 1.2.24
-确保将 `--audit-log-maxbackup` 参数设置为 10 或适当的值。
-<details>
-<summary>原理</summary>
-Kubernetes 会自动轮换日志文件。保留旧日志文件可以确保你有足够的日志数据来执行调查或关联。例如，如果你已将文件大小设置为 100 MB 并将要保留的旧日志文件数设置为 10，那么你将有大约 1 GB 的日志数据用于分析。
 
-可以将此参数作为值传递给 `k3s server` 的 `--kube-apiserver-arg=` 参数来解决此问题。你可以在下方找到示例。
-</details>
+## Control Plane Execution and Arguments
 
-### 管控 1.2.25
-确保将 `--audit-log-maxsize` 参数设置为 100 或适当的值。
-<details>
-<summary>原理</summary>
-Kubernetes 会自动轮换日志文件。保留旧日志文件可以确保你有足够的日志数据来执行调查或关联。如果你已将文件大小设置为 100 MB 并将要保留的旧日志文件数设置为 10，那么你将有大约 1 GB 的日志数据用于分析。
-
-可以将此参数作为值传递给 `k3s server` 的 `--kube-apiserver-arg=` 参数来解决此问题。你可以在下方找到示例。
-</details>
-
-### 管控 1.2.26
-确保适当地设置了 `--request-timeout` 参数。
-<details>
-<summary>原理</summary>
-设置全局请求超时可以将 API Server 的请求超时限制延长到与用户的连接速度相适应的时间。默认设置为 60 秒，这可能会在连接速度较慢时出现问题，一旦请求的数据量无法在 60 秒内完成传输，集群资源将无法访问。但是，如果将超时限制的值设置得太大，API Server 资源会耗尽，因此也容易受到拒绝服务攻击。因此，建议适当设置此限制，并仅在需要时更改默认的 60 秒限制。
-
-可以将此参数作为值传递给 `k3s server` 的 `--kube-apiserver-arg=` 参数来解决此问题。你可以在下方找到示例。
-</details>
-
-### 管控 1.2.27
-确保 `--service-account-lookup` 参数设置为 true。
-<details>
-<summary>原理</summary>
-如果未启用 `--service-account-lookup`，则 apiserver 仅验证身份验证令牌是否有效，不会验证请求中提到的 ServiceAccount 令牌是否实际存在于 etcd 中。这使得相应的 ServiceAccount 被删除后也可以使用 ServiceAccount 令牌。这是一个从检查时间到使用时间的安全问题示例。
-
-可以将此参数作为值传递给 `k3s server` 的 `--kube-apiserver-arg=` 参数来解决此问题。你可以在下方找到示例。
-</details>
-
-### 管控 1.2.33
-确保适当地设置了 `--encryption-provider-config` 参数。
-<details>
-<summary>原理</summary>
-etcd 是 Kubernetes deployment 使用的高可用键值存储，用于持久存储其所有 REST API 对象。这些对象本质上是敏感的，需要进行静态加密以避免泄露。
-
-[Secret 加密](secrets-encryption.md)介绍了如何在 K3s 中配置 Secret 加密的详细步骤。
-</details>
-
-### 管控 1.2.34
-确保正确配置了加密提供程序。
-<details>
-<summary>原理</summary>
-在使用 etcd 加密的地方，使用适当的加密提供程序集是非常重要的。目前，`aescbc`、`kms` 和 `secretbox` 可能是合适的选项。
-
-可以通过将有效配置传递给 `k3s` 来解决，如上所述。[Secret 加密](secrets-encryption.md)介绍了如何在 K3s 中配置 Secret 加密的详细步骤。
-</details>
-
-### 管控 1.3.1
-确保适当地设置了 `--terminated-pod-gc-threshold` 参数。
-<details>
-<summary>原理</summary>
-垃圾收集对于确保资源的可用性和避免性能下降非常重要。在最坏的情况下，系统可能会崩溃或长时间无法使用。垃圾收集的当前设置是 12,500 个终止的 pod，对于你的系统来说，这个值可能太高且无法维持。根据你的系统资源和测试，你可以选择合适的阈值来激活垃圾收集。
-
-可以将此参数作为值传递给 `k3s server` 的 `--kube-apiserver-arg=` 参数来解决此问题。你可以在下方找到示例。
-</details>
-
-### 管控 3.2.1
-确保创建最小审计策略
-<details>
-<summary>原理</summary>
-Logging 是所有系统的重要检测控制，用于检测潜在的未经授权的访问。
-
-可以通过传递管控 1.2.22 - 1.2.25 并验证其有效性来解决问题。
-</details>
-
-### 管控 4.2.7
-确保 `--make-iptables-util-chains` 参数设置为 true。
-<details>
-<summary>原理</summary>
-Kubelets 可以根据你为 Pod 选择的网络选项自动管理 iptables 的必要更改。建议让 kubelets 管理 iptables 的更改。这样能确保 iptables 的配置与 Pod 网络配置保持同步。使用动态 Pod 网络配置更改来手动配置 iptables 可能会妨碍 Pod/容器之间以及与外界的通信。你的 iptables 规则可能过于严格或过于宽松。
-
-可以将此参数作为值传递给 `k3s server` 的 `--kube-apiserver-arg=` 参数来解决此问题。你可以在下方找到示例。
-</details>
-
-### 管控 5.1.5
-确保未主动使用默认 ServiceAccount
-<details>
-<summary>原理</summary>
-Kubernetes 为集群工作负载提供了一个 `default` ServiceAccount，但没有为 pod 分配特定 ServiceAccount。
-
-如果需要从 pod 访问 Kubernetes API，则需要为该 pod 创建一个特定的 ServiceAccount 并授予权限。
-
-你还需要配置 default  ServiceAccount，使其不提供 ServiceAccount 令牌并且没有任何显式的权限分配。
-
-可以通过将每个命名空间中 `default` ServiceAccount 的 `automountServiceAccountToken` 字段更新为 `false` 来解决此问题。
-
-对于内置命名空间（`kube-system`、`kube-public`、`kube-node-lease` 和 `default`）中的 `default` ServiceAccount，K3s 不会自动执行此操作。你可以通过在这些 ServiceAccount 上手动更新此字段来传递管控。
-</details>
-
-## Control Plane 执行和参数
-
-下面列出了 K3s control plane 组件及其在启动时默认的参数。右边的注释是他们满足的 CIS 1.6 管控。
+Listed below are the K3s control plane components and the arguments they are given at start, by default. Commented to their right is the CIS 1.6 control that they satisfy.
 
 ```bash
-kube-apiserver
-    --advertise-port=6443
-    --allow-privileged=true
+kube-apiserver 
+    --advertise-port=6443 
+    --allow-privileged=true 
     --anonymous-auth=false                                                            # 1.2.1
-    --api-audiences=unknown
-    --authorization-mode=Node,RBAC
-    --bind-address=127.0.0.1
+    --api-audiences=unknown 
+    --authorization-mode=Node,RBAC 
+    --bind-address=127.0.0.1 
     --cert-dir=/var/lib/rancher/k3s/server/tls/temporary-certs
     --client-ca-file=/var/lib/rancher/k3s/server/tls/client-ca.crt                    # 1.2.31
     --enable-admission-plugins=NodeRestriction,PodSecurityPolicy                      # 1.2.17
     --etcd-cafile=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt                  # 1.2.32
     --etcd-certfile=/var/lib/rancher/k3s/server/tls/etcd/client.crt                   # 1.2.29
     --etcd-keyfile=/var/lib/rancher/k3s/server/tls/etcd/client.key                    # 1.2.29
-    --etcd-servers=https://127.0.0.1:2379
+    --etcd-servers=https://127.0.0.1:2379 
     --insecure-port=0                                                                 # 1.2.19
-    --kubelet-certificate-authority=/var/lib/rancher/k3s/server/tls/server-ca.crt
-    --kubelet-client-certificate=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.crt
-    --kubelet-client-key=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.key
+    --kubelet-certificate-authority=/var/lib/rancher/k3s/server/tls/server-ca.crt 
+    --kubelet-client-certificate=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.crt 
+    --kubelet-client-key=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.key 
     --profiling=false                                                                 # 1.2.21
-    --proxy-client-cert-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.crt
-    --proxy-client-key-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.key
-    --requestheader-allowed-names=system:auth-proxy
-    --requestheader-client-ca-file=/var/lib/rancher/k3s/server/tls/request-header-ca.crt
-    --requestheader-extra-headers-prefix=X-Remote-Extra-
-    --requestheader-group-headers=X-Remote-Group
-    --requestheader-username-headers=X-Remote-User
+    --proxy-client-cert-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.crt 
+    --proxy-client-key-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.key 
+    --requestheader-allowed-names=system:auth-proxy 
+    --requestheader-client-ca-file=/var/lib/rancher/k3s/server/tls/request-header-ca.crt 
+    --requestheader-extra-headers-prefix=X-Remote-Extra- 
+    --requestheader-group-headers=X-Remote-Group 
+    --requestheader-username-headers=X-Remote-User 
     --secure-port=6444                                                                # 1.2.20
-    --service-account-issuer=k3s
+    --service-account-issuer=k3s 
     --service-account-key-file=/var/lib/rancher/k3s/server/tls/service.key            # 1.2.28
-    --service-account-signing-key-file=/var/lib/rancher/k3s/server/tls/service.key
-    --service-cluster-ip-range=10.43.0.0/16
-    --storage-backend=etcd3
+    --service-account-signing-key-file=/var/lib/rancher/k3s/server/tls/service.key 
+    --service-cluster-ip-range=10.43.0.0/16 
+    --storage-backend=etcd3 
     --tls-cert-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.crt        # 1.2.30
     --tls-private-key-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.key # 1.2.30
 ```
 
 ```bash
-kube-controller-manager
-    --address=127.0.0.1
-    --allocate-node-cidrs=true
+kube-controller-manager 
+    --address=127.0.0.1 
+    --allocate-node-cidrs=true 
     --bind-address=127.0.0.1                                                       # 1.3.7
-    --cluster-cidr=10.42.0.0/16
-    --cluster-signing-cert-file=/var/lib/rancher/k3s/server/tls/client-ca.crt
-    --cluster-signing-key-file=/var/lib/rancher/k3s/server/tls/client-ca.key
-    --kubeconfig=/var/lib/rancher/k3s/server/cred/controller.kubeconfig
-    --port=10252
+    --cluster-cidr=10.42.0.0/16 
+    --cluster-signing-cert-file=/var/lib/rancher/k3s/server/tls/client-ca.crt 
+    --cluster-signing-key-file=/var/lib/rancher/k3s/server/tls/client-ca.key 
+    --kubeconfig=/var/lib/rancher/k3s/server/cred/controller.kubeconfig 
+    --port=10252 
     --profiling=false                                                              # 1.3.2
     --root-ca-file=/var/lib/rancher/k3s/server/tls/server-ca.crt                   # 1.3.5
-    --secure-port=0
-    --service-account-private-key-file=/var/lib/rancher/k3s/server/tls/service.key # 1.3.4
+    --secure-port=0 
+    --service-account-private-key-file=/var/lib/rancher/k3s/server/tls/service.key # 1.3.4 
     --use-service-account-credentials=true                                         # 1.3.3
 ```
 
 ```bash
-kube-scheduler
-    --address=127.0.0.1
+kube-scheduler 
+    --address=127.0.0.1 
     --bind-address=127.0.0.1                                              # 1.4.2
-    --kubeconfig=/var/lib/rancher/k3s/server/cred/scheduler.kubeconfig
-    --port=10251
+    --kubeconfig=/var/lib/rancher/k3s/server/cred/scheduler.kubeconfig 
+    --port=10251 
     --profiling=false                                                     # 1.4.1
     --secure-port=0
 ```
 
 ```bash
-kubelet
-    --address=0.0.0.0
+kubelet 
+    --address=0.0.0.0 
     --anonymous-auth=false                                                # 4.2.1
-    --authentication-token-webhook=true
+    --authentication-token-webhook=true 
     --authorization-mode=Webhook                                          # 4.2.2
-    --cgroup-driver=cgroupfs
+    --cgroup-driver=cgroupfs 
     --client-ca-file=/var/lib/rancher/k3s/agent/client-ca.crt             # 4.2.3
-    --cloud-provider=external
-    --cluster-dns=10.43.0.10
-    --cluster-domain=cluster.local
-    --cni-bin-dir=/var/lib/rancher/k3s/data/223e6420f8db0d8828a8f5ed3c44489bb8eb47aa71485404f8af8c462a29bea3/bin
-    --cni-conf-dir=/var/lib/rancher/k3s/agent/etc/cni/net.d
-    --container-runtime-endpoint=/run/k3s/containerd/containerd.sock
-    --container-runtime=remote
-    --containerd=/run/k3s/containerd/containerd.sock
-    --eviction-hard=imagefs.available<5%,nodefs.available<5%
-    --eviction-minimum-reclaim=imagefs.available=10%,nodefs.available=10%
-    --fail-swap-on=false
-    --healthz-bind-address=127.0.0.1
-    --hostname-override=hostname01
-    --kubeconfig=/var/lib/rancher/k3s/agent/kubelet.kubeconfig
-    --kubelet-cgroups=/systemd/system.slice
-    --node-labels=
-    --pod-manifest-path=/var/lib/rancher/k3s/agent/pod-manifests
+    --cloud-provider=external 
+    --cluster-dns=10.43.0.10 
+    --cluster-domain=cluster.local 
+    --cni-bin-dir=/var/lib/rancher/k3s/data/223e6420f8db0d8828a8f5ed3c44489bb8eb47aa71485404f8af8c462a29bea3/bin 
+    --cni-conf-dir=/var/lib/rancher/k3s/agent/etc/cni/net.d 
+    --container-runtime-endpoint=/run/k3s/containerd/containerd.sock 
+    --container-runtime=remote 
+    --containerd=/run/k3s/containerd/containerd.sock 
+    --eviction-hard=imagefs.available<5%,nodefs.available<5% 
+    --eviction-minimum-reclaim=imagefs.available=10%,nodefs.available=10% 
+    --fail-swap-on=false 
+    --healthz-bind-address=127.0.0.1 
+    --hostname-override=hostname01 
+    --kubeconfig=/var/lib/rancher/k3s/agent/kubelet.kubeconfig 
+    --kubelet-cgroups=/systemd/system.slice 
+    --node-labels= 
+    --pod-manifest-path=/var/lib/rancher/k3s/agent/pod-manifests 
     --protect-kernel-defaults=true                                        # 4.2.6
     --read-only-port=0                                                    # 4.2.4
-    --resolv-conf=/run/systemd/resolve/resolv.conf
-    --runtime-cgroups=/systemd/system.slice
-    --serialize-image-pulls=false
+    --resolv-conf=/run/systemd/resolve/resolv.conf 
+    --runtime-cgroups=/systemd/system.slice 
+    --serialize-image-pulls=false 
     --tls-cert-file=/var/lib/rancher/k3s/agent/serving-kubelet.crt        # 4.2.10
     --tls-private-key-file=/var/lib/rancher/k3s/agent/serving-kubelet.key # 4.2.10
 ```
+Additional information about CIS requirements 1.2.22 to 1.2.25 is presented below.
 
-下面命令示例展示了如何应用修正措施来强化 K3s：
+## Known Issues
+The following are controls that K3s currently does not pass by default. Each gap will be explained, along with a note clarifying whether it can be passed through manual operator intervention, or if it will be addressed in a future release of K3s.
 
-```bash
-k3s server \
-    --protect-kernel-defaults=true \
-    --secrets-encryption=true \
-    --kube-apiserver-arg='audit-log-path=/var/lib/rancher/k3s/server/logs/audit.log' \
-    --kube-apiserver-arg='audit-policy-file=/var/lib/rancher/k3s/server/audit.yaml' \
-    --kube-apiserver-arg='audit-log-maxage=30' \
-    --kube-apiserver-arg='audit-log-maxbackup=10' \
-    --kube-apiserver-arg='audit-log-maxsize=100' \
-    --kube-apiserver-arg='request-timeout=300s' \
-    --kube-apiserver-arg='service-account-lookup=true' \
-    --kube-apiserver-arg='enable-admission-plugins=NodeRestriction,PodSecurityPolicy,NamespaceLifecycle,ServiceAccount' \
-    --kube-controller-manager-arg='terminated-pod-gc-threshold=10' \
-    --kube-controller-manager-arg='use-service-account-credentials=true' \
-    --kubelet-arg='streaming-connection-idle-timeout=5m' \
-    --kubelet-arg='make-iptables-util-chains=true'
-```
+### Control 1.2.15
+Ensure that the admission control plugin `NamespaceLifecycle` is set.
+<details>
+<summary>Rationale</summary>
+Setting admission control policy to `NamespaceLifecycle` ensures that objects cannot be created in non-existent namespaces, and that namespaces undergoing termination are not used for creating the new objects. This is recommended to enforce the integrity of the namespace termination process and also for the availability of the newer objects.
 
-## 结论
+This can be remediated by passing this argument as a value to the `enable-admission-plugins=` and pass that to  `--kube-apiserver-arg=` argument to `k3s server`. An example can be found below.
+</details>
 
-如果遵循本指南，你的 K3s 集群将能符合 CIS Kubernetes Benchmark。你可以查看 [CIS Benchmark 自我评估指南](self-assessment.md)来了解每项 Benchmark 检查的期望结果，以及如何在你的集群上执行相同的操作。
+### Control 1.2.16
+Ensure that the admission control plugin `PodSecurityPolicy` is set.
+<details>
+<summary>Rationale</summary>
+A Pod Security Policy is a cluster-level resource that controls the actions that a pod can perform and what it has the ability to access. The `PodSecurityPolicy` objects define a set of conditions that a pod must run with in order to be accepted into the system. Pod Security Policies are comprised of settings and strategies that control the security features a pod has access to and hence this must be used to control pod access permissions.
+
+This can be remediated by passing this argument as a value to the `enable-admission-plugins=` and pass that to  `--kube-apiserver-arg=` argument to `k3s server`. An example can be found below.
+</details>
+
+### Control 1.2.22
+Ensure that the `--audit-log-path` argument is set.
+<details>
+<summary>Rationale</summary>
+Auditing the Kubernetes API Server provides a security-relevant chronological set of records documenting the sequence of activities that have affected system by individual users, administrators or other components of the system. Even though currently, Kubernetes provides only basic audit capabilities, it should be enabled. You can enable it by setting an appropriate audit log path.
+
+This can be remediated by passing this argument as a value to the `--kube-apiserver-arg=` argument to `k3s server`. An example can be found below.
+</details>
+
+### Control 1.2.23
+Ensure that the `--audit-log-maxage` argument is set to 30 or as appropriate.
+<details>
+<summary>Rationale</summary>
+Retaining logs for at least 30 days ensures that you can go back in time and investigate or correlate any events. Set your audit log retention period to 30 days or as per your business requirements.
+
+This can be remediated by passing this argument as a value to the `--kube-apiserver-arg=` argument to `k3s server`. An example can be found below.
+</details>
+
+### Control 1.2.24
+Ensure that the `--audit-log-maxbackup` argument is set to 10 or as appropriate.
+<details>
+<summary>Rationale</summary>
+Kubernetes automatically rotates the log files. Retaining old log files ensures that you would have sufficient log data available for carrying out any investigation or correlation. For example, if you have set file size of 100 MB and the number of old log files to keep as 10, you would approximate have 1 GB of log data that you could potentially use for your analysis.
+
+This can be remediated by passing this argument as a value to the `--kube-apiserver-arg=` argument to `k3s server`. An example can be found below.
+</details>
+
+### Control 1.2.25
+Ensure that the `--audit-log-maxsize` argument is set to 100 or as appropriate.
+<details>
+<summary>Rationale</summary>
+Kubernetes automatically rotates the log files. Retaining old log files ensures that you would have sufficient log data available for carrying out any investigation or correlation. If you have set file size of 100 MB and the number of old log files to keep as 10, you would approximate have 1 GB of log data that you could potentially use for your analysis.
+
+This can be remediated by passing this argument as a value to the `--kube-apiserver-arg=` argument to `k3s server`. An example can be found below.
+</details>
+
+### Control 1.2.26
+Ensure that the `--request-timeout` argument is set as appropriate.
+<details>
+<summary>Rationale</summary>
+Setting global request timeout allows extending the API server request timeout limit to a duration appropriate to the user's connection speed. By default, it is set to 60 seconds which might be problematic on slower connections making cluster resources inaccessible once the data volume for requests exceeds what can be transmitted in 60 seconds. But, setting this timeout limit to be too large can exhaust the API server resources making it prone to Denial-of-Service attack. Hence, it is recommended to set this limit as appropriate and change the default limit of 60 seconds only if needed.
+
+This can be remediated by passing this argument as a value to the `--kube-apiserver-arg=` argument to `k3s server`. An example can be found below.
+</details>
+
+### Control 1.2.27
+Ensure that the `--service-account-lookup` argument is set to true.
+<details>
+<summary>Rationale</summary>
+If `--service-account-lookup` is not enabled, the apiserver only verifies that the authentication token is valid, and does not validate that the service account token mentioned in the request is actually present in etcd. This allows using a service account token even after the corresponding service account is deleted. This is an example of time of check to time of use security issue.
+
+This can be remediated by passing this argument as a value to the `--kube-apiserver-arg=` argument to `k3s server`. An example can be found below.
+</details>
+
+### Control 1.2.33
+Ensure that the `--encryption-provider-config` argument is set as appropriate.
+<details>
+<summary>Rationale</summary>
+`etcd` is a highly available key-value store used by Kubernetes deployments for persistent storage of all of its REST API objects. These objects are sensitive in nature and should be encrypted at rest to avoid any disclosures.
+
+Detailed steps on how to configure secrets encryption in K3s are available in [Secrets Encryption](secrets-encryption.md).
+</details>
+
+### Control 1.2.34
+Ensure that encryption providers are appropriately configured.
+<details>
+<summary>Rationale</summary>
+Where `etcd` encryption is used, it is important to ensure that the appropriate set of encryption providers is used. Currently, the `aescbc`, `kms` and `secretbox` are likely to be appropriate options.
+
+This can be remediated by passing a valid configuration to `k3s` as outlined above. Detailed steps on how to configure secrets encryption in K3s are available in [Secrets Encryption](secrets-encryption.md).
+</details>
+
+### Control 1.3.1
+Ensure that the `--terminated-pod-gc-threshold` argument is set as appropriate.
+<details>
+<summary>Rationale</summary>
+Garbage collection is important to ensure sufficient resource availability and avoiding degraded performance and availability. In the worst case, the system might crash or just be unusable for a long period of time. The current setting for garbage collection is 12,500 terminated pods which might be too high for your system to sustain. Based on your system resources and tests, choose an appropriate threshold value to activate garbage collection.
+
+This can be remediated by passing this argument as a value to the `--kube-apiserver-arg=` argument to `k3s server`. An example can be found below.
+</details>
+
+### Control 3.2.1
+Ensure that a minimal audit policy is created.
+<details>
+<summary>Rationale</summary>
+Logging is an important detective control for all systems, to detect potential unauthorized access.
+
+This can be remediated by passing controls 1.2.22 - 1.2.25 and verifying their efficacy.
+</details>
+
+### Control 4.2.7
+Ensure that the `--make-iptables-util-chains` argument is set to true.
+<details>
+<summary>Rationale</summary>
+Kubelets can automatically manage the required changes to iptables based on how you choose your networking options for the pods. It is recommended to let kubelets manage the changes to iptables. This ensures that the iptables configuration remains in sync with pods networking configuration. Manually configuring iptables with dynamic pod network configuration changes might hamper the communication between pods/containers and to the outside world. You might have iptables rules too restrictive or too open.
+
+This can be remediated by passing this argument as a value to the `--kube-apiserver-arg=` argument to `k3s server`. An example can be found below.
+</details>
+
+### Control 5.1.5
+Ensure that default service accounts are not actively used
+<details>
+<summary>Rationale</summary>
+Kubernetes provides a `default` service account which is used by cluster workloads where no specific service account is assigned to the pod.
+
+Where access to the Kubernetes API from a pod is required, a specific service account should be created for that pod, and rights granted to that service account.
+
+The default service account should be configured such that it does not provide a service account token and does not have any explicit rights assignments.
+
+This can be remediated by updating the `automountServiceAccountToken` field to `false` for the `default` service account in each namespace.
+
+For `default` service accounts in the built-in namespaces (`kube-system`, `kube-public`, `kube-node-lease`, and `default`), K3s does not automatically do this. You can manually update this field on these service accounts to pass the control.
+</details>
+
+## Conclusion
+
+If you have followed this guide, your K3s cluster will be configured to comply with the CIS Kubernetes Benchmark. You can review the [CIS Benchmark Self-Assessment Guide](self-assessment.md) to understand the expectations of each of the benchmark's checks and how you can do the same on your cluster.

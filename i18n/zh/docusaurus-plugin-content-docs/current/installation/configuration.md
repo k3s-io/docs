@@ -9,11 +9,11 @@ weight: 20
 - [K3s 二进制](#二进制配置)
 - [配置文件](#配置文件)
 
-如需更多高级选项，请参阅[此页面](advanced/advanced.md)。
+如需更多高级选项，请参阅[此页面](../advanced/advanced.md)。
 
 ## 使用安装脚本的选项
 
-如[快速入门指南](quick-start/quick-start.md)中所述，你可以使用 https://get.k3s.io 上提供的安装脚本在基于 systemd 和 openrc 的系统上将 K3s 安装为服务。
+如[快速入门指南](../quick-start/quick-start.md)中所述，你可以使用 https://get.k3s.io 上提供的安装脚本在基于 systemd 和 openrc 的系统上将 K3s 安装为服务。
 
 你可以结合使用 `INSTALL_K3S_EXEC`、`K3S_` 环境变量和命令标志来配置安装。
 
@@ -27,7 +27,7 @@ curl -sfL https://get.k3s.io | K3S_TOKEN=12345 sh -s - server --flannel-backend 
 curl -sfL https://get.k3s.io | sh -s - --flannel-backend none --token 12345
 ```
 
-有关所有环境变量的详细信息，请参阅[环境变量](reference/env-variables.md)。
+有关所有环境变量的详细信息，请参阅[环境变量](../reference/env-variables.md)。
 
 ## 二进制配置
 
@@ -52,8 +52,8 @@ K3s Agent 也可以这样配置：
 k3s agent --server https://k3s.example.com --token mypassword
 ```
 
-有关配置 K3s Server 的详细信息，请参阅 [Server 配置](reference/server-config.md)  
-有关配置 K3s Agent 的详细信息，请参阅 [Agent 配置。](reference/agent-config.md)  
+有关配置 K3s Server 的详细信息，请参阅 [Server 配置](../reference/server-config.md)  
+有关配置 K3s Agent 的详细信息，请参阅 [Agent 配置。](../reference/agent-config.md)  
 你还可以使用 `--help` 标志查看所有可用的选项。
 
 :::info 匹配标志

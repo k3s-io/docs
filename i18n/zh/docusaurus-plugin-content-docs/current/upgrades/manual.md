@@ -26,6 +26,13 @@ weight: 10
 ```sh
 curl -sfL https://get.k3s.io | sh -
 ```
+
+:::note
+中国用户，可以使用以下方法加速升级：
+```
+curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn sh -
+```
+:::
 默认情况下将升级到 stable channel 中的较新版本。
 
 如果想升级到特定 channel（如 latest）中的更新版本，你可以指定 channel：

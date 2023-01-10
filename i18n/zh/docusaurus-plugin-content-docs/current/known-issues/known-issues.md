@@ -12,8 +12,8 @@ weight: 70
 
 如果你使用 nftables 模式而不是传统模式来运行 iptables，则可能会遇到问题。我们建议使用较新的 iptables（例如 1.6.1+）来避免出现问题。
 
-此外，版本 1.8.0-1.8.4 存在可能导致 K3s 失败的问题。有关解决方法，请参阅[其他操作系统准备](advanced/advanced.md#基于-debian-buster-的发行版的额外准备工作)。
+此外，版本 1.8.0-1.8.4 存在可能导致 K3s 失败的问题。有关解决方法，请参阅[其他操作系统准备](../advanced/advanced.md#旧的-iptables-版本)。
 
 ### 无根模式
 
-使用无根模式运行 K3s 是实验性的，存在几个[已知问题](advanced/advanced.md#无根模式的已知问题)。
+使用无根模式运行 K3s 是实验性的，存在几个[已知问题](../advanced/advanced.md#无根模式的已知问题)。
