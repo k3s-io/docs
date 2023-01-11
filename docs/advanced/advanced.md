@@ -46,6 +46,31 @@ Any file found in `/var/lib/rancher/k3s/server/manifests` will automatically be 
 
 For information about deploying Helm charts, refer to the section about [Helm.](../helm/helm.md)
 
+## Configuring an HTTP proxy
+
+If you are running K3s in an environment, which only has external connectivity through an HTTP proxy, you can configure your proxy settings on the K3s systemd service. These proxy settings will then be used in K3s and passed down to the embedded containerd and kubelet.
+
+Add the necessary `HTTP_PROXY`, `HTTPS_PROXY` and `NO_PROXY` variables to the environment file of your systemd service, usually:
+
+- `/etc/default/k3s`
+- `/etc/default/k3s-agent`
+
+The `NO_PROXY` variable must include your internal networks, as well as the cluster pod and service IP ranges.
+
+```
+HTTP_PROXY=http://your-proxy.example.com:8888
+HTTPS_PROXY=http://your-proxy.example.com:8888
+NO_PROXY=127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,.svc,.cluster.local
+```
+
+If you want to configure the proxy settings for containerd without affecting K3s and the Kubelet, you can prefix the variables with `CONTAINERD_`:
+
+```
+CONTAINERD_HTTP_PROXY=http://your-proxy.example.com:8888
+CONTAINERD_HTTPS_PROXY=http://your-proxy.example.com:8888
+CONTAINERD_NO_PROXY=127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,.svc,.cluster.local
+```
+
 ## Using Docker as the Container Runtime
 
 K3s includes and defaults to [containerd](https://containerd.io/), an industry-standard container runtime.
