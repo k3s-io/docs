@@ -9,36 +9,42 @@ aliases:
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-本文描述了用于运行和管理 K3s 的高级设置：
-
-- [证书轮换](#证书轮换)
-- [自动部署清单](#自动部署清单)
-- [使用 Docker 作为容器运行时](#使用-docker-作为容器运行时)
-- [使用 etcdctl](#使用-etcdctl)
-- [配置 containerd](#配置-containerd)
-- [以无根模式运行 K3s（实验性）](#以无根模式运行-k3s实验性)
-- [节点标签和污点](#节点标签和污点)
-- [使用安装脚本启动 Server](#使用安装脚本启动-server)
-- [其他操作系统准备](#其他操作系统准备)
-- [Red Hat/CentOS Enterprise Linux 的额外准备工作](#red-hatcentos-enterprise-linux-的额外准备工作)
-- [Raspberry Pi OS 的额外准备工作](#raspberry-pi-os-的额外准备工作)
-- [在 Raspberry Pi 上的 Ubuntu 21.10+ 中启用 vxlan](#在-raspberry-pi-上的-ubuntu-2110+-中启用-vxlan)
-- [在 Docker 中运行 K3s](#在-docker-中运行-k3s)
-- [SELinux 支持](#selinux-支持)
-- [启用 eStargz 的 Lazy Pulling（实验性）](#启用-estargz-的-lazy-pulling实验性)
-- [其他日志记录源](#其他日志来源)
+本文描述了用于运行和管理 K3s 的高级设置，以及为 K3s 准备主机操作系统所需的步骤。
 
 ## 证书轮换
 
+### 自动轮换
 默认情况下，K3s 中的证书在 12 个月后过期。
 
 如果证书已经过期或剩余的时间不足 90 天，则在 K3s 重启时轮换证书。
+
+### 手动轮换
+
+要手动轮换证书，请使用 `k3s certificate rotate` 子命令：
+
+```bash
+# Stop K3s
+systemctl stop k3s
+# Rotate certificates
+k3s certificate rotate
+# Start K3s
+systemctl start k3s
+```
+
+你可以通过指定证书名称来轮换单个或多个证书：
+
+```bash
+k3s certificate rotate --service <SERVICE>,<SERVICE>
+```
+
+可以轮换的证书：`admin`、`api-server`、`controller-manager`、`scheduler`、`k3s-controller`, `k3s-server`, `cloud-controller`, `etcd`, `auth-proxy`, `kubelet`，`kube-proxy`。
+
 
 ## 自动部署清单
 
 在 `/var/lib/rancher/k3s/server/manifests` 中找到的任何文件都会以类似 `kubectl apply` 的方式自动部署到 Kubernetes，在启动和在磁盘上更改文件时也是一样。删除该目录的文件不会同时删除集群中相应的资源。
 
-有关部署 Helm Chart 的更多信息，请参阅 [Helm](helm/helm.md) 部分。
+有关部署 Helm Chart 的更多信息，请参阅 [Helm](../helm/helm.md) 部分。
 
 ## 使用 Docker 作为容器运行时
 
@@ -128,19 +134,19 @@ K3s 会在 `/var/lib/rancher/k3s/agent/etc/containerd/config.toml` 中为 contai
 
 * **端口**
 
-   如果以无根模式运行，将创建一个新的网络命名空间。换言之，K3s 实例在网络与主机完全分离的情况下运行。要从主机访问在 K3s 中运行的服务，唯一方法是设置端口转发到 K3s 网络命名空间。我们有一个控制器，它会自动将 6443 和低于 1024 的服务端口绑定到偏移量为 10000 的主机。
+   如果以无根模式运行，将创建一个新的网络命名空间。换言之，K3s 实例在网络与主机完全分离的情况下运行。
+   要从主机访问在 K3s 中运行的 Service，唯一的方法是设置转发到 K3s 网络命名空间的端口。
+   无根模式下的 K3s 包含控制器，它会自动将 6443 和低于 1024 的 Service 端口绑定到偏移量为 10000 的主机。
 
-   也就是说，服务端口 80 在主机上会变成 10080，但 8080 会变成 8080，没有任何偏移。
-
-   目前只有 `LoadBalancer` service 是自动绑定的。
+   例如，端口 80 上的 Service 在主机上会变成 10080，但 8080 会变成 8080，没有任何偏移。目前只有 LoadBalancer Service 是自动绑定的。
 
 * **Cgroups**
 
-   不支持 Cgroup v1。支持 v2。
+   不支持 Cgroup v1 和 Hybrid v1/v2，仅支持纯 Cgroup v2。如果 K3s 在无根模式下运行时由于缺少 cgroup 而无法启动，很可能你的节点处于 Hybrid 模式，而且“丢失”的 cgroup 仍然绑定了 v1 控制器。
 
-* **多节点集群**
+* **多节点/多进程集群**
 
-   多集群安装没有经过测试，也没有文档记录。
+   目前，我们不支持多节点无根集群或同一节点上的多个无根 k3s 进程。有关详细信息，请参阅 [#6488](https://github.com/k3s-io/k3s/issues/6488#issuecomment-1314998091)。
 
 ### 使用无根模式运行 Server 和 Agent
 * 启用 cgroup v2 授权，请参阅 https://rootlesscontaine.rs/getting-started/common/cgroup2/。
@@ -164,6 +170,19 @@ K3s 会在 `/var/lib/rancher/k3s/agent/etc/containerd/config.toml` 中为 contai
 >
 > 即：`systemd-run --user -p Delegate=yes --tty k3s server --rootless`
 
+### 高级无根配置
+
+Rootless K3s 使用 [rootlesskit](https://github.com/rootless-containers/rootlesskit) 和 [slirp4netns](https://github.com/rootless-containers/slirp4netns) 在主机和用户网络命名空间之间进行通信。
+rootlesskit 和 slirp4nets 使用的一些配置可以通过环境变量来设置。设置它们的最佳方法是将它们添加到 k3s-rootless systemd 单元的 `Environment` 字段中。
+
+| 变量 | 默认 | 描述 |
+|--------------------------------------|--------------|------------
+| `K3S_ROOTLESS_MTU` | 1500 | 为 slirp4netns 虚拟接口设置 MTU。 |
+| `K3S_ROOTLESS_CIDR` | 10.41.0.0/16 | 设置 slirp4netns 虚拟接口使用的 CIDR。 |
+| `K3S_ROOTLESS_ENABLE_IPV6` | autotedected | 启用 slirp4netns IPv6 支持。如果未指定，则在 K3s 配置为双栈时自动启用。 |
+| `K3S_ROOTLESS_PORT_DRIVER` | builtin | 选择无根 port driver，可选值是 `builtin` 或 `slirp4netns`。`builtin` 速度更快，但会伪装入站数据包的原始源地址。 |
+| `K3S_ROOTLESS_DISABLE_HOST_LOOPBACK` | true | 控制是否允许通过网关接口访问主机的环回地址。出于安全原因，建议不要更改此设置。 |
+
 ### 故障排除
 
 * 运行 `systemctl --user status k3s-rootless` 来检查 daemon 状态
@@ -172,7 +191,7 @@ K3s 会在 `/var/lib/rancher/k3s/agent/etc/containerd/config.toml` 中为 contai
 
 ## 节点标签和污点
 
-K3s Agent 可以通过 `--node-label` 和 `--node-taint` 选项来配置，它们会为 kubelet 添加标签和污点。这两个选项只能[在注册时](reference/agent-config.md#agent-的节点标签和污点)添加标签和/或污点，因此它们只能被添加一次，之后不能再通过运行 K3s 命令来改变。
+K3s Agent 可以通过 `--node-label` 和 `--node-taint` 选项来配置，它们会为 kubelet 添加标签和污点。这两个选项只能[在注册时](../reference/agent-config.md#agent-的节点标签和污点)添加标签和/或污点，因此它们只能被添加一次，之后不能再通过运行 K3s 命令来改变。
 
 如果你想在节点注册后更改节点标签和污点，你需要使用 `kubectl`。关于如何添加[污点](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/)和[节点标签](https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/#add-a-label-to-a-node)的详细信息，请参阅官方 Kubernetes 文档。
 
@@ -188,6 +207,13 @@ K3s Agent 可以通过 `--node-label` 和 `--node-taint` 选项来配置，它�
 ```bash
 curl -sfL https://get.k3s.io | sh -
 ```
+
+:::note
+中国用户，可以使用以下方法加速安装：
+```
+curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn sh -
+```
+:::
 
 手动运行 server 时，你应该得到类似于以下内容的输出：
 
@@ -211,35 +237,19 @@ INFO[2019-01-22T15:16:20.541049100-07:00] Run: k3s kubectl
 
 ## 其他操作系统准备
 
-### 基于 Debian “buster” 的发行版的额外准备工作
+### 旧的 iptables 版本
 
-基于 Debian "buster" 的几个主流 Linux 发行版都搭载了 v1.8.0-v1.8.4 版本的 iptables。这些版本包含了导致重复规则累积的错误，会对节点的性能和稳定性产生负面影响。有关更多背景信息，请参阅 [issue #3117](https://github.com/k3s-io/k3s/issues/3117)。
+几个主流 Linux 发行版发布的 iptables 版本包含一个错误，该错误会导致重复规则的累积，从而对节点的性能和稳定性产生负面影响。有关如何确定你是否受此问题影响，请参阅 [issue #3117](https://github.com/k3s-io/k3s/issues/3117)。
 
-你可以从 nftables 模式切换到传统 iptables 模式，从而绕过此问题。
+K3s 具有一个可以正常运行的 iptables (v1.8.8) 版本。你可以通过使用 `--prefer-bundled-bin` 选项来启动 K3s，或从操作系统中卸载 iptables/nftables 包，从而让 K3s 使用捆绑的 iptables 版本。
 
-```bash
-sudo iptables -F
-sudo update-alternatives --set iptables /usr/sbin/iptables-legacy
-sudo update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
-sudo reboot
-```
+:::info 版本
 
-或者，K3s 提供了一个运行正常的 ipTables (v1.8.6) 的版本。你可以替换系统上的 iptables：
+`--prefer-bundled-bin` 标志从 2022-12 版本开始可用（v1.26.0+k3s1、v1.25.5+k3s1、v1.24.9+k3s1、v1.23.15+k3s1）。
 
-```bash
-sudo apt remove iptables nftables -y
-sudo reboot
-export PATH="/var/lib/rancher/k3s/data/current/bin/:/var/lib/rancher/k3s/data/current/bin/aux:$PATH"
-```
+:::
 
-K3s 现在将使用其打包版本的 iptables。
-
-```bash
-$ which iptables
-/var/lib/rancher/k3s/data/current/bin/aux/iptables
-```
-
-### Red Hat/CentOS Enterprise Linux 的额外准备工作
+### Red Hat Enterprise Linux / CentOS
 
 建议关闭 firewalld：
 ```bash
@@ -252,9 +262,9 @@ systemctl disable nm-cloud-setup.service nm-cloud-setup.timer
 reboot
 ```
 
-### Raspberry Pi OS 的额外准备工作
+### Raspberry Pi
 
-Raspberry Pi OS 基于 Debian，可能会受到旧 iptables 版本的影响。请参阅[解决方法](#基于-debian-buster-的发行版的额外准备工作)。
+Raspberry Pi OS 基于 Debian，可能会受到旧 iptables 版本的影响。请参阅[解决方法](#旧的-iptables-版本)。
 
 标准 Raspberry Pi OS 不会在启用 `cgroups` 的情况下开始。**K3S** 需要 `cgroups` 来启动 systemd 服务。你可以通过将 `cgroup_memory=1 cgroup_enable=memory` 附加到 `/boot/cmdline.txt` 来启用 `cgroups` 。
 
@@ -262,8 +272,6 @@ Raspberry Pi OS 基于 Debian，可能会受到旧 iptables 版本的影响。�
 ```
 console=serial0,115200 console=tty1 root=PARTUUID=58b06195-02 rootfstype=ext4 elevator=deadline fsck.repair=yes rootwait cgroup_memory=1 cgroup_enable=memory
 ```
-
-## 在 Raspberry Pi 上的 Ubuntu 21.10+ 中启用 vxlan
 
 从 Ubuntu 21.10 开始，对 Raspberry Pi 的 vxlan 支持已移至单独的内核模块中。
 ```bash
@@ -277,7 +285,7 @@ sudo apt install linux-modules-extra-raspi
 <Tabs>
 <TabItem value="K3d" default>
 
-[k3d](https://github.com/k3s-io/k3d) 是一个用于在 Docker 中轻松运行 K3s 的实用程序。
+[k3d](https://github.com/k3d-io/k3d) 是一个用于在 Docker 中轻松运行 K3s 的实用程序。
 
 你可以使用 MacOS 上的 [brew](https://brew.sh/) 实用程序来安装它：
 
@@ -334,7 +342,7 @@ sudo docker run \
 <Tabs>
 <TabItem value="自动安装" default>
 
-如果系统兼容，而且没有进行离线安装，那么[安装脚本](installation/configuration#使用安装脚本的选项)将自动从 Rancher RPM 仓库安装 SELinux RPM。你通过设置 `INSTALL_K3S_SKIP_SELINUX_RPM=true` 来跳过自动安装。
+如果系统兼容，而且没有进行离线安装，那么[安装脚本](../installation/configuration.md#使用安装脚本的选项)将自动从 Rancher RPM 仓库安装 SELinux RPM。你通过设置 `INSTALL_K3S_SKIP_SELINUX_RPM=true` 来跳过自动安装。
 
 </TabItem>
 
@@ -392,8 +400,8 @@ k3s server --snapshotter=stargz
 ```
 
 使用此配置，你可以对 eStargz 格式的镜像进行 Lazy Pulling。
-以下 Pod 清单使用 eStargz 格式的 `node:13.13.0` 镜像 (`ghcr.io/stargz-containers/node:13.13.0-esgz`)。
-K3s 对此镜像执行 Lazy Pulling。
+以下 Pod 清单示例使用 eStargz 格式的 `node:13.13.0` 镜像 (`ghcr.io/stargz-containers/node:13.13.0-esgz`)。
+当启用 stargz snapshotter 时，K3s 会对该镜像进行 lazy pulling。
 
 ```yaml
 apiVersion: v1
@@ -426,3 +434,24 @@ helm repo update
 helm install --create-namespace -n cattle-logging-system rancher-logging-crd rancher-charts/rancher-logging-crd
 helm install --create-namespace -n cattle-logging-system rancher-logging --set additionalLoggingSources.k3s.enabled=true rancher-charts/rancher-logging
 ```
+
+## 其他网络策略日志
+
+支持记录网络策略丢弃的数据包。数据包被发送到 iptables NFLOG 操作，它显示了数据包的详细信息，包括阻止它的网络策略。
+
+要将 NFLOG 转换为日志条目，请安装 ulogd2 并将 `[log1]` 配置为在 `group=100` 上读取。然后，重启 ulogd2 服务以提交新配置。
+
+也可以使用 tcpdump 读取命中 NFLOG 操作的数据包：
+```bash
+tcpdump -ni nflog:100
+```
+但是请注意，在这种情况下，不会显示阻止数据包的网络策略。
+
+
+当数据包被网络策略规则阻止时，日志消息将出现在 `/var/log/ulog/syslogemu.log` 中。如果流量很大，日志文件可能会增长得非常快。为了控制它，你可以向相关网络策略添加以下注释，从而设置 `limit` 和 `limit-burst` iptables 参数：
+```bash
+* kube-router.io/netpol-nflog-limit=<LIMIT-VALUE>
+* kube-router.io.io/netpol-nflog-limit-burst=<LIMIT-BURST-VALUE>
+```
+
+默认值为 `limit=10/minute` 和 `limit-burst=10`。你可以查看 iptables 手册以进一步了解这些字段的格式和可选值。

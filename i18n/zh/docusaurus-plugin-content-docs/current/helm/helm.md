@@ -5,7 +5,7 @@ weight: 42
 
 Helm 是 Kubernetes 的包管理工具。Helm Chart 为 Kubernetes YAML 清单文件提供了模板语法。通过 Helm，用户可以创建可配置的 deployment，而不仅仅只能使用静态文件。如果你需要创建自己的 Deployment 商店应用，请参见 [Helm 文档](https://helm.sh/docs/intro/quickstart/)。
 
-K3s 不需要任何特殊配置即可配合 Helm 命令行工具一起使用。请确保你已按照[集群访问](cluster-access/cluster-access.md)部分正确设置了 kubeconfig。K3s 包含一些其他功能，让你可以使用 [rancher/helm-release CRD](#使用-helm-crd) 更轻松地部署传统的 Kubernetes 资源清单和 Helm Chart。
+K3s 不需要任何特殊配置即可配合 Helm 命令行工具一起使用。请确保你已按照[集群访问](../cluster-access/cluster-access.md)部分正确设置了 kubeconfig。K3s 包含一些其他功能，让你可以使用 [rancher/helm-release CRD](#使用-helm-crd) 更轻松地部署传统的 Kubernetes 资源清单和 Helm Chart。
 
 本节涵盖以下主题：
 

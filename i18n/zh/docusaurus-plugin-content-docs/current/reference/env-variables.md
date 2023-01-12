@@ -3,13 +3,20 @@ title: 环境变量
 weight: 3
 ---
 
-如[快速入门指南](quick-start/quick-start.md)中所述，你可以使用 https://get.k3s.io 上提供的安装脚本在基于 systemd 和 openrc 的系统上将 K3s 安装为服务。
+如[快速入门指南](../quick-start/quick-start.md)中所述，你可以使用 https://get.k3s.io 上提供的安装脚本在基于 systemd 和 openrc 的系统上将 K3s 安装为服务。
 
 此命令的最简单形式如下：
 
 ```bash
 curl -sfL https://get.k3s.io | sh -
 ```
+
+:::note
+中国用户，可以使用以下方法加速安装：
+```
+curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn sh -
+```
+:::
 
 使用该方法安装 K3s 时，你可以使用以下环境变量来配置安装：
 
@@ -23,7 +30,7 @@ curl -sfL https://get.k3s.io | sh -
 | `INSTALL_K3S_BIN_DIR` | 安装 K3s 二进制文件、链接和卸载脚本的目录，或使用 `/usr/local/bin` 作为默认目录。 |
 | `INSTALL_K3S_BIN_DIR_READ_ONLY` | 如果设置为 `true` 将不会将文件写入 `INSTALL_K3S_BIN_DIR`，强制设置为 `INSTALL_K3S_SKIP_DOWNLOAD=true`。 |
 | `INSTALL_K3S_SYSTEMD_DIR` | 安装 systemd 服务和环境文件的目录，或使用 `/etc/systemd/system` 作为默认目录。 |
-| `INSTALL_K3S_EXEC` | 带有标志的命令，用于在服务中启动 K3s。如果未指定命令并且设置了 `K3S_URL`，它将默认为 "agent"。如果未设置 `K3S_URL`，它将默认为 "server"。如需帮助，请参阅[此示例](installation/configuration.md#使用安装脚本的选项)。 |
+| `INSTALL_K3S_EXEC` | 带有标志的命令，用于在服务中启动 K3s。如果未指定命令并且设置了 `K3S_URL`，它将默认为 "agent"。如果未设置 `K3S_URL`，它将默认为 "server"。如需帮助，请参阅[此示例](../installation/configuration.md#使用安装脚本的选项)。 |
 | `INSTALL_K3S_NAME` | 要创建的 systemd 服务的名称，如果将 K3s 作为 server 运行，则默认为 “k3s”，如果将 K3s 作为 agent 运行，则默认为 “k3s-agent”。如果指定，名称将以“k3s-”为前缀。 |
 | `INSTALL_K3S_TYPE` | 要创建的 systemd 服务类型，如果未指定，将默认使用来自 K3s exec 命令的类型。 |
 | `INSTALL_K3S_SELINUX_WARN` | 如果设置为 `true`，则在未找到 k3s-selinux 策略时会继续。 |

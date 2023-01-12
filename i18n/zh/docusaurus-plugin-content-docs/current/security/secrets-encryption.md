@@ -16,7 +16,7 @@ K3s 支持启用静态加密。首次启动 server 时，传递标志 `--secrets
 :::tip
 
 如果不重新启动现有 server，则无法在其上启用 Secret 加密。  
-如果使用脚本或[配置选项](installation/configuration.md#使用安装脚本的选项)中描述的其他方法进行安装，请使用 `curl -sfL https://get.k3s.io | sh -s - server --secrets-encryption`。
+如果使用脚本或[配置选项](../installation/configuration.md#使用安装脚本的选项)中描述的其他方法进行安装，请使用 `curl -sfL https://get.k3s.io | sh -s - server --secrets-encryption`。
 
 :::
 

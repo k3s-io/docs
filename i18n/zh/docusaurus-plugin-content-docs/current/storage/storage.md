@@ -9,7 +9,7 @@ weight: 30
 
 本文介绍如何使用本地存储提供程序或 [Longhorn](#设置-longhorn) 设置持久存储。
 
-# K3s 存储有哪些变化？
+## K3s 存储有什么不同？
 
 K3s 删除了几个可选的卷插件和所有内置的（有时称为“in-tree”）云提供商。我们这样做是为了让二进制文件更小，并避免对第三方云或数据中心技术和服务的依赖，因为这些依赖在许多 K3s 用例中可能不可用。我们之所以能够这样做，是因为它们的移除既不会影响核心 Kubernetes 功能，也不会影响一致性。
 
@@ -29,7 +29,7 @@ K3s 删除了几个可选的卷插件和所有内置的（有时称为“in-tree
 
 Kubernetes 维护人员正在积极地将树内卷插件迁移到 CSI 驱动程序。有关此迁移的更多信息，请参阅[此处](https://kubernetes.io/blog/2021/12/10/storage-in-tree-to-csi-migration-status-update/)。
 
-# 设置本地存储提供程序
+## 设置本地存储提供程序
 K3s 自带 Rancher 的 Local Path Provisioner，这使得能够使用各自节点上的本地存储来开箱即用地创建持久卷声明。下面是一个简单的例子。有关更多信息，请参阅[官方文档](https://github.com/rancher/local-path-provisioner/blob/master/README.md#usage)。
 
 创建一个 hostPath 支持的持久卷声明和一个使用它的 Pod：
@@ -91,15 +91,18 @@ kubectl get pvc
 
 状态都应该是 Bound。
 
-# 设置 Longhorn
+## 设置 Longhorn
 
-:::caution（待更改 - Longhorn 将来可能支持 arm64 和 armhf。）
+:::caution
 
-> **注意**：目前 Longhorn 只支持 amd64 和 arm64（实验性）。
+Longhorn 不支持 ARM32。
 
-K3s 支持 [Longhorn](https://github.com/longhorn/longhorn)。Longhorn 是 Kubernetes 的开源分布式块存储系统。
+:::
 
-下面是一个简单的例子。如需更多信息，请参阅[官方文档](https://github.com/longhorn/longhorn/blob/master/README.md)。
+
+K3s 支持 [Longhorn](https://github.com/longhorn/longhorn)，这是用于 Kubernetes 的开源分布式块存储系统。
+
+下面是一个简单的例子。有关详细信息，请参阅[官方文档](https://longhorn.io/docs/latest/)。
 
 应用 longhorn.yaml 来安装 Longhorn：
 

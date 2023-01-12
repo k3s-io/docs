@@ -61,7 +61,7 @@ sudo k3s kubectl create -f dashboard.admin-user.yml -f dashboard.admin-user-role
 sudo k3s kubectl -n kubernetes-dashboard create token admin-user
 ```
 </TabItem>
-<TabItem value="v1.23 和以前的版本">
+<TabItem value="v1.23 和更低版本">
 
 ```bash
 sudo k3s kubectl -n kubernetes-dashboard describe secret admin-user-token | grep '^token'

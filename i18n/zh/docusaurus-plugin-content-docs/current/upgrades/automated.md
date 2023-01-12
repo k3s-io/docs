@@ -42,7 +42,7 @@ kubectl apply -f https://github.com/rancher/system-upgrade-controller/releases/l
 
 
 ### 配置计划
-建议你至少创建两个计划：升级 server（master）节点的计划和升级 agent（worker）节点的计划。根据需要，你可以创建其他计划来控制跨节点的升级回滚。以下两个示例计划会将你的集群升级到 K3s v1.22.11+k3s2。创建计划后，控制器将选择它们并开始升级你的集群。
+建议你至少创建两个计划：升级 server（master）节点的计划和升级 agent（worker）节点的计划。根据需要，你可以创建其他计划来控制跨节点的升级回滚。以下两个示例计划会将你的集群升级到 K3s v1.24.6+k3s1。创建计划后，控制器将选择它们并开始升级你的集群。
 ```yaml
 # Server plan
 apiVersion: upgrade.cattle.io/v1
@@ -62,7 +62,7 @@ spec:
   serviceAccountName: system-upgrade
   upgrade:
     image: rancher/k3s-upgrade
-  version: v1.22.11+k3s2
+  version: v1.24.6+k3s1
 ---
 # Agent plan
 apiVersion: upgrade.cattle.io/v1
@@ -85,7 +85,7 @@ spec:
   serviceAccountName: system-upgrade
   upgrade:
     image: rancher/k3s-upgrade
-  version: v1.22.11+k3s2
+  version: v1.24.6+k3s1
 ```
 关于这些计划，有几个重要的事情需要注意：
 
@@ -97,7 +97,7 @@ spec:
 
 第四，`agent-plan` 中的 `prepare` 步骤会使该计划等待 `server-plan` 完成后再执行升级 job。
 
-第五，两个计划都将 `version` 字段设置为 v1.22.11+k3s2。或者，你可以省略 `version` 字段并将 `channel` 字段设置为解析到 K3s 版本的 URL。这将导致控制器监控该 URL，并在它解析到新版本时随时升级集群。这适用于[版本 channels](manual.md#版本-channels)。因此，你可以用下面的 channel 配置计划，从而确保你的集群总是自动升级到 K3s 的最新稳定版本。
+第五，两个计划都将 `version` 字段设置为 v1.24.6+k3s1。或者，你可以省略 `version` 字段并将 `channel` 字段设置为解析到 K3s 版本的 URL。这将导致控制器监控该 URL，并在它解析到新版本时随时升级集群。这适用于[版本 channels](manual.md#版本-channels)。因此，你可以用下面的 channel 配置计划，从而确保你的集群总是自动升级到 K3s 的最新稳定版本。
 ```yaml
 apiVersion: upgrade.cattle.io/v1
 kind: Plan

@@ -72,7 +72,7 @@ INSTALL_K3S_SKIP_DOWNLOAD=true K3S_URL=https://myserver:6443 K3S_TOKEN=mynodetok
 </TabItem>
 <TabItem value="高可用配置" default>
 
-参考[具有外部数据库的高可用](ha.md)或[具有嵌入式数据库的高可用](ha.md-embedded)指南。你需要调整安装命令来指定 `INSTALL_K3S_SKIP_DOWNLOAD=true`，并在本地运行安装脚本，而不是使用 curl。你还将使用 `INSTALL_K3S_EXEC='args'` 为 K3s 提供参数。
+参考[具有外部数据库的高可用](ha.md)或[具有嵌入式数据库的高可用](ha-embedded.md)指南。你需要调整安装命令来指定 `INSTALL_K3S_SKIP_DOWNLOAD=true`，并在本地运行安装脚本，而不是使用 curl。你还将使用 `INSTALL_K3S_EXEC='args'` 为 K3s 提供参数。
 
 例如，具有外部数据库的高可用指南的第二步提到了以下内容：
 
@@ -105,7 +105,7 @@ INSTALL_K3S_SKIP_DOWNLOAD=true INSTALL_K3S_EXEC='server' K3S_DATASTORE_ENDPOINT=
 
 ### 自动升级
 
-从 v1.17.4+k3s1 开始，K3s 支持[自动升级](upgrades/automated.md)。要在离线环境中启用此功能，你必须确保所需的镜像在你的私有镜像仓库中可用。
+从 v1.17.4+k3s1 开始，K3s 支持[自动升级](../upgrades/automated.md)。要在离线环境中启用此功能，你必须确保所需的镜像在你的私有镜像仓库中可用。
 
 你将需要与你打算升级到的 K3s 版本相对应的 rancher/k3s-upgrade 版本。注意，镜像标签将 K3s 版本中的 `+` 替换为 `-`，因为 Docker 镜像不支持 `+`。
 
@@ -116,4 +116,4 @@ rancher/system-upgrade-controller:v0.4.0
 rancher/kubectl:v0.17.0
 ```
 
-将必要的 rancher/k3s-upgrade、rancher/system-upgrade-controller 和 rancher/kubectl 镜像添加到私有镜像仓库后，请按照[自动升级](upgrades/automated.md)指南进行操作。
+将必要的 rancher/k3s-upgrade、rancher/system-upgrade-controller 和 rancher/kubectl 镜像添加到私有镜像仓库后，请按照[自动升级](../upgrades/automated.md)指南进行操作。

@@ -24,10 +24,24 @@ weight: 40
 curl -sfL https://get.k3s.io | K3S_TOKEN=SECRET sh -s - server --cluster-init
 ```
 
+:::note
+中国用户，可以使用以下方法加速安装：
+```
+curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn K3S_TOKEN=SECRET sh -s - server --cluster-init
+```
+:::
+
 启动第一台服务器后，使用共享 secret  将第二台和第三台服务器加入集群：
 ```bash
 curl -sfL https://get.k3s.io | K3S_TOKEN=SECRET sh -s - server --server https://<ip or hostname of server1>:6443
 ```
+
+:::note
+中国用户，可以使用以下方法加速安装：
+```
+curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn K3S_TOKEN=SECRET sh -s - server --server https://<ip or hostname of server1>:6443
+```
+:::
 
 检查第二个和第三个服务器是否已加入集群：
 
