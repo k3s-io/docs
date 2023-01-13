@@ -49,6 +49,8 @@ k3s certificate rotate --service <SERVICE>,<SERVICE>
 ## 使用 Docker 作为容器运行时
 
 K3s 包含并默认为 [containerd](https://containerd.io/)，它是一个行业标准的容器运行时。
+从 Kubernetes 1.24 开始，Kubelet 不再包含 dockershim，该组件允许 kubelet 与 dockerd 通信。
+K3s 1.24 及更高版本包括了 [cri-dockerd](https://github.com/Mirantis/cri-dockerd)，它允许你无缝升级旧的 K3s 版本，同时继续使用 Docker 容器运行时。
 
 要使用 Docker 而不是 containerd：
 
@@ -97,20 +99,23 @@ K3s 包含并默认为 [containerd](https://containerd.io/)，它是一个行业
 
 ## 使用 etcdctl
 
-etcdctl 为 etcd 提供了一个 CLI。
+etcdctl 提供了一个与 etcd 服务器交互的 CLI。K3s 附带 etcdctl。
 
-如果你想在安装带有嵌入式 etcd 的 K3s 后使用 etcdctl，请参阅[官方文档](https://etcd.io/docs/latest/install/)安装 etcdctl。
+如果你想使用 etcdctl 与 K3s 的嵌入式 etcd 进行交互，请参阅[官方文档](https://etcd.io/docs/latest/install/)安装 etcdctl。
 
 ```bash
-$ VERSION="v3.5.0"
-$ curl -L https://github.com/etcd-io/etcd/releases/download/${VERSION}/etcd-${VERSION}-linux-amd64.tar.gz --output etcdctl-linux-amd64.tar.gz
-$ sudo tar -zxvf etcdctl-linux-amd64.tar.gz --strip-components=1 -C /usr/local/bin etcd-${VERSION}-linux-amd64/etcdctl
+ETCD_VERSION="v3.5.5"
+ETCD_URL="https://github.com/etcd-io/etcd/releases/download/${ETCD_VERSION}/etcd-${ETCD_VERSION}-linux-amd64.tar.gz"
+curl -sL ${ETCD_URL} | sudo tar -zxv --strip-components=1 -C /usr/local/bin
 ```
 
-然后开始使用带有 K3s 标志的 etcdctl 命令：
+然后，你可以将 etcdctl 配置为使用 K3s 管理的证书和密钥来进行身份验证，从而使用 etcdctl：
 
 ```bash
-sudo etcdctl --cacert=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt --cert=/var/lib/rancher/k3s/server/tls/etcd/client.crt --key=/var/lib/rancher/k3s/server/tls/etcd/client.key version
+sudo etcdctl version \
+  --cacert=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt \
+  --cert=/var/lib/rancher/k3s/server/tls/etcd/client.crt \
+  --key=/var/lib/rancher/k3s/server/tls/etcd/client.key
 ```
 
 ## 配置 Containerd
@@ -121,36 +126,88 @@ K3s 会在 `/var/lib/rancher/k3s/agent/etc/containerd/config.toml` 中为 contai
 
 `config.toml.tmpl` 是一个 Go 模板文件，并且 `config.Node` 结构会被传递给模板。有关如何使用该结构自定义配置文件的 Linux 和 Windows 示例，请参阅[此文件夹](https://github.com/k3s-io/k3s/blob/master/pkg/agent/templates)。
 
+## NVIDIA 容器运行时支持
 
-## 以无根模式运行 K3s（实验性）
+如果 NVIDIA 容器运行时在 K3s 启动时存在，K3s 将自动检测并配置它。
 
+1. 按照以下说明在节点上安装 nvidia-container 包仓库：
+   https://nvidia.github.io/libnvidia-container/
+1. 安装 nvidia 容器运行时包。例如：
+   `apt install -y nvidia-container-runtime cuda-drivers-fabricmanager-515 nvidia-headless-515-server`
+1. 安装 K3s，如果已经安装则重启它：
+   `curl -ksL get.k3s.io | sh -`
+1. 确认 K3s 已经找到 nvidia 容器运行时：
+   `grep nvidia /var/lib/rancher/k3s/agent/etc/containerd/config.toml`
+
+这将根据找到的运行时可执行文件自动将 `nvidia` 和/或 `nvidia-experimental` 运行时添加到 containerd 配置中。
+你仍然必须向集群添加 RuntimeClass 定义，并通过在 Pod 规范中设置 `runtimeClassName: nvidia` 来部署显式请求运行时的 Pod：
+```yaml
+apiVersion: node.k8s.io/v1
+kind: RuntimeClass
+metadata:
+  name: nvidia
+handler: nvidia
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nbody-gpu-benchmark
+  namespace: default
+spec:
+  restartPolicy: OnFailure
+  runtimeClassName: nvidia
+  containers:
+  - name: cuda-container
+    image: nvcr.io/nvidia/k8s/cuda-sample:nbody
+    args: ["nbody", "-gpu", "-benchmark"]
+    resources:
+      limits:
+        nvidia.com/gpu: 1
+    env:
+    - name: NVIDIA_VISIBLE_DEVICES
+      value: all
+    - name: NVIDIA_DRIVER_CAPABILITIES
+      value: all
+```
+
+请注意，NVIDIA Container Runtime 也经常与 [NVIDIA Device Plugin](https://github.com/NVIDIA/k8s-device-plugin/) 和 [GPU Feature Discovery](https://github.com/NVIDIA/gpu-feature-discovery/) 一起使用，它们必须单独安装，而且需要修改以确保 Pod 规范能包括 `runtimeClassName: nvidia`，如前所述。
+
+## 运行无 Agent 的 Server（实验性）
 > **警告**：此功能是实验性的。
 
-无根模式允许非特权用户运行整个 k3s，这样可以保护主机上真正的 root 免受潜在的容器攻击。
+当使用 `--disable-agent` 标志启动时，Server 不运行 kubelet、容器运行时或 CNI。它们不会在集群中注册 Node 资源，也不会出现在 `kubectl get nodes` 输出中。
+因为它们不托管 kubelet，所以它们不能运行 pod，也不能由依赖枚举集群节点的 Operator 管理，包括嵌入式 etcd controller 和 system-upgrade-controller。
 
-有关无根模式的更多信息，请参阅[此处](https://rootlesscontaine.rs/)。
+如果你想让 control plane 节点不被 Agent 和工作负载发现，你可以运行无 Agent 的 Server，但是代价是由于缺乏集群 Operator 支持，管理开销会增加。
 
-### 无根模式的已知问题
+## 使用 Rootless 模式运行 Server（实验性）
+> **警告**：此功能是实验性的。
+
+Rootless 模式允许非特权用户运行 K3s Server，这样可以保护主机上真正的 root 免受潜在的容器攻击。
+
+有关 Rootless 模式 Kubernetes 的更多信息，请参阅[此处](https://rootlesscontaine.rs/)。
+
+### Rootless 模式的已知问题
 
 * **端口**
 
-   如果以无根模式运行，将创建一个新的网络命名空间。换言之，K3s 实例在网络与主机完全分离的情况下运行。
+   如果以 Rootless 模式运行，将创建一个新的网络命名空间。换言之，K3s 实例在网络与主机完全分离的情况下运行。
    要从主机访问在 K3s 中运行的 Service，唯一的方法是设置转发到 K3s 网络命名空间的端口。
-   无根模式下的 K3s 包含控制器，它会自动将 6443 和低于 1024 的 Service 端口绑定到偏移量为 10000 的主机。
+   Rootless 模式下的 K3s 包含控制器，它会自动将 6443 和低于 1024 的 Service 端口绑定到偏移量为 10000 的主机。
 
    例如，端口 80 上的 Service 在主机上会变成 10080，但 8080 会变成 8080，没有任何偏移。目前只有 LoadBalancer Service 是自动绑定的。
 
 * **Cgroups**
 
-   不支持 Cgroup v1 和 Hybrid v1/v2，仅支持纯 Cgroup v2。如果 K3s 在无根模式下运行时由于缺少 cgroup 而无法启动，很可能你的节点处于 Hybrid 模式，而且“丢失”的 cgroup 仍然绑定了 v1 控制器。
+   不支持 Cgroup v1 和 Hybrid v1/v2，仅支持纯 Cgroup v2。如果 K3s 在 Rootless 模式下运行时由于缺少 cgroup 而无法启动，很可能你的节点处于 Hybrid 模式，而且“丢失”的 cgroup 仍然绑定了 v1 控制器。
 
 * **多节点/多进程集群**
 
    目前，我们不支持多节点无根集群或同一节点上的多个无根 k3s 进程。有关详细信息，请参阅 [#6488](https://github.com/k3s-io/k3s/issues/6488#issuecomment-1314998091)。
 
-### 使用无根模式运行 Server 和 Agent
+### 启动 Rootless Server
 * 启用 cgroup v2 授权，请参阅 https://rootlesscontaine.rs/getting-started/common/cgroup2/。
-   此步骤是可选的，但强烈建议启用 CPU 和内存资源限制。
+   此步骤是必需的。如果没有正确的 cgroups 授权，rootless kubelet 将无法启动。
 
 * 从 [`https://github.com/k3s-io/k3s/blob/<VERSION>/k3s-rootless.service`](https://github.com/k3s-io/k3s/blob/master/k3s-rootless.service) 下载 `k3s-rootless.service`。
    确保使用了相同版本的 `k3s-rootless.service` 和 `k3s`。
@@ -165,10 +222,8 @@ K3s 会在 `/var/lib/rancher/k3s/agent/etc/containerd/config.toml` 中为 contai
 
 * 运行 `KUBECONFIG=~/.kube/k3s.yaml kubectl get pods -A`，并确保 Pod 正在运行。
 
-> **注意**：不要尝试在终端上运行 `k3s server --rootless`，因为它不会启用 cgroup v2 授权。
-> 如果你确实需要在终端上运行，请在前面添加 `systemd-run --user -p Delegate=yes --tty` 来添加一个 systemd 范围。
->
-> 即：`systemd-run --user -p Delegate=yes --tty k3s server --rootless`
+> **注意**：由于终端会话不允许 cgroup v2 授权，因此不要尝试在终端上运行 `k3s server --rootless`。
+> 如果你确实需要在终端上使用，请使用 `systemd-run --user -p Delegate=yes --tty k3s server --rooless` 将其包装在 systemd 范围内。
 
 ### 高级无根配置
 
@@ -183,7 +238,7 @@ rootlesskit 和 slirp4nets 使用的一些配置可以通过环境变量来设�
 | `K3S_ROOTLESS_PORT_DRIVER` | builtin | 选择无根 port driver，可选值是 `builtin` 或 `slirp4netns`。`builtin` 速度更快，但会伪装入站数据包的原始源地址。 |
 | `K3S_ROOTLESS_DISABLE_HOST_LOOPBACK` | true | 控制是否允许通过网关接口访问主机的环回地址。出于安全原因，建议不要更改此设置。 |
 
-### 故障排除
+### Rootless 模式故障排除
 
 * 运行 `systemctl --user status k3s-rootless` 来检查 daemon 状态
 * 运行 `journalctl --user -f -u k3s-rootless` 来查看​​ daemon 日志
@@ -191,49 +246,27 @@ rootlesskit 和 slirp4nets 使用的一些配置可以通过环境变量来设�
 
 ## 节点标签和污点
 
-K3s Agent 可以通过 `--node-label` 和 `--node-taint` 选项来配置，它们会为 kubelet 添加标签和污点。这两个选项只能[在注册时](../reference/agent-config.md#agent-的节点标签和污点)添加标签和/或污点，因此它们只能被添加一次，之后不能再通过运行 K3s 命令来改变。
+K3s Agent 可以通过 `--node-label` 和 `--node-taint` 选项来配置，它们会为 kubelet 添加标签和污点。这两个选项仅在[注册时](../reference/agent-config.md#agent-的节点标签和污点)添加标签和/或污点，因此只能在节点首次加入集群时设置。
 
-如果你想在节点注册后更改节点标签和污点，你需要使用 `kubectl`。关于如何添加[污点](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/)和[节点标签](https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/#add-a-label-to-a-node)的详细信息，请参阅官方 Kubernetes 文档。
+当前所有的 Kubernetes 版本都限制节点注册到带有 `kubernetes.io` 和 `k8s.io` 前缀的大部分标签，特别是 `kubernetes.io/role` 标签。如果你尝试启动带有不允许的标签的节点，K3s 将无法启动。正如 Kubernetes 作者所说：
 
-## 使用安装脚本启动 Server
+> 不允许节点断言自己的角色标签。节点角色通常用于识别节点的特权或 control plane 类型，如果允许节点将自己标记到该池，那么受感染的节点将能吸引可授予更高特权凭证访问权限的工作负载（如 control plane 守护进程）。
 
-安装脚本将自动检测你的操作系统是使用 systemd 还是 openrc 并启动服务。
-使用 openrc 运行时，将在 `/var/log/k3s.log` 中创建日志。
+有关详细信息，请参阅 [SIG-Auth KEP 279](https://github.com/kubernetes/enhancements/blob/master/keps/sig-auth/279-limit-node-access/README.md#proposal)。
 
-使用 systemd 运行时，将在 `/var/log/syslog` 中创建日志并使用 `journalctl -u k3s` 查看。
+如果你想在节点注册后更改节点标签和污点，或者添加保留标签，请使用 `kubectl`。关于如何添加[污点](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/)和[节点标签](https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/#add-a-label-to-a-node)的详细信息，请参阅官方 Kubernetes 文档。
 
-使用安装脚本安装和自动启动的示例：
+## 使用安装脚本启动服务
 
-```bash
-curl -sfL https://get.k3s.io | sh -
-```
+安装脚本将自动检测你的操作系统使用的是 systemd 还是 openrc，并在安装过程中启动该服务。
+* 使用 openrc 运行时，将在 `/var/log/k3s.log` 中创建日志。
+* 使用 systemd 运行时，将在 `/var/log/syslog` 中创建日志，你可以通过 `journalctl -u k3s`（Agent 上是 `journalctl -u k3s-agent`）查看日志。
 
-:::note
-中国用户，可以使用以下方法加速安装：
-```
-curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn sh -
-```
-:::
-
-手动运行 server 时，你应该得到类似于以下内容的输出：
+使用安装脚本禁用自动启动和服务启用的示例：
 
 ```bash
-$ k3s server
-INFO[2019-01-22T15:16:19.908493986-07:00] Starting k3s dev                             
-INFO[2019-01-22T15:16:19.908934479-07:00] Running kube-apiserver --allow-privileged=true --authorization-mode Node,RBAC --service-account-signing-key-file /var/lib/rancher/k3s/server/tls/service.key --service-cluster-ip-range 10.43.0.0/16 --advertise-port 6445 --advertise-address 127.0.0.1 --insecure-port 0 --secure-port 6444 --bind-address 127.0.0.1 --tls-cert-file /var/lib/rancher/k3s/server/tls/localhost.crt --tls-private-key-file /var/lib/rancher/k3s/server/tls/localhost.key --service-account-key-file /var/lib/rancher/k3s/server/tls/service.key --service-account-issuer k3s --api-audiences unknown --basic-auth-file /var/lib/rancher/k3s/server/cred/passwd --kubelet-client-certificate /var/lib/rancher/k3s/server/tls/token-node.crt --kubelet-client-key /var/lib/rancher/k3s/server/tls/token-node.key
-Flag --insecure-port has been deprecated, This flag will be removed in a future version.
-INFO[2019-01-22T15:16:20.196766005-07:00] Running kube-scheduler --kubeconfig /var/lib/rancher/k3s/server/cred/kubeconfig-system.yaml --port 0 --secure-port 0 --leader-elect=false
-INFO[2019-01-22T15:16:20.196880841-07:00] Running kube-controller-manager --kubeconfig /var/lib/rancher/k3s/server/cred/kubeconfig-system.yaml --service-account-private-key-file /var/lib/rancher/k3s/server/tls/service.key --allocate-node-cidrs --cluster-cidr 10.42.0.0/16 --root-ca-file /var/lib/rancher/k3s/server/tls/token-ca.crt --port 0 --secure-port 0 --leader-elect=false
-Flag --port has been deprecated, see --secure-port instead.
-INFO[2019-01-22T15:16:20.273441984-07:00] Listening on :6443                           
-INFO[2019-01-22T15:16:20.278383446-07:00] Writing manifest: /var/lib/rancher/k3s/server/manifests/coredns.yaml
-INFO[2019-01-22T15:16:20.474454524-07:00] Node token is available at /var/lib/rancher/k3s/server/node-token
-INFO[2019-01-22T15:16:20.474471391-07:00] To join node to cluster: k3s agent -s https://10.20.0.3:6443 -t ${NODE_TOKEN}
-INFO[2019-01-22T15:16:20.541027133-07:00] Wrote kubeconfig /etc/rancher/k3s/k3s.yaml
-INFO[2019-01-22T15:16:20.541049100-07:00] Run: k3s kubectl                             
+curl -sfL https://get.k3s.io | INSTALL_K3S_SKIP_START=true INSTALL_K3S_SKIP_ENABLE=true sh -
 ```
-
-由于 Agent 会创建大量日志，因此输出可能会更长。默认情况下，Server 会将自己注册为一个节点（运行 Agent）。
 
 ## 其他操作系统准备
 
