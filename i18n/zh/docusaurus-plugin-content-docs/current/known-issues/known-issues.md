@@ -14,6 +14,6 @@ weight: 70
 
 此外，版本 1.8.0-1.8.4 存在可能导致 K3s 失败的问题。有关解决方法，请参阅[其他操作系统准备](../advanced/advanced.md#旧的-iptables-版本)。
 
-### 无根模式
+### Rootless 模式
 
-使用无根模式运行 K3s 是实验性的，存在几个[已知问题](../advanced/advanced.md#无根模式的已知问题)。
+使用 Rootless 模式运行 K3s 是实验性的，存在几个[已知问题](../advanced/advanced.md#rootless-模式的已知问题)。

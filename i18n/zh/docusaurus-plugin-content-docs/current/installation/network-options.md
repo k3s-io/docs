@@ -100,6 +100,21 @@ cat /etc/cni/net.d/10-calico.conflist
 </TabItem>
 </Tabs>
 
+## Control Plane Egress 选择器配置
+
+K3s Agent 和 Server 维护节点之间的 websocket 隧道，这些隧道用于封装 control plane（apiserver）和 Agent（kubelet 和 containerd）组件之间的双向通信。
+这允许 Agent 在不将 kubelet 和容器运行时流端口暴露给传入连接的情况下运行，并允许 control plane 在禁用 Agent 的情况下连接到集群服务。
+此功能等同于其他 Kubernetes 发行版上常用的 [Konnectivity](https://kubernetes.io/docs/tasks/extend-kubernetes/setup-konnectivity/) 服务，通过 apiserver 的 Egress 选择器配置进行管理。
+
+你可以使用 `--egress-selector-mode` 标志在 Server 上配置 Egress 选择器模式，支持四种模式：
+* `disabled`：apiserver 不使用 Agent 隧道与 kubelet 或集群端点通信。
+   此模式要求 Server 运行 kubelet、CNI 和 kube-proxy，并与 Agent 直接连接，否则 apiserver 将无法访问 Service 端点或执行 `kubectl exec` 和 `kubectl logs`。
+* `agent`：apiserver 使用 Agent 隧道与 kubelet 通信。
+   这种模式要求 Server 也运行 kubelet、CNI 和 kube-proxy，否则 apiserver 将无法访问 Service 端点。
+* `pod`（默认）：apiserver 使用 Agent 隧道与 kubelets 和 Service 端点通信，通过监视节点将端点连接路由到正确的 Agent。
+   **注意**：如果 CNI 使用自己的 IPAM，而且不考虑节点的 PodCIDR 分配，这将不起作用。这些 CNI 需要使用 `cluster` 或 `agent`。
+* `cluster`：apiserver 使用 Agent 隧道与 kubelets 和 Service 端点通信，通过监视端点将端点连接路由到正确的 Agent。
+
 ## 双栈安装
 
 :::info 版本
@@ -156,3 +171,5 @@ K3s 集群仍然可以部署在使用不同私有网络且不直接连接的节�
 > **警告**：如果外部连接需要更多的跃点，那么节点之间的延迟会变高。延迟太高会降低网络性能，还可能影响集群的运行。
 
 > **警告**：嵌入式 etcd 不会使用外部 IP 进行通信。如果使用嵌入式 etcd，所有 Server 节点必须可以通过其私有 IP 相互访问。
+
+
