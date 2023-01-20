@@ -70,7 +70,7 @@ To select a particular subset of nodes to host pods for a LoadBalancer, set matc
 3. Create one LoadBalancer Service on port 443 with label `svccontroller.k3s.cattle.io/lbpool=pool1`. The DaemonSet for this service only deploy Pods to Node A and Node B.
 4. Create another LoadBalancer Service on port 443 with label `svccontroller.k3s.cattle.io/lbpool=pool2`. The DaemonSet will only deploy Pods to Node C and Node D.
 
-The svccontroller.k3s.cattle.io/enablelb label must also be set on the nodes otherwise the pool label will be ignored.
+The `svccontroller.k3s.cattle.io/enablelb` label must also be set on the nodes otherwise the pool label will be ignored.
 
 ### Disabling the Service LB
 
