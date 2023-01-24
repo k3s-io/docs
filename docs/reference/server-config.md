@@ -38,7 +38,7 @@ In this section, you'll learn how to configure the K3s server.
 | `--etcd-expose-metrics`               | N/A                        | Expose etcd metrics to client interface (default: false)                                                 |
 | `--etcd-disable-snapshots`            | N/A                        | Disable automatic etcd snapshots                                                                         |
 | `--etcd-snapshot-name` value          | N/A                        | Set the base name of etcd snapshots. Default: etcd-snapshot-`<unix-timestamp>` (default:"etcd-snapshot") |
-| `--etcd-snapshot-schedule-cron` value | N/A                        | Snapshot interval time in cron spec. eg. every 5 hours '\* _/5 _ \* _' (default: "0 _/12 \* \* \*")      |
+| `--etcd-snapshot-schedule-cron` value | N/A                        | Snapshot interval time in cron spec. eg. every 5 hours '0 */5 _ \* _' (default: "0 */12 \* \* \*")      |
 | `--etcd-snapshot-retention` value     | N/A                        | Number of snapshots to retain (default: 5)                                                               |
 | `--etcd-snapshot-dir` value           | N/A                        | Directory to save db snapshots (default: ${data-dir}/db/snapshots)                                       |
 | `--etcd-s3`                           | N/A                        | Enable backup to S3                                                                                      |
