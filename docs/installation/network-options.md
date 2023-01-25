@@ -109,9 +109,9 @@ This functionality is equivalent to the [Konnectivity](https://kubernetes.io/doc
 The egress selector mode may be configured on servers via the `--egress-selector-mode` flag, and offers four modes:
 * `disabled`: The apiserver does not use agent tunnels to communicate with kubelets or cluster endpoints.
   This mode requires that servers run the kubelet, CNI, and kube-proxy, and have direct connectivity to agents, or the apiserver will not be able to access service endpoints or perform `kubectl exec` and `kubectl logs`.
-* `agent`: The apiserver uses agent tunnels to communicate with kubelets.
+* `agent` (default): The apiserver uses agent tunnels to communicate with kubelets.
   This is mode requires that servers also run the kubelet, CNI, and kube-proxy, or the apiserver will not be able to access service endpoints.
-* `pod` (default): The apiserver uses agent tunnels to communicate with kubelets and service endpoints, routing endpoint connections to the correct agent by watching Nodes.
+* `pod`: The apiserver uses agent tunnels to communicate with kubelets and service endpoints, routing endpoint connections to the correct agent by watching Nodes.
   **NOTE**: This will not work when using a CNI that uses its own IPAM and does not respect the node's PodCIDR allocation. `cluster` or `agent` should be used with these CNIs instead.
 * `cluster`: The apiserver uses agent tunnels to communicate with kubelets and service endpoints, routing endpoint connections to the correct agent by watching Endpoints.
 
