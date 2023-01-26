@@ -3,6 +3,9 @@ title: Backup and Restore
 weight: 26
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 The way K3s is backed up and restored depends on which type of datastore is used.
 
 - [Backup and Restore with External Datastore](#backup-and-restore-with-external-datastore)
@@ -44,7 +47,12 @@ To configure the snapshot interval or the number of retained snapshots, refer to
 
 When K3s is restored from backup, the old data directory will be moved to `${data-dir}/server/db/etcd-old/`. Then K3s will attempt to restore the snapshot by creating a new data directory, then starting etcd with a new K3s cluster with one etcd member.
 
-To restore the cluster from backup, run K3s with the `--cluster-reset` option, with the `--cluster-reset-restore-path` also given:
+To restore the cluster from backup:
+
+<Tabs>
+<TabItem value="Single Server">
+
+Run K3s with the `--cluster-reset` option, with the --cluster-reset-restore-path` also given:
 
 ```bash
 k3s server \
@@ -53,6 +61,44 @@ k3s server \
 ```
 
 **Result:** A message in the logs says that K3s can be restarted without the flags. Start k3s again and should run successfully and be restored from the specified snapshot.
+
+</TabItem>
+
+<TabItem value="High Availability">
+
+In this example there are 3 servers, `S1`, `S2`, and `S3`. The snapshot is located on `S1`.
+
+1. On S1, start K3s with the `--cluster-reset` option, with the `--cluster-reset-restore-path` also given:
+
+  ```bash
+  k3s server \
+    --cluster-reset \
+    --cluster-reset-restore-path=<PATH-TO-SNAPSHOT>
+  ```
+
+  **Result:** A message in the logs says that K3s can be restarted without the flags.
+
+2. On S2 and S3, stop K3s. Then delete the data directory, `/var/lib/rancher/k3s/server/db/`:
+
+  ```bash
+    systemctl stop k3s
+    rm -rf /var/lib/rancher/k3s/server/db/
+  ```
+
+3. On S1, start K3s again:
+
+  ```bash
+  systemctl start k3s
+  ```
+
+4. On S2 and S3, start K3s again to join the restored cluster:
+
+  ```bash
+  systemctl start k3s
+  ```
+
+</TabItem>
+</Tabs>
 
 #### Options
 
