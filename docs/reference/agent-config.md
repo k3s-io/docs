@@ -22,7 +22,7 @@ In this section, you'll learn how to configure the K3s agent.
 | Flag                    | Default | Description                                                          |
 | ----------------------- | ------- | -------------------------------------------------------------------- |
 | `-v` value              | 0       | Number for the log level verbosity                                   |
-| `--vmodule` value       | N/A     | Comma-separated list of pattern=N settings for file-filtered logging |
+| `--vmodule` value       | N/A     | Comma-separated list of FILE_PATTERN=LOG_LEVEL settings for file-filtered logging |
 | `--log value, -l` value | N/A     | Log to file                                                          |
 | `--alsologtostderr`     | N/A     | Log to standard error as well as file (if set)                       |
 
@@ -42,18 +42,21 @@ In this section, you'll learn how to configure the K3s agent.
 
 ### Node
 
-| Flag                 | Environment Variable | Description                                         |
-| -------------------- | -------------------- | --------------------------------------------------- |
-| `--node-name` value  | `K3S_NODE_NAME`      | Node name                                           |
-| `--with-node-id`     | N/A                  | Append id to node name                              |
-| `--node-label` value | N/A                  | Registering and starting kubelet with set of labels |
-| `--node-taint` value | N/A                  | Registering kubelet with set of taints              |
+| Flag                        | Environment Variable | Description                                                                                   |
+| --------------------------- | -------------------- | --------------------------------------------------------------------------------------------- |
+| `--node-name` value         | `K3S_NODE_NAME`      | Node name                                                                                     |
+| `--with-node-id`            | N/A                  | Append id to node name                                                                        |
+| `--node-label` value        | N/A                  | Registering and starting kubelet with set of labels                                           |
+| `--node-taint` value        | N/A                  | Registering kubelet with set of taints                                                        |
+| `--protect-kernel-defaults` | N/A                  | Kernel tuning behavior. If set, error if kernel tunables are different from kubelet defaults. |
+|   `--selinux` | `K3S_SELINUX` | Enable SELinux in containerd |
+|   `--lb-server-port` value | `K3S_LB_SERVER_PORT` | Local port for supervisor client load-balancer. If the supervisor and apiserver are not colocated an additional port 1 less than this port will also be used for the apiserver client load-balancer. (default: 6444) |
 
 ### Runtime
 
 | Flag                                 | Default                            | Description                                                        |
 | ------------------------------------ | ---------------------------------- | ------------------------------------------------------------------ |
-| `--container-runtime-endpoint` value | N/A                                | Disable embedded containerd and use alternative CRI implementation |
+| `--container-runtime-endpoint` value | N/A                                | Disable embedded containerd and use the CRI socket at the given path; when used with --docker this sets the cri-docker socket path |
 | `--pause-image` value                | "docker.io/rancher/pause:3.1"      | Customized pause image for containerd or docker sandbox            |
 | `--private-registry` value           | "/etc/rancher/k3s/registries.yaml" | Private registry configuration file                                |
 
@@ -81,6 +84,7 @@ In this section, you'll learn how to configure the K3s agent.
 | ------------ | ------------------------------------- |
 | `--rootless` | Run rootless                          |
 | `--docker`   | Use cri-dockerd instead of containerd |
+| `--prefer-bundled-bin` | Prefer bundled userspace binaries over host binaries |
 
 ### Deprecated
 
@@ -118,7 +122,7 @@ OPTIONS:
    --config FILE, -c FILE                     (config) Load configuration from FILE (default: "/etc/rancher/k3s/config.yaml") [$K3S_CONFIG_FILE]
    --debug                                    (logging) Turn on debug logs [$K3S_DEBUG]
    -v value                                   (logging) Number for the log level verbosity (default: 0)
-   --vmodule value                            (logging) Comma-separated list of pattern=N settings for file-filtered logging
+   --vmodule value                            (logging) Comma-separated list of FILE_PATTERN=LOG_LEVEL settings for file-filtered logging
    --log value, -l value                      (logging) Log to file
    --alsologtostderr                          (logging) Log to standard error as well as file (if set)
    --token value, -t value                    (cluster) Token to use for authentication [$K3S_TOKEN]
@@ -131,7 +135,10 @@ OPTIONS:
    --node-taint value                         (agent/node) Registering kubelet with set of taints
    --image-credential-provider-bin-dir value  (agent/node) The path to the directory where credential provider plugin binaries are located (default: "/var/lib/rancher/credentialprovider/bin")
    --image-credential-provider-config value   (agent/node) The path to the credential provider plugin config file (default: "/var/lib/rancher/credentialprovider/config.yaml")
-   --container-runtime-endpoint value         (agent/runtime) Disable embedded containerd and use alternative CRI implementation
+   --selinux                                  (agent/node) Enable SELinux in containerd [$K3S_SELINUX]
+   --lb-server-port value                     (agent/node) Local port for supervisor client load-balancer. If the supervisor and apiserver are not colocated an additional port 1 less than this port will also be used for the apiserver client load-balancer. (default: 6444) [$K3S_LB_SERVER_PORT]
+   --protect-kernel-defaults                  (agent/node) Kernel tuning behavior. If set, error if kernel tunables are different than kubelet defaults.
+   --container-runtime-endpoint value         (agent/runtime) Disable embedded containerd and use the CRI socket at the given path; when used with --docker this sets the docker socket path
    --pause-image value                        (agent/runtime) Customized pause image for containerd or docker sandbox (default: "rancher/mirrored-pause:3.6")
    --snapshotter value                        (agent/runtime) Override default containerd snapshotter (default: "overlayfs")
    --private-registry value                   (agent/runtime) Private registry configuration file (default: "/etc/rancher/k3s/registries.yaml")
@@ -143,11 +150,7 @@ OPTIONS:
    --flannel-cni-conf value                   (agent/networking) Override default flannel cni config file
    --kubelet-arg value                        (agent/flags) Customized flag for kubelet process
    --kube-proxy-arg value                     (agent/flags) Customized flag for kube-proxy process
-   --protect-kernel-defaults                  (agent/node) Kernel tuning behavior. If set, error if kernel tunables are different than kubelet defaults.
    --rootless                                 (experimental) Run rootless
-   --selinux                                  (agent/node) Enable SELinux in containerd [$K3S_SELINUX]
-   --lb-server-port value                     (agent/node) Local port for supervisor client load-balancer. If the supervisor and apiserver are not colocated an additional port 1 less than this port will also be used for the apiserver client load-balancer. (default: 6444) [$K3S_LB_SERVER_PORT]
-   --docker                                   (deprecated) Use docker instead of containerd
-   --no-flannel                               (deprecated) use --flannel-backend=none
-   --cluster-secret value                     (deprecated) use --token [$K3S_CLUSTER_SECRET]
+   --prefer-bundled-bin                       (experimental) Prefer bundled userspace binaries over host binaries
+   --docker                                   (agent/runtime) (experimental) Use cri-dockerd instead of containerd
 ```
