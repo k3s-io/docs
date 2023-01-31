@@ -43,7 +43,7 @@ Follow the steps in the next section to install K3s.
 
 ### Prerequisites
 
-- Before installing K3s, complete the the [Private Registry Method](#private-registry-method) or the [Manually Deploy Images Method](#manually-deploy-images-method) above to prepopulate the images that K3s needs to install.
+- Before installing K3s, complete the [Private Registry Method](#private-registry-method) or the [Manually Deploy Images Method](#manually-deploy-images-method) above to prepopulate the images that K3s needs to install.
 - Download the K3s binary from the [releases](https://github.com/rancher/k3s/releases) page, matching the same version used to get the airgap images. Place the binary in `/usr/local/bin` on each air-gapped node and ensure it is executable.
 - Download the K3s install script at https://get.k3s.io. Place the install script anywhere on each air-gapped node, and name it `install.sh`.
 
