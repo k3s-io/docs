@@ -22,7 +22,7 @@ weight: 2
 | 标志 | 默认 | 描述 |
 | ----------------------- | ------- | -------------------------------------------------------------------- |
 | `-v` value | 0 | 表示日志级别详细程度的数字 |
-| `--vmodule` value | N/A | pattern=N 格式，用逗号分隔的列表，用于文件过滤日志 |
+| `--vmodule` value | N/A | FILE_PATTERN=LOG_LEVEL 格式，用逗号分隔的列表，用于文件过滤日志 |
 | `--log value, -l` value | N/A | 记录到文件 |
 | `--alsologtostderr` | N/A | 记录到标准错误以及文件（如果设置） |
 
@@ -43,17 +43,20 @@ weight: 2
 ### 节点
 
 | 标志 | 环境变量 | 描述 |
-| -------------------- | -------------------- | --------------------------------------------------- |
+| --------------------------- | -------------------- | --------------------------------------------------------------------------------------------- |
 | `--node-name` value | `K3S_NODE_NAME` | 节点名称 |
 | `--with-node-id` | N/A | 将 ID 尾附到节点名称 |
 | `--node-label` value | N/A | 使用一组标签注册和启动 kubelet |
 | `--node-taint` value | N/A | 使用一组污点注册 kubelet |
+| `--protect-kernel-defaults` | N/A | 内核调优行为。如果设置了，当内核可调项与 kubelet 默认值不同时会出错。 |
+| `--selinux` | `K3S_SELINUX` | 在 containerd 中启用 SELinux |
+| `--lb-server-port` value | `K3S_LB_SERVER_PORT` | Supervisor 客户端负载均衡器的本地端口。如果 supervisor 和 apiserver 没有位于同一位置，则比该端口小 1 的端口也将用于 apiserver 客户端负载均衡器（默认值：6444） |
 
 ### 运行时
 
 | 标志 | 默认 | 描述 |
 | ------------------------------------ | ---------------------------------- | ------------------------------------------------------------------ |
-| `--container-runtime-endpoint` value | N/A | 禁用嵌入式 containerd 并使用替代的 CRI 实现 |
+| `--container-runtime-endpoint` value | N/A | 禁用嵌入式 containerd 并在给定路径使用 CRI 套接字。当与 --docker 一起使用时，这会设置 cri-docker 套接字路径 |
 | `--pause-image` value | "docker.io/rancher/pause:3.1" | 为 containerd 或 Docker 沙盒定制的 pause 镜像 |
 | `--private-registry` value | "/etc/rancher/k3s/registries.yaml" | 私有镜像仓库配置文件 |
 
@@ -81,6 +84,7 @@ weight: 2
 | ------------ | ------------------------------------- |
 | `--rootless` | 无根运行 |
 | `--docker` | 使用 cri-dockerd 而不是 containerd |
+| `--prefer-bundled-bin` | 偏向打包的用户空间二进制文件，而不是主机二进制文件 |
 
 ### 已弃用
 
@@ -118,7 +122,7 @@ OPTIONS:
    --config FILE, -c FILE                     (config) Load configuration from FILE (default: "/etc/rancher/k3s/config.yaml") [$K3S_CONFIG_FILE]
    --debug                                    (logging) Turn on debug logs [$K3S_DEBUG]
    -v value                                   (logging) Number for the log level verbosity (default: 0)
-   --vmodule value                            (logging) Comma-separated list of pattern=N settings for file-filtered logging
+   --vmodule value                            (logging) Comma-separated list of FILE_PATTERN=LOG_LEVEL settings for file-filtered logging
    --log value, -l value                      (logging) Log to file
    --alsologtostderr                          (logging) Log to standard error as well as file (if set)
    --token value, -t value                    (cluster) Token to use for authentication [$K3S_TOKEN]
@@ -131,7 +135,10 @@ OPTIONS:
    --node-taint value                         (agent/node) Registering kubelet with set of taints
    --image-credential-provider-bin-dir value  (agent/node) The path to the directory where credential provider plugin binaries are located (default: "/var/lib/rancher/credentialprovider/bin")
    --image-credential-provider-config value   (agent/node) The path to the credential provider plugin config file (default: "/var/lib/rancher/credentialprovider/config.yaml")
-   --container-runtime-endpoint value         (agent/runtime) Disable embedded containerd and use alternative CRI implementation
+   --selinux                                  (agent/node) Enable SELinux in containerd [$K3S_SELINUX]
+   --lb-server-port value                     (agent/node) Local port for supervisor client load-balancer. If the supervisor and apiserver are not colocated an additional port 1 less than this port will also be used for the apiserver client load-balancer.(default: 6444) [$K3S_LB_SERVER_PORT]
+   --protect-kernel-defaults                  (agent/node) Kernel tuning behavior. If set, error if kernel tunables are different than kubelet defaults.
+   --container-runtime-endpoint value         (agent/runtime) Disable embedded containerd and use the CRI socket at the given path; when used with --docker this sets the docker socket path
    --pause-image value                        (agent/runtime) Customized pause image for containerd or docker sandbox (default: "rancher/mirrored-pause:3.6")
    --snapshotter value                        (agent/runtime) Override default containerd snapshotter (default: "overlayfs")
    --private-registry value                   (agent/runtime) Private registry configuration file (default: "/etc/rancher/k3s/registries.yaml")
@@ -143,11 +150,7 @@ OPTIONS:
    --flannel-cni-conf value                   (agent/networking) Override default flannel cni config file
    --kubelet-arg value                        (agent/flags) Customized flag for kubelet process
    --kube-proxy-arg value                     (agent/flags) Customized flag for kube-proxy process
-   --protect-kernel-defaults                  (agent/node) Kernel tuning behavior. If set, error if kernel tunables are different than kubelet defaults.
    --rootless                                 (experimental) Run rootless
-   --selinux                                  (agent/node) Enable SELinux in containerd [$K3S_SELINUX]
-   --lb-server-port value                     (agent/node) Local port for supervisor client load-balancer. 如果 supervisor 和 apiserver 没有位于同一位置，则比该端口小 1 的端口也将用于 apiserver 客户端负载均衡器(default: 6444) [$K3S_LB_SERVER_PORT]
-   --docker                                   (deprecated) Use docker instead of containerd
-   --no-flannel                               (deprecated) use --flannel-backend=none
-   --cluster-secret value                     (deprecated) use --token [$K3S_CLUSTER_SECRET]
+   --prefer-bundled-bin                       (experimental) Prefer bundled userspace binaries over host binaries
+   --docker                                   (agent/runtime) (experimental) Use cri-dockerd instead of containerd
 ```

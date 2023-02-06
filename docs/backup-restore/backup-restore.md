@@ -52,7 +52,7 @@ To restore the cluster from backup:
 <Tabs>
 <TabItem value="Single Server">
 
-Run K3s with the `--cluster-reset` option, with the --cluster-reset-restore-path` also given:
+Run K3s with the `--cluster-reset` option, with the `--cluster-reset-restore-path` also given:
 
 ```bash
 k3s server \
@@ -70,32 +70,32 @@ In this example there are 3 servers, `S1`, `S2`, and `S3`. The snapshot is locat
 
 1. On S1, start K3s with the `--cluster-reset` option, with the `--cluster-reset-restore-path` also given:
 
-  ```bash
-  k3s server \
-    --cluster-reset \
-    --cluster-reset-restore-path=<PATH-TO-SNAPSHOT>
-  ```
+    ```bash
+    k3s server \
+      --cluster-reset \
+      --cluster-reset-restore-path=<PATH-TO-SNAPSHOT>
+    ```
 
-  **Result:** A message in the logs says that K3s can be restarted without the flags.
+    **Result:** A message in the logs says that K3s can be restarted without the flags.
 
 2. On S2 and S3, stop K3s. Then delete the data directory, `/var/lib/rancher/k3s/server/db/`:
 
-  ```bash
+    ```bash
     systemctl stop k3s
     rm -rf /var/lib/rancher/k3s/server/db/
-  ```
+    ```
 
 3. On S1, start K3s again:
 
-  ```bash
-  systemctl start k3s
-  ```
+    ```bash
+    systemctl start k3s
+    ```
 
 4. On S2 and S3, start K3s again to join the restored cluster:
 
-  ```bash
-  systemctl start k3s
-  ```
+    ```bash
+    systemctl start k3s
+    ```
 
 </TabItem>
 </Tabs>

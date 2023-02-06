@@ -3,6 +3,9 @@ title: 备份和恢复
 weight: 26
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 K3s 的备份和恢复方式取决于你使用的数据存储类型。
 
 - [使用外部数据存储进行备份和恢复](#使用外部数据存储进行备份和恢复)
@@ -44,7 +47,12 @@ K3s 的备份和恢复方式取决于你使用的数据存储类型。
 
 使用备份恢复 K3s 时，旧的数据目录将被移动到 `${data-dir}/server/db/etcd-old/`。然后 K3s 将尝试通过创建一个新的数据目录来恢复快照，然后使用具有一个 etcd 成员的新 K3s 集群启动 etcd。
 
-要使用备份来恢复集群，请使用 `--cluster-reset` 选项运行 K3s，同时指定 `--cluster-reset-restore-path`，如下：
+使用备份恢复集群：
+
+<Tabs>
+<TabItem value="单服务器">
+
+使用 `--cluster-reset` 选项运行 K3s，同时指定 `--cluster-reset-restore-path`：
 
 ```bash
 k3s server \
@@ -53,6 +61,44 @@ k3s server \
 ```
 
 **结果**：日志中的一条消息表示 K3s 可以在没有标志的情况下重新启动。再次启动 K3s，K3s 应该会成功运行并通过指定的快照恢复。
+
+</TabItem>
+
+<TabItem value="高可用">
+
+在此示例中有 3 个 Server，分别是 `S1`、`S2`和 `S3`。快照位于 `S1` 上。
+
+1. 在 S1 上，使用 `--cluster-reset` 选项运行 K3s，同时指定 `--cluster-reset-restore-path`：
+
+   ```bash
+   k3s server \
+     --cluster-reset \
+     --cluster-reset-restore-path=<PATH-TO-SNAPSHOT>
+   ```
+
+   **结果**：日志中的一条消息表示 K3s 可以在没有标志的情况下重新启动。
+
+2. 在 S2 和 S3 上，停止 K3s。然后删除数据目录 `/var/lib/rancher/k3s/server/db/`：
+
+   ```bash
+   systemctl stop k3s
+   rm -rf /var/lib/rancher/k3s/server/db/
+   ```
+
+3. 在 S1 上，再次启动 K3s：
+
+   ```bash
+   systemctl start k3s
+   ```
+
+4. 在 S2 和 S3 上，再次启动 K3s 以加入恢复后的集群：
+
+   ```bash
+   systemctl start k3s
+   ```
+
+</TabItem>
+</Tabs>
 
 #### 选项
 

@@ -59,7 +59,7 @@ K3s v1.25 and newer support [Pod Security Admissions (PSAs)](https://kubernetes.
 
 The policy should be written to a file named `psa.yaml` in `/var/lib/rancher/k3s/server` directory. 
 
-Here is an example of a complaint PSA:
+Here is an example of a compliant PSA:
 ```yaml
 apiVersion: apiserver.config.k8s.io/v1
 kind: AdmissionConfiguration
