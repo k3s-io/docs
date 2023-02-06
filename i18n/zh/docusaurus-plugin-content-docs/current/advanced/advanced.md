@@ -46,6 +46,33 @@ k3s certificate rotate --service <SERVICE>,<SERVICE>
 
 有关部署 Helm Chart 的更多信息，请参阅 [Helm](../helm/helm.md) 部分。
 
+## 配置 HTTP 代理
+
+如果你运行 K3s 的环境中只通过 HTTP 代理进行外部连接，你可以在 K3s 的 systemd 服务上配置代理。K3s 将使用这些代理设置，并向下传递到嵌入式 containerd 和 kubelet。
+
+K3s 安装脚本会自动使用当前 shell 中的 `HTTP_PROXY`、`HTTPS_PROXY` 和 `NO_PROXY`，以及 `CONTAINERD_HTTP_PROXY`、`CONTAINERD_HTTPS_PROXY` 和 `CONTAINERD_NO_PROXY` 变量（如果存在），并将它们写入 systemd 服务的环境文件，通常是：
+
+- `/etc/systemd/system/k3s.service.env`
+- `/etc/systemd/system/k3s-agent.service.env`
+
+你也可以通过编辑这些文件来配置代理。
+
+K3s 会自动将集群内部 Pod 和 Service IP 范围以及集群 DNS 域添加到 `NO_PROXY` 条目列表中。你需要确保 Kubernetes 节点本身使用的 IP 地址范围（即节点的公共和私有 IP）包含在 `NO_PROXY` 列表中，或者可以通过代理访问节点。
+
+```
+HTTP_PROXY=http://your-proxy.example.com:8888
+HTTPS_PROXY=http://your-proxy.example.com:8888
+NO_PROXY=127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
+```
+
+如果你想在不影响 K3s 和 Kubelet 的情况下为 containerd 配置代理，你可以在变量前加上 `CONTAINERD_`：
+
+```
+CONTAINERD_HTTP_PROXY=http://your-proxy.example.com:8888
+CONTAINERD_HTTPS_PROXY=http://your-proxy.example.com:8888
+CONTAINERD_NO_PROXY=127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
+```
+
 ## 使用 Docker 作为容器运行时
 
 K3s 包含并默认为 [containerd](https://containerd.io/)，它是一个行业标准的容器运行时。
