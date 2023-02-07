@@ -107,7 +107,7 @@ with the same environment variables.
 
 ### Automated Upgrades Method
 
-As of v1.17.4+k3s1 K3s supports [automated upgrades](../upgrades/automated.md). To enable this in air-gapped environments, you must ensure the required images are available in your private registry.
+K3s supports [automated upgrades](../upgrades/automated.md). To enable this in air-gapped environments, you must ensure the required images are available in your private registry.
 
 You will need the version of rancher/k3s-upgrade that corresponds to the version of K3s you intend to upgrade to. Note, the image tag replaces the `+` in the K3s release with a `-` because Docker images do not support `+`.
 

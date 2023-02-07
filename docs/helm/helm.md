@@ -55,10 +55,13 @@ spec:
 | spec.targetNamespace | default | Helm Chart target namespace | `--namespace` |
 | spec.version |   | Helm Chart version (when installing from repository) | `--version` |
 | spec.repo |   | Helm Chart repository URL | `--repo` |
+| spec.repoCA | | Specify the certificates of HTTPS-enabled servers | `--ca-file` |
 | spec.helmVersion | v3 | Helm version to use (`v2` or `v3`) |  |
 | spec.bootstrap | False | Set to True if this chart is needed to bootstrap the cluster (Cloud Controller Manager, etc) |  |
 | spec.set |   | Override simple default Chart values. These take precedence over options set via valuesContent. | `--set` / `--set-string` |
 | spec.jobImage |   | Specify the image to use when installing the helm chart. E.g. rancher/klipper-helm:v0.3.0 . | |
+| spec.timeout | 300 | Timeout in seconds for Helm operations | `--timeout` |
+| spec.failurePolicy | reinstall | Set to `abort` which case the Helm operation is aborted, pending manual intervention by the operator. | |
 | spec.valuesContent |   | Override complex default Chart values via YAML file content | `--values` |
 | spec.chartContent |   | Base64-encoded chart archive .tgz - overrides spec.chart | CHART |
 
