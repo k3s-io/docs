@@ -45,7 +45,7 @@ curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=vX.Y.Z-rc1 sh -
 
 Or to manually upgrade K3s:
 
-1. Download the desired version of the K3s binary from [releases](https://github.com/rancher/k3s/releases)
+1. Download the desired version of the K3s binary from [releases](https://github.com/k3s-io/k3s/releases)
 2. Copy the downloaded binary to `/usr/local/bin/k3s` (or your desired location)
 3. Stop the old k3s binary
 4. Launch the new k3s binary

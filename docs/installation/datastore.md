@@ -62,7 +62,7 @@ As mentioned, the format of the value passed to the `datastore-endpoint` paramet
 
   More advanced configuration parameters are available. For more information on these, please see https://github.com/go-sql-driver/mysql#dsn-data-source-name
 
-  Note that due to a [known issue](https://github.com/rancher/k3s/issues/1093) in K3s, you cannot set the `tls` parameter. TLS communication is supported, but you cannot, for example, set this parameter to "skip-verify" to cause K3s to skip certificate verification.
+  Note that due to a [known issue](https://github.com/k3s-io/k3s/issues/1093) in K3s, you cannot set the `tls` parameter. TLS communication is supported, but you cannot, for example, set this parameter to "skip-verify" to cause K3s to skip certificate verification.
 
   If you specify a database name and it does not exist, the server will attempt to create it.
 

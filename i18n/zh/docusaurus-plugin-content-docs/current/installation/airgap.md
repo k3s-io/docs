@@ -26,7 +26,7 @@ import TabItem from '@theme/TabItem';
 此方法需要你手动将必要的镜像部署到每个节点，适用于无法运行私有镜像仓库的边缘部署。
 
 ### 准备镜像目录和 K3s 二进制文件
-从 [Releases](https://github.com/rancher/k3s/releases) 页面获取要运行的 K3s 版本的镜像 tar 文件。
+从 [Releases](https://github.com/k3s-io/k3s/releases) 页面获取要运行的 K3s 版本的镜像 tar 文件。
 
 将 tar 文件放在 `images` 目录下，例如：
 
@@ -44,7 +44,7 @@ sudo cp ./k3s-airgap-images-$ARCH.tar /var/lib/rancher/k3s/agent/images/
 ### 先决条件
 
 - 在安装 K3s 之前，完成上面的[私有镜像仓库](#私有镜像仓库)或[手动部署镜像](#手动部署镜像)操作，预填充 K3s 需要安装的镜像。
-- 从 [Releases](https://github.com/rancher/k3s/releases) 页面下载 K3s 二进制文件，该文件需要匹配用于获取离线镜像的版本。将二进制文件放在每个离线节点上的 `/usr/local/bin` 中，并确保文件是可执行的。
+- 从 [Releases](https://github.com/k3s-io/k3s/releases) 页面下载 K3s 二进制文件，该文件需要匹配用于获取离线镜像的版本。将二进制文件放在每个离线节点上的 `/usr/local/bin` 中，并确保文件是可执行的。
 - 在 https://get.k3s.io 下载 K3s 安装脚本。将安装脚本放在每个离线节点上的任何位置，并将其命名为 `install.sh`。
 
 使用 `INSTALL_K3S_SKIP_DOWNLOAD` 环境变量运行 K3s 脚本时，K3s 将使用脚本的本地版本和二进制文件。
@@ -98,7 +98,7 @@ INSTALL_K3S_SKIP_DOWNLOAD=true INSTALL_K3S_EXEC='server' K3S_DATASTORE_ENDPOINT=
 
 你可以通过以下方式完成离线环境的升级：
 
-1. 从 [Releases](https://github.com/rancher/k3s/releases) 页面下载要升级的 K3s 版本的新离线镜像 tar 包。将 tar 文件放在每个节点上的 `/var/lib/rancher/k3s/agent/images/` 目录中。删除旧的 tar 文件。
+1. 从 [Releases](https://github.com/k3s-io/k3s/releases) 页面下载要升级的 K3s 版本的新离线镜像 tar 包。将 tar 文件放在每个节点上的 `/var/lib/rancher/k3s/agent/images/` 目录中。删除旧的 tar 文件。
 2. 复制并替换每个节点上 `/usr/local/bin` 中的旧 K3s 二进制文件。复制 [K3s 安装脚本](https://get.k3s.io)（因为脚本可能自上次版本发布以来已更改）。使用相同的环境变量再次运行脚本。
 3. 重启 K3s 服务（如果安装程序没有自动重启 K3s 的话）。
 

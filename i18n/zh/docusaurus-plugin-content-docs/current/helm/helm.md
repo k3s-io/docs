@@ -18,11 +18,11 @@ K3s 不需要任何特殊配置即可配合 Helm 命令行工具一起使用。�
 
 在 `/var/lib/rancher/k3s/server/manifests` 中找到的 Kubernetes 清单都会以类似于 `kubectl apply` 的方式自动部署到 K3s。以这种方式部署的清单作为 AddOn 自定义资源进行管理，你可以通过运行 `kubectl get addon -A` 查看它们。你能找到用于打包组件的 AddOn，例如 CoreDNS、Local-Storage、Traefik 等。AddOn 由部署控制器自动创建，并根据它们在清单目录中的文件名命名。
 
-你也可以将 Helm Chart 部署为 AddOn。K3s 包含一个 [Helm Controller](https://github.com/rancher/helm-controller/)，它使用 HelmChart 自定义资源定义 (CRD) 管理 Helm Chart。
+你也可以将 Helm Chart 部署为 AddOn。K3s 包含一个 [Helm Controller](https://github.com/k3s-io/helm-controller/)，它使用 HelmChart 自定义资源定义 (CRD) 管理 Helm Chart。
 
 ### 使用 Helm CRD
 
-[HelmChart 资源定义](https://github.com/rancher/helm-controller#helm-controller)捕获了你通常传递给 `helm` 命令行工具的大部分选项。以下示例说明了如何从默认 Chart 仓库部署 Grafana，并覆盖某些默认的 Chart 值。请注意，HelmChart 资源本身位于 `kube-system` 命名空间中，但 Chart 的资源将部署到 `monitoring` 命名空间。
+[HelmChart 资源定义](https://github.com/k3s-io/helm-controller#helm-controller)捕获了你通常传递给 `helm` 命令行工具的大部分选项。以下示例说明了如何从默认 Chart 仓库部署 Grafana，并覆盖某些默认的 Chart 值。请注意，HelmChart 资源本身位于 `kube-system` 命名空间中，但 Chart 的资源将部署到 `monitoring` 命名空间。
 
 ```yaml
 apiVersion: helm.cattle.io/v1

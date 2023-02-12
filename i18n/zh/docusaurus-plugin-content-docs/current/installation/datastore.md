@@ -62,7 +62,7 @@ K3s 支持以下数据存储选项：
 
 支持使用更高级的配置参数。有关更多信息，请参阅 https://github.com/go-sql-driver/mysql#dsn-data-source-name
 
-请注意，由于 K3s 的一个[已知问题](https://github.com/rancher/k3s/issues/1093)，你无法设置 `tls` 参数。TLS 通信是支持的，但你不能将此参数设置为 “skip-verify” 以使 K3s 跳过证书验证。
+请注意，由于 K3s 的一个[已知问题](https://github.com/k3s-io/k3s/issues/1093)，你无法设置 `tls` 参数。TLS 通信是支持的，但你不能将此参数设置为 “skip-verify” 以使 K3s 跳过证书验证。
 
 如果指定数据库名称不存在，server 将尝试创建它。
 

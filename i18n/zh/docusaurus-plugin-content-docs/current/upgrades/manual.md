@@ -52,7 +52,7 @@ curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=vX.Y.Z-rc1 sh -
 
 或者手动升级 K3s：
 
-1. 从 [releases](https://github.com/rancher/k3s/releases) 页面下载所需版本的 K3s 二进制文件
+1. 从 [releases](https://github.com/k3s-io/k3s/releases) 页面下载所需版本的 K3s 二进制文件
 2. 将下载的二进制文件复制到 `/usr/local/bin/k3s`（或你想要的位置）
 3. 停止旧的 K3s 二进制文件
 4. 启动新的 K3s 二进制文件
