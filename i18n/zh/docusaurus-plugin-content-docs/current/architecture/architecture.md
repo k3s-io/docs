@@ -80,4 +80,4 @@ Agent 将使用节点集群 Secret 以及随机生成的节点密码注册到 Se
 
 ### 自动部署的清单
 
-位于 `/var/lib/rancher/k3s/server/manifests` 路径下的[清单](https://github.com/rancher/k3s/tree/master/manifests)在构建时被捆绑到 K3s 二进制文件中，将由 [rancher/helm-controller](https://github.com/rancher/helm-controller#helm-controller) 在运行时安装。
+位于 `/var/lib/rancher/k3s/server/manifests` 路径下的[清单](https://github.com/k3s-io/k3s/tree/master/manifests)在构建时被捆绑到 K3s 二进制文件中，将由 [rancher/helm-controller](https://github.com/k3s-io/helm-controller#helm-controller) 在运行时安装。

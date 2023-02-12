@@ -20,7 +20,7 @@ weight: 20
 有关 system-upgrade-controller 的设计和架构，以及它与 K3s 集成的更多详细信息，请参阅以下 Git 仓库：
 
 - [system-upgrade-controller](https://github.com/rancher/system-upgrade-controller)
-- [k3s-upgrade](https://github.com/rancher/k3s-upgrade)
+- [k3s-upgrade](https://github.com/k3s-io/k3s-upgrade)
 
 要以这种方式自动升级，你必须执行以下操作：
 

@@ -32,7 +32,7 @@ For details on all environment variables, see [Environment Variables.](../refere
 ## Configuration with binary
 
 As stated, the installation script is primarily concerned with configuring K3s to run as a service.  
-If you choose to not use the script, you can run K3s simply by downloading the binary from our [release page](https://github.com/rancher/k3s/releases/latest), placing it on your path, and executing it. Or you can install K3s without enabling it as a service:
+If you choose to not use the script, you can run K3s simply by downloading the binary from our [release page](https://github.com/k3s-io/k3s/releases/latest), placing it on your path, and executing it. Or you can install K3s without enabling it as a service:
 ```bash
 curl -sfL https://get.k3s.io | INSTALL_K3S_SKIP_ENABLE=true sh -
 ```

@@ -32,7 +32,7 @@ curl -sfL https://get.k3s.io | sh -s - --flannel-backend none --token 12345
 ## 二进制配置
 
 如前所述，安装脚本主要是将 K3s 配置为服务来运行。  
-如果你选择不使用该脚本，你可以通过我们的 [Releases 页面](https://github.com/rancher/k3s/releases/latest)下载二进制文件，将其放在你的路径上，然后执行它即可运行 K3s。或者你可以安装 K3s 而不将其作为服务启用：
+如果你选择不使用该脚本，你可以通过我们的 [Releases 页面](https://github.com/k3s-io/k3s/releases/latest)下载二进制文件，将其放在你的路径上，然后执行它即可运行 K3s。或者你可以安装 K3s 而不将其作为服务启用：
 ```bash
 curl -sfL https://get.k3s.io | INSTALL_K3S_SKIP_ENABLE=true sh -
 ```

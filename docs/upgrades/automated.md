@@ -33,7 +33,7 @@ Users can and should use Rancher to upgrade their K3s cluster if Rancher is mana
 For more details on the design and architecture of the system-upgrade-controller or its integration with K3s, see the following Git repositories:
 
 - [system-upgrade-controller](https://github.com/rancher/system-upgrade-controller)
-- [k3s-upgrade](https://github.com/rancher/k3s-upgrade)
+- [k3s-upgrade](https://github.com/k3s-io/k3s-upgrade)
 
 
 ### Install the system-upgrade-controller
