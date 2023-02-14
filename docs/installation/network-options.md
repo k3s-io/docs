@@ -57,7 +57,7 @@ Start K3s with `--flannel-backend=none` and install your CNI of choice. Most CNI
 <Tabs>
 <TabItem value="Canal" default>
 
-Visit the [Project Calico Docs](https://docs.projectcalico.org/) website. Follow the steps to install Canal. Modify the Canal YAML so that IP forwarding is allowed in the `container_settings` section, for example:
+Visit the [Project Calico Docs](https://docs.tigera.io/calico/) website. Follow the steps to install Canal. Modify the Canal YAML so that IP forwarding is allowed in the `container_settings` section, for example:
 
 ```yaml
 "container_settings": {
@@ -78,7 +78,7 @@ You should see that IP forwarding is set to true.
 </TabItem>
 <TabItem value="Calico" default>
 
-Follow the [Calico CNI Plugins Guide](https://docs.tigera.io/calico/3.25/reference/configure-cni-plugins). Modify the Calico YAML so that IP forwarding is allowed in the `container_settings` section, for example:
+Follow the [Calico CNI Plugins Guide](https://docs.tigera.io/calico/latest/reference/configure-cni-plugins). Modify the Calico YAML so that IP forwarding is allowed in the `container_settings` section, for example:
 
 ```yaml
 "container_settings": {
