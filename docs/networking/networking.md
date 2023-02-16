@@ -57,13 +57,13 @@ Create a [Service of type LoadBalancer](https://kubernetes.io/docs/concepts/serv
 
 ### Controlling ServiceLB Node Selection
 
-To exclude nodes from being used by ServiceLB, add the following label to the nodes that should host ServiceLB Pods. All unlabeled nodes will not be used for ServiceLB.
+In order for ServiceLB to assign nodes to pools, nodes must have the following label:
 
 ```
 svccontroller.k3s.cattle.io/enablelb
 ```
 
-To select a particular subset of nodes to host pods for a LoadBalancer, set matching annotation values on the Nodes and Service. For example:
+To select a particular subset of nodes to host pods for a LoadBalancer, set matching label values on the Nodes and Service. For example:
 
 1. Label Node A and Node B with `svccontroller.k3s.cattle.io/lbpool=pool1`
 2. Label Node C and Node D with `svccontroller.k3s.cattle.io/lbpool=pool2`
