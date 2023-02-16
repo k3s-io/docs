@@ -14,7 +14,7 @@ Great for:
 * ARM
 * Embedding K8s
 * Situations where a PhD in K8s clusterology is infeasible
-* Is this signed???
+* Is this signed??? Now???
 # What is K3s?
 
 K3s is a fully compliant Kubernetes distribution with the following enhancements:
