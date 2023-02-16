@@ -13,11 +13,11 @@ When upgrading, upgrade server nodes first one at a time, then any agent nodes.
 
 Upgrades performed via the installation script or using our [automated upgrades](automated.md) feature can be tied to different release channels. The following channels are available:
 
-| Channel |   Description  |
-|---------------|---------|
-|      stable     | (Default) Stable is recommended for production environments. These releases have been through a period of community hardening. |
-|      latest      | Latest is recommended for trying out the latest features.  These releases have not yet been through a period of community hardening. |
-|      v1.22 (example)      | There is a release channel tied to each supported Kubernetes minor version. At the time of this writing, they are `v1.22`, `v1.23`, and `v1.24`. These channels will select the latest patch available, not necessarily a stable release. |
+| Channel        |   Description  |
+|----------------|---------|
+| stable         | (Default) Stable is recommended for production environments. These releases have been through a period of community hardening. |
+| latest         | Latest is recommended for trying out the latest features.  These releases have not yet been through a period of community hardening. |
+| v1.26 (example)| There is a release channel tied to each Kubernetes minor version, including versions that are end-of-life. These channels will select the latest patch available, not necessarily a stable release. |
 
 For an exhaustive and up-to-date list of channels, you can visit the [k3s channel service API](https://update.k3s.io/v1-release/channels). For more technical details on how channels work, you see the [channelserver project](https://github.com/rancher/channelserver).
 
