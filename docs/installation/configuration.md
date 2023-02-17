@@ -20,11 +20,21 @@ You can use a combination of `INSTALL_K3S_EXEC`, `K3S_` environment variables, a
 To illustrate this, the following commands all result in the same behavior of registering a server without flannel and with a token:
 
 ```bash
-curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--flannel-backend none --token 12345" sh -s -
+curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server" sh -s - --flannel-backend none --token 12345
 curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --flannel-backend none" K3S_TOKEN=12345 sh -s -
-curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server" sh -s - --flannel-backend none
 curl -sfL https://get.k3s.io | K3S_TOKEN=12345 sh -s - server --flannel-backend none
+# server is assumed below because there is no K3S_URL
+curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--flannel-backend none --token 12345" sh -s - 
 curl -sfL https://get.k3s.io | sh -s - --flannel-backend none --token 12345
+```
+
+When registering an agent, the following commands all result in the same behavior:
+
+```bash
+curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="agent --server https://k3s.example.com --token mypassword" sh -s -
+curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="agent" K3s_TOKEN="mypassword" sh -s - --server https://k3s.example.com
+curl -sfL https://get.k3s.io | K3S_URL=https://k3s.example.com sh -s - agent --token mypassword
+curl -sfL https://get.k3s.io | K3S_URL=https://k3s.example.com K3S_TOKEN=mypassword sh -s - # agent is assumed becuase of K3S_URL
 ```
 
 For details on all environment variables, see [Environment Variables.](../reference/env-variables.md)
@@ -82,19 +92,21 @@ tls-san:
 node-label:
   - "foo=bar"
   - "something=amazing"
+cluster-init: true
 ```
 
-In general, CLI arguments map to their respective YAML key, with repeatable CLI arguments being represented as YAML lists.
-
-An identical configuration using only CLI arguments is shown below to demonstrate this:
+This is equivalent to the following CLI arguments:
 
 ```bash
 k3s server \
   --write-kubeconfig-mode "0644"    \
   --tls-san "foo.local"             \
   --node-label "foo=bar"            \
-  --node-label "something=amazing"
+  --node-label "something=amazing"  \
+  --cluster-init
 ```
+
+In general, CLI arguments map to their respective YAML key, with repeatable CLI arguments being represented as YAML lists. Boolean flags are represented as `true` or `false` in the YAML file.
 
 It is also possible to use both a configuration file and CLI arguments. In these situations, values will be loaded from both sources, but CLI arguments will take precedence. For repeatable arguments such as `--node-label`, the CLI arguments will overwrite all values in the list.
 
