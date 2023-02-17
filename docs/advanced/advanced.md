@@ -317,6 +317,14 @@ It is recommended to turn off firewalld:
 systemctl disable firewalld --now
 ```
 
+If you wish to keep firewalld enabled, the following rules are required:
+```bash
+firewall-cmd --permanent --add-port=6443/tcp # flannel
+firewall-cmd --permanent --zone=trusted --add-source=10.42.0.0/16
+firewall-cmd --permanent --zone=trusted --add-source=10.43.0.0/16 # services
+firewall-cmd --reload
+```
+
 If enabled, it is required to disable nm-cloud-setup and reboot the node:
 ```bash
 systemctl disable nm-cloud-setup.service nm-cloud-setup.timer
@@ -330,10 +338,11 @@ It is recommended to turn off ufw (uncomplicated firewall):
 ufw disable
 ```
 
-However, if you want to keep ufw enabled, you need to, at minimum, apply the following rules:
+If you wish to keep ufw enabled, the following rules are required:
 ```bash
-ufw allow from 10.42.0.0/16 to any
-ufw allow from 10.43.0.0/16 to any
+ufw allow 6443/tcp
+ufw allow from 10.42.0.0/16 to any #pods
+ufw allow from 10.43.0.0/16 to any #services
 ```
 
 ### Raspberry Pi
