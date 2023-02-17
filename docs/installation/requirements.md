@@ -61,7 +61,9 @@ If you plan on achieving high availability with embedded etcd, server nodes must
 | UDP      | 51820     | All nodes | All nodes   | Required only for Flannel Wireguard with IPv4
 | UDP      | 51821     | All nodes | All nodes   | Required only for Flannel Wireguard with IPv6
 
-Typically all outbound traffic is allowed.
+Typically, all outbound traffic is allowed.
+
+Additional changes to the firewall may be required depending on the OS used. See [Additional OS Preparations](../advanced/advanced.md#additional-os-preparations).
 
 ## Large Clusters
 
