@@ -168,8 +168,20 @@ where `SERVER_EXTERNAL_IP` is the IP through which we can reach the server node 
 
 Both `SERVER_EXTERNAL_IP` and `AGENT_EXTERNAL_IP` must have connectivity between them and are normally public IPs.
 
-> **Warning:** The latency between nodes will increase as external connectivity requires more hops. This will reduce the network performance and could also impact the health of the cluster if latency is too high.
+:::info Dynamic IPs
+If nodes are assigned dynamic IPs and the IP changes (e.g. in AWS), you must modify the `--node-external-ip` parameter to reflect the new IP. If running k3s as a service, you must modify `/etc/systemd/system/k3s.service` then run:
 
-> **Warning:** Embedded etcd will not use external IPs for communication. If using embedded etcd; all server nodes must be reachable to each other via their private IPs.
+```bash
+systemctl daemon-reload
+systemctl restart k3s
+```
+:::
 
+:::caution Warning
+The latency between nodes will increase as external connectivity requires more hops. This will reduce the network performance and could also impact the health of the cluster if latency is too high.
+:::
+
+:::caution Warning
+Embedded etcd will not use external IPs for communication. If using embedded etcd; all server nodes must be reachable to each other via their private IPs.
+:::
 
