@@ -17,7 +17,11 @@ Embedded etcd (HA) may have performance issues on slower disks such as Raspberry
 :::
 
 ## New cluster
-To run K3s in this mode, you must have an odd number of server nodes. We recommend starting with three nodes.
+To run K3s in this mode, you must have an odd number of server nodes. We recommend starting with three nodes. An HA K3s cluster(with Embedded etcd) is comprised of:
+
+* An odd number (at least three) of **server nodes** that will run etcd, the Kubernetes API, and other control plane services
+* Zero or more **agent nodes** that are designated to run your apps and services
+* A **fixed registration address** that is placed in front of the server nodes to allow agent nodes to register with the cluster
 
 To get started, first launch a server node with the `cluster-init` flag to enable clustering and a token that will be used as a shared secret to join additional servers to the cluster.
 ```bash
