@@ -112,6 +112,45 @@ It is also possible to use both a configuration file and CLI arguments. In these
 
 Finally, the location of the config file can be changed either through the CLI argument `--config FILE, -c FILE`, or the environment variable `$K3S_CONFIG_FILE`.
 
+### Multiple Config Files
+:::info Version Gate
+Available as of [v1.21.0+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.21.0%2Bk3s1)
+:::
+
+Multiple configuration files are supported. Configuration is load by default from `/etc/rancher/k3s/config.yaml` and `/etc/rancher/k3s/config.d/*.yaml` in alphabetical order. The last value for a given key will be used. Slices are replaced.
+
+An example of multiple config files is below:
+
+```yaml
+# config.yaml
+token: boop
+node-label:
+  - foo=bar
+  - bar=baz
+
+
+# config.yaml.d/test1.yaml
+write-kubeconfig-mode: 600
+
+
+# config.yaml.d/test2.yaml
+write-kubeconfig-mode: 777
+node-label:
+  - other=what
+  - foo=three
+
+```
+
+This results in a final configuration of:
+
+```yaml
+write-kubeconfig-mode: 777
+token: boop
+node-label:
+  - other=what
+  - foo=three
+```
+
 ## Putting it all together
 
 All of the above options can be combined into a single example.
@@ -133,3 +172,9 @@ Or if you have already installed the K3s Binary:
 ```bash
 K3S_KUBECONFIG_MODE="644" k3s server --flannel-backend none
 ```
+
+This results in a server with:
+- A kubeconfig file with permissions `644`
+- Flannel backend set to `none`
+- The token set to `secret`
+- Debug logging enabled
