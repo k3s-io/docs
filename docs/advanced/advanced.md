@@ -149,9 +149,10 @@ sudo etcdctl version \
 
 K3s will generate config.toml for containerd in `/var/lib/rancher/k3s/agent/etc/containerd/config.toml`.
 
-For advanced customization for this file you can create another file called `config.toml.tmpl` in the same directory and it will be used instead.
+For advanced customization for this file you can create another file called `config.toml.tmpl` in the same directory, and it will be used instead.
 
 The `config.toml.tmpl` will be treated as a Go template file, and the `config.Node` structure is being passed to the template. See [this folder](https://github.com/k3s-io/k3s/blob/master/pkg/agent/templates) for Linux and Windows examples on how to use the structure to customize the configuration file.
+The config.Node golang struct is defined [here](https://github.com/k3s-io/k3s/blob/master/pkg/daemons/config/types.go#L37)
 
 ## NVIDIA Container Runtime Support
 
@@ -320,6 +321,19 @@ If enabled, it is required to disable nm-cloud-setup and reboot the node:
 ```bash
 systemctl disable nm-cloud-setup.service nm-cloud-setup.timer
 reboot
+```
+
+### Ubuntu
+
+It is recommended to turn off ufw (uncomplicated firewall):
+```bash
+ufw disable
+```
+
+However, if you want to keep ufw enabled, you need to, at minimum, apply the following rules:
+```bash
+ufw allow from 10.42.0.0/16 to any
+ufw allow from 10.43.0.0/16 to any
 ```
 
 ### Raspberry Pi
