@@ -117,7 +117,7 @@ Finally, the location of the config file can be changed either through the CLI a
 Available as of [v1.21.0+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.21.0%2Bk3s1)
 :::
 
-Multiple configuration files are supported. Configuration loads by default from `/etc/rancher/k3s/config.yaml` and `/etc/rancher/k3s/config.yaml.d/*.yaml` in alphabetical order. The last value for a given key will be used. Slices are replaced.
+Multiple configuration files are supported. By default, configuration files are read from `/etc/rancher/k3s/config.yaml` and `/etc/rancher/k3s/config.yaml.d/*.yaml` in alphabetical order. The last value for a given key will be used. A `+` can be appended to the key to append the value to the existing string or slice, instead of replacing it.
 
 An example of multiple config files is below:
 
