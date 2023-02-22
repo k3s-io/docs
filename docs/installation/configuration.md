@@ -20,11 +20,21 @@ You can use a combination of `INSTALL_K3S_EXEC`, `K3S_` environment variables, a
 To illustrate this, the following commands all result in the same behavior of registering a server without flannel and with a token:
 
 ```bash
-curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--flannel-backend none --token 12345" sh -s -
+curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server" sh -s - --flannel-backend none --token 12345
 curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --flannel-backend none" K3S_TOKEN=12345 sh -s -
-curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server" sh -s - --flannel-backend none
 curl -sfL https://get.k3s.io | K3S_TOKEN=12345 sh -s - server --flannel-backend none
+# server is assumed below because there is no K3S_URL
+curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--flannel-backend none --token 12345" sh -s - 
 curl -sfL https://get.k3s.io | sh -s - --flannel-backend none --token 12345
+```
+
+When registering an agent, the following commands all result in the same behavior:
+
+```bash
+curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="agent --server https://k3s.example.com --token mypassword" sh -s -
+curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="agent" K3s_TOKEN="mypassword" sh -s - --server https://k3s.example.com
+curl -sfL https://get.k3s.io | K3S_URL=https://k3s.example.com sh -s - agent --token mypassword
+curl -sfL https://get.k3s.io | K3S_URL=https://k3s.example.com K3S_TOKEN=mypassword sh -s - # agent is assumed because of K3S_URL
 ```
 
 For details on all environment variables, see [Environment Variables.](../reference/env-variables.md)
@@ -82,23 +92,64 @@ tls-san:
 node-label:
   - "foo=bar"
   - "something=amazing"
+cluster-init: true
 ```
 
-In general, CLI arguments map to their respective YAML key, with repeatable CLI arguments being represented as YAML lists.
-
-An identical configuration using only CLI arguments is shown below to demonstrate this:
+This is equivalent to the following CLI arguments:
 
 ```bash
 k3s server \
   --write-kubeconfig-mode "0644"    \
   --tls-san "foo.local"             \
   --node-label "foo=bar"            \
-  --node-label "something=amazing"
+  --node-label "something=amazing"  \
+  --cluster-init
 ```
+
+In general, CLI arguments map to their respective YAML key, with repeatable CLI arguments being represented as YAML lists. Boolean flags are represented as `true` or `false` in the YAML file.
 
 It is also possible to use both a configuration file and CLI arguments. In these situations, values will be loaded from both sources, but CLI arguments will take precedence. For repeatable arguments such as `--node-label`, the CLI arguments will overwrite all values in the list.
 
 Finally, the location of the config file can be changed either through the CLI argument `--config FILE, -c FILE`, or the environment variable `$K3S_CONFIG_FILE`.
+
+### Multiple Config Files
+:::info Version Gate
+Available as of [v1.21.0+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.21.0%2Bk3s1)
+:::
+
+Multiple configuration files are supported. By default, configuration files are read from `/etc/rancher/k3s/config.yaml` and `/etc/rancher/k3s/config.yaml.d/*.yaml` in alphabetical order. The last value for a given key will be used. A `+` can be appended to the key to append the value to the existing string or slice, instead of replacing it.
+
+An example of multiple config files is below:
+
+```yaml
+# config.yaml
+token: boop
+node-label:
+  - foo=bar
+  - bar=baz
+
+
+# config.yaml.d/test1.yaml
+write-kubeconfig-mode: 600
+
+
+# config.yaml.d/test2.yaml
+write-kubeconfig-mode: 777
+node-label:
+  - other=what
+  - foo=three
+
+```
+
+This results in a final configuration of:
+
+```yaml
+write-kubeconfig-mode: 777
+token: boop
+node-label:
+  - other=what
+  - foo=three
+```
 
 ## Putting it all together
 
@@ -121,3 +172,9 @@ Or if you have already installed the K3s Binary:
 ```bash
 K3S_KUBECONFIG_MODE="644" k3s server --flannel-backend none
 ```
+
+This results in a server with:
+- A kubeconfig file with permissions `644`
+- Flannel backend set to `none`
+- The token set to `secret`
+- Debug logging enabled

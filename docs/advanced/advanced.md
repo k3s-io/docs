@@ -149,9 +149,10 @@ sudo etcdctl version \
 
 K3s will generate config.toml for containerd in `/var/lib/rancher/k3s/agent/etc/containerd/config.toml`.
 
-For advanced customization for this file you can create another file called `config.toml.tmpl` in the same directory and it will be used instead.
+For advanced customization for this file you can create another file called `config.toml.tmpl` in the same directory, and it will be used instead.
 
 The `config.toml.tmpl` will be treated as a Go template file, and the `config.Node` structure is being passed to the template. See [this folder](https://github.com/k3s-io/k3s/blob/master/pkg/agent/templates) for Linux and Windows examples on how to use the structure to customize the configuration file.
+The config.Node golang struct is defined [here](https://github.com/k3s-io/k3s/blob/master/pkg/daemons/config/types.go#L37)
 
 ## NVIDIA Container Runtime Support
 
@@ -316,11 +317,37 @@ It is recommended to turn off firewalld:
 systemctl disable firewalld --now
 ```
 
+If you wish to keep firewalld enabled, by default, the following rules are required:
+```bash
+firewall-cmd --permanent --add-port=6443/tcp #apiserver
+firewall-cmd --permanent --zone=trusted --add-source=10.42.0.0/16 #pods
+firewall-cmd --permanent --zone=trusted --add-source=10.43.0.0/16 #services
+firewall-cmd --reload
+```
+
+Additional ports may need to be opened depending on your setup. See [Inbound Rules](../installation/requirements.md#inbound-rules-for-k3s-server-nodes) for more information. If you change the default CIDR for pods or services, you will need to update the firewall rules accordingly.
+
 If enabled, it is required to disable nm-cloud-setup and reboot the node:
 ```bash
 systemctl disable nm-cloud-setup.service nm-cloud-setup.timer
 reboot
 ```
+
+### Ubuntu
+
+It is recommended to turn off ufw (uncomplicated firewall):
+```bash
+ufw disable
+```
+
+If you wish to keep ufw enabled, by default, the following rules are required:
+```bash
+ufw allow 6443/tcp #apiserver
+ufw allow from 10.42.0.0/16 to any #pods
+ufw allow from 10.43.0.0/16 to any #services
+```
+
+Additional ports may need to be opened depending on your setup. See [Inbound Rules](../installation/requirements.md#inbound-rules-for-k3s-server-nodes) for more information. If you change the default CIDR for pods or services, you will need to update the firewall rules accordingly.
 
 ### Raspberry Pi
 

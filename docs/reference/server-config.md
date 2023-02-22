@@ -176,7 +176,7 @@ the agent options are there because the server has the agent process embedded wi
 
 | Flag                         | Description                                                                                                                                   |
 | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| `--disable` value            | Do not deploy packaged components and delete any deployed components (valid items: coredns, servicelb, traefik,local-storage, metrics-server) |
+| `--disable` value            | Do not deploy packaged components and delete any deployed components (valid items: coredns, servicelb, traefik,local-storage, metrics-server). Multiple components can be disabled with a comma sperated list (`--disable coredns,traefik`). |
 | `--disable-scheduler`        | Disable Kubernetes default scheduler              |
 | `--disable-cloud-controller` | Disable k3s default cloud controller manager      |
 | `--disable-kube-proxy`       | Disable running kube-proxy                        |
@@ -209,11 +209,11 @@ the agent options are there because the server has the agent process embedded wi
 
 | Flag                                    | Environment Variable | Description                                                                                                 |
 | --------------------------------------- | -------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `--no-flannel`                          | N/A                  | Use --flannel-backend=none                                                                                  |
-| `--no-deploy` value                     | N/A                  | Do not deploy packaged components (valid items: coredns, servicelb, traefik, local-storage, metrics-server) |
-| `--cluster-secret` value                | `K3S_CLUSTER_SECRET` | Use --token                                                                                                 |
-| `--flannel-backend` wireguard           | N/A                  | Use --flannel-backend=wireguard-native                                                                      |
-| `--flannel-backend` value=option1=value | N/A                  | Use --flannel-conf to specify the flannel config file with the backend config                               |
+| `--no-flannel`                          | N/A                  | Use `--flannel-backend=none`                                                                                  |
+| `--no-deploy` value                     | N/A                  | Use `--disable` |
+| `--cluster-secret` value                | `K3S_CLUSTER_SECRET` | Use `--token`                                                                                                 |
+| `--flannel-backend` wireguard           | N/A                  | Use `--flannel-backend=wireguard-native`                                                                      |
+| `--flannel-backend` value=option1=value | N/A                  | Use `--flannel-conf` to specify the flannel config file with the backend config                               |
 
 # K3s Server CLI Help
 
