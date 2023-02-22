@@ -23,11 +23,17 @@ Please reference the K3s [BUILDING.md](https://github.com/k3s-io/k3s/blob/master
 
 ### Where are the K3s logs?
 
-The installation script will auto-detect if your OS is using systemd or openrc and start the service.
+The location of K3s logs will vary depending on how you run K3s and the node's OS.
 
 * When run from the command line, logs are sent to stdout and stderr.
 * When running under openrc, logs will be created at `/var/log/k3s.log`.
 * When running under Systemd, logs will be sent to Journald and can be viewed using `journalctl -u k3s`.
+* Pod logs can be found at `/var/log/pods`.
+* Containerd logs can be found at `/var/lib/rancher/k3s/agent/containerd/containerd.log`.
+
+You can generate more detailed logs by using the `--debug` flag when starting K3s (or `debug: true` in the configuration file).
+
+See [Additional Logging Sources](../advanced/advanced.md#additional-logging-sources) for even more log options.
 
 ### Can I run K3s in Docker?
 
