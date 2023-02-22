@@ -14,13 +14,7 @@ It also describes how agent nodes are registered with K3s servers.
 * An agent node is defined as a host running the `k3s agent` command, without any datastore or control-plane components.
 * Both servers and agents run the kubelet, container runtime, and CNI. See the [Advanced Options](../advanced/advanced.md#running-agentless-servers-experimental) documentation for more information on running agentless servers.
 
-This page covers the following topics:
-
-- [Single-server setup with an embedded database](#single-server-setup-with-an-embedded-db)
-- [High-availability K3s server with an external database](#high-availability-k3s-server-with-an-external-db)
-  - [Fixed registration address for agent nodes](#fixed-registration-address-for-agent-nodes)
-- [How agent node registration works](#how-agent-node-registration-works)
-- [Automatically deployed manifests](#automatically-deployed-manifests)
+![](/img/how-it-works-k3s-revised.svg)
 
 ### Single-server Setup with an Embedded DB
 
