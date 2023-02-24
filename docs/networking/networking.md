@@ -31,6 +31,13 @@ If Traefik is not disabled K3s versions 1.20 and earlier will install Traefik v1
 
 To migrate from an older Traefik v1 instance please refer to the [Traefik documentation](https://doc.traefik.io/traefik/migration/v1-to-v2/) and [migration tool](https://github.com/traefik/traefik-migration-tool).
 
+
+## Network Policy Controller
+
+K3s includes an embedded network policy controller. The underlying implementation is [kube-router's](https://github.com/cloudnativelabs/kube-router) netpol controller library (no other kube-router functionality is present) and can be found [here](https://github.com/k3s-io/k3s/tree/master/pkg/agent/netpol). 
+
+To disable it, start each server with the `--disable-network-policy` flag.
+
 ## Service Load Balancer
 
 Any service load balancer (LB) can be used in your K3s cluster. By default, K3s provides a load balancer known as [ServiceLB](https://github.com/k3s-io/klipper-lb) (formerly Klipper Load Balancer) that uses available host ports.
@@ -75,6 +82,14 @@ To select a particular subset of nodes to host pods for a LoadBalancer, set matc
 To disable the embedded LB, configure all servers in the cluster with the `--disable=servicelb` option.
 
 This is necessary if you wish to run a different LB, such as MetalLB.
+
+## External Cloud Controller Manager
+
+K3s ships with a stub Cloud Controller Manager (CCM) that does not actually implement any functionality. In order to use an external CCM, you must start K3s with the `--disable-cloud-controller` flag. 
+
+:::note K3s v1.22 and older
+In order to deploy an external CCM with K3s v1.22 and older, you must also start K3s with the `--kubelet-arg="cloud-provider=external"` flag.
+:::
 
 ## Nodes Without a Hostname
 
