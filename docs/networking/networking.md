@@ -25,7 +25,7 @@ The Traefik ingress controller will use ports 80 and 443 on the host (i.e. these
 
 The `traefik.yaml` file should not be edited manually, because k3s would overwrite it again once it is restarted. Instead you can customize Traefik by creating an additional `HelmChartConfig` manifest in `/var/lib/rancher/k3s/server/manifests`. For more details and an example see [Customizing Packaged Components with HelmChartConfig](../helm/helm.md#customizing-packaged-components-with-helmchartconfig). For more information on the possible configuration values, refer to the official [Traefik Helm Configuration Parameters.](https://github.com/traefik/traefik-helm-chart/tree/master/traefik).
 
-To disable it, start each server with the `--disable traefik` option.
+To disable it, start each server with the `--disable traefik` flag.
 
 If Traefik is not disabled K3s versions 1.20 and earlier will install Traefik v1, while K3s versions 1.21 and later will install Traefik v2 if v1 is not already present.
 
@@ -79,17 +79,19 @@ To select a particular subset of nodes to host pods for a LoadBalancer, set matc
 
 ### Disabling the Service LB
 
-To disable the embedded LB, configure all servers in the cluster with the `--disable=servicelb` option.
+To disable the embedded LB, configure all servers in the cluster with the `--disable=servicelb` flag.
 
 This is necessary if you wish to run a different LB, such as MetalLB.
 
 ## External Cloud Controller Manager
 
-K3s ships with a stub Cloud Controller Manager (CCM) that does not actually implement any functionality. In order to use an external CCM, you must start K3s with the `--disable-cloud-controller` flag. 
+K3s does not ship with any "in-tree" cloud providers. Instead, K3s ships with a Cloud Controller Manager (CCM) stub that does the following:
+- Sets node InternalIP and ExternalIP address fields based on the `--node-ip` and `--node-external-ip` flags.
+- Hosts the ServiceLB LoadBalancer controller.
+- Clears the `node.cloudprovider.kubernetes.io/uninitialized` taint that is present when the cloud-provider is set to `external` 
 
-:::note K3s v1.22 and older
-In order to deploy an external CCM with K3s v1.22 and older, you must also start K3s with the `--kubelet-arg="cloud-provider=external"` flag.
-:::
+In order to use an external CCM, you must start K3s with the `--disable-cloud-controller` flag. Additionally, if you disable the built-in CCM and do not provide an external CCM, nodes will remain tainted and unschedulable.
+
 
 ## Nodes Without a Hostname
 
