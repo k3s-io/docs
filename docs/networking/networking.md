@@ -25,11 +25,18 @@ The Traefik ingress controller will use ports 80 and 443 on the host (i.e. these
 
 The `traefik.yaml` file should not be edited manually, because k3s would overwrite it again once it is restarted. Instead you can customize Traefik by creating an additional `HelmChartConfig` manifest in `/var/lib/rancher/k3s/server/manifests`. For more details and an example see [Customizing Packaged Components with HelmChartConfig](../helm/helm.md#customizing-packaged-components-with-helmchartconfig). For more information on the possible configuration values, refer to the official [Traefik Helm Configuration Parameters.](https://github.com/traefik/traefik-helm-chart/tree/master/traefik).
 
-To disable it, start each server with the `--disable traefik` option.
+To disable it, start each server with the `--disable=traefik` flag.
 
 If Traefik is not disabled K3s versions 1.20 and earlier will install Traefik v1, while K3s versions 1.21 and later will install Traefik v2 if v1 is not already present.
 
 To migrate from an older Traefik v1 instance please refer to the [Traefik documentation](https://doc.traefik.io/traefik/migration/v1-to-v2/) and [migration tool](https://github.com/traefik/traefik-migration-tool).
+
+
+## Network Policy Controller
+
+K3s includes an embedded network policy controller. The underlying implementation is [kube-router's](https://github.com/cloudnativelabs/kube-router) netpol controller library (no other kube-router functionality is present) and can be found [here](https://github.com/k3s-io/k3s/tree/master/pkg/agent/netpol). 
+
+To disable it, start each server with the `--disable-network-policy` flag.
 
 ## Service Load Balancer
 
@@ -76,9 +83,22 @@ To select a particular subset of nodes to host pods for a LoadBalancer, add the 
 
 ### Disabling the Service LB
 
-To disable the embedded LB, configure all servers in the cluster with the `--disable=servicelb` option.
+To disable the embedded LB, configure all servers in the cluster with the `--disable=servicelb` flag.
 
 This is necessary if you wish to run a different LB, such as MetalLB.
+
+## External Cloud Controller Manager
+
+In order to reduce binary size, K3s removes all "in-tree" (built-in) cloud providers. Instead, K3s provides an embedded Cloud Controller Manager (CCM) stub that does the following:
+- Sets node InternalIP and ExternalIP address fields based on the `--node-ip` and `--node-external-ip` flags.
+- Hosts the ServiceLB LoadBalancer controller.
+- Clears the `node.cloudprovider.kubernetes.io/uninitialized` taint that is present when the cloud-provider is set to `external` 
+
+Before deploying an external CCM, you must start all K3s servers with the `--disable-cloud-controller` flag to disable to embedded CCM. 
+
+:::note
+If you disable the built-in CCM and do not deploy and properly configure an external substitute, nodes will remain tainted and unschedulable.
+:::
 
 ## Nodes Without a Hostname
 

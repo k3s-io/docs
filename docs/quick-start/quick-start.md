@@ -7,7 +7,7 @@ This guide will help you quickly launch a cluster with default options. The [ins
 
 For information on how K3s components work together, refer to the [architecture section.](../architecture/architecture.md)
 
-:::note
+:::info
 New to Kubernetes? The official Kubernetes docs already have some great tutorials outlining the basics [here](https://kubernetes.io/docs/tutorials/kubernetes-basics/).
 :::
 

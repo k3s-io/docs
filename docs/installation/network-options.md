@@ -115,11 +115,24 @@ The egress selector mode may be configured on servers via the `--egress-selector
   **NOTE**: This will not work when using a CNI that uses its own IPAM and does not respect the node's PodCIDR allocation. `cluster` or `agent` should be used with these CNIs instead.
 * `cluster`: The apiserver uses agent tunnels to communicate with kubelets and service endpoints, routing endpoint connections to the correct agent by watching Endpoints.
 
-## Dual-stack installation
+## Dual-stack (IPv4 + IPv6) Networking
 
 :::info Version Gate
 
-Dual-stack networking is supported on K3s v1.21 and above.
+Experimental support is available as of [v1.21.0+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.21.0%2Bk3s1).  
+Stable support is available as of [v1.23.7+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.23.7%2Bk3s1). 
+
+:::
+
+:::caution Known Issue 
+
+Kubernetes v1.24 and v1.25 include [an issue](https://github.com/kubernetes/kubernetes/issues/111695) that ignores the node IPv6 addresses if you have a dual-stack environment and you are not using the primary network interface for cluster traffic. To avoid this bug, add the following flag to both K3s servers and agents:
+
+```
+--kubelet-arg="node-ip=0.0.0.0" # To proritize IPv4 traffic
+#OR
+--kubelet-arg="node-ip=::" # To proritize IPv6 traffic
+```
 
 :::
 
@@ -135,21 +148,22 @@ Note that you may configure any valid `cluster-cidr` and `service-cidr` values, 
 
 If you are using a custom CNI plugin, i.e. a CNI plugin other than Flannel, the additional configuration may be required. Please consult your plugin's dual-stack documentation and verify if network policies can be enabled.
 
-> **Warning:** Kubernetes 1.24 and 1.25 include a bug that ignores the node IPv6 addresses if you have a dual-stack environment and you are not using the primary network interface for cluster traffic. To avoid this bug, add the following flag to both K3s servers and agents:
-
-```
---kubelet-arg=node-ip=0.0.0.0"  # If you want to prioritize IPv6 traffic, use "::" instead of "0.0.0.0".
-```
-
-## Single-stack IPv6 installation
+## Single-stack IPv6 Networking
 
 :::info Version Gate
-
-Single-stack IPv6 clusters (clusters without IPv4) are supported on K3s v1.22 and above.
-
+Available as of [v1.22.9+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.22.9%2Bk3s1)
 :::
 
-> **Warning:** If your IPv6 default route is set by a router advertisement (RA), you will need to set the sysctl `net.ipv6.conf.all.accept_ra=2`; otherwise, the node will drop the default route once it expires. Be aware that accepting RAs could increase the risk of [man-in-the-middle attacks](https://github.com/kubernetes/kubernetes/issues/91507).
+:::caution Known Issue
+If your IPv6 default route is set by a router advertisement (RA), you will need to set the sysctl `net.ipv6.conf.all.accept_ra=2`; otherwise, the node will drop the default route once it expires. Be aware that accepting RAs could increase the risk of [man-in-the-middle attacks](https://github.com/kubernetes/kubernetes/issues/91507).
+:::
+
+Single-stack IPv6 clusters (clusters without IPv4) are supported on K3s using the `--cluster-cidr` and `--service-cidr` flags. This is an example of a valid configuration:
+
+```bash
+--cluster-cidr=2001:cafe:42:0::/56 --service-cidr=2001:cafe:42:1::/112
+```
+
 
 ## Distributed hybrid or multicloud cluster
 
