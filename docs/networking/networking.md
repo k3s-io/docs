@@ -85,13 +85,16 @@ This is necessary if you wish to run a different LB, such as MetalLB.
 
 ## External Cloud Controller Manager
 
-K3s does not ship with any "in-tree" cloud providers. Instead, K3s ships with a Cloud Controller Manager (CCM) stub that does the following:
+In order to reduce binary size, K3s removes all "in-tree" (built-in) cloud providers. Instead, K3s provides an embedded Cloud Controller Manager (CCM) stub that does the following:
 - Sets node InternalIP and ExternalIP address fields based on the `--node-ip` and `--node-external-ip` flags.
 - Hosts the ServiceLB LoadBalancer controller.
 - Clears the `node.cloudprovider.kubernetes.io/uninitialized` taint that is present when the cloud-provider is set to `external` 
 
-In order to use an external CCM, you must start K3s with the `--disable-cloud-controller` flag. Additionally, if you disable the built-in CCM and do not provide an external CCM, nodes will remain tainted and unschedulable.
+Before deploying an external CCM, you must start all K3s servers with the `--disable-cloud-controller` flag to disable to embedded CCM. 
 
+:::note
+If you disable the built-in CCM and do not deploy and properly configure an external substitute, nodes will remain tainted and unschedulable.
+:::
 
 ## Nodes Without a Hostname
 
