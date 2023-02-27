@@ -33,6 +33,21 @@ mirrors:
 
 Each mirror must have a name and set of endpoints. When pulling an image from a registry, containerd will try these endpoint URLs one by one, and use the first working one.
 
+#### Redirects
+
+If a public registry is used as a mirror, such as when configuring a [pull through cache](https://docs.docker.com/registry/recipes/mirror/), images pulls are transparently redirected.
+
+For example, if you have a mirror configured for `docker.io`:
+
+```yaml
+mirrors:
+  docker.io:
+    endpoint:
+      - "https://mycustomreg.com:5000"
+```
+
+Then pulling `docker.io/rancher/coredns-coredns:1.6.3` will transparently pull the image from `https://mycustomreg.com:5000/rancher/coredns-coredns:1.6.3`.
+
 #### Rewrites
 
 Each mirror can have a set of rewrites. Rewrites can change the tag of an image based on a regular expression. This is useful if the organization/project structure in the mirror registry is different to the upstream one.
@@ -151,7 +166,7 @@ In order for the registry changes to take effect, you need to restart K3s on eac
 
 ## Adding Images to the Private Registry
 
-First, obtain the k3s-images.txt file from GitHub for the release you are working with.
+First, obtain the `k3s-images.txt` file from GitHub for the release you are working with.
 Pull the K3s images listed on the k3s-images.txt file from docker.io
 
 Example: `docker pull docker.io/rancher/coredns-coredns:1.6.3`
