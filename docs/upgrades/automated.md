@@ -35,6 +35,9 @@ For more details on the design and architecture of the system-upgrade-controller
 - [system-upgrade-controller](https://github.com/rancher/system-upgrade-controller)
 - [k3s-upgrade](https://github.com/k3s-io/k3s-upgrade)
 
+:::info 
+When attempting to run different versions of K3s in a cluster, the [Kubernetes version skew policy](https://kubernetes.io/docs/setup/release/version-skew-policy/) applies.
+:::
 
 ### Install the system-upgrade-controller
  The system-upgrade-controller can be installed as a deployment into your cluster. The deployment requires a service-account, clusterRoleBinding, and a configmap. To install these components, run the following command:

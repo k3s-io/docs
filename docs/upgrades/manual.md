@@ -21,6 +21,10 @@ Upgrades performed via the installation script or using our [automated upgrades]
 
 For an exhaustive and up-to-date list of channels, you can visit the [k3s channel service API](https://update.k3s.io/v1-release/channels). For more technical details on how channels work, you see the [channelserver project](https://github.com/rancher/channelserver).
 
+:::info 
+When attempting to run different versions of K3s in a cluster, the [Kubernetes version skew policy](https://kubernetes.io/docs/setup/release/version-skew-policy/) applies.
+:::
+
 ### Upgrade K3s Using the Installation Script
 
 To upgrade K3s from an older version you can re-run the installation script using the same flags, for example:
