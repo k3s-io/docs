@@ -24,10 +24,11 @@ To automate upgrades in this manner, you must do the following:
 1. Install the system-upgrade-controller into your cluster
 1. Configure plans
 
-:::note
-Users can and should use Rancher to upgrade their K3s cluster if Rancher is managing it. 
-- If using Rancher to upgrade, the following steps below are taken care of for you.
-- If *not* using Rancher to upgrade, you must follow the steps below.
+:::warning
+If the K3s cluster is managed by Rancher, you should use the Rancher UI to manage upgrades.
+- If the K3s cluster was imported into Rancher, Rancher will manage the system-upgrade-controller deployment and plans. Do not follow the steps on this page.
+- If the K3s cluster was provisioned by Rancher, Rancher will use system agent to manage version upgrades. Do not follow the steps on this page.
+- If the K3s cluster is *not* managed Rancher, you may follow the steps below.
 :::
 
 For more details on the design and architecture of the system-upgrade-controller or its integration with K3s, see the following Git repositories:
@@ -35,8 +36,8 @@ For more details on the design and architecture of the system-upgrade-controller
 - [system-upgrade-controller](https://github.com/rancher/system-upgrade-controller)
 - [k3s-upgrade](https://github.com/k3s-io/k3s-upgrade)
 
-:::info 
-When attempting to run different versions of K3s in a cluster, the [Kubernetes version skew policy](https://kubernetes.io/docs/setup/release/version-skew-policy/) applies.
+:::tip
+When attempting to upgrade to a new version of K3s, the [Kubernetes version skew policy](https://kubernetes.io/docs/setup/release/version-skew-policy/) applies. Ensure that your plan does not skip intermediate minor versions when upgrading. The system-upgrade-controller itself will not protect against unsupported changes to the Kubernetes version.
 :::
 
 ### Install the system-upgrade-controller
@@ -48,7 +49,7 @@ The controller can be configured and customized via the previously mentioned con
 
 
 ### Configure plans
-It is recommended you create at least two plans: a plan for upgrading server (master) nodes and a plan for upgrading agent (worker) nodes. You can create additional plans as needed to control the rollout of the upgrade across nodes. Once the plans are created, the controller will pick them up and begin to upgrade your cluster.  
+It is recommended you create at least two plans: a plan for upgrading server (control-plane) nodes and a plan for upgrading agent nodes. You can create additional plans as needed to control the rollout of the upgrade across nodes. Once the plans are created, the controller will pick them up and begin to upgrade your cluster.  
 
 The following two example plans will upgrade your cluster to K3s v1.24.6+k3s1:
 
@@ -64,7 +65,7 @@ spec:
   cordon: true
   nodeSelector:
     matchExpressions:
-    - key: node-role.kubernetes.io/master
+    - key: node-role.kubernetes.io/control-plane
       operator: In
       values:
       - "true"
@@ -84,7 +85,7 @@ spec:
   cordon: true
   nodeSelector:
     matchExpressions:
-    - key: node-role.kubernetes.io/master
+    - key: node-role.kubernetes.io/control-plane
       operator: DoesNotExist
   prepare:
     args:
@@ -103,7 +104,7 @@ There are a few important things to call out regarding these plans:
 
 2) The `concurrency` field indicates how many nodes can be upgraded at the same time. 
 
-3) The server-plan targets server nodes by specifying a label selector that selects nodes with the `node-role.kubernetes.io/master` label. The agent-plan targets agent nodes by specifying a label selector that select nodes without that label.
+3) The server-plan targets server nodes by specifying a label selector that selects nodes with the `node-role.kubernetes.io/control-plane` label. The agent-plan targets agent nodes by specifying a label selector that select nodes without that label.
 
 4) The `prepare` step in the agent-plan will cause upgrade jobs for that plan to wait for the server-plan to complete before they execute.
 
