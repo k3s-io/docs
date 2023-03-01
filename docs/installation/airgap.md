@@ -35,9 +35,7 @@ sudo mkdir -p /var/lib/rancher/k3s/agent/images/
 sudo cp ./k3s-airgap-images-$ARCH.tar /var/lib/rancher/k3s/agent/images/
 ```
 
-Place the k3s binary at `/usr/local/bin/k3s` and ensure it is executable.
-
-Follow the steps in the next section to install K3s.
+Once you have completed this, you may now go to the [Install K3s](#install-k3s) section below.
 
 ## Install K3s
 
@@ -46,6 +44,7 @@ Follow the steps in the next section to install K3s.
 - Before installing K3s, complete the [Private Registry Method](#private-registry-method) or the [Manually Deploy Images Method](#manually-deploy-images-method) above to prepopulate the images that K3s needs to install.
 - Download the K3s binary from the [releases](https://github.com/k3s-io/k3s/releases) page, matching the same version used to get the airgap images. Place the binary in `/usr/local/bin` on each air-gapped node and ensure it is executable.
 - Download the K3s install script at [get.k3s.io](https://get.k3s.io). Place the install script anywhere on each air-gapped node, and name it `install.sh`.
+- K3s requires a default route in order to auto-detect the node's primary IP, and for kube-proxy ClusterIP routing to function properly. Therefore, a default route must be configured on each node, even if that route is a dummy route or a black hole.
 
 When running the K3s script with the `INSTALL_K3S_SKIP_DOWNLOAD` environment variable, K3s will use the local version of the script and binary.
 
@@ -63,11 +62,15 @@ To install K3s on a single server, simply do the following on the server node:
 INSTALL_K3S_SKIP_DOWNLOAD=true ./install.sh
 ```
 
-Then, to optionally add additional agents do the following on each agent node. Take care to ensure you replace `myserver` with the IP or valid DNS of the server and replace `mynodetoken` with the node token from the server typically at `/var/lib/rancher/k3s/server/node-token`
+To add additional agents, do the following on each agent node: 
 
 ```bash
-INSTALL_K3S_SKIP_DOWNLOAD=true K3S_URL=https://myserver:6443 K3S_TOKEN=mynodetoken ./install.sh
+INSTALL_K3S_SKIP_DOWNLOAD=true K3S_URL=https://<SERVER_IP>:6443 K3S_TOKEN=<YOUR_TOKEN> ./install.sh
 ```
+
+:::note
+The token from the server is typically found at `/var/lib/rancher/k3s/server/token`.
+:::
 
 </TabItem>
 <TabItem value="High Availability Configuration" default>
@@ -78,19 +81,24 @@ For example, step two of the High Availability with an External DB guide mention
 
 ```bash
 curl -sfL https://get.k3s.io | sh -s - server \
-  --datastore-endpoint='mysql://username:password@tcp(hostname:3306)/database-name'
+  --token=SECRET \
+  --datastore-endpoint="mysql://username:password@tcp(hostname:3306)/database-name"
 ```
 
 Instead, you would modify such examples like below:
 
 ```bash
-INSTALL_K3S_SKIP_DOWNLOAD=true INSTALL_K3S_EXEC='server' K3S_DATASTORE_ENDPOINT='mysql://username:password@tcp(hostname:3306)/database-name' ./install.sh
+INSTALL_K3S_SKIP_DOWNLOAD=true INSTALL_K3S_EXEC='server --token=SECRET' \
+K3S_DATASTORE_ENDPOINT='mysql://username:password@tcp(hostname:3306)/database-name' \
+./install.sh
 ```
 
 </TabItem>
 </Tabs>
 
->**Note:** K3s additionally provides a `--resolv-conf` flag for kubelets, which may help with configuring DNS in air-gap networks.
+:::note
+K3s additionally provides a `--resolv-conf` flag for kubelets, which may help with configuring DNS in air-gap networks.
+:::
 
 ## Upgrading
 

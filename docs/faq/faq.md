@@ -49,6 +49,13 @@ In K3s, there are two types of tokens: `K3S_TOKEN` and `K3S_AGENT_TOKEN`.
 
 If no `K3S_TOKEN` is defined, the first K3s server will generate a random token during initial startup. The result is part of the content in `/var/lib/rancher/k3s/server/token`. For example, `K1070878408e06a827960208f84ed18b65fa10f27864e71a57d9e053c4caff8504b::server:df54383b5659b9280aa1e73e60ef78fc`. The token in this example is `df54383b5659b9280aa1e73e60ef78fc`. The full format with the `K10` prefix includes a hash of the cluster's CA certificate, which can be used to ensure that nodes are joining the correct cluster and are not subject to a man-in-the-middle attack during the join process. This full token cannot be generated prior to initial cluster startup, before the cluster CA has been generated.
 
+
+### How compatible are different versions of K3s?
+
+In general, the [Kubernetes version skew policy](https://kubernetes.io/docs/setup/release/version-skew-policy/) applies.
+
+In short, servers can be newer than agents, but agents cannot be newer than servers.
+
 ### I'm having an issue, where can I get help?
  
 If you are having an issue with deploying K3s, you should:
@@ -57,7 +64,7 @@ If you are having an issue with deploying K3s, you should:
 
 2) Check that you have resolved any [Additional OS Preparation](../advanced/advanced.md#additional-os-preparations). Run `k3s check-config` and ensure that it passes.
 
-3) Search the [K3s GitHub existing issues](https://github.com/k3s-io/k3s/issues) for one that matches your problem.
+3) Search the K3s [Issues](https://github.com/k3s-io/k3s/issues) and [Discussions](https://github.com/k3s-io/k3s/discussions) for one that matches your problem.
 
 4) Join the [Rancher Slack](https://slack.rancher.io/) K3s channel to get help.
 
