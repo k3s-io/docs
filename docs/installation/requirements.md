@@ -13,9 +13,20 @@ Two nodes cannot have the same hostname.
 
 If multiple nodes will have the same hostname, or if hostnames may be reused by an automated provisioning system, use the `--with-node-id` option to append a random suffix for each node, or devise a unique name to pass with `--node-name` or `$K3S_NODE_NAME` for each node you add to the cluster.
 
+## Architecture
+
+K3s is available for the following architectures:
+- x86_64
+- armhf
+- arm64/aarch64
+- s390x
+
+
 ## Operating Systems
 
 K3s is expected to work on most modern Linux systems.
+
+On aarch64/arm64 systems, only OSs that use a 4k page size are supported. **RHEL9**, **Ubuntu**, and **SLES** all meet this requirement.
 
 Some OSs have specific requirements:
 
