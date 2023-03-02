@@ -1,59 +1,43 @@
 ---
-title: "Disable Components Flags"
+title: "Managing Server Roles"
 weight: 60
 ---
 
-Starting the K3s server with `--cluster-init` will run all control plane components, including the api server, controller manager, scheduler, and etcd. However, you can run server nodes with certain components and exclude others; the following sections will explain how to do that.
+Starting the K3s server with `--cluster-init` will run all control-plane components, including the apiserver, controller-manager, scheduler, and etcd. It is possible to disable specific components in order to split the control-plane and etcd roles on to separate nodes.
 
-## ETCD Only Nodes
+:::info
+This document is only relevant when using embedded etcd. When not using embedded etc, all servers will have the control-plane role and run control-plane components.
+:::
 
-This document assumes you run K3s server with embedded etcd by passing `--cluster-init` flag to the server process.
-
-To run a K3s server with only etcd components you can pass `--disable-apiserver --disable-controller-manager --disable-scheduler` flags to k3s, this will result in running a server node with only etcd, for example to run K3s server with those flags:
-
-```bash
+# Dedicated `etcd` Nodes
+To create a server with only the `etcd` role, start K3s with all the control-plane components disabled:
+```
 curl -fL https://get.k3s.io | sh -s - server --cluster-init --disable-apiserver --disable-controller-manager --disable-scheduler
 ```
 
-You can join other nodes to the cluster normally after that.
+This first node will start etcd, and wait for additional `etcd` and/or `control-plane` nodes to join. The cluster will not be usable until you join an additional server with the `control-plane` components enabled.
 
-## Disable ETCD
+## Dedicated `control-plane` Nodes
+:::note
+A dedicated `control-plane` node cannot be the first server in the cluster; there must be an existing node with the `etcd` role before joining dedicated `control-plane` nodes.
+:::
 
-You can also disable etcd from a server node and this will result in a k3s server running control components other than etcd, that can be accomplished by running k3s server with flag `--disable-etcd` for example to join another node with only control components to the etcd node created in the previous section:
-
+To create a server with only the `control-plane` role, start k3s with etcd disabled:
 ```bash
 curl -fL https://get.k3s.io | sh -s - server --token <token> --disable-etcd --server https://<etcd-only-node>:6443 
 ```
 
-The end result will be a two nodes one of them is etcd only node and the other one is controlplane only node, if you check the node list you should see something like the following:
-
+After creating dedicated server nodes, the selected roles will be visible in `kubectl get node`:
 ```bash
 $ kubectl get nodes
-NAME              STATUS   ROLES                       AGE     VERSION
-ip-172-31-13-32   Ready    etcd                        5h39m   v1.20.4+k3s1
-ip-172-31-14-69   Ready    control-plane,master        5h39m   v1.20.4+k3s1
+NAME           STATUS   ROLES                       AGE     VERSION
+k3s-server-1   Ready    etcd                        5h39m   v1.20.4+k3s1
+k3s-server-2   Ready    control-plane,master        5h39m   v1.20.4+k3s1
 ```
 
-Note that you can run `kubectl` commands only on the k3s server that has the api running, and you can't run `kubectl` commands on etcd only nodes.
+### Adding Roles To Existing Servers
 
-
-### Re-enabling control components
-
-In both cases you can re-enable any component that you already disabled simply by removing the corresponding flag that disables them, so for example if you want to revert the etcd only node back to a full k3s server with all components you can just remove the following 3 flags `--disable-apiserver --disable-controller-manager --disable-scheduler`, so in our example to revert back node `ip-172-31-13-32` to a full k3s server you can just re-run the curl command without the disable flags:
-```bash
-curl -fL https://get.k3s.io | sh -s - server --cluster-init
-``` 
-
-you will notice that all components started again and you can run kubectl commands again:
-
-```bash
-$ kubectl get nodes
-NAME              STATUS   ROLES                       AGE     VERSION
-ip-172-31-13-32   Ready    control-plane,etcd,master   5h45m   v1.20.4+k3s1
-ip-172-31-14-69   Ready    control-plane,master        5h45m   v1.20.4+k3s1
-```
-
-Notice that role labels has been re-added to the node `ip-172-31-13-32` with the correct labels (control-plane,etcd,master).
+Roles can be added to existing dedicated nodes by restarting K3s with the disable flags removed. For example ,if you want to add the `control-plane` role to a dedicated `etcd` node, you can remove the `--disable-apiserver --disable-controller-manager --disable-scheduler` flags from the systemd unit or config file, and restart the service.
 
 ## Add disable flags using the config file
 
@@ -70,19 +54,4 @@ and then start K3s using the curl command without any arguments:
 
 ```bash
 curl -fL https://get.k3s.io | sh -
-```
-## Disable components using .skip files
-
-For any yaml file under `/var/lib/rancher/k3s/server/manifests` (coredns, traefik, local-storeage, etc.) you can add a `.skip` file which will cause K3s to not apply the associated yaml file.
-For example, adding `traefik.yaml.skip` in the manifests directory will cause K3s to skip `traefik.yaml`.
-```bash
-$ ls /var/lib/rancher/k3s/server/manifests
-ccm.yaml      local-storage.yaml  rolebindings.yaml  traefik.yaml.skip
-coredns.yaml  traefik.yaml
-
-$ kubectl get pods -A
-NAMESPACE     NAME                                     READY   STATUS    RESTARTS   AGE
-kube-system   local-path-provisioner-64ffb68fd-xx98j   1/1     Running   0          74s
-kube-system   metrics-server-5489f84d5d-7zwkt          1/1     Running   0          74s
-kube-system   coredns-85cb69466-vcq7j                  1/1     Running   0          74s
 ```
