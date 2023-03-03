@@ -365,47 +365,37 @@ There are several ways to run K3s in Docker:
 <Tabs>
 <TabItem value='K3d' default>
 
-[k3d](https://github.com/k3d-io/k3d) is a utility designed to easily run K3s in Docker.
+[k3d](https://github.com/k3d-io/k3d) is a utility designed to easily run multi-node K3s clusters in Docker.
 
-It can be installed via the [brew](https://brew.sh/) utility on MacOS:
+k3d makes it very easy to create single- and multi-node k3s clusters in docker, e.g. for local development on Kubernetes.
 
-```bash
-brew install k3d
-```
-
-</TabItem>
-<TabItem value="Docker Compose">
-
-A `docker-compose.yml` in the K3s repo serves as an [example](https://github.com/k3s-io/k3s/blob/master/docker-compose.yml) of how to run K3s from Docker. To run `docker-compose` in this repo, run:
-
-```bash
-docker-compose up --scale agent=3
-# kubeconfig is written to current dir
-
-kubectl --kubeconfig kubeconfig.yaml get node
-
-NAME           STATUS   ROLES    AGE   VERSION
-497278a2d6a2   Ready    <none>   11s   v1.13.2-k3s2
-d54c8b17c055   Ready    <none>   11s   v1.13.2-k3s2
-db7a5a5a5bdd   Ready    <none>   12s   v1.13.2-k3s2
-```
-
-To only run the agent in Docker, use `docker-compose up agent`.
+See the [Installation](https://k3d.io/#installation) documentation for more information on how to install and use k3d.
 
 </TabItem>
 <TabItem value="Docker">
 
-To use Docker, `rancher/k3s` images are also available to run the K3s server and agent. 
+To use Docker, `rancher/k3s` images are also available to run the K3s server and agent.
 Using the `docker run` command:
 
 ```bash
 sudo docker run \
-  -d --tmpfs /run \
-  --tmpfs /var/run \
-  -e K3S_URL=${SERVER_URL} \
-  -e K3S_TOKEN=${NODE_TOKEN} \
-  --privileged rancher/k3s:vX.Y.Z
+  --privileged \
+  --name k3s-server-1 \
+  --hostname k3s-server-1 \
+  -p 6443:6443 \
+  -d rancher/k3s:v1.24.10-k3s1 \
+  server
 ```
+:::note
+You must specify a valid K3s version as the tag; the `latest` tag is not maintained.  
+Docker images do not allow a `+` sign in tags, use a `-` in the tag instead.
+:::
+
+Once K3s is up and running, you can copy the admin kubeconfig out of the Docker container for use:
+```bash
+sudo docker cp k3s-server-1:/etc/rancher/k3s/k3s.yaml ~/.kube/config
+```
+
 </TabItem>
 </Tabs>
 
