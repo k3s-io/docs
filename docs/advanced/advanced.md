@@ -1,5 +1,5 @@
 ---
-title: "Advanced Options and Configuration"
+title: "Advanced Options / Configuration"
 weight: 45
 aliases:
   - /k3s/latest/en/running/
@@ -38,41 +38,6 @@ k3s certificate rotate --service <SERVICE>,<SERVICE>
 ```
 
 The following certificates can be rotated: `admin`, `api-server`, `controller-manager`, `scheduler`, `k3s-controller`, `k3s-server`, `cloud-controller`, `etcd`, `auth-proxy`, `kubelet`, `kube-proxy`.
-
-## Auto-Deploying Manifests
-
-On server nodes, any file found in `/var/lib/rancher/k3s/server/manifests` will automatically be deployed to Kubernetes in a manner similar to `kubectl apply`, both on startup and when the file is changed on disk. Deleting files out of this directory will not delete the corresponding resources from the cluster.
-
-Manifests are tracked as `AddOn` custom resources in the `kube-system` namespace. Any errors or warnings encountered when applying the manifest file may seen by using `kubectl describe` on the corresponding `AddOn`, or by using `kubectl get event -n kube-system` to view all events for that namespace, including those from the deploy controller.
-
-The `AddOn` name for each file in the manifest directory is derived from the file basename. Ensure that all files within the manifests directory (or within any subdirectories) have unique names.
-
-### Disabling manifests using the `--disable` flag
-
-K3s comes with a number of packaged components that are deployed via the manifests directory: coredns, servicelb, traefik, local-storage, and metrics-server. Any of these components (in addition to any custom manifests placed in the `manifests` directory) can be disabled with the `--disable` flag.
-
-:::warning
-Disabled components are actively uninstalled from the cluster, and the source files deleted from the `manifests` directory.
-:::
-
-### Disabling manifests using .skip files
-
-For any file under `/var/lib/rancher/k3s/server/manifests`, you can create a `.skip` file which will cause K3s to ignore the corresponding manifest. The contents of the `.skip` file do not matter, only its existence is checked.
-
-For example, creating an empty `traefik.yaml.skip` file in the manifests directory will cause K3s to skip deploying `traefik.yaml`:
-```bash
-$ ls /var/lib/rancher/k3s/server/manifests
-ccm.yaml      local-storage.yaml  rolebindings.yaml  traefik.yaml.skip
-coredns.yaml  traefik.yaml
-
-$ kubectl get pods -A
-NAMESPACE     NAME                                     READY   STATUS    RESTARTS   AGE
-kube-system   local-path-provisioner-64ffb68fd-xx98j   1/1     Running   0          74s
-kube-system   metrics-server-5489f84d5d-7zwkt          1/1     Running   0          74s
-kube-system   coredns-85cb69466-vcq7j                  1/1     Running   0          74s
-```
-
-For information about managing Helm charts via auto-deploying manifests, refer to the section about [Helm.](../helm/helm.md)
 
 ## Configuring an HTTP proxy
 

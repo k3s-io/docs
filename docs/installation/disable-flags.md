@@ -9,7 +9,7 @@ Starting the K3s server with `--cluster-init` will run all control-plane compone
 This document is only relevant when using embedded etcd. When not using embedded etc, all servers will have the control-plane role and run control-plane components.
 :::
 
-# Dedicated `etcd` Nodes
+## Dedicated `etcd` Nodes
 To create a server with only the `etcd` role, start K3s with all the control-plane components disabled:
 ```
 curl -fL https://get.k3s.io | sh -s - server --cluster-init --disable-apiserver --disable-controller-manager --disable-scheduler
@@ -35,23 +35,17 @@ k3s-server-1   Ready    etcd                        5h39m   v1.20.4+k3s1
 k3s-server-2   Ready    control-plane,master        5h39m   v1.20.4+k3s1
 ```
 
-### Adding Roles To Existing Servers
+## Adding Roles To Existing Servers
 
 Roles can be added to existing dedicated nodes by restarting K3s with the disable flags removed. For example ,if you want to add the `control-plane` role to a dedicated `etcd` node, you can remove the `--disable-apiserver --disable-controller-manager --disable-scheduler` flags from the systemd unit or config file, and restart the service.
 
-## Add disable flags using the config file
+## Configuration File Syntax
 
-In any of the previous situations you can use the config file instead of running the curl commands with the associated flags, for example to run an etcd only node you can add the following options to the `/etc/rancher/k3s/config.yaml` file:
+As with all other CLI flags, you can use the  [Configuration File](installation/configuration.md#configuration-file) to disable components, instead of passing the options as CLI flags. For example, to create a dedicated `etcd` node, you can place the following values in `/etc/rancher/k3s/config.yaml`:
 
 ```yaml
----
+cluster-init: true
 disable-apiserver: true
 disable-controller-manager: true
 disable-scheduler: true
-cluster-init: true
-```
-and then start K3s using the curl command without any arguments:
-
-```bash
-curl -fL https://get.k3s.io | sh -
 ```

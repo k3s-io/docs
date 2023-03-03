@@ -1,5 +1,5 @@
 ---
-title: "High Availability with Embedded DB"
+title: "High Availability - Embedded etcd"
 weight: 40
 ---
 
