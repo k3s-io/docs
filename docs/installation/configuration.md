@@ -3,19 +3,13 @@ title: "Configuration Options"
 weight: 20
 ---
 
-This page focuses on the options that can be used when you set up K3s for the first time:
-
-- [K3s Install Script](#configuration-with-install-script)
-- [K3s Binary](#configuration-with-binary)
-- [Configuration File](#configuration-file)
-
-For more advanced options, refer to [this page](../advanced/advanced.md).
+This page focuses on the options that are commonly used when setting up K3s for the first time. Refer to the documentation on [Advanced Options and Configuration](../advanced/advanced.md) for more in-depth coverage.
 
 ## Configuration with install script
 
 As mentioned in the [Quick-Start Guide](../quick-start/quick-start.md), you can use the installation script available at https://get.k3s.io to install K3s as a service on systemd and openrc based systems.
 
-You can use a combination of `INSTALL_K3S_EXEC`, `K3S_` environment variables, and command flags to configure the installation.
+You can use a combination of `INSTALL_K3S_EXEC`, `K3S_` environment variables, and command flags to pass configuration to the service configuration. The prefixed environment variables, `INSTALL_K3S_EXEC` value, and trailing shell arguments are all persisted into the service configuration. After installation, configuration may be altered by editing the environment file, editing the service configuration, or simply re-running the installer with new options.
 
 To illustrate this, the following commands all result in the same behavior of registering a server without flannel and with a token:
 
@@ -42,7 +36,7 @@ For details on all environment variables, see [Environment Variables.](../refere
 ## Configuration with binary
 
 As stated, the installation script is primarily concerned with configuring K3s to run as a service.  
-If you choose to not use the script, you can run K3s simply by downloading the binary from our [release page](https://github.com/k3s-io/k3s/releases/latest), placing it on your path, and executing it. Or you can install K3s without enabling it as a service:
+If you choose to not use the script, you can run K3s simply by downloading the binary from our [release page](https://github.com/k3s-io/k3s/releases/latest), placing it on your path, and executing it. This is not particularly useful for permanent installations, but may be useful when performing quick tests that do not merit managing K3s as a system service.
 ```bash
 curl -sfL https://get.k3s.io | INSTALL_K3S_SKIP_ENABLE=true sh -
 ```
@@ -68,7 +62,7 @@ You can also use the `--help` flag to see a list of all available options.
 
 :::info Matching Flags
 It is important to match critical flags on your server/agent installations. For example, if you use the flag
-`--disable servicelb` or `--cluster-cidr=10.42.0.0/16` on your master node, but don't set it on other server nodes, the nodes will fail to join. They will print errors with:
+`--disable servicelb` or `--cluster-cidr=10.42.0.0/16` on your master node, but don't set it on other server nodes, the nodes will fail to join. They will print errors such as:
 `failed to validate server configuration: critical configuration value mismatch.`
 :::
 ## Configuration File
