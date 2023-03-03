@@ -3,54 +3,46 @@ title: Helm
 weight: 42
 ---
 
-Helm is the package management tool of choice for Kubernetes. Helm charts provide templating syntax for Kubernetes YAML manifest documents. With Helm, we can create configurable deployments instead of just using static files. For more information about creating your own catalog of deployments, check out the docs at [https://helm.sh/docs/intro/quickstart/](https://helm.sh/docs/intro/quickstart/).
+Helm is the package management tool of choice for Kubernetes. Helm charts provide templating syntax for Kubernetes YAML manifest documents. With Helm, developers or cluster administrators can create configurable templates known as Charts, instead of just using static manifests. For more information about creating your own Chart catalog, check out the docs at [https://helm.sh/docs/intro/quickstart/](https://helm.sh/docs/intro/quickstart/).
 
-K3s does not require any special configuration to use with Helm command-line tools. Just be sure you have properly set up your kubeconfig as per the section about [cluster access](../cluster-access/cluster-access.md). K3s does include some extra functionality to make deploying both traditional Kubernetes resource manifests and Helm Charts even easier with the [rancher/helm-release CRD.](#using-the-helm-crd)
+K3s does not require any special configuration to support Helm. Just be sure you have properly set the kubeconfig path as per the [cluster access](../cluster-access/cluster-access.md) documentation. 
 
-This section covers the following topics:
+K3s includes a [Helm Controller](https://github.com/k3s-io/helm-controller/) that manages installing, upgrading/reconfiguring, and uninstalling Helm charts using a HelmChart Custom Resource Definition (CRD). Paired with [auto-deploying AddOn manifests](../installation/addons.md), installing a Helm chart on your cluster can be automated by creating a single file on disk.
 
-- [Automatically Deploying Manifests and Helm Charts](#automatically-deploying-manifests-and-helm-charts)
-- [Using the Helm CRD](#using-the-helm-crd)
-- [Customizing Packaged Components with HelmChartConfig](#customizing-packaged-components-with-helmchartconfig)
-- [Migrating from Helm v2](#migrating-from-helm-v2)
+### Using the Helm Controller
 
-### Automatically Deploying Manifests and Helm Charts
-
-Any Kubernetes manifests found in `/var/lib/rancher/k3s/server/manifests` will automatically be deployed to K3s in a manner similar to `kubectl apply`. Manifests deployed in this manner are managed as AddOn custom resources, and can be viewed by running `kubectl get addon -A`. You will find AddOns for packaged components such as CoreDNS, Local-Storage, Traefik, etc. AddOns are created automatically by the deploy controller, and are named based on their filename in the manifests directory.
-
-It is also possible to deploy Helm charts as AddOns. K3s includes a [Helm Controller](https://github.com/k3s-io/helm-controller/) that manages Helm charts using a HelmChart Custom Resource Definition (CRD).
-
-### Using the Helm CRD
-
-The [HelmChart resource definition](https://github.com/k3s-io/helm-controller#helm-controller) captures most of the options you would normally pass to the `helm` command-line tool. Here's an example of how you might deploy Grafana from the default chart repository, overriding some of the default chart values. Note that the HelmChart resource itself is in the `kube-system` namespace, but the chart's resources will be deployed to the `monitoring` namespace.
+The [HelmChart Custom Resource](https://github.com/k3s-io/helm-controller#helm-controller) captures most of the options you would normally pass to the `helm` command-line tool. Here's an example of how you might deploy Apache from the Bitnami chart repository, overriding some of the default chart values. Note that the HelmChart resource itself is in the `kube-system` namespace, but the chart's resources will be deployed to the `web` namespace, which is created in the same manifest. This can be useful if you want to keep your HelmChart resources separated from the the resources they deploy.
 
 ```yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: web
+---
 apiVersion: helm.cattle.io/v1
 kind: HelmChart
 metadata:
-  name: grafana
+  name: apache
   namespace: kube-system
 spec:
-  chart: stable/grafana
-  targetNamespace: monitoring
-  set:
-    adminPassword: "NotVerySafePassword"
+  repo: https://charts.bitnami.com/bitnami
+  chart: apache
+  targetNamespace: web
   valuesContent: |-
-    image:
-      tag: master
-    env:
-      GF_EXPLORE_ENABLED: true
-    adminUser: admin
-    sidecar:
-      datasources:
-        enabled: true
+    service:
+      type: ClusterIP
+    ingress:
+      enabled: true
+      hostname: www.example.com
+    metrics:
+      enabled: true
 ```
 
 #### HelmChart Field Definitions
 
 | Field | Default | Description | Helm Argument / Flag Equivalent |
 |-------|---------|-------------|-------------------------------|
-| name |   | Helm Chart name | NAME |
+| metadata.name |   | Helm Chart name | NAME |
 | spec.chart |   | Helm Chart name in repository, or complete HTTPS URL to chart archive (.tgz) | CHART |
 | spec.targetNamespace | default | Helm Chart target namespace | `--namespace` |
 | spec.version |   | Helm Chart version (when installing from repository) | `--version` |

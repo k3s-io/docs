@@ -1,5 +1,5 @@
 ---
-title: High Availability with an External DB
+title: High Availability - External DB
 weight: 30
 ---
 

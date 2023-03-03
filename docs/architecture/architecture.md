@@ -71,7 +71,3 @@ Note: Prior to K3s v1.20.2 servers stored passwords on disk at `/var/lib/rancher
 If the `/etc/rancher/node` directory of an agent is removed, the password file should be recreated for the agent, or the entry removed from the server.
 
 A unique node ID can be appended to the hostname by launching K3s servers or agents using the `--with-node-id` flag.
-
-### Automatically Deployed Manifests
-
-The [manifests](https://github.com/k3s-io/k3s/tree/master/manifests) located at the directory path `/var/lib/rancher/k3s/server/manifests` are bundled into the K3s binary at build time.  These will be installed at runtime by the [k3s-io/helm-controller.](https://github.com/k3s-io/helm-controller#helm-controller)
