@@ -5,25 +5,26 @@ weight: 1
 
 In this section, you'll learn how to configure the K3s server.
 
-- [Commonly Used Options](#commonly-used-options)
-  - [Database](#database)
-  - [Cluster Options](#cluster-options)
-  - [Client Options](#client-options)
-- [Agent Options](#agent-options)
-  - [Agent Nodes](#agent-nodes)
-  - [Agent Runtime](#agent-runtime)
-  - [Agent Networking](#agent-networking)
-- [Advanced Options](#advanced-options)
-  - [Logging](#logging)
-  - [Listeners](#listeners)
-  - [Data](#data)
-  - [Networking](#networking)
-  - [Storage Class](#storage-class)
-  - [Kubernetes Components](#kubernetes-components)
-  - [Customized Flags for Kubernetes Processes](#customized-flags-for-kubernetes-processes)
-  - [Experimental Options](#experimental-options)
-  - [Deprecated Options](#deprecated-options)
-- [K3s Server CLI Help](#k3s-server-cli-help)
+Note that servers also run an agent, so all of the configuration flags listed in the [K3s Agent Configuration](agent-config.md) documentation are also supported on servers.
+
+## Critical Configuration Values
+
+The following options must be set to the same value on all servers in the cluster. Failure to do so will cause new servers to fail to join the cluster when using embedded etcd, or incorrect operation of the cluster when using an external datastore.
+
+* `--agent-token`
+* `--cluster-cidr`
+* `--cluster-dns`
+* `--cluster-domain`
+* `--disable-cloud-controller`
+* `--disable-helm-controller`
+* `--disable-network-policy`
+* `--disable-servicelb`
+* `--egress-selector-mode`
+* `--flannel-backend`
+* `--flannel-external-ip`
+* `--flannel-ipv6-masq`
+* `--secrets-encryption`
+* `--service-cidr`
 
 ## Commonly Used Options
 
@@ -66,54 +67,12 @@ In this section, you'll learn how to configure the K3s server.
 | `--cluster-init`             | `K3S_CLUSTER_INIT` |           Initialize a new cluster using embedded Etcd
 | `--cluster-reset`            |  `K3S_CLUSTER_RESET` |           Forget all peers and become sole member of a new cluster
 
-### Client Options
+### Admin Kubeconfig Options
 
 | Flag | Environment Variable | Description |
 |------|----------------------|-------------|
 |  `--write-kubeconfig value, -o` value  | `K3S_KUBECONFIG_OUTPUT` | Write kubeconfig for admin client to this file |
-|  `--write-kubeconfig-mode` value       | `K3S_KUBECONFIG_MODE`   | Write kubeconfig with this [mode.](https://en.wikipedia.org/wiki/Chmod) The option to allow writing to the kubeconfig file is useful for allowing a K3s cluster to be imported into Rancher. An example value is 644. |
-
-## Agent Options
-
-K3s agent options are available as server options because the server has the agent process embedded within.
-
-### Agent Nodes
-
-| Flag | Environment Variable | Description |
-|------|----------------------|-------------|
-|   `--node-name` value      | `K3S_NODE_NAME`        | Node name       |
-|   `--with-node-id`     |  N/A           | Append id to node name         | (agent/node)
-|   `--node-label` value   | N/A         | Registering and starting kubelet with set of labels        |
-|   `--node-taint` value    | N/A        | Registering kubelet with set of taints         |
-|   `--image-credential-provider-bin-dir` value | N/A |  The path to the directory where credential provider plugin binaries are located (default: "/var/lib/rancher/credentialprovider/bin") |
-|   `--image-credential-provider-config` value | N/A | The path to the credential provider plugin config file (default: "/var/lib/rancher/credentialprovider/config.yaml") |
-|   `--selinux` | `K3S_SELINUX` | Enable SELinux in containerd |
-|   `--lb-server-port` value | `K3S_LB_SERVER_PORT` | Local port for supervisor client load-balancer. If the supervisor and apiserver are not colocated an additional port 1 less than this port will also be used for the apiserver client load-balancer. (default: 6444) |
-| `--protect-kernel-defaults` | N/A                  | Kernel tuning behavior. If set, error if kernel tunables are different from kubelet defaults. |
-
-### Agent Runtime
-
-| Flag                                 | Default                            | Description                                                        |
-| ------------------------------------ | ---------------------------------- | ------------------------------------------------------------------ |
-| `--container-runtime-endpoint` value | N/A                                | Disable embedded containerd and use the CRI socket at the given path; when used with --docker this sets the cri-docker socket path |
-| `--pause-image` value                | "docker.io/rancher/pause:3.1"      | Customized pause image for containerd or Docker sandbox            |
-| `--snapshotter` value                | "overlayfs"                        | Override default containerd snapshotter                            |
-| `--private-registry` value           | "/etc/rancher/k3s/registries.yaml" | Private registry configuration file                                |
-| `system-default-registry` value      | Private registry to be used for all system images |
-
-### Agent Networking
-
-the agent options are there because the server has the agent process embedded within
-
-| Flag                        | Environment Variable | Description                               |
-| --------------------------- | -------------------- | ----------------------------------------- |
-| `--node-ip value, -i` value | N/A                  | IP address to advertise for node          |
-| `--node-external-ip` value  | N/A                  | External IP address to advertise for node |
-| `--resolv-conf` value       | `K3S_RESOLV_CONF`    | Kubelet resolv.conf file                  |
-| `--flannel-iface` value     | N/A                  | Override default flannel interface        |
-| `--flannel-conf` value      | N/A                  | Override default flannel config file      |
-| `--flannel-cni-conf` value  | N/A | Override default flannel cni config file |
-
+|  `--write-kubeconfig-mode` value       | `K3S_KUBECONFIG_MODE`   | Write kubeconfig with this [mode.](https://en.wikipedia.org/wiki/Chmod) The kubeconfig file is owned by root, and written with a default mode of 600. Changing the mode to 644 will allow it to be read by other unprivileged users on the host. |
 
 ## Advanced Options
 
@@ -176,12 +135,12 @@ the agent options are there because the server has the agent process embedded wi
 
 | Flag                         | Description                                                                                                                                   |
 | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| `--disable` value            | Do not deploy packaged components and delete any deployed components (valid items: coredns, servicelb, traefik,local-storage, metrics-server). Multiple components can be disabled with a comma sperated list (`--disable coredns,traefik`). |
+| `--disable` value            | See "[Using the `--disable` flag](../installation/addons.md#using-the---disable-flag)" |
 | `--disable-scheduler`        | Disable Kubernetes default scheduler              |
 | `--disable-cloud-controller` | Disable k3s default cloud controller manager      |
 | `--disable-kube-proxy`       | Disable running kube-proxy                        |
 | `--disable-network-policy`   | Disable k3s default network policy controller     |
-|   `--disable-helm-controller` | Disable Helm controller |
+| `--disable-helm-controller` | Disable Helm controller |
 
 
 ### Customized Flags for Kubernetes Processes
@@ -204,6 +163,8 @@ the agent options are there because the server has the agent process embedded wi
 | `--enable-pprof`       | Enable pprof endpoint on supervisor port |
 | `--docker`             | Use cri-dockerd instead of containerd    |
 | `--prefer-bundled-bin` | Prefer bundled userspace binaries over host binaries |
+| `--disable-agent`      | See "[Running Agentless Servers (Experimental)](../advanced#running-agentless-servers-experimental)" |
+
 
 ### Deprecated Options
 
