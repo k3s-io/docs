@@ -62,12 +62,14 @@ After registration, the agent nodes establish a connection directly to one of th
 
 ### How Agent Node Registration Works
 
-Agent nodes are registered with a websocket connection initiated by the `k3s agent` process, and the connection is maintained by a client-side load balancer running as part of the agent process.
+Agent nodes are registered with a websocket connection initiated by the `k3s agent` process, and the connection is maintained by a client-side load balancer running as part of the agent process. This load-balancer maintains stable connections to all servers in the cluster, providing a connection to the apiserver that tolerates outages of individual servers.
 
-Agents will register with the server using the node cluster secret along with a randomly generated password for the node, stored at `/etc/rancher/node/password`. The server will store the passwords for individual nodes as Kubernetes secrets, and any subsequent attempts must use the same password. Node password secrets are stored in the `kube-system` namespace with names using the template `<host>.node-password.k3s`.
+Agents will register with the server using the node cluster secret along with a randomly generated password for the node, stored at `/etc/rancher/node/password`. The server will store the passwords for individual nodes as Kubernetes secrets, and any subsequent attempts must use the same password. Node password secrets are stored in the `kube-system` namespace with names using the template `<host>.node-password.k3s`. This is done to protect the integrity of node IDs.
 
-Note: Prior to K3s v1.20.2 servers stored passwords on disk at `/var/lib/rancher/k3s/server/cred/node-passwd`.
+If the `/etc/rancher/node` directory of an agent is removed, or you wish to rejoin a node using an existing name, the node should be deleted from the cluster. This will clean up both the old node entry, and the node password secret, and allow the node to (re)join the cluster.
 
-If the `/etc/rancher/node` directory of an agent is removed, the password file should be recreated for the agent, or the entry removed from the server.
+:::note
+Prior to K3s v1.20.2 servers stored passwords on disk at `/var/lib/rancher/k3s/server/cred/node-passwd`.
+:::
 
-A unique node ID can be appended to the hostname by launching K3s servers or agents using the `--with-node-id` flag.
+If you frequently reuse hostnames, but are unable to remove the node password secrets, a unique node ID can be automatically appended to the hostname by launching K3s servers or agents using the `--with-node-id` flag. When enabled, the node ID is also stored in `/etc/rancher/node/`.
