@@ -61,9 +61,10 @@ For details on configuring the K3s agent, see [Agent Configuration.](../referenc
 You can also use the `--help` flag to see a list of all available options.
 
 :::info Matching Flags
-It is important to match critical flags on your server/agent installations. For example, if you use the flag
-`--disable servicelb` or `--cluster-cidr=10.42.0.0/16` on your master node, but don't set it on other server nodes, the nodes will fail to join. They will print errors such as:
+It is important to match critical flags on your server nodes. For example, if you use the flag
+`--disable servicelb` or `--cluster-cidr=10.200.0.0/16` on your master node, but don't set it on other server nodes, the nodes will fail to join. They will print errors such as:
 `failed to validate server configuration: critical configuration value mismatch.`
+See the Server Configuration documentation (linked above) for more information on which flags must be set identically on server nodes.
 :::
 ## Configuration File
 

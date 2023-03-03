@@ -5,17 +5,7 @@ weight: 2
 
 In this section, you'll learn how to configure the K3s agent.
 
-- [Logging](#logging)
-- [Cluster Options](#cluster-options)
-- [Data](#data)
-- [Node](#node)
-- [Runtime](#runtime)
-- [Networking](#networking)
-- [Customized Flags](#customized-flags)
-- [Experimental](#experimental)
-- [Deprecated](#deprecated)
-- [Node Labels and Taints for Agents](#node-labels-and-taints-for-agents)
-- [K3s Agent CLI Help](#k3s-agent-cli-help)
+Note that servers also run an agent, so all flags listed on this page are also valid for use on servers.
 
 ### Logging
 
