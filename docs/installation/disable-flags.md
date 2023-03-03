@@ -41,7 +41,7 @@ Roles can be added to existing dedicated nodes by restarting K3s with the disabl
 
 ## Configuration File Syntax
 
-As with all other CLI flags, you can use the  [Configuration File](installation/configuration.md#configuration-file) to disable components, instead of passing the options as CLI flags. For example, to create a dedicated `etcd` node, you can place the following values in `/etc/rancher/k3s/config.yaml`:
+As with all other CLI flags, you can use the  [Configuration File](configuration.md#configuration-file) to disable components, instead of passing the options as CLI flags. For example, to create a dedicated `etcd` node, you can place the following values in `/etc/rancher/k3s/config.yaml`:
 
 ```yaml
 cluster-init: true
