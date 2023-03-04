@@ -1,5 +1,5 @@
 ---
-title: K3s Agent Configuration
+title: Agent Configuration
 weight: 2
 ---
 
