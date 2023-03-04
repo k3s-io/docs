@@ -75,12 +75,23 @@ module.exports = {
     {
       type: 'category',
       label: 'Reference',
+      link: {type: 'doc', id: 'reference/reference',},
       items: [
         'reference/server-config',
         'reference/agent-config',
         'reference/env-variables',
-        `reference/binary-tools`,
         'reference/resource-profiling',
+        {
+          type: 'category',
+          label: 'CLI Tools',
+          link: {type: 'doc', id: 'reference/cli/cli'},
+          items: [
+            'reference/cli/certificate',
+            'reference/cli/etcd-snapshot',
+            'reference/cli/secrets-encrypt',
+            'reference/cli/token',
+          ],
+        },
       ],
     },
     {

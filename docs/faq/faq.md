@@ -33,6 +33,10 @@ The location of K3s logs will vary depending on how you run K3s and the node's O
 
 You can generate more detailed logs by using the `--debug` flag when starting K3s (or `debug: true` in the configuration file).
 
+Kubernetes uses a logging framework known as `klog`, which uses a single logging configuration for all components within a process.
+Since K3s runs all Kubernetes components within a single process, it is not possible to configure different log levels or destinations for individual Kubernetes components.
+Use of the `-v=<level>` or `--vmodule=<module>=<level>` component args will likely not have the desired effect. 
+
 See [Additional Logging Sources](../advanced/advanced.md#additional-logging-sources) for even more log options.
 
 ### Can I run K3s in Docker?
@@ -41,14 +45,7 @@ Yes, there are multiple ways to run K3s in Docker. See [Advanced Options](../adv
 
 ### What is the difference between K3s Server and Agent Tokens?
 
-In K3s, there are two types of tokens: `K3S_TOKEN` and `K3S_AGENT_TOKEN`.
-
-`K3S_TOKEN`: Defines the key required by the server to offer the HTTP config resources. These resources are requested by the other servers before joining the K3s HA cluster. If the `K3S_AGENT_TOKEN` is not defined, the agents use this token as well to access the required HTTP resources to join the cluster. Note that this token is also used to generate the encryption key for important content in the database (e.g., bootstrap data).
-
-`K3S_AGENT_TOKEN`: Optional. Defines the key required by the server to offer HTTP config resources to the agents. If not defined, agents will require `K3S_TOKEN`. Defining `K3S_AGENT_TOKEN` is encouraged to avoid agents having to know `K3S_TOKEN`, which is also used to encrypt data.
-
-If no `K3S_TOKEN` is defined, the first K3s server will generate a random token during initial startup. The result is part of the content in `/var/lib/rancher/k3s/server/token`. For example, `K1070878408e06a827960208f84ed18b65fa10f27864e71a57d9e053c4caff8504b::server:df54383b5659b9280aa1e73e60ef78fc`. The token in this example is `df54383b5659b9280aa1e73e60ef78fc`. The full format with the `K10` prefix includes a hash of the cluster's CA certificate, which can be used to ensure that nodes are joining the correct cluster and are not subject to a man-in-the-middle attack during the join process. This full token cannot be generated prior to initial cluster startup, before the cluster CA has been generated.
-
+For more information on managing K3s join tokens, see the [`k3s token`](../reference/cli/token.md) documentation.
 
 ### How compatible are different versions of K3s?
 

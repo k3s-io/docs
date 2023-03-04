@@ -11,33 +11,25 @@ import TabItem from '@theme/TabItem';
 
 This section contains advanced information describing the different ways you can run and manage K3s, as well as steps necessary to prepare the host OS for K3s use.
 
-## Certificate Rotation
+## Certificate Management
 
-### Automatic rotation
-By default, certificates in K3s expire in 12 months.
+### Certificate Authority Certificates
 
-If the certificates are expired or have fewer than 90 days remaining before they expire, the certificates are rotated when K3s is restarted.
+K3s generates self-signed Certificate Authority (CA) Certificates during startup of the first server node. These CA certificates are valid for 10 years, and are not automatically renewed.
 
-### Manual rotation
+For information on using custom CA certificates, or renewing the self-signed CA certificates, see the [`k3s certificate rotate-ca`](../reference/cli/certificate.md#rotate-ca) CLI tool documentation.
 
-To rotate the certificates manually, use the `k3s certificate rotate` subcommand:
+### Client and Server certificates
 
-```bash
-# Stop K3s
-systemctl stop k3s
-# Rotate certificates
-k3s certificate rotate
-# Start K3s
-systemctl start k3s
-```
+K3s client and server certificates are valid for 365 days from their date of issuance. Any certificates that are expired, or within 90 days of expiring, are automatically renewed every time K3s starts.
 
-Individual or lists of certificates can be rotated by specifying the certificate name:
+For information on manually rotating client and server certificates, see the [`k3s certificate rotate`](../reference/cli/certificate.md#rotate) CLI tool documentation.
 
-```bash
-k3s certificate rotate --service <SERVICE>,<SERVICE>
-```
+## Token Management
 
-The following certificates can be rotated: `admin`, `api-server`, `controller-manager`, `scheduler`, `k3s-controller`, `k3s-server`, `cloud-controller`, `etcd`, `auth-proxy`, `kubelet`, `kube-proxy`.
+By default, K3s uses a single static token for both servers and agents. This token cannot be changed once the cluster has been created.
+It is possible to enable a second static token that can only be used to join agents, or to create temporary `kubeadm` style join tokens that expire automatically.
+For more information, see the [`k3s token`](../reference/cli/token.md) documentation.
 
 ## Configuring an HTTP proxy
 
@@ -129,7 +121,7 @@ ETCD_URL="https://github.com/etcd-io/etcd/releases/download/${ETCD_VERSION}/etcd
 curl -sL ${ETCD_URL} | sudo tar -zxv --strip-components=1 -C /usr/local/bin
 ```
 
-You may then use etcdctl by configuring it to use the K3s-managed certs and keys for authentication:
+You may then use etcdctl by configuring it to use the K3s-managed certificates and keys for authentication:
 
 ```bash
 sudo etcdctl version \
