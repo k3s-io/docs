@@ -1,11 +1,11 @@
 ---
-title: K3s Server Configuration
+title: Server Configuration
 weight: 1
 ---
 
 In this section, you'll learn how to configure the K3s server.
 
-Note that servers also run an agent, so all of the configuration flags listed in the [K3s Agent Configuration](agent-config.md) documentation are also supported on servers.
+Note that servers also run an agent, so all of the configuration flags listed in the [Agent Configuration](agent-config.md) documentation are also supported on servers.
 
 ## Critical Configuration Values
 

@@ -1,6 +1,5 @@
 ---
-title: K3s Resource Profiling
-shortTitle: Resource Profiling
+title: Resource Profiling
 weight: 1
 ---
 

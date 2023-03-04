@@ -1,5 +1,5 @@
 ---
-title: K3s Binary Tools
+title: Binary Tools
 weight: 1
 ---
 
