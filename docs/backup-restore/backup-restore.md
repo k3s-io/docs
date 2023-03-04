@@ -11,6 +11,12 @@ The way K3s is backed up and restored depends on which type of datastore is used
 - [Backup and Restore with External Datastore](#backup-and-restore-with-external-datastore)
 - [Backup and Restore with Embedded etcd Datastore](#backup-and-restore-with-embedded-etcd-datastore)
 
+:::caution
+In addition to backing up the datastore itself, you must also back up the server token file at `/var/lib/rancher/k3s/server/token`.
+You must restore this file, or pass its value into the `--token` option, when restoring from backup.
+If you do not use the same token value when restoring, the snapshot will be unusable, as the token is used to encrypt confidential data within the datastore itself.
+:::
+
 ### Backup and Restore with External Datastore
 
 When an external datastore is used, backup and restore operations are handled outside of K3s. The database administrator will need to back up the external database, or restore it from a snapshot or dump.
