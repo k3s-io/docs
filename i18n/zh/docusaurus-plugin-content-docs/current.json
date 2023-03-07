@@ -18,5 +18,13 @@
   "sidebar.mySidebar.category.Security": {
     "message": "安全",
     "description": "The label for category Security in sidebar mySidebar"
+  },
+  "sidebar.mySidebar.category.Cluster Datastore Options": {
+    "message": "Cluster Datastore Options",
+    "description": "The label for category Cluster Datastore Options in sidebar mySidebar"
+  },
+  "sidebar.mySidebar.category.CLI Tools": {
+    "message": "CLI Tools",
+    "description": "The label for category CLI Tools in sidebar mySidebar"
   }
 }
