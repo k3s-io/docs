@@ -3,7 +3,7 @@ title: "Configuration Options"
 weight: 20
 ---
 
-This page focuses on the options that are commonly used when setting up K3s for the first time. Refer to the documentation on [Advanced Options and Configuration](../advanced/advanced.md) for more in-depth coverage.
+This page focuses on the options that are commonly used when setting up K3s for the first time. Refer to the documentation on [Advanced Options and Configuration](../advanced/advanced.md) and the [server](../cli/server.md) and [agent](../cli/agent.md) command documentation for more in-depth coverage.
 
 ## Configuration with install script
 
@@ -56,8 +56,8 @@ The k3s agent can also be configured this way:
 k3s agent --server https://k3s.example.com --token mypassword
 ```
 
-For details on configuring the K3s server, see [Server Configuration.](../reference/server-config.md)  
-For details on configuring the K3s agent, see [Agent Configuration.](../reference/agent-config.md)  
+For details on configuring the K3s server, see the [`k3s server` documentation](../cli/server.md).  
+For details on configuring the K3s agent, see the [`k3s agent` documentation](../cli/agent.md).  
 You can also use the `--help` flag to see a list of all available options.
 
 :::info Matching Flags

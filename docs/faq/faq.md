@@ -45,7 +45,7 @@ Yes, there are multiple ways to run K3s in Docker. See [Advanced Options](../adv
 
 ### What is the difference between K3s Server and Agent Tokens?
 
-For more information on managing K3s join tokens, see the [`k3s token`](../reference/cli/token.md) documentation.
+For more information on managing K3s join tokens, see the [`k3s token` command documentation](../cli/token.md).
 
 ### How compatible are different versions of K3s?
 

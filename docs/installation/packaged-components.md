@@ -19,7 +19,17 @@ Manifests for packaged components are managed by K3s, and should not be altered.
 
 You may place additional files in the manifests directory for deployment as an `AddOn`. Each file may contain multiple Kubernetes resources, delmited by the `---` YAML document separator. For more information on organizing resources in manifests, see the [Managing Resources](https://kubernetes.io/docs/concepts/cluster-administration/manage-deployment/) section of the Kubernetes documentation.
 
-The `AddOn` name for each file in the manifest directory is derived from the file basename. Ensure that all files within the manifests directory (or within any subdirectories) have names that are unique, and are valid Kubernetes resource names. Care should also be taken not to conflict with names in use by the default K3s packaged components, even if those components are disabled.
+#### File Naming Requirements
+
+The `AddOn` name for each file in the manifest directory is derived from the file basename. 
+Ensure that all files within the manifests directory (or within any subdirectories) have names that are unique, and adhere to Kubernetes [object naming restrictions](https://kubernetes.io/docs/concepts/overview/working-with-objects/names/).
+Care should also be taken not to conflict with names in use by the default K3s packaged components, even if those components are disabled.
+
+Here is en example of an error that would be reported if the file name contains underscores:
+> `Failed to process config: failed to process /var/lib/rancher/k3s/server/manifests/example_manifest.yaml:
+   Addon.k3s.cattle.io "example_manifest" is invalid: metadata.name: Invalid value: "example_manifest": 
+   a lowercase RFC 1123 subdomain must consist of lower case alphanumeric characters, '-' or '.', and must start and end with an alphanumeric character
+   (e.g. 'example.com', regex used for validation is '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*')`
 
 :::warning
 If you have multiple server nodes, and place additional AddOn manifests on more than one server, it is your responsibility to ensure that files stay in sync across those nodes. K3s does not sync AddOn content between nodes, and cannot guarantee correct behavior if different servers attempt to deploy conflicting manifests.
