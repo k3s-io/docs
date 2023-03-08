@@ -57,4 +57,4 @@ K3s contains a utility tool `secrets-encrypt`, which enables automatic control o
 - Rotating and deleting encryption keys
 - Reencrypting secrets
 
-For more information, see [`k3s secrets-encrypt`](../reference/cli/secrets-encrypt.md).
+For more information, see the [`k3s secrets-encrypt` command documentation](../cli/secrets-encrypt.md).

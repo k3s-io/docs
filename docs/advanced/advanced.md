@@ -17,19 +17,19 @@ This section contains advanced information describing the different ways you can
 
 K3s generates self-signed Certificate Authority (CA) Certificates during startup of the first server node. These CA certificates are valid for 10 years, and are not automatically renewed.
 
-For information on using custom CA certificates, or renewing the self-signed CA certificates, see the [`k3s certificate rotate-ca`](../reference/cli/certificate.md#rotate-ca) CLI tool documentation.
+For information on using custom CA certificates, or renewing the self-signed CA certificates, see the [`k3s certificate rotate-ca` command documentation](../cli/certificate.md#certificate-authority-ca-certificates).
 
 ### Client and Server certificates
 
 K3s client and server certificates are valid for 365 days from their date of issuance. Any certificates that are expired, or within 90 days of expiring, are automatically renewed every time K3s starts.
 
-For information on manually rotating client and server certificates, see the [`k3s certificate rotate`](../reference/cli/certificate.md#rotate) CLI tool documentation.
+For information on manually rotating client and server certificates, see the [`k3s certificate rotate` command documentation](../cli/certificate.md#client-and-server-certificates).
 
 ## Token Management
 
 By default, K3s uses a single static token for both servers and agents. This token cannot be changed once the cluster has been created.
 It is possible to enable a second static token that can only be used to join agents, or to create temporary `kubeadm` style join tokens that expire automatically.
-For more information, see the [`k3s token`](../reference/cli/token.md) documentation.
+For more information, see the [`k3s token` command documentation](../cli/token.md).
 
 ## Configuring an HTTP proxy
 
@@ -259,7 +259,7 @@ Some of the configuration used by rootlesskit and slirp4nets can be set by envir
 
 ## Node Labels and Taints
 
-K3s agents can be configured with the options `--node-label` and `--node-taint` which adds a label and taint to the kubelet. The two options only add labels and/or taints [at registration time](../reference/agent-config.md#node-labels-and-taints-for-agents), so they can only be set when the node is first joined to the cluster.
+K3s agents can be configured with the options `--node-label` and `--node-taint` which adds a label and taint to the kubelet. The two options only add labels and/or taints [at registration time](../cli/agent.md#node-labels-and-taints-for-agents), so they can only be set when the node is first joined to the cluster.
 
 All current versions of Kubernetes restrict nodes from registering with most labels with `kubernetes.io` and `k8s.io` prefixes, specifically including the `kubernetes.io/role` label. If you attempt to start a node with a disallowed label, K3s will fail to start. As stated by the Kubernetes authors:
 

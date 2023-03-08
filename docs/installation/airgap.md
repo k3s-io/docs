@@ -75,7 +75,7 @@ The token from the server is typically found at `/var/lib/rancher/k3s/server/tok
 </TabItem>
 <TabItem value="High Availability Configuration" default>
 
-Reference the [High Availability with an External DB](ha.md) or [High Availability with Embedded DB](ha-embedded.md) guides. You will be tweaking install commands so you specify `INSTALL_K3S_SKIP_DOWNLOAD=true` and run your install script locally instead of via curl. You will also utilize `INSTALL_K3S_EXEC='args'` to supply any arguments to k3s.
+Reference the [High Availability with an External DB](../datastore/ha.md) or [High Availability with Embedded DB](../datastore/ha-embedded.md) guides. You will be tweaking install commands so you specify `INSTALL_K3S_SKIP_DOWNLOAD=true` and run your install script locally instead of via curl. You will also utilize `INSTALL_K3S_EXEC='args'` to supply any arguments to k3s.
 
 For example, step two of the High Availability with an External DB guide mentions the following:
 

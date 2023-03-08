@@ -21,7 +21,7 @@ If you don't install CoreDNS, you will need to install a cluster DNS provider yo
 
 The Traefik ingress controller deploys a LoadBalancer Service that uses ports 80 and 443. By default, ServiceLB will expose these ports on all cluster members, meaning these ports will not be usable for other HostPort or NodePort pods.
 
-Traefik is deployed by default when starting the server. For more information see [Managing Packaged Components](../installation/addons.md). The default config file is found in `/var/lib/rancher/k3s/server/manifests/traefik.yaml`.
+Traefik is deployed by default when starting the server. For more information see [Managing Packaged Components](../installation/packaged-components.md). The default config file is found in `/var/lib/rancher/k3s/server/manifests/traefik.yaml`.
 
 The `traefik.yaml` file should not be edited manually, as K3s will replace the file with defaults at startup. Instead, you should customize Traefik by creating an additional `HelmChartConfig` manifest in `/var/lib/rancher/k3s/server/manifests`. For more details and an example see [Customizing Packaged Components with HelmChartConfig](../helm/helm.md#customizing-packaged-components-with-helmchartconfig). For more information on the possible configuration values, refer to the official [Traefik Helm Configuration Parameters.](https://github.com/traefik/traefik-helm-chart/tree/master/traefik).
 
@@ -66,7 +66,7 @@ Create a [Service of type LoadBalancer](https://kubernetes.io/docs/concepts/serv
 Adding the `svccontroller.k3s.cattle.io/enablelb=true` label to one or more nodes switches the ServiceLB controller into allow-list mode, where only nodes with the label are eligible to host LoadBalancer pods. Nodes that remain unlabeled will be excluded from use by ServiceLB.
 
 :::note
-By default, nodes are not labeled. As long as all nodes remain unlabled, all nodes with ports available will be used by ServiceLB.
+By default, nodes are not labeled. As long as all nodes remain unlabeled, all nodes with ports available will be used by ServiceLB.
 :::
 
 ### Creating ServiceLB Node Pools

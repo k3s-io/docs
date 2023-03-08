@@ -6,7 +6,7 @@ import TabItem from '@theme/TabItem';
 
 # k3s secrets-encrypt
 
-K3s supports enabling secrets encryption at rest. For more information, see [Secrets Encryption](../../security/secrets-encryption.md).
+K3s supports enabling secrets encryption at rest. For more information, see [Secrets Encryption](../security/secrets-encryption.md).
 
 ## Secrets Encryption Tool
 
