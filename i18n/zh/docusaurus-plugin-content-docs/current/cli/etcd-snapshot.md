@@ -1,6 +1,8 @@
 ---
 title: etcd-snapshot
 ---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 # k3s etcd-snapshot
 
@@ -77,7 +79,7 @@ In this example there are 3 servers, `S1`, `S2`, and `S3`. The snapshot is locat
 
 #### Options
 
-These options can be passed in with the command line, or in the [configuration file,](../../installation/configuration.md#configuration-file ) which may be easier to use.
+These options can be passed in with the command line, or in the [configuration file,](../installation/configuration.md#configuration-file ) which may be easier to use.
 
 | Options | Description |
 | ----------- | --------------- |
