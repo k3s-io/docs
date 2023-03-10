@@ -85,14 +85,14 @@ If the command completes successfully, you may install and/or start K3s for the 
 To rotate custom CA certificates, use the `k3s certificate rotate-ca` subcommand.
 Updated files must be staged into a temporary directory, loaded into the datastore, and k3s must be restarted on all nodes to use the updated certificates.
 
-A cluster that has been started with custom CA certificates can renew or rotate the CA certificates and keys non-disruptively, as long as the same root CA is used.
-
-If a new root CA is required, the rotation will be disruptive. The `--force` option must be used, all nodes that were joined with a [secure token](token.md#secure) will need to be reconfigured to trust the new CA hash, and pods will need to be restarted to trust the new root CA.
-
 :::caution
 You must not overwrite the currently in-use data in `/var/lib/rancher/k3s/server/tls`.  
 Stage the updated certificates and keys into a separate directory.
 :::
+
+A cluster that has been started with custom CA certificates can renew or rotate the CA certificates and keys non-disruptively, as long as the same root CA is used.
+
+If a new root CA is required, the rotation will be disruptive. The `--force` option must be used, all nodes that were joined with a [secure token](token.md#secure) will need to be reconfigured to trust the new CA hash, and pods will need to be restarted to trust the new root CA.
 
 The example `generate-custom-ca-certs.sh` script linked above can also be used to generate updated certs in a new temporary directory, by setting the `DATA_DIR` environment variable.
 To use the example script to generate updated certs and keys, run the following commands:
@@ -122,15 +122,15 @@ The token may be stored in a `.env` file, systemd unit, or config.yaml, dependin
 To rotate the K3s-generated self-signed CA certificates, use the `k3s certificate rotate-ca` subcommand.
 Updated files must be staged into a temporary directory, loaded into the datastore, and k3s must be restarted on all nodes to use the updated certificates.
 
-If the cluster has been started with default self-signed CA certificates, rotation will be disruptive. All nodes that were joined with a [secure token](token.md#secure) will need to be reconfigured to trust the new CA hash.
-If the new CA certificates are not cross-signed by the old CA certificates, you will need to use the `--force` option to bypass integrity checks, and pods will need to be restarted to trust the new root CA.
-
-An example script to create updated CA certificates and keys cross-signed by the existing CAs is available [in the K3s repo at `contrib/util/rotate-default-ca-certs.sh`](https://github.com/k3s-io/k3s/blob/master/contrib/util/rotate-default-ca-certs.sh).
-
 :::caution
 You must not overwrite the currently in-use data in `/var/lib/rancher/k3s/server/tls`.  
 Stage the updated certificates and keys into a separate directory.
 :::
+
+If the cluster has been started with default self-signed CA certificates, rotation will be disruptive. All nodes that were joined with a [secure token](token.md#secure) will need to be reconfigured to trust the new CA hash.
+If the new CA certificates are not cross-signed by the old CA certificates, you will need to use the `--force` option to bypass integrity checks, and pods will need to be restarted to trust the new root CA.
+
+An example script to create updated CA certificates and keys cross-signed by the existing CAs is available [in the K3s repo at `contrib/util/rotate-default-ca-certs.sh`](https://github.com/k3s-io/k3s/blob/master/contrib/util/rotate-default-ca-certs.sh).
 
 To use the example script to generate updated self-signed certificates that are cross-signed by the existing CAs, run the following commands:
 ```bash
@@ -164,8 +164,11 @@ For example, to rotate only the service-account issuer key, run the following co
 # Create a temporary directory for cert generation
 mkdir -p /opt/k3s/server/tls
 
+# Check OpenSSL version
+openssl version | grep -qF 'OpenSSL 3' && OPENSSL_GENRSA_FLAGS=-traditional
+
 # Generate a new key
-openssl genrsa -traditional -out /opt/k3s/server/tls/service.key 2048
+openssl genrsa ${OPENSSL_GENRSA_FLAGS:-} -out /opt/k3s/server/tls/service.key 2048
 
 # Append the existing key to avoid invalidating current tokens
 cat /var/lib/rancher/k3s/server/tls/service.key >> /opt/k3s/server/tls/service.key
