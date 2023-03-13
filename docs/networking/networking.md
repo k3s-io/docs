@@ -103,3 +103,48 @@ If you disable the built-in CCM and do not deploy and properly configure an exte
 ## Nodes Without a Hostname
 
 Some cloud providers, such as Linode, will create machines with "localhost" as the hostname and others may not have a hostname set at all. This can cause problems with domain name resolution. You can run K3s with the `--node-name` flag or `K3S_NODE_NAME` environment variable and this will pass the node name to resolve this issue.
+
+## Multicluster CIDR (Experimental)
+
+:::info Version Gate
+
+Experimental as of v1.26.3+k3s1
+
+:::
+
+:::caution Warning
+The network policy controller could not work properly when this flag is enabled.
+:::
+
+From `v1.26` Kubernetes introduced Multicluster CIDR as an alpha feature. (https://github.com/kubernetes/enhancements/tree/master/keps/sig-network/2593-multiple-cluster-cidrs)
+
+This feature can be enabled on K3s server with the `--multi-cluster-cidr` flag and it gives the possibility to define multiple cluster CIDR used to allocate the podCIDR for each node with also the possibility to extend it on an already running cluster.
+The `clustercidr` resources will be visible through the API and `kubectl` (the CIDR configured with `--cluster-cidr` is defined as the default one).
+
+A new `clustercidr` can be defined as follow:
+
+```
+apiVersion: networking.k8s.io/v1alpha1
+kind: ClusterCIDR
+metadata:
+  name: new-cidr
+spec:
+  nodeSelector:
+    nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          -  "worker2"
+  perNodeHostBits: 8
+  ipv4: 10.247.0.0/16
+```
+
+The nodes that match the `nodeSelector` will use a podCIDR from the new defined resource.
+
+:::note
+A node that already has a CIDR cannot get a new one. It has to be removed and restarted.
+:::
+:::caution Warning
+A dualstack CIDR could be defined with both `ipv4` and `ipv6` configuration but the `perNodeHostBits` will be the same. When a dualstack configuration is defined with `--cluster-cidr` the `--node-cidr-mask-size-ipv6` flag on the `kube-controller` should be defined to have the same size of IPv4.
+:::
