@@ -71,7 +71,7 @@ The agent token is written to `/var/lib/rancher/k3s/server/agent-token`, in secu
 ### Bootstrap
 
 :::info Version Gate
-Bootstrap tokens are available starting with the 2023-02 releases (v1.26.2+k3s1, v1.25.7+k3s1, v1.24.11+k3s1, v1.23.17+k3s1)
+Support for the `k3s token` command and the ability to join nodes with bootstrap tokens is available starting with the 2023-02 releases (v1.26.2+k3s1, v1.25.7+k3s1, v1.24.11+k3s1, v1.23.17+k3s1).
 :::
 
 K3s supports dynamically generated, automatically expiring agent bootstrap tokens. Bootstrap tokens can only be used to join agents.
