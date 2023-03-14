@@ -41,7 +41,7 @@ Hardware requirements scale based on the size of your deployments. Minimum recom
 
 | Spec | Minimum | Recommended |
 |------|---------|-------------|
-| CPU  | 1       | 2           |
+| CPU  | 1 core      | 2 cores          |
 | RAM  | 512 MB  | 1 GB        |
 
 [Resource Profiling](../reference/resource-profiling.md) captures the results of tests to determine minimum resource requirements for the K3s agent, the K3s server with a workload, and the K3s server with one agent. It also contains analysis about what has the biggest impact on K3s server and agent utilization, and how the cluster datastore can be protected from interference from agents and workloads.
