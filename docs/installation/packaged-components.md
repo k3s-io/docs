@@ -43,7 +43,7 @@ There are two ways to disable deployment of specific content from the manifests 
 
 The AddOns for packaged components listed above, in addition to AddOns for any additional manifests placed in the `manifests` directory, can be disabled with the `--disable` flag. Disabled AddOns are actively uninstalled from the cluster, and the source files deleted from the `manifests` directory.
 
-For example, to disable traefik from being installed on a new cluster, or to uninstall it and remove the manifest from an existing cluster, you can start K3s with `--skip=traefik`. Multiple items can be disabled by separating their names with commas, or by repeating the flag.
+For example, to disable traefik from being installed on a new cluster, or to uninstall it and remove the manifest from an existing cluster, you can start K3s with `--disable=traefik`. Multiple items can be disabled by separating their names with commas, or by repeating the flag.
 
 ### Using .skip files
 
