@@ -69,20 +69,36 @@ Custom Certificate Authority files must be placed in `/var/lib/rancher/k3s/serve
   *// note: This is the private key used to sign service-account tokens. It does not have a corresponding certificate.*
 * `service.key`
 
+:::important
+If you want to sign the cluster CA certificates with an existing root CA using the example script, you must place the root and intermediate files in the target directory prior to running the script.
+If the files do not exist, the script will create new root and intermediate CA certificates.
+:::
+
+If you want to use only an existing root CA certificate, provide the following files:
+* `root.pem`
+* `root.key`
+
+If you want to use an existing root and intermediate CA certificate, provide the following files:
+* `root.pem`
+* `intermediate.pem`
+* `intermediate.key`
+
 To use the example script to generate custom certs and keys before starting K3s, run the following commands:
 ```bash
 # Create the target directory for cert generation.
 mkdir -p /var/lib/rancher/k3s/server/tls
 
 # Copy your root CA cert and intermediate CA cert+key into the correct location for the script.
+# For the purposes of this example, we assume you have existing root and intermediate CA files in /etc/ssl.
 # If you do not have an existing root and/or intermediate CA, the script will generate them for you.
-cp /etc/ssl/certs/root.crt /etc/ssl/certs/intermediate.cert /etc/ssl/private/intermediate.key /var/lib/rancher/k3s/server/tls
+cp /etc/ssl/certs/root.pem /etc/ssl/certs/intermediate.pem /etc/ssl/private/intermediate.key /var/lib/rancher/k3s/server/tls
 
 # Generate custom CA certs and keys.
 curl -sL https://github.com/k3s-io/k3s/raw/master/contrib/util/generate-custom-ca-certs.sh | bash -
 ```
 
 If the command completes successfully, you may install and/or start K3s for the first time.
+If the script generated root and/or intermediate CA files, you should back up these files so that they can be reused if it is necessary to rotate the CA certificates at a later date.
 
 ### Rotating Custom CA Certificates
 
@@ -96,17 +112,21 @@ Stage the updated certificates and keys into a separate directory.
 
 A cluster that has been started with custom CA certificates can renew or rotate the CA certificates and keys non-disruptively, as long as the same root CA is used.
 
-If a new root CA is required, the rotation will be disruptive. The `--force` option must be used, all nodes that were joined with a [secure token](token.md#secure) will need to be reconfigured to trust the new CA hash, and pods will need to be restarted to trust the new root CA.
+If a new root CA is required, the rotation will be disruptive. The `k3s certificate rotate-ca --force` option must be used, all nodes that were joined with a [secure token](token.md#secure) (including servers) will need to be reconfigured to use the new token value, and pods will need to be restarted to trust the new root CA.
 
-The example `generate-custom-ca-certs.sh` script linked above can also be used to generate updated certs in a new temporary directory, by setting the `DATA_DIR` environment variable.
+The example `generate-custom-ca-certs.sh` script linked above can also be used to generate updated certs in a new temporary directory, by copying files into the correct location and setting the `DATA_DIR` environment variable.
 To use the example script to generate updated certs and keys, run the following commands:
 ```bash
 # Create a temporary directory for cert generation.
 mkdir -p /opt/k3s/server/tls
 
 # Copy your root CA cert and intermediate CA cert+key into the correct location for the script.
-# If you do not have an existing root and/or intermediate CA, the script will generate them for you.
-cp /etc/ssl/certs/root.crt /etc/ssl/certs/intermediate.cert /etc/ssl/private/intermediate.key /opt/k3s/server/tls
+# Non-disruptive rotation requires the same root CA that was used to generate the original certificates.
+# If the original files are still in the data directory, you can just run:
+cp /var/lib/rancher/k3s/server/root.* /var/lib/rancher/k3s/server/intermediate.* /opt/k3s/server/tls
+
+# Copy the current service-account signing key, so that existing service-account tokens are not invalidated.
+cp /var/lib/rancher/k3s/server/tls/service.key /opt/k3s/server/tls
 
 # Generate updated custom CA certs and keys.
 curl -sL https://github.com/k3s-io/k3s/raw/master/contrib/util/generate-custom-ca-certs.sh | DATA_DIR=/opt/k3s bash -
@@ -142,14 +162,14 @@ To use the example script to generate updated self-signed certificates that are 
 # This script will create a new temporary directory containing the updated certs, and output the new token values.
 curl -sL https://github.com/k3s-io/k3s/raw/master/contrib/util/rotate-default-ca-certs.sh | bash -
 
-# Load the updated certs into the datastore; see the script output for the updated token value and path to the new certs.
-k3s certificate rotate-ca --path=PATH_TO_TEMP_DIR
+# Load the updated certs into the datastore; see the script output for the updated token values.
+k3s certificate rotate-ca --path=/var/lib/rancher/k3s/server/rotate-ca
 ```
 
 If the `rotate-ca` command returns an error, check the service log for errors.
 If the command completes successfully, restart K3s on all nodes in the cluster - servers first, then agents.
 
-Ensure that any nodes that were joined with a [secure token](token.md#secure) are reconfigured to use the new token value, prior to being restarted.
+Ensure that any nodes that were joined with a [secure token](token.md#secure), including other server nodes, are reconfigured to use the new token value prior to being restarted.
 The token may be stored in a `.env` file, systemd unit, or config.yaml, depending on how the node was configured during initial installation.
 
 ## Service-Account Issuer Key Rotation
