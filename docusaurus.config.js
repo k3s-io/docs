@@ -11,6 +11,12 @@ module.exports = {
   organizationName: 'k3s-io', // Usually your GitHub org/user name.
   projectName: 'docs', // Usually your repo name.
   trailingSlash: false,
+  markdown: {
+    mermaid: true,
+  },
+  themes: [
+    '@docusaurus/theme-mermaid'
+  ],
   i18n: {
     defaultLocale: "en",
     locales: ["en", "zh"],
