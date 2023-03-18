@@ -37,9 +37,13 @@ Kubernetes requires a number of CA certificates for proper operation. For more i
 
 By default, K3s generates self-signed CA certificates during startup of the first server node. These CA certificates are valid for 10 years from date of issuance, and are not automatically renewed.
 
+The authoritative CA certificates and keys are stored within the datastore's bootstrap key, encrypted using the [server token](token.md#server) as the PBKDF2 passphrase with AES256-GCM and HMAC-SHA1.
+Copies of the CA certificates and keys are extracted to disk during K3s server startup.
+Any server may generate leaf certificates for nodes as they join the cluster, and the Kubernetes [Certificates API](https://kubernetes.io/docs/reference/access-authn-authz/certificate-signing-requests/) controllers may issue additional certificates at runtime.
+
 To rotate CA certificates and keys, use the `k3s certificate rotate-ca` command.
 The command performs integrity checks to confirm that the updated certificates and keys are usable.
-If the updated data is acceptable, the datastore's encrypted bootstrap data is updated, and the new certificates and keys will be used the next time K3s starts.
+If the updated data is acceptable, the datastore's encrypted bootstrap key is updated, and the new certificates and keys will be used the next time K3s starts.
 If problems are encountered while validating the certificates and keys, an error is reported to the system log and the operation is cancelled without changes.
 
 :::info Version Gate
@@ -69,6 +73,39 @@ Custom Certificate Authority files must be placed in `/var/lib/rancher/k3s/serve
   *// note: This is the private key used to sign service-account tokens. It does not have a corresponding certificate.*
 * `service.key`
 
+#### Custom CA Topology
+
+Custom CA Certificates should observe the following topology:
+
+```mermaid
+graph TD
+  root("Root CA")
+  intermediate("Intermediate CA")
+  server-ca("Server CA")
+  client-ca("Client CA")
+  request-header-ca("API Aggregation CA")
+  etcd-peer-ca("etcd Peer CA")
+  etcd-server-ca("etcd Server CA")
+
+  root-hash>"Join token CA hash"]
+
+  kube-server-certs[["Kubernetes servers<br/>(control-plane and kubelet listeners)"]]
+  kube-client-certs[["Kubernetes clients<br/>(apiserver and kubelet clients)"]]
+  request-header-certs[["Kubernetes API aggregation<br/>(apiserver proxy client)"]]
+  etcd-peer-certs[["etcd peer client/server<br/>(etcd replication)"]]
+  etcd-server-certs[["etcd client/server certificates<br/>(Kubernetes <-> etcd)"]]
+
+  root -.-|SHA256| root-hash
+  root ---> intermediate
+  intermediate --> server-ca ==> kube-server-certs
+  intermediate --> client-ca ==> kube-client-certs
+  intermediate --> request-header-ca ==> request-header-certs
+  intermediate --> etcd-peer-ca ==> etcd-peer-certs
+  intermediate --> etcd-server-ca ==> etcd-server-certs
+```
+
+#### Using the Example Script
+
 :::important
 If you want to sign the cluster CA certificates with an existing root CA using the example script, you must place the root and intermediate files in the target directory prior to running the script.
 If the files do not exist, the script will create new root and intermediate CA certificates.
@@ -78,7 +115,7 @@ If you want to use only an existing root CA certificate, provide the following f
 * `root.pem`
 * `root.key`
 
-If you want to use an existing root and intermediate CA certificate, provide the following files:
+If you want to use existing root and intermediate CA certificates, provide the following files:
 * `root.pem`
 * `intermediate.pem`
 * `intermediate.key`
@@ -113,6 +150,8 @@ Stage the updated certificates and keys into a separate directory.
 A cluster that has been started with custom CA certificates can renew or rotate the CA certificates and keys non-disruptively, as long as the same root CA is used.
 
 If a new root CA is required, the rotation will be disruptive. The `k3s certificate rotate-ca --force` option must be used, all nodes that were joined with a [secure token](token.md#secure) (including servers) will need to be reconfigured to use the new token value, and pods will need to be restarted to trust the new root CA.
+
+#### Using the Example Script
 
 The example `generate-custom-ca-certs.sh` script linked above can also be used to generate updated certs in a new temporary directory, by copying files into the correct location and setting the `DATA_DIR` environment variable.
 To use the example script to generate updated certs and keys, run the following commands:
@@ -153,6 +192,83 @@ Stage the updated certificates and keys into a separate directory.
 
 If the cluster has been started with default self-signed CA certificates, rotation will be disruptive. All nodes that were joined with a [secure token](token.md#secure) will need to be reconfigured to trust the new CA hash.
 If the new CA certificates are not cross-signed by the old CA certificates, you will need to use the `--force` option to bypass integrity checks, and pods will need to be restarted to trust the new root CA.
+
+#### Default CA Topology
+The default self-signed CA certificates have the following topology:
+
+```mermaid
+graph TD
+  server-ca("Server CA")
+  client-ca("Client CA")
+  request-header-ca("API Aggregation CA")
+  etcd-peer-ca("etcd Peer CA")
+  etcd-server-ca("etcd Server CA")
+
+  root-hash>"Join token CA hash"]
+
+  kube-server-certs[["Kubernetes servers<br/>(control-plane and kubelet listeners)"]]
+  kube-client-certs[["Kubernetes clients<br/>(apiserver and kubelet clients)"]]
+  request-header-certs[["Kubernetes API aggregation<br/>(apiserver proxy client)"]]
+  etcd-peer-certs[["etcd peer client/server<br/>(etcd replication)"]]
+  etcd-server-certs[["etcd client/server certificates<br/>(Kubernetes <-> etcd)"]]
+
+  server-ca -.-|SHA256| root-hash
+  server-ca ===> kube-server-certs
+  client-ca ===> kube-client-certs
+  request-header-ca ===> request-header-certs
+  etcd-peer-ca ===> etcd-peer-certs
+  etcd-server-ca ===> etcd-server-certs
+```
+
+When rotating the default self-signed CAs, a modified certificate topology with intermediate CAs and a new root CA cross-signed by the old CA can be used so that there is a continuous chain of trust between the old and new CAs:
+```mermaid
+graph TD
+  server-ca-old("Server CA<br/>(old)")
+  client-ca-old("Client CA<br/>(old)")
+  request-header-ca-old("API Aggregation CA<br/>(old)")
+  etcd-peer-ca-old("etcd Peer CA<br/>(old)")
+  etcd-server-ca-old("etcd Server CA<br/>(old)")
+
+  root-hash>"Join token CA hash"]
+
+  server-ca-xsigned("Server CA<br/>(cross-signed)")
+  client-ca-xsigned("Client CA<br/>(cross-signed)")
+  request-header-ca-xsigned("API Aggregation CA<br/>(cross-signed)")
+  etcd-peer-ca-xsigned("etcd Peer CA<br/>(cross-signed)")
+  etcd-server-ca-xsigned("etcd Server CA<br/>(cross-signed)")
+
+  server-ca-ssigned("Server CA<br/>(self-signed)")
+  client-ca-ssigned("Client CA<br/>(self-signed)")
+  request-header-ca-ssigned("API Aggregation CA<br/>(self-signed)")
+  etcd-peer-ca-ssigned("etcd Peer CA<br/>(self-signed)")
+  etcd-server-ca-ssigned("etcd Server CA<br/>(self-signed)")
+
+  server-ca("Intermediate<br/>Server CA")
+  client-ca("Intermediate<br/>Client CA")
+  request-header-ca("Intermediate<br/>API Aggregation CA")
+  etcd-peer-ca("Intermediate<br/>etcd Peer CA")
+  etcd-server-ca("Intermediate<br>etcd Server CA")
+
+  kube-server-certs[["Kubernetes servers<br/>(control-plane and kubelet listeners)"]]
+  kube-client-certs[["Kubernetes clients<br/>(apiserver and kubelet clients)"]]
+  request-header-certs[["Kubernetes API aggregation<br/>(apiserver proxy client)"]]
+  etcd-peer-certs[["etcd peer client/server<br/>(etcd replication)"]]
+  etcd-server-certs[["etcd client/server certificates<br/>(Kubernetes <-> etcd)"]]
+
+  server-ca-ssigned -.-|SHA256| root-hash
+  server-ca-ssigned --> server-ca ==> kube-server-certs
+  server-ca-old --> server-ca-xsigned --> server-ca
+  client-ca-ssigned --> client-ca ==> kube-client-certs
+  client-ca-old --> client-ca-xsigned --> client-ca
+  request-header-ca-ssigned --> request-header-ca ==> request-header-certs
+  request-header-ca-old --> request-header-ca-xsigned --> request-header-ca
+  etcd-peer-ca-ssigned --> etcd-peer-ca ==> etcd-peer-certs
+  etcd-peer-ca-old --> etcd-peer-ca-xsigned --> etcd-peer-ca
+  etcd-server-ca-ssigned --> etcd-server-ca ==> etcd-server-certs
+  etcd-server-ca-old --> etcd-server-ca-xsigned --> etcd-server-ca
+```
+
+#### Using The Example Script
 
 An example script to create updated CA certificates and keys cross-signed by the existing CAs is available [in the K3s repo at `contrib/util/rotate-default-ca-certs.sh`](https://github.com/k3s-io/k3s/blob/master/contrib/util/rotate-default-ca-certs.sh).
 
