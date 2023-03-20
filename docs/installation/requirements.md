@@ -13,6 +13,17 @@ Two nodes cannot have the same hostname.
 
 If multiple nodes will have the same hostname, or if hostnames may be reused by an automated provisioning system, use the `--with-node-id` option to append a random suffix for each node, or devise a unique name to pass with `--node-name` or `$K3S_NODE_NAME` for each node you add to the cluster.
 
+## Architecture
+
+K3s is available for the following architectures:
+- x86_64
+- armhf
+- arm64/aarch64
+- s390x
+
+On `aarch64/arm64` systems, the OS must use a 4k page size. **RHEL9**, **Ubuntu**, and **SLES** all meet this requirement.
+
+
 ## Operating Systems
 
 K3s is expected to work on most modern Linux systems.
@@ -28,8 +39,10 @@ For more information on which OSs were tested with Rancher managed K3s clusters,
 
 Hardware requirements scale based on the size of your deployments. Minimum recommendations are outlined here.
 
-*    RAM: 512MB Minimum (we recommend at least 1GB)
-*    CPU: 1 Minimum
+| Spec | Minimum | Recommended |
+|------|---------|-------------|
+| CPU  | 1 core      | 2 cores          |
+| RAM  | 512 MB  | 1 GB        |
 
 [Resource Profiling](../reference/resource-profiling.md) captures the results of tests to determine minimum resource requirements for the K3s agent, the K3s server with a workload, and the K3s server with one agent. It also contains analysis about what has the biggest impact on K3s server and agent utilization, and how the cluster datastore can be protected from interference from agents and workloads.
 
