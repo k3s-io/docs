@@ -503,7 +503,7 @@ Packets dropped by network policies can be logged. The packet is sent to the ipt
 
 If there is a lot of traffic, the number of log messages could be very high. To control the log rate on a per-policy basis, set the `limit` and `limit-burst` iptables parameters by adding the following annotations to the network policy in question:
 * `kube-router.io/netpol-nflog-limit=<LIMIT-VALUE>`
-* `kube-router.io.io/netpol-nflog-limit-burst=<LIMIT-BURST-VALUE>`
+* `kube-router.io/netpol-nflog-limit-burst=<LIMIT-BURST-VALUE>`
 
 Default values are `limit=10/minute` and `limit-burst=10`. Check the [iptables manual](https://www.netfilter.org/documentation/HOWTO/packet-filtering-HOWTO-7.html#:~:text=restrict%20the%20rate%20of%20matches) for more information on the format and possible values for these fields.
 
