@@ -1,28 +1,28 @@
 ---
-title: "Private Registry Configuration"
+title: "私有镜像仓库配置"
 weight: 55
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-Containerd can be configured to connect to private registries and use them to pull private images on the node.
+你可以将 Containerd 配置为连接到私有镜像仓库，并在节点上使用私有镜像仓库拉取私有镜像。
 
-Upon startup, K3s will check to see if a `registries.yaml` file exists at `/etc/rancher/k3s/` and instruct containerd to use any registries defined in the file. If you wish to use a private registry, then you will need to create this file as root on each node that will be using the registry.
+启动时，K3s 会检查 `/etc/rancher/k3s/` 中是否存在 `registries.yaml` 文件，并指示 containerd 使用该文件中定义的镜像仓库。如果你想使用私有的镜像仓库，你需要在每个使用镜像仓库的节点上以 root 身份创建这个文件。
 
-Note that server nodes are schedulable by default. If you have not tainted the server nodes and will be running workloads on them, please ensure you also create the `registries.yaml` file on each server as well.
+请注意，server 节点默认是可以调度的。如果你没有在 server 节点上设置污点，而且希望在 server 节点上运行工作负载，请确保在每个 server 节点上创建 `registries.yaml` 文件。
 
-Configuration in containerd can be used to connect to a private registry with a TLS connection and with registries that enable authentication as well. The following section will explain the `registries.yaml` file and give different examples of using private registry configuration in K3s.
+Containerd 中的配置可以用于通过 TLS 连接到私有镜像仓库，也可以与启用验证的镜像仓库连接。下一节将解释 `registries.yaml` 文件，并给出在 K3s 中使用私有镜像仓库配置的不同例子。
 
-## Registries Configuration File
+## 镜像仓库配置文件
 
-The file consists of two main sections:
+该文件由两个主要部分组成：
 
 - mirrors
 - configs
 
 ### Mirrors
 
-Mirrors is a directive that defines the names and endpoints of the private registries, for example:
+Mirrors 是用于定义私有镜像仓库名称和端点的指令，例如：
 
 ```
 mirrors:
@@ -31,13 +31,13 @@ mirrors:
       - "https://mycustomreg.com:5000"
 ```
 
-Each mirror must have a name and set of endpoints. When pulling an image from a registry, containerd will try these endpoint URLs one by one, and use the first working one.
+每个 mirror 都必须有一个名称和一组端点。从镜像仓库中拉取镜像时，containerd 会逐个尝试这些端点 URL，并使用第一个有效的 URL。
 
-#### Redirects
+#### 重定向
 
-If a public registry is used as a mirror, such as when configuring a [pull through cache](https://docs.docker.com/registry/recipes/mirror/), images pulls are transparently redirected.
+如果将公共镜像仓库用作 Mirror，例如在配置[通过缓存拉取](https://docs.docker.com/registry/recipes/mirror/)时，镜像拉取将被透明地重定向。
 
-For example, if you have a mirror configured for `docker.io`:
+例如，如果你为 `docker.io` 配置了一个 Mirror：
 
 ```yaml
 mirrors:
@@ -46,13 +46,13 @@ mirrors:
       - "https://mycustomreg.com:5000"
 ```
 
-Then pulling `docker.io/rancher/coredns-coredns:1.6.3` will transparently pull the image from `https://mycustomreg.com:5000/rancher/coredns-coredns:1.6.3`.
+然后，拉取 `docker.io/rancher/coredns-coredns:1.6.3` 将透明地从 `https://mycustomreg.com:5000/rancher/coredns-coredns:1.6.3` 拉取镜像。
 
 #### Rewrites
 
-Each mirror can have a set of rewrites. Rewrites can change the tag of an image based on a regular expression. This is useful if the organization/project structure in the mirror registry is different to the upstream one.
+每个 Mirror 都可以有一组 rewrites。Rewrites 可以根据正则表达式来改变镜像的标签。如果 mirror 仓库中的组织/项目结构与上游不同，这将很有用。
 
-For example, the following configuration would transparently pull the image `docker.io/rancher/coredns-coredns:1.6.3` from `registry.example.com:5000/mirrorproject/rancher-images/coredns-coredns:1.6.3`:
+例如，以下配置将透明地从 `registry.example.com:5000/mirrorproject/rancher-images/coredns-coredns:1.6.3` 中拉取镜像 `docker.io/rancher/coredns-coredns:1.6.3`：
 
 ```
 mirrors:
@@ -63,37 +63,37 @@ mirrors:
       "^rancher/(.*)": "mirrorproject/rancher-images/$1"
 ```
 
-The image will still be stored under the original name so that a `crictl image ls` will show `docker.io/rancher/coredns-coredns:1.6.3` as available on the node, even though the image was pulled from the mirrored registry with a different name.
+镜像仍将以原始名称存储，因此，即使镜像以不同的名字从镜像仓库中拉取，`crictl image ls` 也将显示 `docker.io/rancher/coredns-coredns:1.6.3` 在节点上是可用的。
 
 ### Configs
 
-The `configs` section defines the TLS and credential configuration for each mirror. For each mirror you can define `auth` and/or `tls`. 
+`configs` 部分定义了每个 mirror 的 TLS 和凭证配置。对于每个 mirror，你可以定义 `auth` 和/或 `tls`。
 
-The `tls` part consists of:
+`tls` 部分包括：
 
-| Directive              | Description                                                                          |
+| 指令 | 描述 |
 |------------------------|--------------------------------------------------------------------------------------|
-| `cert_file`            | The client certificate path that will be used to authenticate with the registry      |
-| `key_file`             | The client key path that will be used to authenticate with the registry              |
-| `ca_file`              | Defines the CA certificate path to be used to verify the registry's server cert file |
-| `insecure_skip_verify` | Boolean that defines if TLS verification should be skipped for the registry          |
+| `cert_file` | 客户端证书路径，用于向镜像仓库进行身份验证 |
+| `key_file` | 客户端密钥路径，用于向镜像仓库进行身份验证 |
+| `ca_file` | 定义用于验证镜像仓库服务器证书文件的 CA 证书路径 |
+| `insecure_skip_verify` | 定义是否应跳过镜像仓库的 TLS 验证的布尔值 |
 
-The `auth` part consists of either username/password or authentication token:
+`auth` 部分由用户名/密码或身份验证令牌组成：
 
-| Directive  | Description                                             |
+| 指令 | 描述 |
 |------------|---------------------------------------------------------|
-| `username` | user name of the private registry basic auth            |
-| `password` | user password of the private registry basic auth        |
-| `auth`     | authentication token of the private registry basic auth |
+| `username` | 私有镜像仓库基本身份验证的用户名 |
+| `password` | 私有镜像仓库基本身份验证的用户密码 |
+| `auth` | 私有镜像仓库基本身份验证的身份验证令牌 |
 
-Below are basic examples of using private registries in different modes:
+以下是在不同模式下使用私有镜像仓库的基本例子：
 
-### With TLS
+### 使用 TLS
 
-Below are examples showing how you may configure `/etc/rancher/k3s/registries.yaml` on each node when using TLS.
+下面的例子展示了使用 TLS 时，如何在每个节点上配置 `/etc/rancher/k3s/registries.yaml`。
 
 <Tabs>
-<TabItem value="With Authentication">
+<TabItem value="有认证">
 
 ```yaml
 mirrors:
@@ -112,7 +112,7 @@ configs:
 ```
 
 </TabItem>
-<TabItem value="Without Authentication">
+<TabItem value="无认证">
 
 ```yaml
 mirrors:
@@ -129,12 +129,12 @@ configs:
 </TabItem>
 </Tabs>
 
-### Without TLS
+### 没有 TLS
 
-Below are examples showing how you may configure `/etc/rancher/k3s/registries.yaml` on each node when _not_ using TLS.
+以下示例展示了_不_使用 TLS 时，如何在每个节点上配置 `/etc/rancher/k3s/registries.yaml`。
 
 <Tabs>
-<TabItem value="With Authentication">
+<TabItem value="有认证">
 
 ```yaml
 mirrors:
@@ -149,7 +149,7 @@ configs:
 ```
 
 </TabItem>
-<TabItem value="Without Authentication">
+<TabItem value="无认证">
 
 ```yaml
 mirrors:
@@ -160,21 +160,21 @@ mirrors:
 </TabItem>
 </Tabs>
 
-> In case of no TLS communication, you need to specify `http://` for the endpoints, otherwise it will default to https.
- 
-In order for the registry changes to take effect, you need to restart K3s on each node.
+> 如果没有 TLS 通信，你需要为端点指定 `http://`，否则将默认为 https。
 
-## Adding Images to the Private Registry
+为了使镜像仓库更改生效，你需要重新启动每个节点上的 K3s。
 
-First, obtain the `k3s-images.txt` file from GitHub for the release you are working with.
-Pull the K3s images listed on the k3s-images.txt file from docker.io
+## 将镜像添加到私有镜像仓库
 
-Example: `docker pull docker.io/rancher/coredns-coredns:1.6.3`
+首先，从 GitHub 上获取你正在使用的版本的 `k3s-images.txt` 文件。
+从 docker.io 拉取 `k3s-images.txt` 文件中列出的 K3s 镜像
 
-Then, retag the images to the private registry.
+示例：`docker pull docker.io/rancher/coredns-coredns:1.6.3`
 
-Example: `docker tag coredns-coredns:1.6.3 mycustomreg:5000/coredns-coredns`
+然后，将镜像重新标记到私有镜像仓库。
 
-Last, push the images to the private registry.
+示例：`docker tag coredns-coredns:1.6.3 mycustomreg:5000/coredns-coredns`
 
-Example: `docker push mycustomreg.com:5000/coredns-coredns`
+最后，将镜像推送到私有镜像仓库。
+
+示例：`docker push mycustomreg.com:5000/coredns-coredns`

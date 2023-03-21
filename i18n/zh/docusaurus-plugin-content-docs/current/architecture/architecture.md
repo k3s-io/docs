@@ -14,13 +14,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 * Agent 节点指的是运行 `k3s agent` 命令的主机，不具有任何数据存储或 control plane 组件。
 * Server 和 Agent 都运行 kubelet、容器运行时和 CNI。有关运行无 Agent 的 Server 的更多信息，请参阅[高级选项](../advanced/advanced.md#运行无-agent-的-server实验性)。
 
-本文涵盖以下主题：
-
-- [带有嵌入式数据库的单服务器设置](#带有嵌入式数据库的单服务器设置)
-- [具有外部数据库的高可用 K3s Server](#具有外部数据库的高可用-k3s-server)
-   - [Agent 节点的固定注册地址](#agent-节点的固定注册地址)
-- [Agent 节点注册的工作原理](#agent-节点注册的工作原理)
-- [自动部署的清单](#自动部署的清单)
+![](/img/how-it-works-k3s-revised.svg)
 
 ### 带有嵌入式数据库的单服务器设置
 
@@ -68,16 +62,14 @@ dark: useBaseUrl('/img/k3s-production-setup-dark.svg'),
 
 ### Agent 节点注册的工作原理
 
-Agent 节点通过 `k3s agent` 进程发起的 WebSocket 连接进行注册，连接由作为 agent 进程一部分运行的客户端负载均衡器维护。
+Agent 节点通过 `k3s agent` 进程发起的 WebSocket 连接进行注册，连接由作为 agent 进程一部分运行的客户端负载均衡器维护。这个负载均衡器会稳定连接集群中所有 Server，从而提供与 apiserver 的连接来容忍单个 Server 的中断。
 
-Agent 将使用节点集群 Secret 以及随机生成的节点密码注册到 Server，密码存储在 `/etc/rancher/node/password` 中。Server 会将各个节点的密码存储为 Kubernetes Secret，后续的任何尝试都必须使用相同的密码。节点密码 Secret 存储在 `kube-system` 命名空间中，名称使用 `<host>.node-password.k3s` 模板。
+Agent 将使用节点集群 Secret 以及随机生成的节点密码注册到 Server，密码存储在 `/etc/rancher/node/password` 中。Server 会将各个节点的密码存储为 Kubernetes Secret，后续的任何尝试都必须使用相同的密码。节点密码 Secret 存储在 `kube-system` 命名空间中，名称使用 `<host>.node-password.k3s` 模板。这样做是为了保护节点 ID 的完整性。
 
-注意：在 K3s v1.20.2 之前，Server 将密码存储在磁盘上的 `/var/lib/rancher/k3s/server/cred/node-passwd` 中。
+如果 Agent 的 `/etc/rancher/node` 目录被删除，或者你希望使用现有名称重新加入节点，那么你需要从集群中删除该节点。这将清除旧节点条目和节点密码 Secret，并允许节点（重新）加入集群。
 
-如果 Agent 的 `/etc/rancher/node` 目录被删除，你需要为 Agent 重新创建密码文件，或者从 Server 中删除该条目。
+:::note
+在 K3s v1.20.2 之前，Server 将密码存储在磁盘上的 `/var/lib/rancher/k3s/server/cred/node-passwd` 中。
+:::
 
-通过使用 `--with-node-id` 标志启动 K3s Server 或 Agent，可以将唯一节点 ID 附加到主机名。
-
-### 自动部署的清单
-
-位于 `/var/lib/rancher/k3s/server/manifests` 路径下的[清单](https://github.com/k3s-io/k3s/tree/master/manifests)在构建时被捆绑到 K3s 二进制文件中，将由 [rancher/helm-controller](https://github.com/k3s-io/helm-controller#helm-controller) 在运行时安装。
+如果你经常重复使用主机名，但无法删除节点密码 Secret，你可以使用 `--with-node-id` 标志启动 K3s Server 或 Agent，从而将唯一的节点 ID 自动附加到主机名。启用后，节点 ID 也存储在 `/etc/rancher/node/` 中。

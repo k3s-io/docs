@@ -19,12 +19,12 @@
     "message": "安全",
     "description": "The label for category Security in sidebar mySidebar"
   },
-  "sidebar.mySidebar.category.Cluster Datastore Options": {
-    "message": "Cluster Datastore Options",
-    "description": "The label for category Cluster Datastore Options in sidebar mySidebar"
-  },
   "sidebar.mySidebar.category.CLI Tools": {
-    "message": "CLI Tools",
+    "message": "CLI 工具",
     "description": "The label for category CLI Tools in sidebar mySidebar"
+  },
+  "sidebar.mySidebar.category.Cluster Datastore": {
+    "message": "集群数据存储",
+    "description": "The label for category Cluster Datastore in sidebar mySidebar"
   }
 }

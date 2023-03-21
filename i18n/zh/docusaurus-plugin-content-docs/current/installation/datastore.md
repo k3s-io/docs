@@ -1,5 +1,5 @@
 ---
-title: Cluster Datastore Options
+title: 集群数据存储选项
 ---
 
-**[This page has moved.](../datastore/datastore.md)**
+**本文已迁移到[此处](../datastore/datastore.md)**。

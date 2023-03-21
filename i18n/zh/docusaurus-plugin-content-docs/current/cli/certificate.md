@@ -4,176 +4,319 @@ title: certificate
 
 # k3s certificate
 
-## Client and Server Certificates
+## 客户端和服务器证书
 
-K3s client and server certificates are valid for 365 days from their date of issuance. Any certificates that are expired, or within 90 days of expiring, are automatically renewed every time K3s starts.
+K3s 客户端和服务器证书自颁发日起 365 天内有效。每次启动 K3s 时，已过期或 90 天内过期的证书都会自动更新。
 
-### Rotating Client and Server Certificates
+### 轮换客户端和服务器证书
 
-To rotate client and server certificates manually, use the `k3s certificate rotate` subcommand:
+要手动轮换客户端和服务器证书，请使用 `k3s certificate rotate` 子命令：
 
 ```bash
-# Stop K3s
+# 停止 K3s
 systemctl stop k3s
 
-# Rotate certificates
+# 轮换证书
 k3s certificate rotate
 
-# Start K3s
+# 启动 K3s
 systemctl start k3s
 ```
 
-Individual or lists of certificates can be rotated by specifying the certificate name:
+你可以通过指定证书名称来轮换单个或多个证书：
 
 ```bash
 k3s certificate rotate --service <SERVICE>,<SERVICE>
 ```
 
-The following certificates can be rotated: `admin`, `api-server`, `controller-manager`, `scheduler`, `k3s-controller`, `k3s-server`, `cloud-controller`, `etcd`, `auth-proxy`, `kubelet`, `kube-proxy`.
+可以轮换的证书：`admin`、`api-server`、`controller-manager`、`scheduler`、`k3s-controller`, `k3s-server`, `cloud-controller`, `etcd`, `auth-proxy`, `kubelet`，`kube-proxy`。
 
-## Certificate Authority (CA) Certificates
+## CA 证书
 
-Kubernetes requires a number of CA certificates for proper operation. For more information on how Kubernetes uses CA certificates, see the Kubernetes [PKI Certificates and Requirements](https://kubernetes.io/docs/setup/best-practices/certificates/#all-certificates) documentation.
+Kubernetes 需要大量 CA 证书才能正常运行。有关 Kubernetes 如何使用 CA 证书，请参阅 Kubernetes [PKI 证书和要求](https://kubernetes.io/docs/setup/best-practices/certificates/#all-certificates)文档。
 
-By default, K3s generates self-signed CA certificates during startup of the first server node. These CA certificates are valid for 10 years from date of issuance, and are not automatically renewed.
+默认情况下，K3s 在第一个 Server 节点启动时生成自签名 CA 证书。这些 CA 证书自颁发日起 10 年内有效，不会自动更新。
 
-To rotate CA certificates and keys, use the `k3s certificate rotate-ca` command.
-The command performs integrity checks to confirm that the updated certificates and keys are usable.
-If the updated data is acceptable, the datastore's encrypted bootstrap data is updated, and the new certificates and keys will be used the next time K3s starts.
-If problems are encountered while validating the certificates and keys, an error is reported to the system log and the operation is cancelled without changes.
+权威 CA 证书和密钥存储在数据存储区的引导程序密钥中，使用 [server token](token.md#server) 作为 PBKDF2 密码和 AES256-GCM 和 HMAC-SHA1 进行加密。
+在 K3s Server 启动期间，CA 证书和密钥的副本会被提取到磁盘。
+任何 Server 都可以在节点加入集群时为节点生成叶证书，而 Kubernetes [Certificates API](https://kubernetes.io/docs/reference/access-authn-authz/certificate-signing-requests/) 控制器可以在运行时颁发其他证书。
 
-### Using Custom CA Certificates
+要轮换 CA 证书和密钥，请使用 `k3s certificate rotate-ca` 命令。
+该命令会执行完整性检查，从而确认更新的证书和密钥可用。
+如果更新后的数据没有问题，则会更新数据存储的加密引导程序密钥，并在下次 K3s 启动时使用新的证书和密钥。
+如果在验证证书和密钥时出现了问题，则会向系统日志报告错误，并取消操作且不做任何更改。
 
-If CA certificates and keys are found the correct location during initial startup of the first server in the cluster, automatic generation of CA certificates will be bypassed.
+:::info 版本
+从 2023-02 版本（v1.26.2+k3s1、v1.25.7+k3s1、v1.24.11+k3s1、v1.23.17+k3s1）开始，支持 `k3s certificate rotate-ca` 命令以及使用由外部 CA 签发的 CA 证书。
+:::
 
-An example script to pre-create the appropriate certificates and keys is available [in the K3s repo at `contrib/util/generate-custom-ca-certs.sh`](https://github.com/k3s-io/k3s/blob/master/contrib/util/generate-custom-ca-certs.sh).
-This script should be run prior to starting K3s for the first time, and will create a full set of leaf CA certificates signed by common Root and Intermediate CA certificates.
-If you have an existing Root or Intermediate CA, this script can be used (or used as a starting point) to create the correct CA certificates to provision a K3s cluster with PKI rooted in an existing authority.
+### 使用自定义 CA 证书
 
-Custom Certificate Authority files must be placed in `/var/lib/rancher/k3s/server/tls`. The following files are required:
+在集群中的第一台 Server 初始启动期间，如果找到了放置在正确位置的 CA 证书和密钥，将不会自动生成 CA 证书。
+
+[K3s 仓库中的 `contrib/util/generate-custom-ca-certs.sh`](https://github.com/k3s-io/k3s/blob/master/contrib/util/generate-custom-ca-certs.sh) 是预先创建适当的证书和密钥的示例脚本。
+该脚本应在首次启动 K3s 之前运行，能创建一整套由通用根证书和中间 CA 证书签名的叶 CA 证书。
+如果你已有根证书或中间 CA 证书，你可以使用此脚本（或用作起点）创建 CA 证书，从而使用现有机构中的 PKI 来配置 K3s 集群。
+
+自定义证书颁发机构文件必须放在 `/var/lib/rancher/k3s/server/tls` 中。需要以下文件：
 * `server-ca.crt`
 * `server-ca.key`
 * `client-ca.crt`
 * `client-ca.key`
 * `request-header-ca.crt`
 * `request-header-ca.key`  
-  *// note: etcd files are required even if embedded etcd is not in use.*
-* `etcd/peer-ca.crt`  
+   *// 注意：即使未使用嵌入式 etcd，也需要 etcd 文件。*
+* `etcd/peer-ca.crt`
 * `etcd/peer-ca.key`
 * `etcd/server-ca.crt`
 * `etcd/server-ca.key`  
-  *// note: This is the private key used to sign service-account tokens. It does not have a corresponding certificate.*
+   *// 注意：这是用于签署 ServiceAccount Token 的私钥。它没有对应的证书。*
 * `service.key`
 
-To use the example script to generate custom certs and keys before starting K3s, run the following commands:
+#### 自定义 CA 拓扑
+
+自定义 CA 证书应遵循以下拓扑结构：
+
+```mermaid
+graph TD
+  root("Root CA")
+  intermediate("Intermediate CA")
+  server-ca("Server CA")
+  client-ca("Client CA")
+  request-header-ca("API Aggregation CA")
+  etcd-peer-ca("etcd Peer CA")
+  etcd-server-ca("etcd Server CA")
+
+  root-hash>"Join token CA hash"]
+
+  kube-server-certs[["Kubernetes servers<br/>(control-plane and kubelet listeners)"]]
+  kube-client-certs[["Kubernetes clients<br/>(apiserver and kubelet clients)"]]
+  request-header-certs[["Kubernetes API aggregation<br/>(apiserver proxy client)"]]
+  etcd-peer-certs[["etcd peer client/server<br/>(etcd replication)"]]
+  etcd-server-certs[["etcd client/server certificates<br/>(Kubernetes <-> etcd)"]]
+
+  root -.-|SHA256| root-hash
+  root ---> intermediate
+  intermediate --> server-ca ==> kube-server-certs
+  intermediate --> client-ca ==> kube-client-certs
+  intermediate --> request-header-ca ==> request-header-certs
+  intermediate --> etcd-peer-ca ==> etcd-peer-certs
+  intermediate --> etcd-server-ca ==> etcd-server-certs
+```
+
+#### 使用示例脚本
+
+:::important
+如果要使用示例脚本通过现有根 CA 来签发集群 CA 证书，则必须在运行脚本之前将根文件和中间文件放在目标目录中。
+如果文件不存在，脚本将创建新的根 CA 证书和中间 CA 证书。
+:::
+
+如果你只想使用现有的根 CA 证书，请提供以下文件：
+* `root.pem`
+* `root.key`
+
+要使用现有的根 CA 证书和中间 CA 证书，请提供以下文件：
+* `root.pem`
+* `intermediate.pem`
+* `intermediate.key`
+
+要在启动 K3s 之前使用示例脚本生成自定义证书和密钥，请运行以下命令：
 ```bash
-# Create the target directory for cert generation.
+# 创建用于生成证书的目标目录。
 mkdir -p /var/lib/rancher/k3s/server/tls
 
-# Copy your root CA cert and intermediate CA cert+key into the correct location for the script.
-# If you do not have an existing root and/or intermediate CA, the script will generate them for you.
-cp /etc/ssl/certs/root.crt /etc/ssl/certs/intermediate.cert /etc/ssl/private/intermediate.key /var/lib/rancher/k3s/server/tls
+# 将根 CA 证书和中间 CA 证书 + 密钥复制到脚本的正确位置。
+# 本示例假设你在 /etc/ssl 中放置了现有的根 CA 文件和中间 CA 文件。
+# 如果你没有现有的根证书或中间 CA 证书，脚本将为你生成。
+cp /etc/ssl/certs/root.pem /etc/ssl/certs/intermediate.pem /etc/ssl/private/intermediate.key /var/lib/rancher/k3s/server/tls
 
-# Generate custom CA certs and keys.
+# 生成自定义 CA 证书和密钥。
 curl -sL https://github.com/k3s-io/k3s/raw/master/contrib/util/generate-custom-ca-certs.sh | bash -
 ```
 
-If the command completes successfully, you may install and/or start K3s for the first time.
+如果命令成功完成，你可以进行 K3s 的首次安装和启动。
+如果脚本生成了根 CA 文件或中间 CA 文件，你应该备份这些文件，这样，你就能在需要轮换 CA 证书时重新使用这些文件。
 
-### Rotating Custom CA Certificates
+### 轮换自定义 CA 证书
 
-To rotate custom CA certificates, use the `k3s certificate rotate-ca` subcommand.
-Updated files must be staged into a temporary directory, loaded into the datastore, and k3s must be restarted on all nodes to use the updated certificates.
-
-A cluster that has been started with custom CA certificates can renew or rotate the CA certificates and keys non-disruptively, as long as the same root CA is used.
-
-If a new root CA is required, the rotation will be disruptive. The `--force` option must be used, all nodes that were joined with a [secure token](token.md#secure) will need to be reconfigured to trust the new CA hash, and pods will need to be restarted to trust the new root CA.
+要轮换自定义 CA 证书，请使用 `k3s certificate rotate-ca` 子命令。
+更新后的文件必须暂存到一个临时目录中，加载到数据存储中，并且必须在所有节点上重启 K3s 才能使用更新后的证书。
 
 :::caution
-You must not overwrite the currently in-use data in `/var/lib/rancher/k3s/server/tls`.  
-Stage the updated certificates and keys into a separate directory.
+不要覆盖 `/var/lib/rancher/k3s/server/tls` 中正在使用的数据。  
+将更新的证书和密钥暂存到单独的目录中。
 :::
 
-The example `generate-custom-ca-certs.sh` script linked above can also be used to generate updated certs in a new temporary directory, by setting the `DATA_DIR` environment variable.
-To use the example script to generate updated certs and keys, run the following commands:
+只要是使用相同的根 CA，使用自定义 CA 证书启动的集群就可以无中断地更新或轮换 CA 证书和密钥。
+
+如果需要新的根 CA，那么需要中断才能进行轮换。必须使用 `k3s certificate rotate-ca --force` 选项，所有使用 [secure token](token.md#secure) 加入的节点（包括 server）都需要重新配置才能使用新的 Token 值，并且 Pod 需要重启才能信任新的根 CA。
+
+#### 使用示例脚本
+
+上面的示例 `generate-custom-ca-certs.sh` 脚本也可用于在新的临时目录中生成更新的证书，这是通过将文件复制到正确的位置并设置 `DATA_DIR` 环境变量实现的。
+要使用示例脚本生成更新的证书和密钥，请运行以下命令：
 ```bash
-# Create a temporary directory for cert generation.
+# 创建用于生成证书的临时目录。
 mkdir -p /opt/k3s/server/tls
 
-# Copy your root CA cert and intermediate CA cert+key into the correct location for the script.
-# If you do not have an existing root and/or intermediate CA, the script will generate them for you.
-cp /etc/ssl/certs/root.crt /etc/ssl/certs/intermediate.cert /etc/ssl/private/intermediate.key /opt/k3s/server/tls
+# 将根 CA 证书和中间 CA 证书 + 密钥复制到脚本的正确位置。
+# 如果是非中断轮换，则需要用于生成原始证书的同一个根 CA。
+# 如果原始文件仍在数据目录中，则可以运行：
+cp /var/lib/rancher/k3s/server/root.* /var/lib/rancher/k3s/server/intermediate.* /opt/k3s/server/tls
 
-# Generate updated custom CA certs and keys.
+# 复制当前的 service-account 签名密钥，这样，现有的 service-account token 就不会失效。
+cp /var/lib/rancher/k3s/server/tls/service.key /opt/k3s/server/tls
+
+# 生成更新的自定义 CA 证书和密钥。
 curl -sL https://github.com/k3s-io/k3s/raw/master/contrib/util/generate-custom-ca-certs.sh | DATA_DIR=/opt/k3s bash -
 
-# Load the updated CA certs and keys into the datastore.
+# 将更新后的 CA 证书和密钥加载到数据存储中。
 k3s certificate rotate-ca --path=/opt/k3s/server
 ```
 
-If the `rotate-ca` command returns an error, check the service log for errors.
-If the command completes successfully, restart K3s on all nodes in the cluster - servers first, then agents.
+如果 `rotate-ca` 命令返回错误，请检查服务日志中的错误。
+命令成功完成，在集群中的所有节点上重启 K3s，你需要先重启 Server，然后再重启 Agent。
 
-If you used the `--force` option or changed the root CA, ensure that any nodes that were joined with a [secure token](token.md#secure) are reconfigured to use the new token value, prior to being restarted.
-The token may be stored in a `.env` file, systemd unit, or config.yaml, depending on how the node was configured during initial installation.
+如果你使用了 `--force` 选项或更改了根 CA，请确保使用 [secure token](token.md#secure) 加入的节点在重启前都重新配置为使用新的 Token 值。
+Token 可能存储在 `.env` 文件、systemd 单元或 config.yaml 中，具体取决于节点在初始安装时的配置。
 
-### Rotating Self-Signed CA Certificates
+### 轮换自签名 CA 证书
 
-To rotate the K3s-generated self-signed CA certificates, use the `k3s certificate rotate-ca` subcommand.
-Updated files must be staged into a temporary directory, loaded into the datastore, and k3s must be restarted on all nodes to use the updated certificates.
-
-If the cluster has been started with default self-signed CA certificates, rotation will be disruptive. All nodes that were joined with a [secure token](token.md#secure) will need to be reconfigured to trust the new CA hash.
-If the new CA certificates are not cross-signed by the old CA certificates, you will need to use the `--force` option to bypass integrity checks, and pods will need to be restarted to trust the new root CA.
-
-An example script to create updated CA certificates and keys cross-signed by the existing CAs is available [in the K3s repo at `contrib/util/rotate-default-ca-certs.sh`](https://github.com/k3s-io/k3s/blob/master/contrib/util/rotate-default-ca-certs.sh).
+要轮换 K3s 生成的自签名 CA 证书，请使用 `k3s certificate rotate-ca` 子命令。
+更新后的文件必须暂存到一个临时目录中，加载到数据存储中，并且必须在所有节点上重启 K3s 才能使用更新后的证书。
 
 :::caution
-You must not overwrite the currently in-use data in `/var/lib/rancher/k3s/server/tls`.  
-Stage the updated certificates and keys into a separate directory.
+不要覆盖 `/var/lib/rancher/k3s/server/tls` 中正在使用的数据。  
+将更新的证书和密钥暂存到单独的目录中。
 :::
 
-To use the example script to generate updated self-signed certificates that are cross-signed by the existing CAs, run the following commands:
+如果集群已使用默认的自签名 CA 证书启动，轮换将是中断的。使用 [secure token](token.md#secure) 加入的所有节点都需要重新配置才能信任新的 CA 哈希。
+如果旧 CA 证书没有交叉签名新的 CA 证书，你需要使用 `--force` 选项来绕过完整性检查，并且需要重启 Pod 才能信任新的根 CA。
+
+#### 默认 CA 拓扑
+默认的自签名 CA 证书拓扑结构如下：
+
+```mermaid
+graph TD
+  server-ca("Server CA")
+  client-ca("Client CA")
+  request-header-ca("API Aggregation CA")
+  etcd-peer-ca("etcd Peer CA")
+  etcd-server-ca("etcd Server CA")
+
+  root-hash>"Join token CA hash"]
+
+  kube-server-certs[["Kubernetes servers<br/>(control-plane and kubelet listeners)"]]
+  kube-client-certs[["Kubernetes clients<br/>(apiserver and kubelet clients)"]]
+  request-header-certs[["Kubernetes API aggregation<br/>(apiserver proxy client)"]]
+  etcd-peer-certs[["etcd peer client/server<br/>(etcd replication)"]]
+  etcd-server-certs[["etcd client/server certificates<br/>(Kubernetes <-> etcd)"]]
+
+  server-ca -.-|SHA256| root-hash
+  server-ca ===> kube-server-certs
+  client-ca ===> kube-client-certs
+  request-header-ca ===> request-header-certs
+  etcd-peer-ca ===> etcd-peer-certs
+  etcd-server-ca ===> etcd-server-certs
+```
+
+轮换默认的自签名 CA 时，你可以使用具有中间 CA 的修改后证书拓扑和由旧 CA 交叉签名的新根 CA，以便在新旧 CA 之间保留连续的信任链：
+```mermaid
+graph TD
+  server-ca-old("Server CA<br/>(old)")
+  client-ca-old("Client CA<br/>(old)")
+  request-header-ca-old("API Aggregation CA<br/>(old)")
+  etcd-peer-ca-old("etcd Peer CA<br/>(old)")
+  etcd-server-ca-old("etcd Server CA<br/>(old)")
+
+  root-hash>"Join token CA hash"]
+
+  server-ca-xsigned("Server CA<br/>(cross-signed)")
+  client-ca-xsigned("Client CA<br/>(cross-signed)")
+  request-header-ca-xsigned("API Aggregation CA<br/>(cross-signed)")
+  etcd-peer-ca-xsigned("etcd Peer CA<br/>(cross-signed)")
+  etcd-server-ca-xsigned("etcd Server CA<br/>(cross-signed)")
+
+  server-ca-ssigned("Server CA<br/>(self-signed)")
+  client-ca-ssigned("Client CA<br/>(self-signed)")
+  request-header-ca-ssigned("API Aggregation CA<br/>(self-signed)")
+  etcd-peer-ca-ssigned("etcd Peer CA<br/>(self-signed)")
+  etcd-server-ca-ssigned("etcd Server CA<br/>(self-signed)")
+
+  server-ca("Intermediate<br/>Server CA")
+  client-ca("Intermediate<br/>Client CA")
+  request-header-ca("Intermediate<br/>API Aggregation CA")
+  etcd-peer-ca("Intermediate<br/>etcd Peer CA")
+  etcd-server-ca("Intermediate<br>etcd Server CA")
+
+  kube-server-certs[["Kubernetes servers<br/>(control-plane and kubelet listeners)"]]
+  kube-client-certs[["Kubernetes clients<br/>(apiserver and kubelet clients)"]]
+  request-header-certs[["Kubernetes API aggregation<br/>(apiserver proxy client)"]]
+  etcd-peer-certs[["etcd peer client/server<br/>(etcd replication)"]]
+  etcd-server-certs[["etcd client/server certificates<br/>(Kubernetes <-> etcd)"]]
+
+  server-ca-ssigned -.-|SHA256| root-hash
+  server-ca-ssigned --> server-ca ==> kube-server-certs
+  server-ca-old --> server-ca-xsigned --> server-ca
+  client-ca-ssigned --> client-ca ==> kube-client-certs
+  client-ca-old --> client-ca-xsigned --> client-ca
+  request-header-ca-ssigned --> request-header-ca ==> request-header-certs
+  request-header-ca-old --> request-header-ca-xsigned --> request-header-ca
+  etcd-peer-ca-ssigned --> etcd-peer-ca ==> etcd-peer-certs
+  etcd-peer-ca-old --> etcd-peer-ca-xsigned --> etcd-peer-ca
+  etcd-server-ca-ssigned --> etcd-server-ca ==> etcd-server-certs
+  etcd-server-ca-old --> etcd-server-ca-xsigned --> etcd-server-ca
+```
+
+#### 使用示例脚本
+
+[K3s 仓库中的 `contrib/util/rotate-default-ca-certs.sh`](https://github.com/k3s-io/k3s/blob/master/contrib/util/rotate-default-ca-certs.sh) 是用于创建由现有 CA 交叉签名的更新 CA 证书和密钥的示例脚本。
+
+要使用示例脚本生成由现有 CA 交叉签名的更新的自签名证书，请运行以下命令：
 ```bash
-# Create updated CA certs and keys, cross-signed by the current CAs.
-# This script will create a new temporary directory containing the updated certs, and output the new token values.
+# 创建更新的 CA 证书和密钥，由当前 CA 交叉签名。
+# 该脚本将创建一个包含更新证书的新临时目录，并输出新的 Token 值。
 curl -sL https://github.com/k3s-io/k3s/raw/master/contrib/util/rotate-default-ca-certs.sh | bash -
 
-# Load the updated certs into the datastore; see the script output for the updated token value and path to the new certs.
-k3s certificate rotate-ca --path=PATH_TO_TEMP_DIR
+# 将更新后的证书加载到数据存储中。在脚本的输出中查看更新后的 Token 值。
+k3s certificate rotate-ca --path=/var/lib/rancher/k3s/server/rotate-ca
 ```
 
-If the `rotate-ca` command returns an error, check the service log for errors.
-If the command completes successfully, restart K3s on all nodes in the cluster - servers first, then agents.
+如果 `rotate-ca` 命令返回错误，请检查服务日志中的错误。
+命令成功完成，在集群中的所有节点上重启 K3s，你需要先重启 Server，然后再重启 Agent。
 
-Ensure that any nodes that were joined with a [secure token](token.md#secure) are reconfigured to use the new token value, prior to being restarted.
-The token may be stored in a `.env` file, systemd unit, or config.yaml, depending on how the node was configured during initial installation.
+请确保使用 [secure token](token.md#secure) 加入的节点（包括 server 节点）在重启前都重新配置为使用新的 Token 值。
+Token 可能存储在 `.env` 文件、systemd 单元或 config.yaml 中，具体取决于节点在初始安装时的配置。
 
-## Service-Account Issuer Key Rotation
+## ServiceAccount Issuer 密钥轮换
 
-The service-account issuer key is an RSA private key used to sign service-account tokens.
-When rotating the service-account issuer key, at least one old key should be retained in the file so that existing service-account tokens are not invalidated.
-It can be rotated independent of the cluster CAs by using the `k3s certificate rotate-ca` to install only an updated `service.key` file that includes both the new and old keys.
+service-account Issuer 密钥是用于签发 service-account Token 的 RSA 私钥。
+轮换 service-account Issuer 密钥时，文件中至少应保留一个旧密钥，以免现有 service-account Token 失效。
+它可以通过使用 `k3s certificate rotate-ca` 独立于集群 CA 进行轮换，这样能仅安装包含新旧密钥的更新的 `service.key` 文件。
 
 :::caution
-You must not overwrite the currently in-use data in `/var/lib/rancher/k3s/server/tls`.  
-Stage the updated key into a separate directory.
+不要覆盖 `/var/lib/rancher/k3s/server/tls` 中正在使用的数据。  
+将更新的密钥暂存到单独的目录中。
 :::
 
-For example, to rotate only the service-account issuer key, run the following commands:
+例如，要仅轮换 service-account Issuer 密钥，请运行以下命令：
 ```bash
-# Create a temporary directory for cert generation
+# 创建用于生成证书的临时目录
 mkdir -p /opt/k3s/server/tls
 
-# Generate a new key
-openssl genrsa -traditional -out /opt/k3s/server/tls/service.key 2048
+# 检查 OpenSSL 版本
+openssl version | grep -qF 'OpenSSL 3' && OPENSSL_GENRSA_FLAGS=-traditional
 
-# Append the existing key to avoid invalidating current tokens
+# 生成新的密钥
+openssl genrsa ${OPENSSL_GENRSA_FLAGS:-} -out /opt/k3s/server/tls/service.key 2048
+
+# 追加现有密钥，避免当前 token 失效
 cat /var/lib/rancher/k3s/server/tls/service.key >> /opt/k3s/server/tls/service.key
 
-# Load the updated key into the datastore
+# 将更新后的密钥加载到数据存储中
 k3s certificate rotate-ca --path=/opt/k3s/server
 ```
 
-It is normal to see warnings for files that are not being updated. If the `rotate-ca` command returns an error, check the service log for errors.
-If the command completes successfully, restart K3s on all servers in the cluster. It is not necessary to restart agents or restart any pods.
+出现文件未更新的警告是正常的。如果 `rotate-ca` 命令返回错误，请检查服务日志中的错误。
+命令成功完成后，在集群中的所有 Server 上重启 K3s。无需重启 Agent 或任何 Pod。
 

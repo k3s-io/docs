@@ -16,6 +16,7 @@ The upgrade job that is launched must be highly privileged. It is configured wit
 - Host `IPC`, `NET`, and `PID` namespaces
 - The `CAP_SYS_BOOT` capability
 - Host root mounted at `/host` with read and write permissions
+
 :::
 
 
@@ -29,6 +30,7 @@ If the K3s cluster is managed by Rancher, you should use the Rancher UI to manag
 - If the K3s cluster was imported into Rancher, Rancher will manage the system-upgrade-controller deployment and plans. Do not follow the steps on this page.
 - If the K3s cluster was provisioned by Rancher, Rancher will use system agent to manage version upgrades. Do not follow the steps on this page.
 - If the K3s cluster is *not* managed Rancher, you may follow the steps below.
+
 :::
 
 For more details on the design and architecture of the system-upgrade-controller or its integration with K3s, see the following Git repositories:

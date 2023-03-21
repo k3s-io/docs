@@ -14,12 +14,16 @@ weight: 10
 通过安装脚本或使用我们的[自动升级](automated.md)功能执行的升级可以绑定到不同的版本 channels。以下是可用的 channels：
 
 | Channel | 描述 |
-|---------------|---------|
+|----------------|---------|
 | stable | （默认）生产环境建议使用稳定版。这些版本已经过一段时间的社区强化。 |
 | latest | 建议使用最新版本来试用最新功能。这些版本已经过一段时间的社区强化。 |
-| v1.22（示例） | 每个受支持的 Kubernetes 次要版本都有一个发布 channel。目前它们是 `v1.22`、`v1.23` 和 `v1.24`。这些 channel 会选择可用的最新补丁，不一定是稳定版本。 |
+| v1.26（示例） | 每个 Kubernetes 次要版本都有一个 release channel，包括 EOL 的版本。这些 channel 会选择可用的最新补丁，不一定是稳定版本。 |
 
 有关详细的最新 channel 列表，你可以访问 [k3s channel 服务 API](https://update.k3s.io/v1-release/channels)。有关 channel 如何工作的更多信息，请参阅 [channelserver 项目](https://github.com/rancher/channelserver)。
+
+:::tip
+尝试升级到 K3s 新版本时，[Kubernetes 版本倾斜策略](https://kubernetes.io/docs/setup/release/version-skew-policy/)适用。确保你的计划在升级时不会跳过中间次要版本。system-upgrade-controller 本身不会防止更改到不支持的 Kubernetes 版本。
+:::
 
 ### 使用安装脚本升级 K3s
 

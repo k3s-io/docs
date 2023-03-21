@@ -18,7 +18,7 @@ Additionally, versions 1.8.0-1.8.4 have known issues that can cause K3s to fail.
 
 Running K3s with Rootless mode is experimental and has several [known issues.](../advanced/advanced.md#known-issues-with-rootless-mode)
 
-# Upgrading Hardened Clusters from v1.24.x to v1.25.x
+### Upgrading Hardened Clusters from v1.24.x to v1.25.x
 
 Kubernetes removed PodSecurityPolicy from v1.25 in favor of Pod Security Standards. You can read more about PSS in the [upstream documentation](https://kubernetes.io/docs/concepts/security/pod-security-standards/). For K3S, there are some manual steps that must be taken if any `PodSecurityPoliciy` has been configured on the nodes.
 

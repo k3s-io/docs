@@ -6,30 +6,30 @@ import TabItem from '@theme/TabItem';
 
 # k3s etcd-snapshot
 
-:::info Version Gate
+:::info 版本
 
-Available as of [v1.19.1+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.19.1%2Bk3s1)
+从 [v1.19.1+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.19.1%2Bk3s1) 起可用
 
 :::
 
-In this section, you'll learn how to create backups of the K3s embedded etcd datastore, and to restore the cluster from backup.
+在本节中，你将学习如何创建 K3s 嵌入式 etcd 数据存储的备份，以及如何使用备份恢复集群。
 
-#### Creating Snapshots
+#### 创建快照
 
-Snapshots are enabled by default, at 00:00 and 12:00 system time, with 5 snapshots retained. To configure the snapshot interval or the number of retained snapshots, refer to the [options](#options).
+默认情况下，快照在系统时间 00:00 和 12:00 启用，会保留 5 个快照。要配置快照间隔或保留快照的数量，请参阅[选项](#选项)。
 
-The snapshot directory defaults to `${data-dir}/server/db/snapshots`. The data-dir value defaults to `/var/lib/rancher/k3s` and can be changed by setting the `--data-dir` flag.
+快照目录默认为 `${data-dir}/server/db/snapshots`。data-dir 的默认值为 `/var/lib/rancher/k3s`，你可以通过设置 `--data-dir` 标志来更改它。
 
-#### Restoring a Cluster from a Snapshot
+#### 使用快照恢复集群
 
-When K3s is restored from backup, the old data directory will be moved to `${data-dir}/server/db/etcd-old/`. Then K3s will attempt to restore the snapshot by creating a new data directory, then starting etcd with a new K3s cluster with one etcd member.
+使用备份恢复 K3s 时，旧的数据目录将被移动到 `${data-dir}/server/db/etcd-old/`。然后 K3s 将尝试通过创建一个新的数据目录来恢复快照，然后使用具有一个 etcd 成员的新 K3s 集群启动 etcd。
 
-To restore the cluster from backup:
+使用备份恢复集群：
 
 <Tabs>
-<TabItem value="Single Server">
+<TabItem value="单服务器">
 
-Run K3s with the `--cluster-reset` option, with the `--cluster-reset-restore-path` also given:
+使用 `--cluster-reset` 选项运行 K3s，同时指定 `--cluster-reset-restore-path`：
 
 ```bash
 k3s server \
@@ -37,78 +37,78 @@ k3s server \
   --cluster-reset-restore-path=<PATH-TO-SNAPSHOT>
 ```
 
-**Result:** A message in the logs says that K3s can be restarted without the flags. Start k3s again and should run successfully and be restored from the specified snapshot.
+**结果**：日志中的一条消息表示 K3s 可以在没有标志的情况下重新启动。再次启动 K3s，K3s 应该会成功运行并通过指定的快照恢复。
 
 </TabItem>
 
-<TabItem value="High Availability">
+<TabItem value="高可用">
 
-In this example there are 3 servers, `S1`, `S2`, and `S3`. The snapshot is located on `S1`.
+在此示例中有 3 个 Server，分别是 `S1`、`S2`和 `S3`。快照位于 `S1` 上。
 
-1. On S1, start K3s with the `--cluster-reset` option, with the `--cluster-reset-restore-path` also given:
+1. 在 S1 上，使用 `--cluster-reset` 选项运行 K3s，同时指定 `--cluster-reset-restore-path`：
 
-    ```bash
-    k3s server \
-      --cluster-reset \
-      --cluster-reset-restore-path=<PATH-TO-SNAPSHOT>
-    ```
+   ```bash
+   k3s server \
+     --cluster-reset \
+     --cluster-reset-restore-path=<PATH-TO-SNAPSHOT>
+   ```
 
-    **Result:** A message in the logs says that K3s can be restarted without the flags.
+   **结果**：日志中的一条消息表示 K3s 可以在没有标志的情况下重新启动。
 
-2. On S2 and S3, stop K3s. Then delete the data directory, `/var/lib/rancher/k3s/server/db/`:
+2. 在 S2 和 S3 上，停止 K3s。然后删除数据目录 `/var/lib/rancher/k3s/server/db/`：
 
-    ```bash
-    systemctl stop k3s
-    rm -rf /var/lib/rancher/k3s/server/db/
-    ```
+   ```bash
+   systemctl stop k3s
+   rm -rf /var/lib/rancher/k3s/server/db/
+   ```
 
-3. On S1, start K3s again:
+3. 在 S1 上，再次启动 K3s：
 
-    ```bash
-    systemctl start k3s
-    ```
+   ```bash
+   systemctl start k3s
+   ```
 
-4. On S2 and S3, start K3s again to join the restored cluster:
+4. 在 S2 和 S3 上，再次启动 K3s 以加入恢复后的集群：
 
-    ```bash
-    systemctl start k3s
-    ```
+   ```bash
+   systemctl start k3s
+   ```
 
 </TabItem>
 </Tabs>
 
-#### Options
+#### 选项
 
-These options can be passed in with the command line, or in the [configuration file,](../installation/configuration.md#configuration-file ) which may be easier to use.
+你可以通过命令行或者[配置文件](../installation/configuration.md#配置文件)（可能更容易使用）传入这些选项。
 
-| Options | Description |
+| 选项 | 描述 |
 | ----------- | --------------- |
-| `--etcd-disable-snapshots` | Disable automatic etcd snapshots |
-| `--etcd-snapshot-schedule-cron` value  |  Snapshot interval time in cron spec. eg. every 5 hours `0 */5 * * *`(default: `0 */12 * * *`) |
-| `--etcd-snapshot-retention` value  | Number of snapshots to retain (default: 5) |
-| `--etcd-snapshot-dir` value  | Directory to save db snapshots. (Default location: `${data-dir}/db/snapshots`) |
-| `--cluster-reset`  | Forget all peers and become sole member of a new cluster. This can also be set with the environment variable `[$K3S_CLUSTER_RESET]`.
-| `--cluster-reset-restore-path` value | Path to snapshot file to be restored
+| `--etcd-disable-snapshots` | 禁用自动 etcd 快照 |
+| `--etcd-snapshot-schedule-cron` value | cron 规范中的快照间隔时间。eg. 每 5 小时 `0 */5 * * *`（默认值：`0 */12 * * *`） |
+| `--etcd-snapshot-retention` value | 要保留的快照数量（默认值：5） |
+| `--etcd-snapshot-dir` value | 保存数据库快照的目录。（默认位置：`${data-dir}/db/snapshots`） |
+| `--cluster-reset` | 忘记所有对等点，成为新集群的唯一成员。也可以使用环境变量 `[$K3S_CLUSTER_RESET]` 进行设置。 |
+| `--cluster-reset-restore-path` value | 要恢复的快照文件路径 |
 
-#### S3 Compatible API Support
+#### S3 兼容 API 支持
 
-K3s supports writing etcd snapshots to and restoring etcd snapshots from systems with S3-compatible APIs. S3 support is available for both on-demand and scheduled snapshots.
+K3s 支持向具有 S3 兼容 API 的系统写入 etcd 快照和从系统中恢复 etcd 快照。S3 支持按需和计划快照。
 
-The arguments below have been added to the `server` subcommand. These flags exist for the `etcd-snapshot` subcommand as well however the `--etcd-s3` portion is removed to avoid redundancy.
+以下参数已添加到 `server` 子命令中。`etcd-snapshot` 子命令也存在这些标志，但是删除了 `--etcd-s3` 部分以避免冗余。
 
-| Options | Description |
+| 选项 | 描述 |
 | ----------- | --------------- |
-| `--etcd-s3` | Enable backup to S3 |
-| `--etcd-s3-endpoint` | S3 endpoint url |
-| `--etcd-s3-endpoint-ca` | S3 custom CA cert to connect to S3 endpoint |
-| `--etcd-s3-skip-ssl-verify` | Disables S3 SSL certificate validation |
-| `--etcd-s3-access-key` |  S3 access key |
+| `--etcd-s3` | 启用备份到 S3 |
+| `--etcd-s3-endpoint` | S3 端点网址 |
+| `--etcd-s3-endpoint-ca` | S3 自定义 CA 证书，用于连接到 S3 端点 |
+| `--etcd-s3-skip-ssl-verify` | 禁用 S3 SSL 证书验证 |
+| `--etcd-s3-access-key` | S3 access key |
 | `--etcd-s3-secret-key` | S3 secret key |
-| `--etcd-s3-bucket` | S3 bucket name |
-| `--etcd-s3-region` | S3 region / bucket location (optional). defaults to us-east-1 |
-| `--etcd-s3-folder` | S3 folder |
+| `--etcd-s3-bucket` | S3 存储桶名称 |
+| `--etcd-s3-region` | S3 区域/存储桶位置（可选）。默认为 us-east-1 |
+| `--etcd-s3-folder` | S3 文件夹 |
 
-To perform an on-demand etcd snapshot and save it to S3:
+执行按需的 etcd 快照并将其保存到 S3：
 
 ```bash
 k3s etcd-snapshot \
@@ -118,7 +118,7 @@ k3s etcd-snapshot \
   --s3-secret-key=<S3-SECRET-KEY>
 ```
 
-To perform an on-demand etcd snapshot restore from S3, first make sure that K3s isn't running. Then run the following commands:
+要从 S3 中执行按需的 etcd 快照还原，首先确保 K3s 没有运行。然后运行以下命令：
 
 ```bash
 k3s server \
@@ -131,26 +131,26 @@ k3s server \
   --etcd-s3-secret-key=<S3-SECRET-KEY>
 ```
 
-#### Etcd Snapshot and Restore Subcommands
+#### Etcd 快照和恢复子命令
 
-k3s supports a set of subcommands for working with your etcd snapshots.
+K3s 支持用于处理 etcd 快照的一组子命令。
 
-| Subcommand | Description |
+| 子命令 | 描述 |
 | ----------- | --------------- |
-| delete      |  Delete given snapshot(s) |
-| ls, list, l |  List snapshots |
-| prune       |  Remove snapshots that exceed the configured retention count |
-| save        |  Trigger an immediate etcd snapshot |
+| delete | 删除给定的快照 |
+| ls, list, l | 列出快照 |
+| prune | 删除超过配置的保留数量的快照 |
+| save | 触发即时 etcd 快照 |
 
 :::note
-The `save` subcommand is the same as `k3s etcd-snapshot`. The latter will eventually be deprecated in favor of the former.
+`save` 子命令与 `k3s etcd-snapshot` 相同。后者最终将被前者取代。
 :::
 
-These commands will perform as expected whether the etcd snapshots are stored locally or in an S3 compatible object store.
+无论 etcd 快照是存储在本地还是存储在 S3 兼容的对象存储中，这些命令都将按预期执行。
 
-For additional information on the etcd snapshot subcommands, run `k3s etcd-snapshot`.
+有关 etcd 快照子命令的更多信息，请运行 `k3s etcd-snapshot`。
 
-Delete a snapshot from S3.
+从 S3 中删除快照。
 
 ```bash
 k3s etcd-snapshot delete          \
@@ -161,7 +161,7 @@ k3s etcd-snapshot delete          \
   <SNAPSHOT-NAME>
 ```
 
-Prune local snapshots with the default retention policy (5). The `prune` subcommand takes an additional flag `--snapshot-retention` that allows for overriding the default retention policy.
+使用默认保留策略 (5) 修剪本地快照。`prune` 子命令接受额外的标志 `--snapshot-retention`，允许覆盖默认保留策略。
 
 ```bash
 k3s etcd-snapshot prune

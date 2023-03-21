@@ -7,7 +7,7 @@ weight: 10
 
 有关 K3s 组件如何协同工作的信息，请参阅[架构](../architecture/architecture.md)。
 
-:::note
+:::info
 Kubernetes 新手？Kubernetes 官方文档介绍了一些很好的[基础知识教程](https://kubernetes.io/docs/tutorials/kubernetes-basics/)。
 :::
 

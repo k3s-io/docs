@@ -1,5 +1,5 @@
 ---
-title: Disable Components Flags
+title: 禁用组件标志
 ---
 
-**[This page has moved.](server-roles.md)**
+**本文已迁移到[此处](server-roles.md)**。

@@ -1,14 +1,14 @@
 ---
-title: "Kubernetes Dashboard"
+title: "Kubernetes 仪表板"
 weight: 60
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-This installation guide will help you to deploy and configure the [Kubernetes Dashboard](https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/) on K3s.
+本安装指南将帮助你在 K3s 上部署和配置 [Kubernetes 仪表板](https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/)。
 
-### Deploying the Kubernetes Dashboard
+### 部署 Kubernetes 仪表板
 
 ```bash
 GITHUB_URL=https://github.com/kubernetes/dashboard/releases
@@ -16,11 +16,11 @@ VERSION_KUBE_DASHBOARD=$(curl -w '%{url_effective}' -I -L -s -S ${GITHUB_URL}/la
 sudo k3s kubectl create -f https://raw.githubusercontent.com/kubernetes/dashboard/${VERSION_KUBE_DASHBOARD}/aio/deploy/recommended.yaml
 ```
 
-### Dashboard RBAC Configuration
+### 仪表板 RBAC 配置
 
-> **Important:** The `admin-user` created in this guide will have administrative privileges in the Dashboard.
+> **重要提示**：在本指南中创建的 `admin-user` 将在仪表板中拥有管理权限。
 
-Create the following resource manifest files:
+创建以下资源清单文件：
 
 `dashboard.admin-user.yml`
 ```yaml
@@ -47,21 +47,21 @@ subjects:
   namespace: kubernetes-dashboard
 ```
 
-Deploy the `admin-user` configuration:
+部署 `admin-user` 配置：
 
 ```bash
 sudo k3s kubectl create -f dashboard.admin-user.yml -f dashboard.admin-user-role.yml
 ```
 
-### Obtain the Bearer Token
+### 获取持有者令牌
 <Tabs>
-<TabItem value="v1.24 and newer">
+<TabItem value="v1.24 和更新版本">
 
 ```bash
 sudo k3s kubectl -n kubernetes-dashboard create token admin-user
 ```
 </TabItem>
-<TabItem value="v1.23 and older">
+<TabItem value="v1.23 和更低版本">
 
 ```bash
 sudo k3s kubectl -n kubernetes-dashboard describe secret admin-user-token | grep '^token'
@@ -71,24 +71,24 @@ sudo k3s kubectl -n kubernetes-dashboard describe secret admin-user-token | grep
 </Tabs>
 
 
-### Local Access to the Dashboard
+### 本地访问仪表板
 
-To access the Dashboard you must create a secure channel to your K3s cluster:
+要访问仪表板，你必须为你的 K3s 集群创建一个安全通道：
 
 ```bash
 sudo k3s kubectl proxy
 ```
 
-The Dashboard is now accessible at:
+现在，你可以通过以下网址访问仪表盘：
 
 * http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
-* `Sign In` with the `admin-user` Bearer Token
+* 使用 `admin-user` 持有者令牌进行`登录`。
 
-#### Advanced: Remote Access to the Dashboard
+#### 高级：远程访问仪表板
 
-Please see the Dashboard documentation: Using [Port Forwarding](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/) to Access Applications in a Cluster.
+请参阅仪表板文档：使用[端口转发](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/)访问集群中的应用程序。
 
-### Upgrading the Dashboard
+### 升级仪表板
 
 ```bash
 sudo k3s kubectl delete ns kubernetes-dashboard
@@ -97,7 +97,7 @@ VERSION_KUBE_DASHBOARD=$(curl -w '%{url_effective}' -I -L -s -S ${GITHUB_URL}/la
 sudo k3s kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/${VERSION_KUBE_DASHBOARD}/aio/deploy/recommended.yaml -f dashboard.admin-user.yml -f dashboard.admin-user-role.yml
 ```
 
-### Deleting the Dashboard and admin-user configuration
+### 删除仪表板和 admin-user 配置
 
 ```bash
 sudo k3s kubectl delete ns kubernetes-dashboard

@@ -1,6 +1,5 @@
 ---
-title: K3s 资源分析
-shortTitle: 资源分析
+title: 资源分析
 weight: 1
 ---
 
