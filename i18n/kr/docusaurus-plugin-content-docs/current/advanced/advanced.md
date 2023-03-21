@@ -515,23 +515,21 @@ helm install --create-namespace -n cattle-logging-system rancher-logging --set a
 
 ## 추가 네트워크 정책 로깅
 
-네트워크 정책에 의해 차단된 패킷을 로깅할 수 있습니다. 패킷은 차단 네트워크 정책을 포함한 패킷 세부 정보를 표시하는 iptables NFLOG 액션으로 전송됩니다.
+네트워크 정책에 의해 차단된 패킷을 로깅할 수 있습니다. 패킷은 차단 네트워크 정책을 포함한 패킷 세부 정보를 표시하는 iptables NFLOG 작업으로 전송됩니다.
 
-NFLOG를 로그 항목으로 변환하려면 ulogd2를 설치하고 `[log1]`을 `group=100`에서 읽도록 구성합니다. 그런 다음 ulogd2 서비스를 다시 시작하여 새 구성이 커밋되도록 합니다.
+트래픽이 많으면 로그 메시지 수가 매우 많아질 수 있습니다. 정책별로 로그 속도를 제어하려면, 해당 네트워크 정책에 다음 어노테이션을 추가하여 `limit` 및 `limit-burst` iptables 매개변수를 설정합니다:
+* `kube-router.io/netpol-nflog-limit=<LIMIT-VALUE>`
+* `kube-router.io/netpol-nflog-limit-burst=<LIMIT-BURST-VALUE>`
 
-NFLOG 액션에 도달하는 패킷은 tcpdump를 사용하여 읽을 수도 있습니다:
+
+기본값은 `limit=10/minute`와 `limit-burst=10`입니다. 이러한 필드의 형식과 사용 가능한 값에 대한 자세한 내용은 [iptables manual](https://www.netfilter.org/documentation/HOWTO/packet-filtering-HOWTO-7.html#:~:text=restrict%20the%20rate%20of%20matches)을 참조하세요.
+
+NFLOG 패킷을 로그 항목으로 변환하려면 ulogd2를 설치하고 `[log1]`을 `group=100`에서 읽도록 구성합니다. 그런 다음 ulogd2 서비스를 다시 시작하여 새 구성이 커밋되도록 합니다.
+네트워크 정책 규칙에 의해 패킷이 차단되면 `/var/log/ulog/syslogemu.log`에 로그 메시지가 나타납니다.
+
+NFLOG 넷링크 소켓으로 전송된 패킷은 tcpdump 또는 tshark와 같은 명령줄 도구를 사용하여 읽을 수도 있습니다:
 
 ```bash
 tcpdump -ni nflog:100
 ```
-
-그러나 이 경우 패킷을 차단한 네트워크 정책은 표시되지 않는다는 점에 유의하세요.
-
-네트워크 정책 규칙에 의해 패킷이 차단되면 `/var/log/ulog/syslogemu.log`에 로그 메시지가 나타납니다. 트래픽이 많으면 로깅 파일이 매우 빠르게 증가할 수 있습니다. 이를 제어하려면 해당 네트워크 정책에 다음 주석을 추가하여 "limit" 및 "limit-burst" iptables 매개 변수를 적절하게 설정하세요:
-
-```bash
-* kube-router.io/netpol-nflog-limit=<LIMIT-VALUE>
-* kube-router.io.io/netpol-nflog-limit-burst=<LIMIT-BURST-VALUE>
-```
-
-기본값은 `limit=10/minute`와 `limit-burst=10`입니다. 이러한 필드의 형식과 사용 가능한 값에 대한 자세한 내용은 iptables 설명서를 참조하세요.
+더 쉽게 사용할 수 있지만, tcpdump는 패킷을 차단한 네트워크 정책의 이름을 표시하지 않습니다. 대신 와이어샤크의 tshark 명령을 사용하여 정책 이름이 포함된 `nflog.prefix` 필드를 포함한 전체 NFLOG 패킷 헤더를 표시하세요.
