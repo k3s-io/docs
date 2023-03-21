@@ -1,20 +1,20 @@
 ---
-title: CLI Tools
+title: CLI 工具
 weight: 1
 ---
 
-The K3s binary contains a number of additional tools the help you manage your cluster.
+K3s 二进制文件包含了很多工具，可帮助你管理集群。
 
-Command | Description
+| 命令 | 描述 |
 --------|------------------
-`k3s server`| Run a K3s server node, which launches the Kubernetes `apiserver`, `scheduler`, `controller-manager`, and `cloud-controller-manager` components, in addition a datastore and the agent components. See the [`k3s server` command documentation](server.md) for more information.
-`k3s agent`|  Run the K3s agent node, which launches `containerd`, `flannel`, `kube-router` network policy controller, and the Kubernetes `kubelet` and `kube-proxy` components. See the [`k3s agent` command documentation](agent.md) for more information.
-`k3s kubectl`| Run the embedded [`kubectl` command](https://kubernetes.io/docs/reference/kubectl). This is a CLI for interacting with the Kubernetes apiserver.  If the `KUBECONFIG` environment variable is not set, this will automatically attempt to use the kubeconfig at `/etc/rancher/k3s/k3s.yaml`.
-`k3s crictl`| Run the embedded [`crictl` command](https://github.com/kubernetes-sigs/cri-tools/blob/master/docs/crictl.md). This is a CLI for interacting with Kubernetes's container runtime interface (CRI). Useful for debugging.
-`k3s ctr`| Run the embedded [`ctr` command](https://github.com/projectatomic/containerd/blob/master/docs/cli.md). This is a CLI for containerd, the container daemon used by K3s. Useful for debugging.
-`k3s token` | Manage bootstrap tokens. See the [`k3s token` command documentation](token.md) for more information.
-`k3s etcd-snapshot` | Perform on demand backups of the K3s cluster data and upload to S3. See the [`k3s etcd-snapshot` command documentation](etcd-snapshot.md) for more information.
-`k3s secrets-encrypt` | Configure K3s to encrypt secrets when storing them in the cluster. See the [`k3s secrets-encrypt` command documentation](secrets-encrypt.md) for more information.
-`k3s certificate` | Manage K3s certificates. See the [`k3s certificate` command documentation](certificate.md) for more information.
-`k3s completion` | Generate shell completion scripts for k3s
-`k3s help`| Shows a list of commands or help for one command
+| `k3s server` | 运行 K3s Server 节点，这将启动 Kubernetes `apiserver`、`scheduler`、`controller-manager` 和 `cloud-controller-manager` 组件，以及数据存储和 Agent 组件。有关详细信息，请参阅 [`k3s server` 命令文档](server.md)。 |
+| `k3s agent` | 运行 K3s Agent 节点，这将启动 `containerd`、`flannel`、`kube-router` 网络策略控制器和 Kubernetes `kubelet` 和 `kube-proxy` 组件。有关详细信息，请参阅 [`k3s agent` 命令文档](agent.md)。 |
+| `k3s kubectl` | 运行嵌入式 [`kubectl` 命令](https://kubernetes.io/docs/reference/kubectl)。这是用于与 Kubernetes apiserver 交互的 CLI。如果未设置 `KUBECONFIG` 环境变量，将自动尝试使用 `/etc/rancher/k3s/k3s.yaml` 中的 kubeconfig。 |
+| `k3s crictl` | 运行嵌入式 [`crictl` 命令](https://github.com/kubernetes-sigs/cri-tools/blob/master/docs/crictl.md)。这是一个 CLI，用于与 Kubernetes 的容器运行时接口 (CRI) 交互。对调试很有用。 |
+| `k3s ctr` | 运行嵌入式 [`ctr` 命令](https://github.com/projectatomic/containerd/blob/master/docs/cli.md)。这是一个用于 containerd 的 CLI，containerd 是 K3s 使用的容器 daemon。对调试很有用。 |
+| `k3s token` | 管理引导 Token。有关详细信息，请参阅 [`k3s token` 命令文档](token.md)。 |
+| `k3s etcd-snapshot` | 对 K3s 集群数据进行按需备份并上传到 S3。有关详细信息，请参阅 [`k3s etcd-snapshot` 命令文档](etcd-snapshot.md)。 |
+| `k3s secrets-encrypt` | 在将 Secret 存储到集群中时加密 Secret。有关详细信息，请参阅 [`k3s secrets-encrypt` 命令文档](secrets-encrypt.md)。 |
+| `k3s certificate` | 管理 K3s 证书。有关详细信息，请参阅 [`k3s certificate` 命令文档](certificate.md)。 |
+| `k3s completion` | 为 K3s 生成 shell 补全脚本 |
+| `k3s help` | 显示命令列表或某个命令的帮助 |

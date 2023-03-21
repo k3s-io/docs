@@ -6,229 +6,229 @@ import TabItem from '@theme/TabItem';
 
 # k3s secrets-encrypt
 
-K3s supports enabling secrets encryption at rest. For more information, see [Secrets Encryption](../security/secrets-encryption.md).
+K3s 支持启用静态加密。有关详细信息，请参阅 [Secret 加密](../security/secrets-encryption.md)。
 
-## Secrets Encryption Tool
+## Secret 加密工具
 
-:::info Version Gate
-Available as of [v1.21.8+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.21.8%2Bk3s1)
+:::info 版本
+从 [v1.21.8+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.21.8%2Bk3s1) 起可用
 :::
 
-K3s contains a CLI tool `secrets-encrypt`, which enables automatic control over the following:
+K3s 包含一个 CLI 工具 `secrets-encrypt`，可以自动控制以下内容：
 
-- Disabling/Enabling secrets encryption
-- Adding new encryption keys
-- Rotating and deleting encryption keys
-- Reencrypting secrets
+- 禁用/启用 Secret 加密
+- 添加新的加密密钥
+- 轮换和删除加密密钥
+- 重新加密 Secret
 
 :::caution
-Failure to follow proper procedure for rotating encryption keys can leave your cluster permanently corrupted. Proceed with caution.
+如果不遵循正确的加密密钥轮换程序，你的集群可能会永久损坏。因此，请谨慎操作。
 :::
 
-### Encryption Key Rotation
+### 加密密钥轮换
 
 <Tabs>
-<TabItem value="Single-Server" default>
+<TabItem value="单服务器" default>
 
-To rotate secrets encryption keys on a single-server cluster:
+要在单服务器集群上轮换 Secret 加密密钥：
 
-- Start the K3s server with the flag `--secrets-encryption`
-
-:::note 
-Starting K3s without encryption and enabling it at a later time is currently *not* supported.
-:::
-
-1. Prepare
-
-    ```bash
-    k3s secrets-encrypt prepare
-    ```
-
-2. Kill and restart the K3s server with same arguments. If running K3s as a service:
-    ```bash
-    # If using systemd
-    systemctl restart k3s
-    # If using openrc
-    rc-service k3s restart
-    ```
-
-3. Rotate
-
-    ```bash
-    k3s secrets-encrypt rotate
-    ```
-
-4. Kill and restart the K3s server with same arguments
-5. Reencrypt
-    :::info
-    K3s will reencrypt ~5 secrets per second.  
-    Clusters with large # of secrets can take several minutes to reencrypt.
-    ::: 
-    ```bash
-    k3s secrets-encrypt reencrypt
-    ``` 
-
-
-</TabItem>
-<TabItem value="High-Availability" default>
-
-The steps are the same for both embedded DB and external DB clusters.
-
-To rotate secrets encryption keys on HA setups:
-
-:::note Notes
-
-- Starting K3s without encryption and enabling it at a later time is currently *not* supported.
-- While not required, it is recommended that you pick one server node from which to run the `secrets-encrypt` commands.
-
-:::
-
-1. Start up all three K3s servers with the `--secrets-encryption` flag. For brevity, the servers will be referred to as S1, S2, S3.
-
-2. Prepare on S1
-
-    ```bash
-    k3s secrets-encrypt prepare
-    ```
-
-3. Kill and restart S1 with same arguments. If running K3s as a service:
-    ```bash
-    # If using systemd
-    systemctl restart k3s
-    # If using openrc
-    rc-service k3s restart
-    ```
-
-4. Once S1 is up, kill and restart the S2 and S3
-
-5. Rotate on S1
-
-    ```bash
-    k3s secrets-encrypt rotate
-    ```
-
-6. Kill and restart S1 with same arguments
-7. Once S1 is up, kill and restart the S2 and S3
-
-8. Reencrypt on S1
-    :::info
-    K3s will reencrypt ~5 secrets per second.  
-    Clusters with large # of secrets can take several minutes to reencrypt.
-    :::
-    ```bash
-    k3s secrets-encrypt reencrypt
-    ```
-
-9. Kill and restart S1 with same arguments
-10. Once S1 is up, kill and restart the S2 and S3
-
-</TabItem>
-</Tabs>
-
-### Secrets Encryption Disable/Enable
-<Tabs>
-<TabItem value="Single-Server" default>
-
-After launching a server with `--secrets-encryption` flag, secrets encryption can be disabled.
-
-To disable secrets encryption on a single-node cluster:
-
-1. Disable
-
-    ```bash
-    k3s secrets-encrypt disable
-    ```
-
-2. Kill and restart the K3s server with same arguments. If running K3s as a service:
-    ```bash
-    # If using systemd
-    systemctl restart k3s
-    # If using openrc
-    rc-service k3s restart
-    ```
-
-3. Reencrypt with flags
-
-    ```bash
-    k3s secrets-encrypt reencrypt --force --skip
-    ```
-
-To re-enable secrets encryption on a single node cluster:
-
-1. Enable
-
-    ```bash
-    k3s secrets-encrypt enable
-    ```
-
-2. Kill and restart the K3s server with same arguments
-
-3. Reencrypt with flags
-
-    ```bash
-    k3s secrets-encrypt reencrypt --force --skip
-    ```
-
-</TabItem>
-<TabItem value="High-Availability" default>
-
-After launching a HA cluster with `--secrets-encryption` flags, secrets encryption can be disabled.
+- 使用标志 `--secrets-encryption` 启动 K3s Server
 
 :::note
-While not required, it is recommended that you pick one server node from which to run the `secrets-encrypt` commands.
+目前*不*支持在没有加密的情况下启动 K3s 并在后续启用它。
 :::
 
-For brevity, the three servers used in this guide will be referred to as S1, S2, S3.
+1. 准备
 
-To disable secrets encryption on a HA cluster:
+   ```bash
+   k3s secrets-encrypt prepare
+   ```
 
-1. Disable on S1
+2. 使用相同的参数终止并重启 K3s Server。如果将 K3s 作为服务运行：
+   ```bash
+   # 如果使用 systemd
+   systemctl restart k3s
+   # 如果使用 openrc
+   rc-service k3s restart
+   ```
 
-    ```bash
-    k3s secrets-encrypt disable
-    ```
+3. 轮换
 
-2. Kill and restart S1 with same arguments. If running K3s as a service:
-    ```bash
-    # If using systemd
-    systemctl restart k3s
-    # If using openrc
-    rc-service k3s restart
-    ```
+   ```bash
+   k3s secrets-encrypt rotate
+   ```
 
-3. Once S1 is up, kill and restart the S2 and S3
+4. 使用相同的参数终止并重启 K3s Server。
+5. 重新加密
+   :::info
+   K3s 每秒将重新加密约 5 个 Secret。  
+   具有大量 Secret 的集群可能需要几分钟才能重新加密。
+   :::
+   ```bash
+   k3s secrets-encrypt reencrypt
+   ```
 
 
-4. Reencrypt with flags on S1
+</TabItem>
+<TabItem value="高可用" default>
 
-    ```bash
-    k3s secrets-encrypt reencrypt --force --skip
-    ```
+嵌入式数据库和外部数据库集群的步骤相同。
 
-To re-enable secrets encryption on a HA cluster:
+要在 HA 设置上轮换 Secret 加密密钥：
 
-1. Enable on S1
+:::note 注意事项
 
-    ```bash
-    k3s secrets-encrypt enable
-    ```
+- 目前*不*支持在没有加密的情况下启动 K3s 并在后续启用它。
+- 虽然不是必需的，但建议你选择一个 Server 节点来运行 `secrets-encrypt` 命令。
 
-2. Kill and restart S1 with same arguments
-3. Once S1 is up, kill and restart the S2 and S3
+:::
 
-4. Reencrypt with flags on S1
+1. 使用 `--secrets-encryption` 标志启动所有三个 K3s Server。为简便起见，我们将 server 分别称为 S1、S2、S3。
 
-    ```bash
-    k3s secrets-encrypt reencrypt --force --skip
-    ```
+2. 准备 S1
+
+   ```bash
+   k3s secrets-encrypt prepare
+   ```
+
+3. 使用相同的参数终止并重启 S1。如果将 K3s 作为服务运行：
+   ```bash
+   # 如果使用 systemd
+   systemctl restart k3s
+   # 如果使用 openrc
+   rc-service k3s restart
+   ```
+
+4. S1 启动后，终止并重启 S2 和 S3
+
+5. 轮换 S1
+
+   ```bash
+   k3s secrets-encrypt rotate
+   ```
+
+6. 使用相同的参数终止并重启 S1。
+7. S1 启动后，终止并重启 S2 和 S3
+
+8. 在 S1 上重新加密
+   :::info
+   K3s 每秒将重新加密约 5 个 Secret。  
+   具有大量 Secret 的集群可能需要几分钟才能重新加密。
+   :::
+   ```bash
+   k3s secrets-encrypt reencrypt
+   ```
+
+9. 使用相同的参数终止并重启 S1。
+10. S1 启动后，终止并重启 S2 和 S3
 
 </TabItem>
 </Tabs>
 
-### Secrets Encryption Status
-The secrets-encrypt tool includes a `status` command that displays information about the current status of secrets encryption on the node.
+### 禁用/启用 Secret 加密
+<Tabs>
+<TabItem value="单服务器" default>
 
-An example of the command on a single-server node:  
+使用 `--secrets-encryption` 标志启动 server 后，你还可以禁用 Secret 加密。
+
+要在单节点集群上禁用 Secret 加密：
+
+1. 禁用
+
+   ```bash
+   k3s secrets-encrypt disable
+   ```
+
+2. 使用相同的参数终止并重启 K3s Server。如果将 K3s 作为服务运行：
+   ```bash
+   # 如果使用 systemd
+   systemctl restart k3s
+   # 如果使用 openrc
+   rc-service k3s restart
+   ```
+
+3. 使用标志重新加密
+
+   ```bash
+   k3s secrets-encrypt reencrypt --force --skip
+   ```
+
+要在单节点集群上重新启用 Secret 加密：
+
+1. 启用
+
+   ```bash
+   k3s secrets-encrypt enable
+   ```
+
+2. 使用相同的参数终止并重启 K3s Server。
+
+3. 使用标志重新加密
+
+   ```bash
+   k3s secrets-encrypt reencrypt --force --skip
+   ```
+
+</TabItem>
+<TabItem value="高可用" default>
+
+使用 `--secrets-encryption` 标志启动 HA 集群后，你还可以禁用 Secret 加密。
+
+:::note
+虽然不是必需的，但建议你选择一个 Server 节点来运行 `secrets-encrypt` 命令。
+:::
+
+为简便起见，我们将本指南中使用的 3 个 server 分别称为 S1、S2、S3。
+
+要在 HA 集群上禁用 Secret 加密：
+
+1. 在 S1 上禁用
+
+   ```bash
+   k3s secrets-encrypt disable
+   ```
+
+2. 使用相同的参数终止并重启 S1。如果将 K3s 作为服务运行：
+   ```bash
+   # 如果使用 systemd
+   systemctl restart k3s
+   # 如果使用 openrc
+   rc-service k3s restart
+   ```
+
+3. S1 启动后，终止并重启 S2 和 S3
+
+
+4. 在 S1 上使用标志重新加密
+
+   ```bash
+   k3s secrets-encrypt reencrypt --force --skip
+   ```
+
+要在 HA 集群上重新启用 Secret 加密：
+
+1. 在 S1 上启用
+
+   ```bash
+   k3s secrets-encrypt enable
+   ```
+
+2. 使用相同的参数终止并重启 S1。
+3. S1 启动后，终止并重启 S2 和 S3
+
+4. 在 S1 上使用标志重新加密
+
+   ```bash
+   k3s secrets-encrypt reencrypt --force --skip
+   ```
+
+</TabItem>
+</Tabs>
+
+### Secret 加密状态
+secrets-encrypt 工具包含一个 `status` 命令，该命令能显示节点上 Secret 加密的当前状态信息。
+
+单 Server 节点上的命令示例：
 ```bash
 $ k3s secrets-encrypt status
 Encryption Status: Enabled
@@ -241,7 +241,7 @@ Active  Key Type  Name
 
 ```
 
-Another example on HA cluster, after rotating the keys, but before restarting the servers:  
+以下是另一个关于 HA 集群的例子，在轮换密钥后，重启 server 之前：
 ```bash
 $ k3s secrets-encrypt status
 Encryption Status: Enabled
@@ -255,13 +255,13 @@ Active  Key Type  Name
 
 ```
 
-Details on each section are as follows:  
+各部分详情如下：
 
-- __Encryption Status__: Displayed whether secrets encryption is disabled or enabled on the node  
-- __Current Rotation Stage__: Indicates the current rotation stage on the node.  
-  Stages are: `start`, `prepare`, `rotate`, `reencrypt_request`, `reencrypt_active`, `reencrypt_finished`  
-- __Server Encryption Hashes__: Useful for HA clusters, this indicates whether all servers are on the same stage with their local files. This can be used to identify whether a restart of servers is required before proceeding to the next stage. In the HA example above, node-1 and node-2 have different hashes, indicating that they currently do not have the same encryption configuration. Restarting the servers will sync up their configuration.
-- __Key Table__: Summarizes information about the secrets encryption keys found on the node.  
-  * __Active__: The "*" indicates which, if any, of the keys are currently used for secrets encryption. An active key is used by Kubernetes to encrypt any new secrets.
-  * __Key Type__: All keys using this tool are `AES-CBC` type. See more info [here.](https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/#providers)
-  * __Name__: Name of the encryption key.  
+- __Encryption Status__：显示节点上的 Secret 加密是禁用还是启用的
+- __Current Rotation Stage__：表示节点上当前的轮换阶段  
+   Stage 可能是：`start`，`prepare`，`rotate`，`reencrypt_request`，`reencrypt_active`，`reencrypt_finished`
+- __Server Encryption Hashes__：对 HA 集群有用，表明所有 server 是否与本地文件处于同一阶段。这可用于确定在进入下一阶段之前是否需要重启 server。在上面的 HA 例子中，node-1 和 node-2 的哈希值不同，说明它们目前没有相同的加密配置。重启 server 将同步它们的配置。
+- __Key Table__：汇总在节点上找到的 Secret 加密密钥的信息。
+   * __Active__：“*”表示当前使用了哪些密钥（如果有的话）进行Secret 加密。Kubernetes 使用 active 密钥来加密新的 Secret。
+   * __Key Type__：使用此工具的所有密钥都是 `AES-CBC` 类型。详情请参见[此处](https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/#providers)。
+   * __Name__：加密密钥的名称。

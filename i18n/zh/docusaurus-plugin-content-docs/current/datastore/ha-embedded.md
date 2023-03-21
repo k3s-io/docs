@@ -1,35 +1,49 @@
 ---
-title: "High Availability Embedded etcd"
+title: "高可用嵌入式 etcd"
 weight: 40
 ---
 
-:::info Version Gate
-Full support as of [v1.19.5+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.19.5%2Bk3s1)  
-Experimental support as of [v1.19.1+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.19.1%2Bk3s1)
+:::info 版本
+完全支持 [v1.19.5+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.19.5%2Bk3s1)  
+实验性支持 [v1.19.1+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.19.1%2Bk3s1)
 :::
 
-:::note Notice: Deprecated Dqlite
-Embedded etcd replaced experimental Dqlite in the K3s v1.19.1 release. This is a breaking change. Please note that upgrades from experimental Dqlite to embedded etcd are not supported. If you attempt an upgrade it will not succeed and data will be lost.
+:::note 注意：已弃用 Dqlite
+在 K3s v1.19.1 中，嵌入式 etcd 取代了实验性的 Dqlite。这是一个突破性的变化。请注意，不支持从实验性 Dqlite 升级到嵌入式 etcd。如果你尝试升级，升级将不会成功，并且数据将会丢失。
 :::
 
 :::caution
-Embedded etcd (HA) may have performance issues on slower disks such as Raspberry Pis running with SD cards.
+嵌入式 etcd (HA) 在速度较慢的磁盘（例如使用 SD 卡运行的 Raspberry Pi）上可能会出现性能问题。
 :::
 
-## New cluster
-To run K3s in this mode, you must have an odd number of server nodes. We recommend starting with three nodes.
+## 新集群
+要在这种模式下运行 K3s，你必须拥有奇数个 Server 节点。我们建议从三个节点开始。
 
-To get started, first launch a server node with the `cluster-init` flag to enable clustering and a token that will be used as a shared secret to join additional servers to the cluster.
+首先，启动一个带有 `cluster-init` 标志的 Server 节点来启用集群和一个令牌，该令牌将作为共享 secret，用于将其他 Server 加入集群。
 ```bash
 curl -sfL https://get.k3s.io | K3S_TOKEN=SECRET sh -s - server --cluster-init
 ```
 
-After launching the first server, join the second and third servers to the cluster using the shared secret:
+:::note
+中国用户，可以使用以下方法加速安装：
+```
+curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn K3S_TOKEN=SECRET sh -s - server --cluster-init
+```
+:::
+
+启动第一台服务器后，使用共享 secret  将第二台和第三台服务器加入集群：
 ```bash
 curl -sfL https://get.k3s.io | K3S_TOKEN=SECRET sh -s - server --server https://<ip or hostname of server1>:6443
 ```
 
-Check to see that the second and third servers are now part of the cluster:
+:::note
+中国用户，可以使用以下方法加速安装：
+```
+curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn K3S_TOKEN=SECRET sh -s - server --server https://<ip or hostname of server1>:6443
+```
+:::
+
+检查第二个和第三个服务器是否已加入集群：
 
 ```bash
 $ kubectl get nodes
@@ -38,18 +52,18 @@ server1     Ready    control-plane,etcd,master   28m   vX.Y.Z
 server2     Ready    control-plane,etcd,master   13m   vX.Y.Z
 ```
 
-Now you have a highly available control plane. Any successfully clustered servers can be used in the `--server` argument to join additional server and worker nodes. Joining additional worker nodes to the cluster follows the same procedure as a single server cluster.
+现在你有了一个高可用的 control plane。你可以在 `--server` 参数中使用任何集群 server，从而加入额外的 server 和 worker 节点。将其他 worker 节点加入到集群中，步骤与单个 server 集群相同。
 
-There are a few config flags that must be the same in all server nodes:         
+有几个配置标志在所有 Server 节点中必须是相同的:
 
-* Network related flags: `--cluster-dns`, `--cluster-domain`, `--cluster-cidr`, `--service-cidr`
-* Flags controlling the deployment of certain components: `--disable-helm-controller`, `--disable-kube-proxy`, `--disable-network-policy` and any component passed to `--disable`
-* Feature related flags: `--secrets-encryption`
+* 网络相关标志：`--cluster-dns`、`--cluster-domain`、`--cluster-cidr`、`--service- cidr`
+* 控制某些组件部署的标志：`--disable-helm-controller`、`--disable-kube-proxy`、`--disable-network-policy` 和任何传递给 `--disable` 的组件
+* 功能相关标志：`--secrets-encryption`
 
-## Existing clusters
-If you have an existing cluster using the default embedded SQLite database, you can convert it to etcd by simply restarting your K3s server with the `--cluster-init` flag. Once you've done that, you'll be able to add additional instances as described above.
+## 现有集群
+如果你有一个使用默认嵌入式 SQLite 数据库的现有集群，你可以通过使用 `--cluster-init` 标志重新启动你的 K3s server，从而将其转换为 etcd。完成此操作后，你将能够如上所述添加其他实例。
 
-If an etcd datastore is found on disk either because that node has either initialized or joined a cluster already, the datastore arguments (`--cluster-init`, `--server`, `--datastore-endpoint`, etc) are ignored.
+如果由于节点已经初始化或加入了一个集群，导致在磁盘上发现一个 etcd 数据存储，那么数据存储参数（`--cluster-init`、`--server`、`--datastore-endpoint` 等）将被忽略。
 
->**Important:** K3s v1.22.2 and newer support migration from SQLite to etcd. Older versions will create a new empty datastore if you add `--cluster-init` to an existing server.
+> **重要提示**：K3s v1.22.2 及更高版本支持将 SQLite 迁移到 etcd。如果你将 `--cluster-init` 添加到现有 server，旧版本将创建一个新的空数据存储。
 

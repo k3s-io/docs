@@ -23,11 +23,21 @@ K3s 是经过 CNCF 认证的 Kubernetes 发行版，可以胜任标准 Kubernete
 
 ### K3s 日志在哪里？
 
-安装脚本将自动检测你的操作系统是使用 systemd 还是 openrc 并启动服务。
+K3s 日志的位置将根据你运行 K3s 的方式和节点的操作系统而有所不同。
 
 * 从命令行运行时，日志将发送到 stdout 和 stderr。
 * 使用 openrc 运行时，将在 `/var/log/k3s.log` 中创建日志。
 * 使用 systemd 运行时，日志将发送到 Journald 并可以使用 `journalctl -u k3s` 查看​​。
+* Pod 日志在 `/var/log/pods` 中。
+* Containerd 日志在 `/var/lib/rancher/k3s/agent/containerd/containerd.log` 中。
+
+你可以在启动 K3s 时使用 `--debug` 标志（或配置文件中的 `debug: true`）来生成更详细的日志。
+
+Kubernetes 使用名为 `klog` 的日志管理框架，该框架对进程中的所有组件使用单一的日志管理配置。
+由于 K3s 在单个进程中运行所有 Kubernetes 组件，因此无法为单个 Kubernetes 组件配置不同的日志级别或目的位置。
+使用 `-v=<level>` 或 `--vmodule=<module>=<level>` 组件参数的效果可能不如预期。
+
+要获得更多日志选项，请参阅[其他日志来源](../advanced/advanced.md#其他日志来源)。
 
 ### 可以在 Docker 中运行 K3s 吗？
 
@@ -35,13 +45,13 @@ K3s 是经过 CNCF 认证的 Kubernetes 发行版，可以胜任标准 Kubernete
 
 ### K3s Server 和 Agent Token 有什么区别？
 
-K3s 中有两种 token，分别是 `K3S_TOKEN` 和 `K3S_AGENT_TOKEN`。
+有关管理 K3s join token 的更多信息，请参阅 [`k3s token` 命令文档](../cli/token.md)。
 
-`K3S_TOKEN`：定义 server 提供 HTTP 配置资源所需的密钥。这些资源在加入 K3s HA 集群之前由其他 server 请求。如果未定义 `K3S_AGENT_TOKEN`，则 Agent 也使用此令牌来访问所需的 HTTP 资源以加入集群。请注意，此令牌还用于为数据库中的重要内容（例如引导数据）生成加密密钥。
+### 不同版本的 K3s 兼容性如何？
 
-`K3S_AGENT_TOKEN`：可选。定义 server 向 agent 提供 HTTP 配置资源所需的密钥。如果未定义，agent 将需要 `K3S_TOKEN`。建议你定义 `K3S_AGENT_TOKEN`，从而避免 agent 知道 `K3S_TOKEN`，因为 `K3S_TOKEN` 也用于加密数据。
+通常，[Kubernetes 版本倾斜策略](https://kubernetes.io/docs/setup/release/version-skew-policy/)适用。
 
-如果没有定义 `K3S_TOKEN`，第一个 K3s Server 将在初始启动时生成一个随机的 token。结果是 `/var/lib/rancher/k3s/server/token` 中的部分内容。例如 `K1070878408e06a827960208f84ed18b65fa10f27864e71a57d9e053c4caff8504b::server:df54383b5659b9280aa1e73e60ef78fc`。此示例中的 token 是 `df54383b5659b9280aa1e73e60ef78fc`。带有 `K10` 前缀的完整格式包括集群 CA 证书的哈希值，可用于确保节点加入正确的集群，而且在加入过程中不受中间人攻击。在生成集群 CA 之前，无法在集群初始启动前生成此完整令牌。
+简而言之，Server 版本可以比 Agnet 新，但 Agent 不能比 Server 新。
 
 ### 如果我遇到问题，可以在哪里获得帮助？
 
@@ -51,8 +61,8 @@ K3s 中有两种 token，分别是 `K3S_TOKEN` 和 `K3S_AGENT_TOKEN`。
 
 2) 检查你是否已解决[其他操作系统准备](../advanced/advanced.md#其他操作系统准备)。运行 `k3s check-config` 并确保它通过。
 
-3) 在 [K3s GitHub existing issues](https://github.com/k3s-io/k3s/issues) 中搜索与你的问题相匹配的 issue。
+3) 在 K3s [Issues](https://github.com/k3s-io/k3s/issues) 和 [Discussions](https://github.com/k3s-io/k3s/discussions) 中搜索匹配的问题。
 
-4) 加入 [Rancher Slack](https://rancher-users.slack.com/) K3s 频道以获得帮助。
+4) 加入 [Rancher Slack](https://slack.rancher.io/) K3s 频道以获得帮助。
 
 5) 在 K3s Github 上提交[新 issue](https://github.com/k3s-io/k3s/issues/new/choose)，你可以描述你的设置和遇到的问题。

@@ -1,5 +1,5 @@
 ---
-title: High Availability with an External DB
+title: 具有外部数据库的高可用
 ---
 
-**[This page has moved.](../datastore/ha.md)**
+**本文已迁移到[此处](../datastore/ha.md)**。

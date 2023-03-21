@@ -3,82 +3,65 @@ title: Helm
 weight: 42
 ---
 
-Helm 是 Kubernetes 的包管理工具。Helm Chart 为 Kubernetes YAML 清单文件提供了模板语法。通过 Helm，用户可以创建可配置的 deployment，而不仅仅只能使用静态文件。如果你需要创建自己的 Deployment 商店应用，请参见 [Helm 文档](https://helm.sh/docs/intro/quickstart/)。
+Helm 是 Kubernetes 的包管理工具。Helm Chart 为 Kubernetes YAML 清单文件提供了模板语法。借助 Helm，开发人员或集群管理员可以创建称为 Chart 的可配置模板，而不仅仅是使用静态清单。如果你需要创建自己的 Chart catalog，请参阅 [https://helm.sh/docs/intro/quickstart/](https://helm.sh/docs/intro/quickstart/)。
 
-K3s 不需要任何特殊配置即可配合 Helm 命令行工具一起使用。请确保你已按照[集群访问](../cluster-access/cluster-access.md)部分正确设置了 kubeconfig。K3s 包含一些其他功能，让你可以使用 [rancher/helm-release CRD](#使用-helm-crd) 更轻松地部署传统的 Kubernetes 资源清单和 Helm Chart。
+K3s 不需要使用任何特殊配置来支持 Helm。请确保你已根据[集群访问](../cluster-access/cluster-access.md)文档正确设置了 kubeconfig 路径。
 
-本节涵盖以下主题：
+K3s 包含一个 [Helm Controller](https://github.com/k3s-io/helm-controller/)，它使用 HelmChart 自定义资源定义 (CRD) 来管理 Helm Chart 的安装、升级、重新配置和卸载。与[自动部署 AddOn 清单](../installation/packaged-components.md)配合使用后，它可以在磁盘上创建单个文件，自动在集群上安装 Helm Chart。
 
-- [自动部署清单和 Helm Chart](#自动部署清单和-helm-chart)
-- [使用 Helm CRD](#使用-helm-crd)
-- [使用 HelmChartConfig 自定义打包组件](#使用-helmchartconfig-自定义打包组件)
-- [从 Helm v2 迁移](#从-helm-v2-迁移)
+### 使用 Helm Controller
 
-### 自动部署清单和 Helm Chart
-
-在 `/var/lib/rancher/k3s/server/manifests` 中找到的 Kubernetes 清单都会以类似于 `kubectl apply` 的方式自动部署到 K3s。以这种方式部署的清单作为 AddOn 自定义资源进行管理，你可以通过运行 `kubectl get addon -A` 查看它们。你能找到用于打包组件的 AddOn，例如 CoreDNS、Local-Storage、Traefik 等。AddOn 由部署控制器自动创建，并根据它们在清单目录中的文件名命名。
-
-你也可以将 Helm Chart 部署为 AddOn。K3s 包含一个 [Helm Controller](https://github.com/k3s-io/helm-controller/)，它使用 HelmChart 自定义资源定义 (CRD) 管理 Helm Chart。
-
-### 使用 Helm CRD
-
-[HelmChart 资源定义](https://github.com/k3s-io/helm-controller#helm-controller)捕获了你通常传递给 `helm` 命令行工具的大部分选项。以下示例说明了如何从默认 Chart 仓库部署 Grafana，并覆盖某些默认的 Chart 值。请注意，HelmChart 资源本身位于 `kube-system` 命名空间中，但 Chart 的资源将部署到 `monitoring` 命名空间。
+[HelmChart Custom Resource](https://github.com/k3s-io/helm-controller#helm-controller) 捕获了你通常传递给 `helm` 命令行工具的大部分选项。以下示例说明了如何从 Bitnami Chart 仓库部署 Apache，并覆盖某些默认的 Chart 值。请注意，HelmChart 资源本身位于 `kube-system` 命名空间中，但 Chart 的资源将部署到在同一清单中创建的 `web` 命名空间。如果你希望将 HelmChart 资源与其部署的资源分开，这将很有用。
 
 ```yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: web
+---
 apiVersion: helm.cattle.io/v1
 kind: HelmChart
 metadata:
-  name: grafana
+  name: apache
   namespace: kube-system
 spec:
-  chart: stable/grafana
-  targetNamespace: monitoring
-  set:
-    adminPassword: "NotVerySafePassword"
+  repo: https://charts.bitnami.com/bitnami
+  chart: apache
+  targetNamespace: web
   valuesContent: |-
-    image:
-      tag: master
-    env:
-      GF_EXPLORE_ENABLED: true
-    adminUser: admin
-    sidecar:
-      datasources:
-        enabled: true
+    service:
+      type: ClusterIP
+    ingress:
+      enabled: true
+      hostname: www.example.com
+    metrics:
+      enabled: true
 ```
 
 #### HelmChart 字段定义
 
 | 字段 | 默认 | 描述 | Helm 参数/标志等效项 |
 |-------|---------|-------------|-------------------------------|
-| name |   | Helm Chart 名称 | NAME |
+| metadata.name |   | Helm Chart 名称 | NAME |
 | spec.chart |   | 仓库中的 Helm Chart 名称，或 chart archive (.tgz) 的完整 HTTPS URL | CHART |
 | spec.targetNamespace | default | Helm Chart 目标命名空间 | `--namespace` |
 | spec.version |   | Helm Chart 版本（通过仓库安装时） | `--version` |
 | spec.repo |   | Helm Chart 仓库 URL | `--repo` |
+| spec.repoCA | | 指定启用 HTTPS 的 Server 的证书 | `--ca-file` |
 | spec.helmVersion | v3 | 要使用的 Helm 版本（`v2` 或 `v3`） |  |
 | spec.bootstrap | False | 如果需要此 Chart 来引导集群（Cloud Controller Manager 等），请设置为 `True` |  |
 | spec.set |   | 覆盖简单的默认 Chart 值。优先于通过 valuesContent 设置的选项。 | `--set` / `--set-string` |
 | spec.jobImage |   | 指定安装 helm chart 时要使用的镜像。例如：rancher/klipper-helm:v0.3.0 | |
+| spec.timeout | 300 | Helm 操作的超时秒数 | `--timeout` |
+| spec.failurePolicy | reinstall | 如果设置为 `abort`，Helm 操作会被中止，等待操作人员的手动干预。 | |
 | spec.valuesContent |   | 通过 YAML 文件内容覆盖复杂的默认 Chart 值 | `--values` |
 | spec.chartContent |   | Base64 编码的 chart archive .tgz，覆盖 spec.chart | CHART |
 
 你可以通过集群内的 Kubernetes APIServer 匿名访问 `/var/lib/rancher/k3s/server/static/` 中的内容。此 URL 可以使用 `spec.chart` 字段中的特殊变量 `%{KUBERNETES_API}%` 进行模板化。例如，打包的 Traefik 组件通过 `https://%{KUBERNETES_API}%/static/charts/traefik-12.0.000.tgz` 加载 Chart。
 
 :::note
-`name` 字段需要遵循 Helm Chart 命名约定。详情请参阅[此处](https://helm.sh/docs/chart_best_practices/conventions/#chart-names)。
+`name` 字段需要遵循 Helm Chart 命名约定。如需了解更多信息，请参阅 [Helm 最佳实践文档](https://helm.sh/docs/chart_best_practices/conventions/#chart-names)。
 :::
-
-> **文件命名要求注意事项**：`HelmChart` 和 `HelmChartConfig` 清单文件名应遵守 Kubernetes 对象的[命名要求](https://kubernetes.io/docs/concepts/overview/working-with-objects/names/)。Helm Controller 使用文件名来创建对象，因此文件名也必须遵循该限制。相关的错误都可以在 k3s-server 日志中观察到。下面示例是使用下划线导致的错误：
-```
-level=error msg="Failed to process config: failed to process
-/var/lib/rancher/k3s/server/manifests/k3s_ingress_daemonset.yaml:
-Addon.k3s.cattle.io \"k3s_ingress_daemonset\" is invalid: metadata.name:
-Invalid value: \"k3s_ingress_daemonset\": a lowercase RFC 1123 subdomain
-must consist of lower case alphanumeric characters, '-' or '.', and must
-start and end with an alphanumeric character (e.g. 'example.com', regex
-used for validation is '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]
-([-a-z0-9]*[a-z0-9])?)*')"
-```
 
 ### 使用 HelmChartConfig 自定义打包组件
 
