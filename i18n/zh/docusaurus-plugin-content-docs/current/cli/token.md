@@ -105,9 +105,9 @@ OPTIONS:
 
 | 标志 | 描述 |
 ---- | ----
-| `--data-dir` value | (data) 保存状态的文件夹，如果不是 root，则默认为 `/var/lib/rancher/k3s 或 ${HOME}/.rancher/k3s` |
-| `--kubeconfig` value | (cluster) 要连接到 [$KUBECONFIG] 的 Server |
-| `--description` value | 如何使用此 Token 的描述 |
+| `--data-dir` value | 保存状态的（数据）文件夹，如果不是 root，则默认为 `/var/lib/rancher/k3s 或 ${HOME}/.rancher/k3s` |
+| `--kubeconfig` value | 要连接到 [$KUBECONFIG] 的（集群）Server |
+| `--description` value | 有关如何使用此 Token 的描述 |
 | `--groups` value | 该 Token 用于认证的其他组（默认值：“system:bootstrappers:k3s:default-node-token”） |
 | `--ttl` value | 自动删除 Token 的时间（例如 1s、2m、3h）。如果设置为 `0`，Token 将永不过期（默认值：24h0m0s） |
 | `--usages` value | 描述可使用此 Token 的方式。(默认值："signing,authentication") |
@@ -118,8 +118,8 @@ OPTIONS:
 
 | 标志 | 描述 |
 ---- | ----
-| `--data-dir` value | (data) 保存状态的文件夹，如果不是 root，则默认为 `/var/lib/rancher/k3s 或 ${HOME}/.rancher/k3s` |
-| `--kubeconfig` value | (cluster) 要连接到 [$KUBECONFIG] 的 Server |
+| `--data-dir` value | 保存状态的（数据）文件夹，如果不是 root，则默认为 `/var/lib/rancher/k3s 或 ${HOME}/.rancher/k3s` |
+| `--kubeconfig` value | 要连接到 [$KUBECONFIG] 的（集群）Server |
 
 #### `k3s token generate`
 
@@ -129,8 +129,8 @@ OPTIONS:
 
 | 标志 | 描述 |
 ---- | ----
-| `--data-dir` value | (data) 保存状态的文件夹，如果不是 root，则默认为 `/var/lib/rancher/k3s 或 ${HOME}/.rancher/k3s` |
-| `--kubeconfig` value | (cluster) 要连接到 [$KUBECONFIG] 的 Server |
+| `--data-dir` value | 保存状态的（数据）文件夹，如果不是 root，则默认为 `/var/lib/rancher/k3s 或 ${HOME}/.rancher/k3s` |
+| `--kubeconfig` value | 要连接到 [$KUBECONFIG] 的（集群）Server |
 
 #### `k3s token list`
 
@@ -138,6 +138,6 @@ OPTIONS:
 
 | 标志 | 描述 |
 ---- | ----
-| `--data-dir` value | (data) 保存状态的文件夹，如果不是 root，则默认为 `/var/lib/rancher/k3s 或 ${HOME}/.rancher/k3s` |
-| `--kubeconfig` value | (cluster) 要连接到 [$KUBECONFIG] 的 Server |
+| `--data-dir` value | 保存状态的（数据）文件夹，如果不是 root，则默认为 `/var/lib/rancher/k3s 或 ${HOME}/.rancher/k3s` |
+| `--kubeconfig` value | 要连接到 [$KUBECONFIG] 的（集群）Server |
 | `--output` value | 输出格式。可选值：text、json（默认值：`text`） |

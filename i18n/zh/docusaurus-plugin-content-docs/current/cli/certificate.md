@@ -54,7 +54,7 @@ Kubernetes 需要大量 CA 证书才能正常运行。有关 Kubernetes 如何�
 
 在集群中的第一台 Server 初始启动期间，如果找到了放置在正确位置的 CA 证书和密钥，将不会自动生成 CA 证书。
 
-[K3s 仓库中的 `contrib/util/generate-custom-ca-certs.sh`](https://github.com/k3s-io/k3s/blob/master/contrib/util/generate-custom-ca-certs.sh) 是预先创建适当的证书和密钥的示例脚本。
+[K3s 仓库中的 `contrib/util/generate-custom-ca-certs.sh`](https://github.com/k3s-io/k3s/blob/master/contrib/util/generate-custom-ca-certs.sh) 示例脚本用于预先创建证书和密钥。
 该脚本应在首次启动 K3s 之前运行，能创建一整套由通用根证书和中间 CA 证书签名的叶 CA 证书。
 如果你已有根证书或中间 CA 证书，你可以使用此脚本（或用作起点）创建 CA 证书，从而使用现有机构中的 PKI 来配置 K3s 集群。
 
@@ -147,9 +147,9 @@ curl -sL https://github.com/k3s-io/k3s/raw/master/contrib/util/generate-custom-c
 将更新的证书和密钥暂存到单独的目录中。
 :::
 
-只要是使用相同的根 CA，使用自定义 CA 证书启动的集群就可以无中断地更新或轮换 CA 证书和密钥。
+只要是使用相同的根 CA，使用自定义 CA 证书启动的集群能无中断地更新或轮换 CA 证书和密钥。
 
-如果需要新的根 CA，那么需要中断才能进行轮换。必须使用 `k3s certificate rotate-ca --force` 选项，所有使用 [secure token](token.md#secure) 加入的节点（包括 server）都需要重新配置才能使用新的 Token 值，并且 Pod 需要重启才能信任新的根 CA。
+如果使用新的根 CA，则需要中断才能进行轮换。必须使用 `k3s certificate rotate-ca --force` 选项，所有使用 [secure token](token.md#secure) 加入的节点（包括 server）都需要重新配置才能使用新的 Token 值，并且 Pod 需要重启才能信任新的根 CA。
 
 #### 使用示例脚本
 
@@ -178,7 +178,7 @@ k3s certificate rotate-ca --path=/opt/k3s/server
 命令成功完成，在集群中的所有节点上重启 K3s，你需要先重启 Server，然后再重启 Agent。
 
 如果你使用了 `--force` 选项或更改了根 CA，请确保使用 [secure token](token.md#secure) 加入的节点在重启前都重新配置为使用新的 Token 值。
-Token 可能存储在 `.env` 文件、systemd 单元或 config.yaml 中，具体取决于节点在初始安装时的配置。
+Token 可能存储在 `.env` 文件、systemd 单元或 config.yaml 中，具体取决于节点初始安装时的配置。
 
 ### 轮换自签名 CA 证书
 
@@ -270,7 +270,7 @@ graph TD
 
 #### 使用示例脚本
 
-[K3s 仓库中的 `contrib/util/rotate-default-ca-certs.sh`](https://github.com/k3s-io/k3s/blob/master/contrib/util/rotate-default-ca-certs.sh) 是用于创建由现有 CA 交叉签名的更新 CA 证书和密钥的示例脚本。
+[K3s 仓库中的 `contrib/util/rotate-default-ca-certs.sh`](https://github.com/k3s-io/k3s/blob/master/contrib/util/rotate-default-ca-certs.sh) 示例脚本用于创建由现有 CA 交叉签名的更新 CA 证书和密钥。
 
 要使用示例脚本生成由现有 CA 交叉签名的更新的自签名证书，请运行以下命令：
 ```bash
