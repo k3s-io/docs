@@ -112,13 +112,13 @@ If the files do not exist, the script will create new root and intermediate CA c
 :::
 
 If you want to use only an existing root CA certificate, provide the following files:
-* `root.pem`
-* `root.key`
+* `root-ca.pem`
+* `root-ca.key`
 
 If you want to use existing root and intermediate CA certificates, provide the following files:
-* `root.pem`
-* `intermediate.pem`
-* `intermediate.key`
+* `root-ca.pem`
+* `intermediate-ca.pem`
+* `intermediate-ca.key`
 
 To use the example script to generate custom certs and keys before starting K3s, run the following commands:
 ```bash
@@ -128,7 +128,7 @@ mkdir -p /var/lib/rancher/k3s/server/tls
 # Copy your root CA cert and intermediate CA cert+key into the correct location for the script.
 # For the purposes of this example, we assume you have existing root and intermediate CA files in /etc/ssl.
 # If you do not have an existing root and/or intermediate CA, the script will generate them for you.
-cp /etc/ssl/certs/root.pem /etc/ssl/certs/intermediate.pem /etc/ssl/private/intermediate.key /var/lib/rancher/k3s/server/tls
+cp /etc/ssl/certs/root-ca.pem /etc/ssl/certs/intermediate-ca.pem /etc/ssl/private/intermediate-ca.key /var/lib/rancher/k3s/server/tls
 
 # Generate custom CA certs and keys.
 curl -sL https://github.com/k3s-io/k3s/raw/master/contrib/util/generate-custom-ca-certs.sh | bash -
@@ -162,7 +162,7 @@ mkdir -p /opt/k3s/server/tls
 # Copy your root CA cert and intermediate CA cert+key into the correct location for the script.
 # Non-disruptive rotation requires the same root CA that was used to generate the original certificates.
 # If the original files are still in the data directory, you can just run:
-cp /var/lib/rancher/k3s/server/root.* /var/lib/rancher/k3s/server/intermediate.* /opt/k3s/server/tls
+cp /var/lib/rancher/k3s/server/tls/root-ca.* /var/lib/rancher/k3s/server/tls/intermediate-ca.* /opt/k3s/server/tls
 
 # Copy the current service-account signing key, so that existing service-account tokens are not invalidated.
 cp /var/lib/rancher/k3s/server/tls/service.key /opt/k3s/server/tls
