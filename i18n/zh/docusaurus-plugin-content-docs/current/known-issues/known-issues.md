@@ -18,7 +18,7 @@ weight: 70
 
 使用 Rootless 模式运行 K3s 是实验性的，存在几个[已知问题](../advanced/advanced.md#rootless-模式的已知问题)。
 
-### 将强化集群从 v1.24.x 升级到 v1.25.x
+### 将强化集群从 v1.24.x 升级到 v1.25.x {#hardened-125}
 
 Kubernetes v1.25 删除了 PodSecurityPolicy，支持 Pod Security Standard（PSS）。你可以在[上游文档](https://kubernetes.io/docs/concepts/security/pod-security-standards/)中阅读有关 PSS 的更多信息。对于 K3s，如果在节点上配置了任何 `PodSecurityPoliciy`，则必须执行一些手动步骤。
 
