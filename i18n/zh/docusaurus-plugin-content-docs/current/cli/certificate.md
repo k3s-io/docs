@@ -112,13 +112,13 @@ graph TD
 :::
 
 如果你只想使用现有的根 CA 证书，请提供以下文件：
-* `root.pem`
-* `root.key`
+* `root-ca.pem`
+* `root-ca.key`
 
 要使用现有的根 CA 证书和中间 CA 证书，请提供以下文件：
-* `root.pem`
-* `intermediate.pem`
-* `intermediate.key`
+* `root-ca.pem`
+* `intermediate-ca.pem`
+* `intermediate-ca.key`
 
 要在启动 K3s 之前使用示例脚本生成自定义证书和密钥，请运行以下命令：
 ```bash
@@ -128,7 +128,7 @@ mkdir -p /var/lib/rancher/k3s/server/tls
 # 将根 CA 证书和中间 CA 证书 + 密钥复制到脚本的正确位置。
 # 本示例假设你在 /etc/ssl 中放置了现有的根 CA 文件和中间 CA 文件。
 # 如果你没有现有的根证书或中间 CA 证书，脚本将为你生成。
-cp /etc/ssl/certs/root.pem /etc/ssl/certs/intermediate.pem /etc/ssl/private/intermediate.key /var/lib/rancher/k3s/server/tls
+cp /etc/ssl/certs/root-ca.pem /etc/ssl/certs/intermediate-ca.pem /etc/ssl/private/intermediate-ca.key /var/lib/rancher/k3s/server/tls
 
 # 生成自定义 CA 证书和密钥。
 curl -sL https://github.com/k3s-io/k3s/raw/master/contrib/util/generate-custom-ca-certs.sh | bash -
@@ -162,7 +162,7 @@ mkdir -p /opt/k3s/server/tls
 # 将根 CA 证书和中间 CA 证书 + 密钥复制到脚本的正确位置。
 # 如果是非中断轮换，则需要用于生成原始证书的同一个根 CA。
 # 如果原始文件仍在数据目录中，则可以运行：
-cp /var/lib/rancher/k3s/server/root.* /var/lib/rancher/k3s/server/intermediate.* /opt/k3s/server/tls
+cp /var/lib/rancher/k3s/server/tls/root-ca.* /var/lib/rancher/k3s/server/tls/intermediate-ca.* /opt/k3s/server/tls
 
 # 复制当前的 service-account 签名密钥，这样，现有的 service-account token 就不会失效。
 cp /var/lib/rancher/k3s/server/tls/service.key /opt/k3s/server/tls
