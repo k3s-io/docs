@@ -1,0 +1,30 @@
+{
+  "version.label": {
+    "message": "현재 버전",
+    "description": "The label for version current"
+  },
+  "sidebar.mySidebar.category.Installation": {
+    "message": "설치",
+    "description": "The label for category Installation in sidebar mySidebar"
+  },
+  "sidebar.mySidebar.category.Cluster Datastore": {
+    "message": "클러스터 데이터 저장소",
+    "description": "The label for category Cluster Datastore in sidebar mySidebar"
+  },
+  "sidebar.mySidebar.category.Upgrades": {
+    "message": "업그레이드",
+    "description": "The label for category Upgrades in sidebar mySidebar"
+  },
+  "sidebar.mySidebar.category.CLI Tools": {
+    "message": "명령줄 도구",
+    "description": "The label for category CLI Tools in sidebar mySidebar"
+  },
+  "sidebar.mySidebar.category.Reference": {
+    "message": "레퍼런스",
+    "description": "The label for category Reference in sidebar mySidebar"
+  },
+  "sidebar.mySidebar.category.Security": {
+    "message": "보안",
+    "description": "The label for category Security in sidebar mySidebar"
+  }
+}

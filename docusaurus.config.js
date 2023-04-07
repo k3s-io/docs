@@ -19,13 +19,16 @@ module.exports = {
   ],
   i18n: {
     defaultLocale: "en",
-    locales: ["en", "zh"],
+    locales: ["en", "zh", "kr"],
     localeConfigs: {
       en: {
         label: "English",
       },
       zh: {
         label: "简体中文",
+      },
+      kr: {
+        label: "한국어",
       },
     },
   },
