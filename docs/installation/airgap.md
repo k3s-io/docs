@@ -22,7 +22,7 @@ Once you have completed this, you may now go to the [Install K3s](#install-k3s) 
 
 ## Manually Deploy Images Method
 
-We are assuming you have created your nodes in your air-gap environment.
+We are assuming you have created your nodes in your air-gap environment and use containerd as container runtime.
 This method requires you to manually deploy the necessary images to each node and is appropriate for edge deployments where running a private registry is not practical.
 
 ### Prepare the Images Directory and K3s Binary
