@@ -55,7 +55,7 @@ Single server clusters can meet a variety of use cases, but for environments whe
 <TabItem value="External DB">
 
 * Two or more **server nodes** that will serve the Kubernetes API and run other control plane services
-* An **external datastore** (such as etcd, MySQL, or PostgreSQL)
+* An **external datastore** (such as MySQL, PostgreSQL, or etcd)
 
 <ThemedImage
   alt="K3s Architecture with High-availability Servers and an External DB"
