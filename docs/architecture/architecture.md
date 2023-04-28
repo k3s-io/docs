@@ -30,21 +30,32 @@ In this configuration, each agent node is registered to the same server node. A 
   }}
 />
 
-
-### High-Availability K3s Server with an External DB
+### High-Availability K3s
 
 Single server clusters can meet a variety of use cases, but for environments where uptime of the Kubernetes control plane is critical, you can run K3s in an HA configuration. An HA K3s cluster is comprised of:
 
-* Two or more **server nodes** that will serve the Kubernetes API and run other control plane services
-* An **external datastore** (as opposed to the embedded SQLite datastore used in single-server setups)
+* Three or more **server nodes** that will serve the Kubernetes API and run other control plane services
+
+Either:
+* An **embedded etcd datastore** (as opposed to the embedded SQLite datastore used in single-server setups)
+
 
 <ThemedImage
   alt="K3s Architecture with High-availability Servers"
   sources={{
-    light: useBaseUrl('/img/k3s-architecture-ha-server.svg'),
-    dark: useBaseUrl('/img/k3s-architecture-ha-server-dark.svg'),
-  }}
-/>
+    light: useBaseUrl('/img/k3s-architecture-ha-embedded.svg'),
+    dark: useBaseUrl('/img/k3s-architecture-ha-embedded-dark.svg'),
+}} />
+
+Or:
+
+* An **external datastore** (such as etcd, MySQL, or PostgreSQL)
+<ThemedImage
+  alt="K3s Architecture with High-availability Servers and an External DB"
+  sources={{
+    light: useBaseUrl('/img/k3s-architecture-ha-external.svg'),
+    dark: useBaseUrl('/img/k3s-architecture-ha-external-dark.svg'),
+}} />
 
 ### Fixed Registration Address for Agent Nodes
 
