@@ -12,7 +12,7 @@ Single server clusters can meet a variety of use cases, but for environments whe
 * An **external datastore** (as opposed to the embedded SQLite datastore used in single-server setups)
 * A **fixed registration address** that is placed in front of the server nodes to allow agent nodes to register with the cluster
 
-For more details on how these components work together, refer to the [architecture section.](../architecture/architecture.md#high-availability-k3s-server-with-an-external-db)
+For more details on how these components work together, refer to the [architecture section.](../architecture/architecture.md#high-availability-k3s)
 
 Agents register through the fixed registration address, but after registration they establish a connection directly to one of the server nodes. This is a websocket connection initiated by the `k3s agent` process, it is maintained by a client-side load balancer running as part of the agent process.
 
