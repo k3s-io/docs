@@ -3,8 +3,6 @@ title: High Availability External DB
 weight: 30
 ---
 
-> **Note:** Official support for installing Rancher on a Kubernetes cluster was introduced in our v1.0.0 release.
-
 This section describes how to install a high-availability K3s cluster with an external database.
 
 Single server clusters can meet a variety of use cases, but for environments where uptime of the Kubernetes control plane is critical, you can run K3s in an HA configuration. An HA K3s cluster is comprised of:
@@ -14,7 +12,7 @@ Single server clusters can meet a variety of use cases, but for environments whe
 * An **external datastore** (as opposed to the embedded SQLite datastore used in single-server setups)
 * A **fixed registration address** that is placed in front of the server nodes to allow agent nodes to register with the cluster
 
-For more details on how these components work together, refer to the [architecture section.](../architecture/architecture.md#high-availability-k3s-server-with-an-external-db)
+For more details on how these components work together, refer to the [architecture section.](../architecture/architecture.md#high-availability-k3s)
 
 Agents register through the fixed registration address, but after registration they establish a connection directly to one of the server nodes. This is a websocket connection initiated by the `k3s agent` process, it is maintained by a client-side load balancer running as part of the agent process.
 
@@ -50,7 +48,7 @@ By default, server nodes will be schedulable and thus your workloads can get lau
 
 Once you've launched the `k3s server` process on all server nodes, ensure that the cluster has come up properly with `k3s kubectl get nodes`. You should see your server nodes in the Ready state.
 
-### 3. Configure the Fixed Registration Address
+### 3. Optional: Configure a Fixed Registration Address
 
 Agent nodes need a URL to register against. This can be the IP or hostname of any of the server nodes, but in many cases those may change over time. For example, if you are running your cluster in a cloud that supports scaling groups, you may scale the server node group up and down over time, causing nodes to be created and destroyed and thus having different IPs from the initial set of server nodes. Therefore, you should have a stable endpoint in front of the server nodes that will not change over time. This endpoint can be set up using any number approaches, such as:
 

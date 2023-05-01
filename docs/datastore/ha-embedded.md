@@ -3,15 +3,6 @@ title: "High Availability Embedded etcd"
 weight: 40
 ---
 
-:::info Version Gate
-Full support as of [v1.19.5+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.19.5%2Bk3s1)  
-Experimental support as of [v1.19.1+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.19.1%2Bk3s1)
-:::
-
-:::note Notice: Deprecated Dqlite
-Embedded etcd replaced experimental Dqlite in the K3s v1.19.1 release. This is a breaking change. Please note that upgrades from experimental Dqlite to embedded etcd are not supported. If you attempt an upgrade it will not succeed and data will be lost.
-:::
-
 :::caution
 Embedded etcd (HA) may have performance issues on slower disks such as Raspberry Pis running with SD cards.
 :::
@@ -36,9 +27,10 @@ $ kubectl get nodes
 NAME        STATUS   ROLES                       AGE   VERSION
 server1     Ready    control-plane,etcd,master   28m   vX.Y.Z
 server2     Ready    control-plane,etcd,master   13m   vX.Y.Z
+server3     Ready    control-plane,etcd,master   10m   vX.Y.Z
 ```
 
-Now you have a highly available control plane. Any successfully clustered servers can be used in the `--server` argument to join additional server and worker nodes. Joining additional worker nodes to the cluster follows the same procedure as a single server cluster.
+Now you have a highly available control plane. Any successfully clustered servers can be used in the `--server` argument to join additional server and agent nodes. Joining additional agent nodes to the cluster follows the same procedure as a single server cluster.
 
 There are a few config flags that must be the same in all server nodes:         
 
