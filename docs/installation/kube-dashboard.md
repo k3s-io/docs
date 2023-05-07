@@ -104,3 +104,17 @@ sudo k3s kubectl delete ns kubernetes-dashboard
 sudo k3s kubectl delete clusterrolebinding kubernetes-dashboard
 sudo k3s kubectl delete clusterrole kubernetes-dashboard
 ```
+
+### Access the dashboard from outside the controle-plane server (but on same network)
+If you exported the kubeconfig on another machine outside the cluster, you can directly issue the kube command from it and access to the Dashboard.
+
+```bash
+kubectl -n kubernetes-dashboard create token admin-user
+kubectl proxy
+```
+
+The Dashboard is now accessible at:
+
+* http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+* `Sign In` with the `admin-user` Bearer Token
+
