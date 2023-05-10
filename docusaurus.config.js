@@ -34,6 +34,9 @@ module.exports = {
   },
   themeConfig: {
     colorMode: {
+      // "light" | "dark"
+      defaultMode: "light",
+      // Use user preference instead of default mode
       respectPrefersColorScheme: true,
 
       // Hides the switch in the navbar
