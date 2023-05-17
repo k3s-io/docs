@@ -126,7 +126,7 @@ Stable support is available as of [v1.23.7+k3s1](https://github.com/k3s-io/k3s/r
 
 :::caution Known Issue 
 
-Kubernetes v1.24 and v1.25 include [an issue](https://github.com/kubernetes/kubernetes/issues/111695) that ignores the node IPv6 addresses if you have a dual-stack environment and you are not using the primary network interface for cluster traffic. To avoid this bug, add the following flag to both K3s servers and agents:
+Kubernetes [Issue #111695](https://github.com/kubernetes/kubernetes/issues/111695) causes the Kubelet to ignore the node IPv6 addresses if you have a dual-stack environment and you are not using the primary network interface for cluster traffic. To avoid this bug, add the following flag to both K3s servers and agents:
 
 ```
 --kubelet-arg="node-ip=0.0.0.0" # To proritize IPv4 traffic
