@@ -6,7 +6,7 @@ weight: 60
 Starting the K3s server with `--cluster-init` will run all control-plane components, including the apiserver, controller-manager, scheduler, and etcd. It is possible to disable specific components in order to split the control-plane and etcd roles on to separate nodes.
 
 :::info
-This document is only relevant when using embedded etcd. When not using embedded etc, all servers will have the control-plane role and run control-plane components.
+This document is only relevant when using embedded etcd. When not using embedded etcd, all servers will have the control-plane role and run control-plane components.
 :::
 
 ## Dedicated `etcd` Nodes
