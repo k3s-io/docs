@@ -173,7 +173,7 @@ Example: `docker pull docker.io/rancher/coredns-coredns:1.6.3`
 
 Then, retag the images to the private registry.
 
-Example: `docker tag coredns-coredns:1.6.3 mycustomreg:5000/coredns-coredns`
+Example: `docker tag coredns-coredns:1.6.3 mycustomreg.com:5000/coredns-coredns`
 
 Last, push the images to the private registry.
 
