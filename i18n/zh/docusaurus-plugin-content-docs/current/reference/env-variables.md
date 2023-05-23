@@ -35,7 +35,7 @@ curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIR
 | `INSTALL_K3S_TYPE` | 要创建的 systemd 服务类型，如果未指定，将默认使用来自 K3s exec 命令的类型。 |
 | `INSTALL_K3S_SELINUX_WARN` | 如果设置为 `true`，则在未找到 k3s-selinux 策略时会继续。 |
 | `INSTALL_K3S_SKIP_SELINUX_RPM` | 如果设置为 `true` 将跳过 k3s RPM 的自动安装。 |
-| `INSTALL_K3S_CHANNEL_URL` | 用于获取 K3s 下载 URL 的 Channel URL。默认为 https://update.k3s.io/v1-release/channels。 |
+| `INSTALL_K3S_CHANNEL_URL` | 用于获取 K3s 下载 URL 的 Channel URL。默认为 <https://update.k3s.io/v1-release/channels>。 |
 | `INSTALL_K3S_CHANNEL` | 用于获取 K3s 下载 URL 的 Channel。默认为 "stable"。可选项：`stable`、`latest`、`testing`。 |
 
 以下示例显示了如何将上述环境变量作为选项设置（在管道符后）：
