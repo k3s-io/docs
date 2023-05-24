@@ -27,12 +27,21 @@ When attempting to upgrade to a new version of K3s, the [Kubernetes version skew
 
 ### Upgrade K3s Using the Installation Script
 
-To upgrade K3s from an older version you can re-run the installation script using the same flags, for example:
+To upgrade K3s from an older version you can re-run the installation script using the same configuration options you originally used when running the install script.
+
+:::info Note
+The `INSTALL_K3S_EXEC` variable, `K3S_` variables, and trailing shell arguments are all used by the install script to generate the systemd unit and environment file.
+If you set configuration when originally running the install script, but do not set it again when re-running the install script, the original values will be lost.
+
+The contents of the [configuration file](../installation/configuration.md#configuration-file) are not managed by the install script.
+If you want your configuration to be independent from the install script, you should use a configuration file instead of passing environment variables or arguments to the install script.
+:::
+
+For example, to upgrade to the current stable release:
 
 ```sh
 curl -sfL https://get.k3s.io | sh -
 ```
-This will upgrade to a newer version in the stable channel by default.
 
 If you want to upgrade to a newer version in a specific channel (such as latest) you can specify the channel:
 ```sh
