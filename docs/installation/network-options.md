@@ -52,12 +52,12 @@ We recommend that users migrate to the new backend as soon as possible. The migr
 
 ## Custom CNI
 
-Start K3s with `--flannel-backend=none` and install your CNI of choice. Most CNI plugins come with their own network policy engine, so it is recommended to set `--disable-network-policy` as well to avoid conflicts. IP Forwarding should be enabled for Canal and Calico; please reference the steps below.
+Start K3s with `--flannel-backend=none` and install your CNI of choice. Most CNI plugins come with their own network policy engine, so it is recommended to set `--disable-network-policy` as well to avoid conflicts. Some information is important to take into consideration:
 
 <Tabs>
 <TabItem value="Canal" default>
 
-Visit the [Project Calico Docs](https://docs.tigera.io/calico/) website. Follow the steps to install Canal. Modify the Canal YAML so that IP forwarding is allowed in the `container_settings` section, for example:
+Visit the [Canal Docs](https://docs.tigera.io/calico/latest/getting-started/kubernetes/flannel/install-for-flannel#installing-calico-for-policy-and-flannel-aka-canal-for-networking) website. Follow the steps to install Canal. Modify the Canal YAML so that IP forwarding is allowed in the `container_settings` section, for example:
 
 ```yaml
 "container_settings": {
@@ -96,6 +96,17 @@ cat /etc/cni/net.d/10-calico.conflist
 
 You should see that IP forwarding is set to true.
 
+
+</TabItem>
+<TabItem value="Cilium" default>
+
+Before running `k3s-killall.sh` or `k3s-uninstall.sh`, you must manually remove `cilium_host`, `cilium_net` and `cilium_vxlan` interfaces. If you fail to do this, you may loose network connectivity to the host when K3s is stopped
+
+```bash
+ip link delete cilium_host
+ip link delete cilium_net
+ip link delete cilium_vxlan
+```
 
 </TabItem>
 </Tabs>
