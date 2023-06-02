@@ -39,9 +39,9 @@ The resource tests were intended to address the following problem statements:
 
 The tested components are:
 
-* K3s 1.19.2 with all packaged components enabled
+* K3s v1.26.5 with all packaged components enabled
 * Prometheus + Grafana monitoring stack
-* Kubernetes Example PHP Guestbook app
+* [Kubernetes Example Nginx Deployment](https://kubernetes.io/docs/tasks/run-application/run-stateless-application-deployment/)
 
 These are baseline figures for a stable system using only K3s packaged components (Traefik Ingress, Klipper lb, local-path storage) running a standard monitoring stack (Prometheus and Grafana) and the Guestbook example app.
 
@@ -49,73 +49,83 @@ Resource figures including IOPS are for the Kubernetes datastore and control pla
 
 ## Methodology
 
-A standalone instance of Prometheus v2.21.0 was used to collect host CPU, memory, and disk IO statistics using `prometheus-node-exporter` installed via apt.
+A standalone instance of Prometheus v2.43.0 was used to collect host CPU, memory, and disk IO statistics using `prometheus-node-exporter` installed via apt.
 
 `systemd-cgtop` was used to spot-check systemd cgroup-level CPU and memory utilization. `system.slice/k3s.service` tracks resource utilization for both K3s and containerd, while individual pods are under the `kubepods` hierarchy.
 
-Additional detailed K3s memory utilization data was collected from the `process_resident_memory_bytes` and `go_memstats_alloc_bytes` metrics using the kubelet exporter integrated into the server and agent processes.
+Additional detailed K3s memory utilization data was collected from `kubectl top node` using the integrated metrics-server for the server and agent processes.
 
 Utilization figures were based on 95th percentile readings from steady state operation on nodes running the described workloads.
 
 ## Environment
 
-OS: Ubuntu 20.04 x86_64, aarch64
+| Arch | OS | System | CPU | RAM | Disk | 
+|------|----|--------|--|----|------|
+| x86_64 | Ubuntu 22.04 | AWS c6id.xlarge | Intel 8375C CPU, 4 Core 2.90 GHz | 8 GB | NVME SSD |
+| aarch64 | Raspbian Linux 11 | Raspberry Pi 4 Model B | BCM2711, 4 Core 1.50 GHz | 8 GB | UHS-III SDXC |
 
-Hardware:
-
-- AWS c5d.xlarge - 4 core, 8 GB RAM, NVME SSD
-- Raspberry Pi 4 Model B - 4 core, 8 GB RAM, Class 10 SDHC
 
 ## Baseline Resource Requirements
 
-This section captures the results of tests to determine minimum resource requirements for the K3s agent, the K3s server with a workload, and the K3s server with one agent.
+This section captures the results of tests to determine minimum resource requirements for basic K3s operation.
 
 ### K3s Server with a Workload
 
-These are the requirements for a single-node cluster in which the K3s server shares resources with a workload.
+These are the requirements for a single-node cluster in which the K3s server shares resources with a simple workload.
 
 The CPU requirements are:
 
-| Resource Requirement | Tested Processor  |
-|-----------|-----------------|
-| 10% of a core | Intel(R) Xeon(R) Platinum 8124M CPU, 3.00 GHz |
-| 20% of a core | Low-power processor such as Pi4B BCM2711, 1.50 GHz |
+| System | CPU Core Usage |
+|--------|----------------|
+| c6id.xlarge | 6% of a core |
+| Pi4B | 30% of a core |
 
-The IOPS and memory requirements are:
+The Memory Requirements are:
+| Tested Datastore | System | Memory |
+|-----------|---------|------|
+| Kine/SQLite | c6id.xlarge | 1602 M | 
+|             | Pi4B |  1588 M |
+| Embedded etcd | c6id.xlarge | 1604 M | 
+|               | Pi4B |  1613 M |
 
-| Tested Datastore | IOPS | KiB/sec | Latency | RAM  |
-|-----------|------|---------|---------|--------|
-| Kine/SQLite | 10 | 500     | < 10 ms | 768 M  |
-| Embedded etcd | 50 |  250  | < 5 ms  | 896 M  |
+The Disk requirements are:
+
+| Tested Datastore | IOPS | KiB/sec | Latency |
+|-----------|------|---------|---------|
+| Kine/SQLite | 10 | 500     | < 10 ms |
+| Embedded etcd | 50 |  250  | < 5 ms  |
 
 ### K3s Cluster with a Single Agent
 
 These are the baseline requirements for a K3s cluster with a K3s server node and a K3s agent, but no workload.
 
+#### K3s Server
 The CPU requirements are:
 
-| Resource Requirement | Tested Processor  |
-|-----------|-----------------|
-| 10% of a core | Intel(R) Xeon(R) Platinum 8124M CPU, 3.00 GHz |
-| 20% of a core | Pi4B BCM2711, 1.50 GHz |
+| System | CPU Core Usage | 
+|--------|----------------|
+| c6id.xlarge | 5% of a core |
+| Pi4B | 30% of a core |
 
-The IOPS and memory requirements are:
-
-| Datastore | IOPS | KiB/sec | Latency | RAM    |
-|-----------|------|---------|---------|--------|
-| Kine/SQLite | 10 | 500     | < 10 ms | 512 M  |
-| Embedded etcd | 50 |  250  | < 5 ms  | 768 M  |
+The Memory Requirements are:
+| Tested Datastore | System | Memory |
+|-----------|---------|------|
+| Kine/SQLite | Pi4B |  1215 M |
+|             | c6id.xlarge | 1428 M | 
+| Embedded etcd | Pi4B |  1413 M |
+|               | c6id.xlarge | 1450 M | 
 
 ### K3s Agent
 
-The CPU requirements are:
+The requirements are:
 
- Resource Requirement | Tested Processor   |
-|-----------|-----------------|
-| 5% of a core | Intel(R) Xeon(R) Platinum 8124M CPU, 3.00 GHz |
-| 10% of a core | Pi4B BCM2711, 1.50 GHz |
+| System | CPU Core Usage | RAM |
+|--------|----------------|-----|
+| c6id.xlarge | 3% of a core | 275 M |
+| Pi4B | 5% of a core | 268 M |
 
-256 M of RAM is required.
+
+
 
 ## Analysis
 
