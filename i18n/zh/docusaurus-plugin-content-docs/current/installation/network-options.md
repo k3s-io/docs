@@ -126,7 +126,7 @@ K3s Agent 和 Server 维护节点之间的 websocket 隧道，这些隧道用于
 
 :::caution 已知问题
 
-Kubernetes v1.24 和 v1.25 中存在[一个问题](https://github.com/kubernetes/kubernetes/issues/111695)。如果你有一个双栈环境而且你没有为集群流量使用主要网卡，则会忽略节点 IPv6 地址。为避免此错误，请将以下标志添加到 K3s Server 和 Agent ：
+Kubernetes [Issue #111695](https://github.com/kubernetes/kubernetes/issues/111695) 导致了一个问题。如果你有一个双栈环境而且你没有为集群流量使用主要网卡，那么 Kubelet 会忽略节点 IPv6 地址。为避免此错误，请将以下标志添加到 K3s Server 和 Agent ：
 
 ```
 --kubelet-arg="node-ip=0.0.0.0" # To proritize IPv4 traffic
@@ -178,7 +178,7 @@ K3s 集群仍然可以部署在使用不同私有网络且不直接连接的节�
 --node-external-ip=<AGENT_EXTERNAL_IP>
 ```
 
-其中 `SERVER_EXTERNAL_IP` 是访问 Server 节点的 IP，`AGENT_EXTERNAL_IP` 是访问 Agent/Worker 节点的 IP。请注意，Agent/Worker 中的 `K3S_URL` 配置参数需要使用 `SERVER_EXTERNAL_IP` 才能连接。请记住检查[网络要求](../installation/requirements.md#网络)，并允许访问内部和外部地址上列出的端口。
+其中 `SERVER_EXTERNAL_IP` 是访问 Server 节点的 IP，`AGENT_EXTERNAL_IP` 是访问 Agent 节点的 IP。请注意，Agent 中的 `K3S_URL` 配置参数需要使用 `SERVER_EXTERNAL_IP` 才能连接。请记住检查[网络要求](../installation/requirements.md#网络)，并允许访问内部和外部地址上列出的端口。
 
 `SERVER_EXTERNAL_IP` 和 `AGENT_EXTERNAL_IP` 之间需要保持连接，并且通常使用公共 IP。
 
