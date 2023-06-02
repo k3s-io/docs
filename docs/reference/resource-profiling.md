@@ -9,12 +9,12 @@ The results are summarized as follows:
 
 | Components |  Processor | Min CPU | Min RAM with Kine/SQLite | Min RAM with Embedded etcd |
 |------------|-----|----------|-------------------------|---------------------------|
-| K3s server with a workload  | Intel(R) Xeon(R) Platinum 8124M CPU, 3.00 GHz | 10% of a core | 768 M | 896 M |
-| K3s cluster with a single agent  | Intel(R) Xeon(R) Platinum 8124M CPU, 3.00 GHz | 10% of a core | 512 M | 768 M |
-| K3s agent | Intel(R) Xeon(R) Platinum 8124M CPU, 3.00 GHz | 5% of a core | 256 M | 256 M |
-| K3s server with a workload  | Pi4B BCM2711, 1.50 GHz | 20% of a core | 768 M | 896 M |
-| K3s cluster with a single agent | Pi4B BCM2711, 1.50 GHz | 20% of a core | 512 M | 768 M |
-| K3s agent  | Pi4B BCM2711, 1.50 GHz | 10% of a core | 256 M | 256 M |
+| K3s server with a workload  | Intel 8375C CPU, 2.90 GHz | 6% of a core | 1602 M | 1604 M |
+| K3s cluster with a single agent  | Intel 8375C CPU, 2.90 GHz | 5% of a core | 1428 M | 1450 M |
+| K3s agent | Intel 8375C CPU, 2.90 GHz | 3% of a core | 275 M | 275 M |
+| K3s server with a workload  | Pi4B BCM2711, 1.50 GHz | 30% of a core | 1588 M | 1613 M |
+| K3s cluster with a single agent | Pi4B BCM2711, 1.50 GHz | 25% of a core | 1215 M | 1413 M |
+| K3s agent  | Pi4B BCM2711, 1.50 GHz | 10% of a core | 268 M | 268 M |
 
 - [Scope of Resource Testing](#scope-of-resource-testing)
 - [Components Included for Baseline Measurements](#components-included-for-baseline-measurements)
@@ -62,7 +62,7 @@ Utilization figures were based on 95th percentile readings from steady state ope
 | Arch | OS | System | CPU | RAM | Disk | 
 |------|----|--------|--|----|------|
 | x86_64 | Ubuntu 22.04 | AWS c6id.xlarge | Intel 8375C CPU, 4 Core 2.90 GHz | 8 GB | NVME SSD |
-| aarch64 | Raspbian Linux 11 | Raspberry Pi 4 Model B | BCM2711, 4 Core 1.50 GHz | 8 GB | UHS-III SDXC |
+| aarch64 | Raspberry Pi OS 11 | Raspberry Pi 4 Model B | BCM2711, 4 Core 1.50 GHz | 8 GB | UHS-III SDXC |
 
 
 ## Baseline Resource Requirements
@@ -71,7 +71,7 @@ This section captures the results of tests to determine minimum resource require
 
 ### K3s Server with a Workload
 
-These are the requirements for a single-node cluster in which the K3s server shares resources with a simple workload.
+These are the requirements for a single-node cluster in which the K3s server shares resources with a [simple workload](https://kubernetes.io/docs/tasks/run-application/run-stateless-application-deployment/).
 
 The CPU requirements are:
 
@@ -81,6 +81,7 @@ The CPU requirements are:
 | Pi4B | 30% of a core |
 
 The Memory Requirements are:
+
 | Tested Datastore | System | Memory |
 |-----------|---------|------|
 | Kine/SQLite | c6id.xlarge | 1602 M | 
@@ -105,15 +106,16 @@ The CPU requirements are:
 | System | CPU Core Usage | 
 |--------|----------------|
 | c6id.xlarge | 5% of a core |
-| Pi4B | 30% of a core |
+| Pi4B | 25% of a core |
 
 The Memory Requirements are:
+
 | Tested Datastore | System | Memory |
 |-----------|---------|------|
-| Kine/SQLite | Pi4B |  1215 M |
-|             | c6id.xlarge | 1428 M | 
-| Embedded etcd | Pi4B |  1413 M |
-|               | c6id.xlarge | 1450 M | 
+| Kine/SQLite | c6id.xlarge | 1428 M |
+|             | Pi4B |  1215 M |
+| Embedded etcd | c6id.xlarge | 1450 M |
+|               | Pi4B |  1413 M |
 
 ### K3s Agent
 
