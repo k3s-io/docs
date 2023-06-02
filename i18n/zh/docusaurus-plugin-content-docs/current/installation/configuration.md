@@ -9,7 +9,9 @@ weight: 20
 
 如[快速入门指南](../quick-start/quick-start.md)中所述，你可以使用 https://get.k3s.io 上提供的安装脚本在基于 systemd 和 openrc 的系统上将 K3s 安装为服务。
 
-你可以结合使用 `INSTALL_K3S_EXEC`、`K3S_` 环境变量和命令标志将配置传递给服务配置。带前缀的环境变量、`INSTALL_K3S_EXEC` 值和尾附的 shell 参数都保存在服务配置中。安装后，如果需要更改配置，你可以编辑环境文件、编辑服务配置或简单使用新选项重新运行安装程序。
+你可以结合使用 `INSTALL_K3S_EXEC`、`K3S_` 环境变量和命令标志将配置传递给服务配置。
+带前缀的环境变量、`INSTALL_K3S_EXEC` 值和尾附的 shell 参数都保存在服务配置中。
+安装后，如果需要更改配置，你可以编辑环境文件、编辑服务配置或简单使用新选项重新运行安装程序。
 
 为了说明这一点，以下命令均同样地没有 Flannel 和使用令牌的情况下注册 Server：
 
@@ -33,21 +35,29 @@ curl -sfL https://get.k3s.io | K3S_URL=https://k3s.example.com K3S_TOKEN=mypassw
 
 有关所有环境变量的详细信息，请参阅[环境变量](../reference/env-variables.md)。
 
+:::info
+如果你在运行安装脚本时进行了配置，但在重新运行安装脚本时没有重新设置，则原始值将会丢失。
+
+[配置文件](#配置文件) 的内容不受安装脚本管理。
+要让你的配置独立于安装脚本，请使用配置文件而不是传递环境变量或使用安装脚本参数。
+:::
+
 ## 二进制配置
 
 如前所述，安装脚本主要是将 K3s 配置为服务来运行。  
 如果你选择不使用该脚本，你可以通过我们的 [Releases 页面](https://github.com/k3s-io/k3s/releases/latest)下载二进制文件，将其放在你的路径上，然后执行它即可运行 K3s。对于永久安装而言这不是特别有用，但如果执行不需要将 K3s 作为系统服务管理的快速测试，这可能有用。
 ```bash
-curl -sfL https://get.k3s.io | INSTALL_K3S_SKIP_ENABLE=true sh -
+curl -Lo /usr/local/bin/k3s https://github.com/k3s-io/k3s/releases/download/v1.26.5+k3s1/k3s; chmod a+x /usr/local/bin/k3s
 ```
 
-你可以通过 `K3S_` 环境变量配置 K3s：
+你可以通过设置 `K3S_` 环境变量来传递配置：
 ```bash
 K3S_KUBECONFIG_MODE="644" k3s server
 ```
+
 或使用命令标志：
 ```bash
-k3s server --write-kubeconfig-mode 644
+k3s server --write-kubeconfig-mode=644
 ```
 
 K3s Agent 也可以这样配置：
@@ -58,7 +68,7 @@ k3s agent --server https://k3s.example.com --token mypassword
 
 关于配置 K3s Server 的详细信息，请参阅 [`K3s Server` 文档](../cli/server.md)。  
 有关配置 K3s Agent 的详细信息，请参阅 [`K3s Agent` 文档](../cli/agent.md)。  
-你还可以使用 `--help` 标志来查看所有可用选项。
+你还可以使用 `--help` 标志来查看所有可用选项及其对应的环境变量。
 
 :::info 匹配标志
 匹配 Server 节点上的关键标志是非常重要的。例如，如果你在 master 节点上使用了 `--disable servicelb` 或 `--cluster-cidr=10.200.0.0/16` 标志，但是没有在其他 Server 节点上进行相同的设置，节点将无法加入。它们会显示 `failed to validate server configuration: critical configuration value mismatch` 错误。

@@ -27,19 +27,28 @@ weight: 10
 
 ### 使用安装脚本升级 K3s
 
-要升级旧版本的 K3s，你可以使用相同的标志重新运行安装脚本，例如：
+要升级旧版本的 K3s，你可以使用最初运行安装脚本时使用的相同配置选项重新运行安装脚本。
+
+:::info
+安装脚本使用 `INSTALL_K3S_EXEC` 变量、`K3S_` 变量和尾随的 shell 参数来生成 systemd 单元和环境文件。
+如果你在最初运行安装脚本时进行了配置，但在重新运行安装脚本时没有重新设置，则原始值将会丢失。
+
+[配置文件](../installation/configuration.md#配置文件) 的内容不受安装脚本管理。
+要让你的配置独立于安装脚本，请使用配置文件而不是传递环境变量或使用安装脚本参数。
+:::
+
+例如，要升级到当前的稳定版本：
 
 ```sh
 curl -sfL https://get.k3s.io | sh -
 ```
 
 :::note
-中国用户，可以使用以下方法加速升级：
+中国用户，可以使用以下方法加速安装：
 ```
 curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn sh -
 ```
 :::
-默认情况下将升级到 stable channel 中的较新版本。
 
 如果想升级到特定 channel（如 latest）中的更新版本，你可以指定 channel：
 ```sh

@@ -6,7 +6,7 @@ weight: 60
 使用 `--cluster-init` 启动 K3s Server 将运行所有 control-plane 组件，包括 apiserver、controller-manager、scheduler 和 etcd。你可以通过禁用特定组件来将 control-plane 和 etcd 角色拆分到单独的节点上。
 
 :::info
-本文档仅适用于使用嵌入式 etcd 的情况。如果没有使用嵌入式组件，所有 Server 都将具有 control-plane 角色并运行 control-plane 组件。
+本文档仅适用于使用嵌入式 etcd 的情况。如果没有使用嵌入式 etcd，所有 Server 都将具有 control-plane 角色并运行 control-plane 组件。
 :::
 
 ## 专用 `etcd` 节点

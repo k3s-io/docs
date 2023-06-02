@@ -3,15 +3,6 @@ title: "高可用嵌入式 etcd"
 weight: 40
 ---
 
-:::info 版本
-完全支持 [v1.19.5+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.19.5%2Bk3s1)  
-实验性支持 [v1.19.1+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.19.1%2Bk3s1)
-:::
-
-:::note 注意：已弃用 Dqlite
-在 K3s v1.19.1 中，嵌入式 etcd 取代了实验性的 Dqlite。这是一个突破性的变化。请注意，不支持从实验性 Dqlite 升级到嵌入式 etcd。如果你尝试升级，升级将不会成功，并且数据将会丢失。
-:::
-
 :::caution
 嵌入式 etcd (HA) 在速度较慢的磁盘（例如使用 SD 卡运行的 Raspberry Pi）上可能会出现性能问题。
 :::
@@ -50,9 +41,10 @@ $ kubectl get nodes
 NAME        STATUS   ROLES                       AGE   VERSION
 server1     Ready    control-plane,etcd,master   28m   vX.Y.Z
 server2     Ready    control-plane,etcd,master   13m   vX.Y.Z
+server3     Ready    control-plane,etcd,master   10m   vX.Y.Z
 ```
 
-现在你有了一个高可用的 control plane。你可以在 `--server` 参数中使用任何集群 server，从而加入额外的 server 和 worker 节点。将其他 worker 节点加入到集群中，步骤与单个 server 集群相同。
+现在你有了一个高可用的 control plane。你可以在 `--server` 参数中使用任何集群 server，从而加入其他 server 和 agent 节点。将其他 agent 节点加入到集群中，步骤与单个 server 集群相同。
 
 有几个配置标志在所有 Server 节点中必须是相同的:
 

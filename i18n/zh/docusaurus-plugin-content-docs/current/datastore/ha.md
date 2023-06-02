@@ -3,8 +3,6 @@ title: 高可用外部数据库
 weight: 30
 ---
 
-> **注意**：我们在 v1.0.0 版本中引入了在 Kubernetes 集群上安装 Rancher 的官方支持。
-
 本文介绍了如何安装具有外部数据库的高可用 K3s 集群。
 
 单服务器集群可以满足各种用例，但如果你的环境对 Kubernetes control plane 的正常运行时间有要求，你可以在 HA 配置中运行 K3s。一个 HA K3s 集群包括：
@@ -14,7 +12,7 @@ weight: 30
 * **外部数据存储**（与单节点设置中使用的嵌入式 SQLite 数据存储相反）
 * 一个在 Server 节点前面的**固定的注册地址**，用于让 Agent 节点注册到集群
 
-有关这些组件如何协同工作的详细信息，请参阅[架构](../architecture/architecture.md#具有外部数据库的高可用-k3s-server)。
+有关这些组件如何协同工作的详细信息，请参阅[架构](../architecture/architecture.md#高可用-k3s)。
 
 Agent 通过固定的注册地址进行注册，但注册后直接与其中一个 Server 节点建立连接。这是一个由 `k3s agent` 进程发起的 WebSocket 连接，并由作为 agent 进程一部分运行的客户端负载均衡器维护。
 
@@ -59,7 +57,7 @@ curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIR
 
 在所有 server 节点上启动 `k3s server` 进程后，请通过 `k3s kubectl get nodes` 确保集群已正确启动。你应该看到 server 节点处于 Ready 状态。
 
-### 3. 配置固定的注册地址
+### 3. 可选：配置固定的注册地址
 
 Agent 节点需要一个 URL 来注册。这可以是任何 server 节点的 IP 或主机名，但在许多情况下，这些节点可能会随着时间的推移而改变。例如，如果你在支持缩放组的云中运行集群，你可能会纵向缩放 Server 节点组，导致节点被创建和销毁，从而导致 Server 节点集的 IP 发生改变。因此，你应该在 Server 节点前面有一个稳定的端点，而且它不会随时间推移而改变。你可以使用许多方法来设置此端点，例如：
 
