@@ -8,7 +8,7 @@ Embedded etcd (HA) may have performance issues on slower disks such as Raspberry
 :::
 
 :::info
-HA embedded etcd cluster must be comprised of an odd number of server nodes for etcd to maintain quorum. An even number of server nodes will result in a non-functional, "split-brain" cluster. 
+HA embedded etcd cluster must be comprised of an odd number of server nodes for etcd to maintain quorum. For a cluster with n servers, quorum is (n/2)+1. For any odd-sized cluster, adding one node will always increase the number of nodes necessary for quorum. Although adding a node to an odd-sized cluster appears better since there are more machines, the fault tolerance is worse since exactly the same number of nodes may fail without losing quorum but there are more nodes that can fail.
 :::
 
 An HA K3s cluster with embedded etcd is composed of:
