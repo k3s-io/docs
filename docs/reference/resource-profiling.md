@@ -61,7 +61,7 @@ Utilization figures were based on 95th percentile readings from steady state ope
 
 | Arch | OS | System | CPU | RAM | Disk | 
 |------|----|--------|--|----|------|
-| x86_64 | Ubuntu 22.04 | AWS c6id.xlarge | Intel 8375C CPU, 4 Core 2.90 GHz | 8 GB | NVME SSD |
+| x86_64 | Ubuntu 22.04 | AWS c6id.xlarge | Intel Xeon Platinum 8375C CPU, 4 Core 2.90 GHz | 8 GB | NVME SSD |
 | aarch64 | Raspberry Pi OS 11 | Raspberry Pi 4 Model B | BCM2711, 4 Core 1.50 GHz | 8 GB | UHS-III SDXC |
 
 
@@ -77,16 +77,16 @@ The CPU requirements are:
 
 | System | CPU Core Usage |
 |--------|----------------|
-| c6id.xlarge | 6% of a core |
+| Intel 8375C | 6% of a core |
 | Pi4B | 30% of a core |
 
 The Memory Requirements are:
 
 | Tested Datastore | System | Memory |
 |-----------|---------|------|
-| Kine/SQLite | c6id.xlarge | 1602 M | 
+| Kine/SQLite | Intel 8375C | 1602 M | 
 |             | Pi4B |  1588 M |
-| Embedded etcd | c6id.xlarge | 1604 M | 
+| Embedded etcd | Intel 8375C | 1604 M | 
 |               | Pi4B |  1613 M |
 
 The Disk requirements are:
@@ -105,16 +105,16 @@ The CPU requirements are:
 
 | System | CPU Core Usage | 
 |--------|----------------|
-| c6id.xlarge | 5% of a core |
+| Intel 8375C | 5% of a core |
 | Pi4B | 25% of a core |
 
 The Memory Requirements are:
 
 | Tested Datastore | System | Memory |
 |-----------|---------|------|
-| Kine/SQLite | c6id.xlarge | 1428 M |
+| Kine/SQLite | Intel 8375C | 1428 M |
 |             | Pi4B |  1215 M |
-| Embedded etcd | c6id.xlarge | 1450 M |
+| Embedded etcd | Intel 8375C | 1450 M |
 |               | Pi4B |  1413 M |
 
 ### K3s Agent
@@ -123,7 +123,7 @@ The requirements are:
 
 | System | CPU Core Usage | RAM |
 |--------|----------------|-----|
-| c6id.xlarge | 3% of a core | 275 M |
+| Intel 8375C | 3% of a core | 275 M |
 | Pi4B | 5% of a core | 268 M |
 
 
