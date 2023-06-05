@@ -44,7 +44,7 @@ Once you have completed this, you may now go to the [Install K3s](#install-k3s) 
 - Before installing K3s, complete the [Private Registry Method](#private-registry-method) or the [Manually Deploy Images Method](#manually-deploy-images-method) above to prepopulate the images that K3s needs to install.
 - Download the K3s binary from the [releases](https://github.com/k3s-io/k3s/releases) page, matching the same version used to get the airgap images. Place the binary in `/usr/local/bin` on each air-gapped node and ensure it is executable.
 - Download the K3s install script at [get.k3s.io](https://get.k3s.io). Place the install script anywhere on each air-gapped node, and name it `install.sh`.
-- K3s requires a default route in order to auto-detect the node's primary IP, and for kube-proxy ClusterIP routing to function properly. Therefore, a default route must be configured on each node, even if that route is a dummy route or a black hole. To add a dummy route, do the following:
+- If your nodes do not have an interface with a default route, a default route must be configured; even a black-hole route via a dummy interface will suffice. K3s requires a default route in order to auto-detect the node's primary IP, and for kube-proxy ClusterIP routing to function properly. To add a dummy route, do the following:
   ```
   ip link add dummy0 type dummy
   ip link set dummy0 up
