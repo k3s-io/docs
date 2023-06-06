@@ -9,7 +9,7 @@ The results are summarized as follows:
 
 | Components |  Processor | Min CPU | Min RAM with Kine/SQLite | Min RAM with Embedded etcd |
 |------------|-----|----------|-------------------------|---------------------------|
-| K3s server with a workload  | Intel 8375C CPU, 2.90 GHz | 6% of a core | 1602 M | 1604 M |
+| K3s server with a workload  | Intel 8375C CPU, 2.90 GHz | 6% of a core | 1596 M | 1606 M |
 | K3s cluster with a single agent  | Intel 8375C CPU, 2.90 GHz | 5% of a core | 1428 M | 1450 M |
 | K3s agent | Intel 8375C CPU, 2.90 GHz | 3% of a core | 275 M | 275 M |
 | K3s server with a workload  | Pi4B BCM2711, 1.50 GHz | 30% of a core | 1588 M | 1613 M |
@@ -84,9 +84,9 @@ The Memory Requirements are:
 
 | Tested Datastore | System | Memory |
 |-----------|---------|------|
-| Kine/SQLite | Intel 8375C | 1602 M | 
+| Kine/SQLite | Intel 8375C | 1596 M | 
 |             | Pi4B |  1588 M |
-| Embedded etcd | Intel 8375C | 1604 M | 
+| Embedded etcd | Intel 8375C | 1606 M | 
 |               | Pi4B |  1613 M |
 
 The Disk requirements are:
