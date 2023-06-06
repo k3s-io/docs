@@ -37,6 +37,14 @@ K3s includes an embedded network policy controller. The underlying implementatio
 
 To disable it, start each server with the `--disable-network-policy` flag.
 
+:::note
+Network policy iptables rules are not removed if the K3s configuration is changed to disable the network policy controller. To clean up the configured kube-router network policy rules after disabling the network policy controller, use the `k3s-killall.sh` script, or clean them using `iptables-save` and `iptables-restore`. These steps must be ryn manually on all nodes in the cluster.
+```
+iptables-save | grep -v KUBE-ROUTER | iptables-restore
+ip6tables-save | grep -v KUBE-ROUTER | ip6tables-restore
+```
+:::
+
 ## Service Load Balancer
 
 Any LoadBalancer controller can be deployed to your K3s cluster. By default, K3s provides a load balancer known as [ServiceLB](https://github.com/k3s-io/klipper-lb) (formerly Klipper LoadBalancer) that uses available host ports.
