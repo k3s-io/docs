@@ -52,7 +52,7 @@ We recommend that users migrate to the new backend as soon as possible. The migr
 
 ## Custom CNI
 
-Start K3s with `--flannel-backend=none` and install your CNI of choice. Most CNI plugins come with their own network policy engine, so it is recommended to set `--disable-network-policy` as well to avoid conflicts. Some information is important to take into consideration:
+Start K3s with `--flannel-backend=none` and install your CNI of choice. Most CNI plugins come with their own network policy engine, so it is recommended to set `--disable-network-policy` as well to avoid conflicts. Some important information to take into consideration:
 
 <Tabs>
 <TabItem value="Canal" default>
@@ -100,12 +100,19 @@ You should see that IP forwarding is set to true.
 </TabItem>
 <TabItem value="Cilium" default>
 
-Before running `k3s-killall.sh` or `k3s-uninstall.sh`, you must manually remove `cilium_host`, `cilium_net` and `cilium_vxlan` interfaces. If you fail to do this, you may loose network connectivity to the host when K3s is stopped
+Before running `k3s-killall.sh` or `k3s-uninstall.sh`, you must manually remove `cilium_host`, `cilium_net` and `cilium_vxlan` interfaces. If you fail to do this, you may lose network connectivity to the host when K3s is stopped
 
 ```bash
 ip link delete cilium_host
 ip link delete cilium_net
 ip link delete cilium_vxlan
+```
+
+Additionally, iptables rules for cilium should be removed:
+
+```bash
+iptables-save | grep -iv cilium | iptables-restore
+ip6tables-save | grep -iv cilium | ip6tables-restore
 ```
 
 </TabItem>
