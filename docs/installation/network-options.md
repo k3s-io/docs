@@ -191,7 +191,7 @@ The latency between nodes will increase as external connectivity requires more h
 :::
 
 :::caution Warning
-Embedded etcd is not supported in this type of deployment. If using embedded etcd;, all server nodes must be reachable to each other via their private IPs. Agents may be distributed over multiple networks, but all servers should be in the same location.
+Embedded etcd is not supported in this type of deployment. If using embedded etcd, all server nodes must be reachable to each other via their private IPs. Agents may be distributed over multiple networks, but all servers should be in the same location.
 :::
 
 ### Embedded k3s multicloud solution
@@ -227,9 +227,12 @@ Available in v1.27.3, v1.26.6, v1.25.11 and newer.
 K3s can integrate with [Tailscale](https://tailscale.com/) so that nodes use the Tailscale VPN service to build a mesh between nodes.
 
 There are four steps to be done with Tailscale before deploying K3s:
-1 - Log in to your Tailscale account
-2 - In Settings > Keys, generate an auth key ($AUTH-KEY), which may be reusable for all nodes in your cluster
-3 - Decide on the podCIDR the cluster will use (by default 10.42.0.0/16). Append the CIDR (or CIDRs for dual-stack) in Access controls with the stanza:
+
+1. Log in to your Tailscale account
+
+2. In `Settings > Keys`, generate an auth key ($AUTH-KEY), which may be reusable for all nodes in your cluster
+
+3. Decide on the podCIDR the cluster will use (by default `10.42.0.0/16`). Append the CIDR (or CIDRs for dual-stack) in Access controls with the stanza:
 ```yaml
 "autoApprovers": {
         "routes": {
@@ -239,7 +242,7 @@ There are four steps to be done with Tailscale before deploying K3s:
     },
 ```
 
-4 - Install Tailscale in your nodes:
+4. Install Tailscale in your nodes:
 ```bash
 curl -fsSL https://tailscale.com/install.sh | sh
 ```
