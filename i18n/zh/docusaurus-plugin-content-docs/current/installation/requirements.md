@@ -21,8 +21,11 @@ K3s 适用于以下架构：
 - arm64/aarch64
 - s390x
 
-在 `aarch64/arm64` 系统上，操作系统必须使用 4k 页面大小。**RHEL9**、**Ubuntu** 和 **SLES** 都满足这个要求。
+:::caution ARM64 页面大小
 
+在 2023 年 5 月版本（v1.24.14+k3s1、v1.25.10+k3s1、v1.26.5+k3s1、v1.27.2+k3s1）前，在 `aarch64/arm64` 系统上，操作系统必须使用 4k 页面大小。**RHEL9**、**Ubuntu**、**Raspberry PI OS** 和 **SLES** 都满足这个要求。
+
+:::
 
 ## 操作系统
 
@@ -45,6 +48,10 @@ K3s 有望在大多数现代 Linux 系统上运行。
 | RAM | 512MB | 1 GB |
 
 [资源分析](../reference/resource-profiling.md)的测试结果用于确定 K3s Agent、具有工作负载的 K3s Server 和具有一个 Agent 的 K3s Server 的最低资源要求。它还包含了有关对 K3s Server 和 Agent 利用率产生最大影响的分析，以及如何保护集群数据存储免受 Agent 和工作负载的干扰。
+
+:::info Raspberry Pi 和嵌入式 etcd
+如果在 Raspberry Pi 上部署带有嵌入式 etcd 的 K3s，建议你使用外部 SSD。etcd 是写入密集型的，SD 卡无法处理 IO 负载。
+:::
 
 #### 磁盘
 

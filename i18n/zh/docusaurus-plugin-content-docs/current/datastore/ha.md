@@ -8,13 +8,11 @@ weight: 30
 单服务器集群可以满足各种用例，但如果你的环境对 Kubernetes control plane 的正常运行时间有要求，你可以在 HA 配置中运行 K3s。一个 HA K3s 集群包括：
 
 * 两个或多个 **Server 节点**为 Kubernetes API 提供服务并运行其他 control plane 服务
-* 零个或多个 **Agent 节点**，用于运行你的应用和服务
 * **外部数据存储**（与单节点设置中使用的嵌入式 SQLite 数据存储相反）
-* 一个在 Server 节点前面的**固定的注册地址**，用于让 Agent 节点注册到集群
+* 可选：零个或多个 **Agent 节点**，用于运行你的应用和服务
+* 可选：**固定注册地址**，供 Agent 节点注册到集群
 
 有关这些组件如何协同工作的详细信息，请参阅[架构](../architecture/architecture.md#高可用-k3s)。
-
-Agent 通过固定的注册地址进行注册，但注册后直接与其中一个 Server 节点建立连接。这是一个由 `k3s agent` 进程发起的 WebSocket 连接，并由作为 agent 进程一部分运行的客户端负载均衡器维护。
 
 ## 安装概要
 
@@ -57,17 +55,7 @@ curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIR
 
 在所有 server 节点上启动 `k3s server` 进程后，请通过 `k3s kubectl get nodes` 确保集群已正确启动。你应该看到 server 节点处于 Ready 状态。
 
-### 3. 可选：配置固定的注册地址
-
-Agent 节点需要一个 URL 来注册。这可以是任何 server 节点的 IP 或主机名，但在许多情况下，这些节点可能会随着时间的推移而改变。例如，如果你在支持缩放组的云中运行集群，你可能会纵向缩放 Server 节点组，导致节点被创建和销毁，从而导致 Server 节点集的 IP 发生改变。因此，你应该在 Server 节点前面有一个稳定的端点，而且它不会随时间推移而改变。你可以使用许多方法来设置此端点，例如：
-
-* 4 层 (TCP) 负载均衡器
-* 轮询 DNS
-* 虚拟或弹性 IP 地址
-
-这个端点也可以用来访问 Kubernetes API。因此，你可以修改 [kubeconfig](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/) 文件来指向它，而不是特定的节点。为了避免在这样的配置中出现证书错误，你应该使用 `--tls-san YOUR_IP_OR_HOSTNAME_HERE` 选项来安装 server。这个选项在 TLS 证书中增加了一个额外的主机名或 IP 作为 Subject Alternative Name，如果你想通过 IP 和主机名访问，可以多次指定。
-
-### 4. 可选：加入其它 Server 节点
+### 3. 可选：加入其它 Server 节点
 
 步骤 2 中的相同示例命令可用于加入其他 Server 节点，其中需要使用第一个节点的 Token。
 
@@ -103,12 +91,24 @@ curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIR
 你需要备份 token 的值，因为恢复备份和添加节点时都需要该 token。以前，K3s 在使用外部 SQL 数据存储时不强制使用 token。
 :::
 
-### 5. 可选：加入 Agent 节点
+### 4. 可选：加入 Agent 节点
 
-因为 K3s Server 节点默认是可调度的，所以 HA K3s Server 集群的最小节点数是两个 Server 节点和零个 Agent 节点。要添加用于运行应用程序和服务的节点，请将 Agent 节点加入到你的集群中。
+因为 K3s Server 节点默认是可调度的，所以 HA K3s 集群不需要 Agent 节点。但是，你可能希望使用专门的 Agent 节点来运行应用程序和服务。
 
-在 HA 集群中加入 Agent 节点与在单个 Server 集群中加入 Agent 节点是一样的。你只需要指定 Agent 应该注册的 URL 和要使用的 Token 即可。
+在 HA 集群中加入 Agent 节点与在单个 Server 集群中加入 Agent 节点是一样的。你只需要指定 Agent 应该注册的 URL（server IP 之一或固定注册地址）和要使用的 Token 即可。
 
 ```bash
-K3S_TOKEN=SECRET k3s agent --server https://fixed-registration-address:6443
+K3S_TOKEN=SECRET k3s agent --server https://server-or-fixed-registration-address:6443
 ```
+
+### 5. 可选：配置固定的注册地址
+
+Agent 节点需要一个 URL 来注册。这可以是任何 server 节点的 IP 或主机名，但在许多情况下，这些节点可能会随着时间的推移而改变。例如，如果你在支持缩放组的云中运行集群，你可能会纵向缩放 Server 节点组，导致节点被创建和销毁，从而导致 Server 节点集的 IP 发生改变。因此，你应该在 Server 节点前面有一个稳定的端点，而且它不会随时间推移而改变。你可以使用许多方法来设置此端点，例如：
+
+* 4 层 (TCP) 负载均衡器
+* 轮询 DNS
+* 虚拟或弹性 IP 地址
+
+这个端点也可以用来访问 Kubernetes API。因此，你可以修改 [kubeconfig](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/) 文件来指向它，而不是特定的节点。
+
+要避免此类配置中的证书错误，请使用 `--tls-san YOUR_IP_OR_HOSTNAME_HERE` 选项来配置 Server。这个选项在 TLS 证书中增加了一个额外的主机名或 IP 作为 Subject Alternative Name，如果你想通过 IP 和主机名访问，可以多次指定。

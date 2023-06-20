@@ -37,6 +37,14 @@ K3s 包含一个嵌入式网络策略控制器。底层实现是 [kube-router](h
 
 要禁用它，使用 `--disable-network-policy` 标志来启动每个 server。
 
+:::note
+如果 K3s 配置为禁用网络策略控制器，则不会删除网络策略 iptables 规则。要在禁用网络策略控制器后清理配置的 kube-router 网络策略规则，请使用 `k3s-killall.sh` 脚本，或使用 `iptables-save` 和 `iptables-restore`。这些步骤必须在集群中的所有节点上手动执行。
+```
+iptables-save | grep -v KUBE-ROUTER | iptables-restore
+ip6tables-save | grep -v KUBE-ROUTER | ip6tables-restore
+```
+:::
+
 ## Service Load Balancer
 
 任何 LoadBalancer 控制器都可以部署到你的 K3s 集群。默认情况下，K3s 提供一个称为 [ServiceLB](https://github.com/k3s-io/klipper-lb)（以前称为 Klipper LoadBalancer）的负载均衡器，它会使用可用的主机端口。
