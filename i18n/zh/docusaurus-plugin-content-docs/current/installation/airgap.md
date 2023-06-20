@@ -44,7 +44,13 @@ sudo cp ./k3s-airgap-images-$ARCH.tar /var/lib/rancher/k3s/agent/images/
 - 在安装 K3s 之前，完成上面的[私有镜像仓库](#私有镜像仓库)或[手动部署镜像](#手动部署镜像)操作，预填充 K3s 需要安装的镜像。
 - 从 [Releases](https://github.com/k3s-io/k3s/releases) 页面下载 K3s 二进制文件，该文件需要匹配用于获取离线镜像的版本。将二进制文件放在每个离线节点上的 `/usr/local/bin` 中，并确保文件是可执行的。
 - 在 [get.k3s.io](https://get.k3s.io) 下载 K3s 安装脚本。将安装脚本放在每个离线节点上的任何位置，并将其命名为 `install.sh`。
-- K3s 需要一个默认路由来自动检测节点的主 IP，并使 kube-proxy ClusterIP 路由正常运行。因此，即使路由是虚拟或黑洞路由，你也必须在每个节点上配置默认路由。
+- 如果你的节点没有带默认路由的接口，则必须配置默认路由，使用虚拟接口的黑洞路由也足够了。K3s 需要一个默认路由来自动检测节点的主 IP，并使 kube-proxy ClusterIP 路由正常运行。要添加虚拟路由，请执行以下操作：
+   ```
+   ip link add dummy0 type dummy
+   ip link set dummy0 up
+   ip addr add 169.254.255.254/31 dev dummy0
+   ip route add default via 169.254.255.255 dev dummy0 metric 1000
+   ```
 
 使用 `INSTALL_K3S_SKIP_DOWNLOAD` 环境变量运行 K3s 脚本时，K3s 将使用脚本的本地版本和二进制文件。
 

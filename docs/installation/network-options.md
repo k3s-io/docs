@@ -257,5 +257,7 @@ or provide that information in a file and use the parameter:
 ```
 
 :::caution Warning
-If you plan on running several K3s clusters using the same tailscale network, please create appropriate [ACLs](https://tailscale.com/kb/1018/acls/) to avoid IP conflicts or use different podCIDR subnets for each cluster
+
+If you plan on running several K3s clusters using the same tailscale network, please create appropriate [ACLs](https://tailscale.com/kb/1018/acls/) to avoid IP conflicts or use different podCIDR subnets for each cluster.
+
 :::

@@ -173,7 +173,7 @@ mirrors:
 
 然后，将镜像重新标记到私有镜像仓库。
 
-示例：`docker tag coredns-coredns:1.6.3 mycustomreg:5000/coredns-coredns`
+示例：`docker tag coredns-coredns:1.6.3 mycustomreg.com:5000/coredns-coredns`
 
 最后，将镜像推送到私有镜像仓库。
 

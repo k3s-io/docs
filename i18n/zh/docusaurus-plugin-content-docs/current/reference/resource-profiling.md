@@ -9,12 +9,12 @@ weight: 1
 
 | 组件 | 处理器 | 最小 CPU | Kine/SQLite 的最小 RAM | 嵌入式 etcd 的最小 RAM |
 |------------|-----|----------|-------------------------|---------------------------|
-| 具有工作负载的 K3s Server | Intel(R) Xeon(R) Platinum 8124M CPU, 3.00 GHz | 核的 10% | 768M | 896M |
-| 具有单个 Agent 的 K3s 集群 | Intel(R) Xeon(R) Platinum 8124M CPU, 3.00 GHz | 核的 10% | 512M | 768M |
-| K3s agent | Intel(R) Xeon(R) Platinum 8124M CPU, 3.00 GHz | 核的 5% | 256M | 256M |
-| 具有工作负载的 K3s Server | Pi4B BCM2711, 1.50 GHz | 核的 20% | 768M | 896M |
-| 具有单个 Agent 的 K3s 集群 | Pi4B BCM2711, 1.50 GHz | 核的 20% | 512M | 768M |
-| K3s agent | Pi4B BCM2711, 1.50 GHz | 核的 10% | 256M | 256M |
+| 具有工作负载的 K3s Server | Intel 8375C CPU, 2.90 GHz | 核的 6% | 1596M | 1606M |
+| 具有单个 Agent 的 K3s 集群 | Intel 8375C CPU, 2.90 GHz | 核的 5% | 1428M | 1450M |
+| K3s agent | Intel 8375C CPU, 2.90 GHz | 核的 3% | 275M | 275M |
+| 具有工作负载的 K3s Server | Pi4B BCM2711, 1.50 GHz | 核的 30% | 1588M | 1613M |
+| 具有单个 Agent 的 K3s 集群 | Pi4B BCM2711, 1.50 GHz | 核的 25% | 1215M | 1413M |
+| K3s agent | Pi4B BCM2711, 1.50 GHz | 核的 10% | 268M | 268M |
 
 - [资源测试范围](#资源测试范围)
 - [用于基线测量的组件](#用于基线测量的组件)
@@ -39,9 +39,9 @@ weight: 1
 
 测试的组件包括：
 
-* 启用所有打包组件的 K3s 1.19.2
+* 启用所有打包组件的 K3s 1.26.5
 * Prometheus + Grafana 监控栈
-* Kubernetes PHP Guestbook 示例应用程序
+* [Kubernetes 示例 Nginx 部署](https://kubernetes.io/docs/tasks/run-application/run-stateless-application-deployment/)
 
 这些是一个稳定系统的基线数据，只使用 K3s 打包的组件（Traefik Ingress、Klipper lb、本地路径存储），运行标准的监控堆栈（Prometheus 和 Grafana）和 Guestbook 示例应用程序。
 
@@ -49,73 +49,85 @@ weight: 1
 
 ## 方法
 
-Prometheus v2.21.0 的独立实例可以通过 apt 安装的 `prometheus-node-exporter` 收集主机 CPU、内存和磁盘 IO 统计信息。
+Prometheus v2.43.0 的独立实例可以通过 apt 安装的 `prometheus-node-exporter` 收集主机 CPU、内存和磁盘 IO 统计信息。
 
 `systemd-cgtop` 用于抽查 systemd cgroup 级别的 CPU 和内存利用率。`system.slice/k3s.service` 跟踪 K3s 和 containerd 的资源利用率，而单个 pod 位于 `kubepods` 层级下。
 
-使用集成到 server 和 agent 进程中的 kubelet exporter，从 `process_resident_memory_bytes` 和 `go_memstats_alloc_bytes` 指标收集其他详细的 K3s 内存利用率数据。
+其他详细的 K3s 内存利用率数据是使用 server 和 agent 进程的集成 metrics-server 从 `kubectl top node` 收集的。
 
 利用率数据来自于运行所述工作负载的节点上稳态运行的第 95 个百分位读数。
 
 ## 环境
 
-操作系统：Ubuntu 20.04 x86_64、aarch64
+| Arch | OS | System | CPU | RAM | Disk |
+|------|----|--------|--|----|------|
+| x86_64 | Ubuntu 22.04 | AWS c6id.xlarge | Intel Xeon Platinum 8375C CPU, 4 Core 2.90 GHz | 8 GB | NVME SSD |
+| aarch64 | Raspberry Pi OS 11 | Raspberry Pi 4 Model B | BCM2711, 4 Core 1.50 GHz | 8 GB | UHS-III SDXC |
 
-硬件：
-
-- AWS c5d.xlarge - 4 核, 8 GB RAM, NVME SSD
-- Raspberry Pi 4 Model B - 4 核, 8 GB RAM, Class 10 SDHC
 
 ## 基准资源要求
 
-本节的测试结果用于确定 K3s Agent、具有工作负载的 K3s Server 和具有一个 Agent 的 K3s Server 的最低资源要求。
+本文介绍了测试结果，用于确定基本 K3s 操作的最低资源要求。
 
 ### 具有工作负载的 K3s Server
 
-这些是单节点集群的要求，其中 K3s Server 与工作负载共享资源。
+这些是单节点集群的要求，其中 K3s Server 与[简单工作负载](https://kubernetes.io/docs/tasks/run-application/run-stateless-application-deployment/)共享资源。
 
 CPU 要求：
 
-| 资源需求 | 测试的处理器 |
-|-----------|-----------------|
-| 核的 10% | Intel(R) Xeon(R) Platinum 8124M CPU, 3.00 GHz |
-| 核的 20% | 低功耗处理器，例如 Pi4B BCM2711，1.50 GHz |
+| 系统 | CPU 核用量 |
+|--------|----------------|
+| Intel 8375C | 核的 6% |
+| Pi4B | 核的 30% |
 
-IOPS 和内存要求：
+内存要求：
 
-| 测试的数据存储 | IOPS | KiB/sec | 延迟 | RAM |
-|-----------|------|---------|---------|--------|
-| Kine/SQLite | 10 | 500 | < 10 ms | 768M |
-| 嵌入式 etcd | 50 | 250 | < 5 ms | 896M |
+| 测试的数据存储 | 系统 | 内存 |
+|-----------|---------|------|
+| Kine/SQLite | Intel 8375C | 1596M |
+|             | Pi4B | 1588M |
+| 嵌入式 etcd | Intel 8375C | 1606M |
+|               | Pi4B | 1613M |
+
+磁盘要求：
+
+| 测试的数据存储 | IOPS | KiB/sec | 延迟 |
+|-----------|------|---------|---------|
+| Kine/SQLite | 10 | 500 | < 10 ms |
+| 嵌入式 etcd | 50 | 250 | < 5 ms |
 
 ### 具有单个 Agent 的 K3s 集群
 
 以下介绍具有 K3s Server 节点和 K3s Agent，但没有工作负载的 K3s 集群的基线要求。
 
+#### K3s Server
 CPU 要求：
 
-| 资源需求 | 测试的处理器 |
-|-----------|-----------------|
-| 核的 10% | Intel(R) Xeon(R) Platinum 8124M CPU, 3.00 GHz |
-| 核的 20% | Pi4B BCM2711, 1.50 GHz |
+| 系统 | CPU 核用量 |
+|--------|----------------|
+| Intel 8375C | 核的 5% |
+| Pi4B | 核的 25% |
 
-IOPS 和内存要求：
+内存要求：
 
-| Datastore | IOPS | KiB/sec | 延迟 | RAM |
-|-----------|------|---------|---------|--------|
-| Kine/SQLite | 10 | 500 | < 10 ms | 512M |
-| 嵌入式 etcd | 50 | 250 | < 5 ms | 768M |
+| 测试的数据存储 | 系统 | 内存 |
+|-----------|---------|------|
+| Kine/SQLite | Intel 8375C | 1428M |
+|             | Pi4B | 1215M |
+| 嵌入式 etcd | Intel 8375C | 1450M |
+|               | Pi4B | 1413M |
 
 ### K3s Agent
 
-CPU 要求：
+要求：
 
-| 资源需求 | 测试的处理器 |
-|-----------|-----------------|
-| 核的 5% | Intel(R) Xeon(R) Platinum 8124M CPU, 3.00 GHz |
-| 核的 10% | Pi4B BCM2711, 1.50 GHz |
+| 系统 | CPU 核用量 | RAM |
+|--------|----------------|-----|
+| Intel 8375C | 核的 3% | 275M |
+| Pi4B | 核的 5% | 268M |
 
-256M 的 RAM 是必须的。
+
+
 
 ## 分析
 
