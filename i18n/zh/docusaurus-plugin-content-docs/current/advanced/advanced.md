@@ -430,7 +430,7 @@ yum install -y https://rpm.rancher.io/k3s/latest/common/centos/7/noarch/k3s-seli
 selinux: true
 ```
 
-不支持在 SELinux 下使用自定义 `--data-dir`。要自定义它，你可能需要自行编写自定义策略。如需指导，你可以参考 [containers/container-selinux](https://github.com/containers/container-selinux) 仓库，仓库包含 Container Runtime 的 SELinux 策略文件，同时你可以参考 [rancher/k3s-selinux](https://github.com/rancher/k3s-selinux) 仓库，该仓库包含 K3s 的 SELinux 策略。
+不支持在 SELinux 下使用自定义 `--data-dir`。要自定义它，你可能需要自行编写自定义策略。如需指导，你可以参考 [containers/container-selinux](https://github.com/containers/container-selinux) 仓库，仓库包含 Container Runtime 的 SELinux 策略文件，同时你可以参考 [k3s-io/k3s-selinux](https://github.com/k3s-io/k3s-selinux) 仓库，该仓库包含 K3s 的 SELinux 策略。
 
 ## 启用 eStargz 的 Lazy Pulling（实验性）
 

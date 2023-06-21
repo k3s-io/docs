@@ -430,7 +430,7 @@ This option can also be specified in the K3s [configuration file](#).
 selinux: true
 ```
 
-Using a custom `--data-dir` under SELinux is not supported. To customize it, you would most likely need to write your own custom policy. For guidance, you could refer to the [containers/container-selinux](https://github.com/containers/container-selinux) repository, which contains the SELinux policy files for Container Runtimes, and the [rancher/k3s-selinux](https://github.com/rancher/k3s-selinux) repository, which contains the SELinux policy for K3s.
+Using a custom `--data-dir` under SELinux is not supported. To customize it, you would most likely need to write your own custom policy. For guidance, you could refer to the [containers/container-selinux](https://github.com/containers/container-selinux) repository, which contains the SELinux policy files for Container Runtimes, and the [k3s-io/k3s-selinux](https://github.com/k3s-io/k3s-selinux) repository, which contains the SELinux policy for K3s.
 
 ## Enabling Lazy Pulling of eStargz (Experimental)
 

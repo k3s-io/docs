@@ -446,7 +446,7 @@ SELinux를 활용하려면 K3s 서버 및 에이전트를 시작할 때 `--selin
 selinux: true
 ```
 
-SELinux에서 사용자 지정 `--data-dir`을 사용하는 것은 지원되지 않습니다. 사용자 지정하려면 사용자 지정 정책을 직접 작성해야 할 가능성이 높습니다. 컨테이너 런타임에 대한 SELinux 정책 파일이 포함된 [containers/container-selinux](https://github.com/containers/container-selinux) 리포지토리와 K3s를 위한 SELinux 정책이 포함된 [rancher/k3s-selinux](https://github.com/rancher/k3s-selinux) 리포지토리를 참고할 수 있습니다.
+SELinux에서 사용자 지정 `--data-dir`을 사용하는 것은 지원되지 않습니다. 사용자 지정하려면 사용자 지정 정책을 직접 작성해야 할 가능성이 높습니다. 컨테이너 런타임에 대한 SELinux 정책 파일이 포함된 [containers/container-selinux](https://github.com/containers/container-selinux) 리포지토리와 K3s를 위한 SELinux 정책이 포함된 [k3s-io/k3s-selinux](https://github.com/k3s-io/k3s-selinux) 리포지토리를 참고할 수 있습니다.
 
 ## 지연 풀링의 지연 풀링 활성화 (실험적)
 
