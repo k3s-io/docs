@@ -98,5 +98,22 @@ module.exports = {
         },
       },
     ],
+  ],
+  plugins: [
+    [
+      '@docusaurus/plugin-client-redirects',
+      {
+        redirects: [
+          {
+            from: '/installation/ha',
+            to: '/datastore/ha',
+          },
+          {
+            from: '/installation/ha-embedded',
+            to: '/datastore/ha-embedded',
+          },
+        ],
+      },
+    ],
   ], 
 };
