@@ -120,7 +120,9 @@ You should consider increasing the subnet size for the cluster CIDR so that you 
 
 ### Database
 
-K3s supports different databases including MySQL, PostgreSQL, MariaDB, and etcd, the following is a sizing guide for the database resources you need to run large clusters:
+K3s supports different databases including MySQL, PostgreSQL, MariaDB, and etcd.  See [Cluster Datastore](../datastore/datastore.md) for more info.
+
+The following is a sizing guide for the database resources you need to run large clusters:
 
 | Deployment Size |   Nodes   | VCPUS |  RAM  |
 |:---------------:|:---------:|:-----:|:-----:|
@@ -129,4 +131,3 @@ K3s supports different databases including MySQL, PostgreSQL, MariaDB, and etcd,
 |      Large      | Up to 250 |   4   | 16 GB |
 |     X-Large     | Up to 500 |   8   | 32 GB |
 |     XX-Large    |   500+    |   16  | 64 GB |
-
