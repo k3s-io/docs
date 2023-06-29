@@ -395,7 +395,7 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: default-network-dns-policy
-  namespace: <NAMESPACE>
+  namespace: kube-system
 spec:
   ingress:
   - ports:
