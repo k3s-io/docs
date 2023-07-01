@@ -40,18 +40,18 @@ If you want your configuration to be independent from the install script, you sh
 For example, to upgrade to the current stable release:
 
 ```sh
-curl -sfL https://get.k3s.io | <EXISTING_K3S_ENV> sh - <EXISTING_K3S_ARGS>
+curl -sfL https://get.k3s.io | <EXISTING_K3S_ENV> sh -s - <EXISTING_K3S_ARGS>
 ```
 
 If you want to upgrade to a newer version in a specific channel (such as latest) you can specify the channel:
 ```sh
-curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL=latest <EXISTING_K3S_ENV> sh - <EXISTING_K3S_ARGS>
+curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL=latest <EXISTING_K3S_ENV> sh -s - <EXISTING_K3S_ARGS>
 ```
 
 If you want to upgrade to a specific version you can run the following command:
 
 ```sh
-curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=vX.Y.Z-rc1 <EXISTING_K3S_ENV> sh - <EXISTING_K3S_ARGS>
+curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=vX.Y.Z-rc1 <EXISTING_K3S_ENV> sh -s - <EXISTING_K3S_ARGS>
 ```
 
 ### Manually Upgrade K3s Using the Binary
