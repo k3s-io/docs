@@ -32,6 +32,7 @@ For example, a command like the following could be used to install the K3s serve
 curl -sfL https://get.k3s.io | sh -s - server \
   --token=SECRET \
   --datastore-endpoint="mysql://username:password@tcp(hostname:3306)/database-name"
+  --tls-san=<FIXED_IP> # Optional, needed if using a fixed registration address
 ```
 
 The datastore endpoint format differs based on the database type. For details, refer to the section on [datastore endpoint formats.](../datastore/datastore.md#datastore-endpoint-format-and-functionality)
@@ -73,7 +74,22 @@ There are a few config flags that must be the same in all server nodes:
 Ensure that you retain a copy of this token as it is required when restoring from backup and adding nodes. Previously, K3s did not enforce the use of a token when using external SQL datastores.
 :::
 
-### 4. Optional: Join Agent Nodes
+
+### 4. Optional: Configure a Fixed Registration Address
+
+Agent nodes need a URL to register against. This can be the IP or hostname of any server node, but in many cases those may change over time. For example, if running your cluster in a cloud that supports scaling groups, nodes may be created and destroyed over time, changing to different IPs from the initial set of server nodes. It would be best to have a stable endpoint in front of the server nodes that will not change over time. This endpoint can be set up using any number approaches, such as:
+
+* A layer-4 (TCP) load balancer
+* Round-robin DNS
+* Virtual or elastic IP addresses
+
+See [Cluster Loadbalancer](./cluster-loadbalancer.md) for example configurations.
+
+This endpoint can also be used for accessing the Kubernetes API. So you can, for example, modify your [kubeconfig](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/) file to point to it instead of a specific node. 
+
+To avoid certificate errors in such a configuration, you should configure the server with the `--tls-san YOUR_IP_OR_HOSTNAME_HERE` option. This option adds an additional hostname or IP as a Subject Alternative Name in the TLS cert, and it can be specified multiple times if you would like to access via both the IP and the hostname.
+
+### 5. Optional: Join Agent Nodes
 
 Because K3s server nodes are schedulable by default, agent nodes are not required for a HA K3s cluster. However, you may wish to have dedicated agent nodes to run your apps and services.
 
@@ -82,15 +98,3 @@ Joining agent nodes in an HA cluster is the same as joining agent nodes in a sin
 ```bash
 K3S_TOKEN=SECRET k3s agent --server https://server-or-fixed-registration-address:6443
 ```
-
-### 5. Optional: Configure a Fixed Registration Address
-
-Agent nodes need a URL to register against. This can be the IP or hostname of any server node, but in many cases those may change over time. For example, if you are running your cluster in a cloud that supports scaling groups, you may scale the server node group up and down over time, causing nodes to be created and destroyed and thus having different IPs from the initial set of server nodes. In this case, you should have a stable endpoint in front of the server nodes that will not change over time. This endpoint can be set up using any number approaches, such as:
-
-* A layer-4 (TCP) load balancer
-* Round-robin DNS
-* Virtual or elastic IP addresses
-
-This endpoint can also be used for accessing the Kubernetes API. So you can, for example, modify your [kubeconfig](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/) file to point to it instead of a specific node. 
-
-To avoid certificate errors in such a configuration, you should configure the server with the `--tls-san YOUR_IP_OR_HOSTNAME_HERE` option. This option adds an additional hostname or IP as a Subject Alternative Name in the TLS cert, and it can be specified multiple times if you would like to access via both the IP and the hostname.
