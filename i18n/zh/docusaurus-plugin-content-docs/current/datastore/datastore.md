@@ -28,6 +28,10 @@ K3s 支持以下数据存储选项：
    * [MariaDB](https://mariadb.org/)（针对版本 10.6.8 进行了认证）
    * [PostgreSQL](https://www.postgresql.org/)（针对版本 10.7、11.5 和 14.2 进行了认证）
 
+:::caution 准备语句支持
+K3s 需要 DB 的准备语句支持。换言之，[PgBouncer](https://www.pgbouncer.org/faq.html#how-to-use-prepared-statements-with-transaction-pooling) 之类的连接池将无法与 K3s 一起使用。
+:::
+
 ### 外部数据存储配置参数
 如果你希望使用外部数据存储（例如 PostgreSQL、MySQL 或 etcd），你必须设置 `datastore-endpoint` 参数，以便 K3s 知道如何连接到外部数据存储。你也可以指定参数来配置连接的认证和加密。下表总结了这些参数，它们可以作为 CLI 标志或环境变量传递：
 

@@ -40,25 +40,18 @@ weight: 10
 例如，要升级到当前的稳定版本：
 
 ```sh
-curl -sfL https://get.k3s.io | sh -
+curl -sfL https://get.k3s.io | <EXISTING_K3S_ENV> sh -s - <EXISTING_K3S_ARGS>
 ```
-
-:::note
-中国用户，可以使用以下方法加速安装：
-```
-curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn sh -
-```
-:::
 
 如果想升级到特定 channel（如 latest）中的更新版本，你可以指定 channel：
 ```sh
-curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL=latest sh -
+curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL=latest <EXISTING_K3S_ENV> sh -s - <EXISTING_K3S_ARGS>
 ```
 
 如果要升级到特定版本，可以运行以下命令：
 
 ```sh
-curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=vX.Y.Z-rc1 sh -
+curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=vX.Y.Z-rc1 <EXISTING_K3S_ENV> sh -s - <EXISTING_K3S_ARGS>
 ```
 
 ### 使用二进制文件手动升级 K3s

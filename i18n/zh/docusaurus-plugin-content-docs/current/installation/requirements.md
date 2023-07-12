@@ -120,7 +120,9 @@ Flannel 依赖 [Bridge CNI 插件](https://www.cni.dev/plugins/current/main/brid
 
 ### 数据库
 
-K3s 支持不同的数据库，包括 MySQL、PostgreSQL、MariaDB 和 etcd，以下是运行大型集群所需的数据库资源的大小指南：
+K3s 支持不同的数据库，包括 MySQL、PostgreSQL、MariaDB 和 etcd。有关详细信息，请参阅[集群数据存储](../datastore/datastore.md)。
+
+以下是运行大型集群所需的数据库资源的大小指南：
 
 | 部署规模 | 节点 | VCPUS | RAM |
 |:---------------:|:---------:|:-----:|:-----:|
@@ -129,4 +131,3 @@ K3s 支持不同的数据库，包括 MySQL、PostgreSQL、MariaDB 和 etcd，�
 | Large | Up to 250 | 4 | 16GB |
 | X-Large | Up to 500 | 8 | 32GB |
 | XX-Large | 500+ | 16 | 64GB |
-
