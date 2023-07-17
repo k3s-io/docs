@@ -136,13 +136,16 @@ node-label:
 
 # config.yaml.d/test1.yaml
 write-kubeconfig-mode: 600
-
+node-taint:
+  - alice=bob:NoExecute
 
 # config.yaml.d/test2.yaml
 write-kubeconfig-mode: 777
 node-label:
   - other=what
   - foo=three
+node-taint+:
+  - charlie=delta:NoSchedule
 
 ```
 
@@ -154,6 +157,9 @@ token: boop
 node-label:
   - other=what
   - foo=three
+node-taint:
+  - alice=bob:NoExecute
+  - charlie=delta:NoSchedule
 ```
 
 ## Putting it all together
