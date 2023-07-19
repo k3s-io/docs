@@ -1,8 +1,6 @@
 ---
 title: etcd-snapshot
 ---
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 
 # k3s etcd-snapshot
 

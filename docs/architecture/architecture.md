@@ -5,9 +5,6 @@ weight: 1
 
 import ThemedImage from '@theme/ThemedImage';
 import useBaseUrl from '@docusaurus/useBaseUrl';
-import TabItem from '@theme/TabItem';
-import Tabs from '@theme/Tabs';
-
 
 This page describes the architecture of a high-availability K3s server cluster and how it differs from a single-node server cluster.
 

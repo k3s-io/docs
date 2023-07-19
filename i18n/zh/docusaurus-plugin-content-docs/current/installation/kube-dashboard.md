@@ -3,8 +3,6 @@ title: "Kubernetes 仪表板"
 weight: 60
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 
 本安装指南将帮助你在 K3s 上部署和配置 [Kubernetes 仪表板](https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/)。
 

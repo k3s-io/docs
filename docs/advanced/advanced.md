@@ -6,9 +6,6 @@ aliases:
   - /k3s/latest/en/configuration/
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 This section contains advanced information describing the different ways you can run and manage K3s, as well as steps necessary to prepare the host OS for K3s use.
 
 ## Certificate Management

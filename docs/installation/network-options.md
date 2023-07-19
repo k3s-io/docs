@@ -3,9 +3,6 @@ title: "Network Options"
 weight: 25
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 This page describes K3s network configuration options, including configuration or replacement of Flannel, and configuring IPv6.
 
 > **Note:** Please reference the [Networking](../networking/networking.md) page for information about CoreDNS, Traefik, and the Service LB.

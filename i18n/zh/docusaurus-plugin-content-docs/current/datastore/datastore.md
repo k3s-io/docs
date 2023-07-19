@@ -3,8 +3,6 @@ title: "集群数据存储"
 weight: 50
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 
 K3s 与其他 Kubernetes 发行版的不同之处，在于 K3s 支持使用 etcd 以外的数据库来运行 Kubernetes。该功能让 Kubernetes 运维更加灵活。你可以根据实际情况选择合适的数据存储选项。例如：
 

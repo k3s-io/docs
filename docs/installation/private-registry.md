@@ -2,8 +2,6 @@
 title: "Private Registry Configuration"
 weight: 55
 ---
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 
 Containerd can be configured to connect to private registries and use them to pull private images on the node.
 

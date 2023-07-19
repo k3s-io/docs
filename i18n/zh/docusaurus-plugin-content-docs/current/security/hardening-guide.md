@@ -3,8 +3,6 @@ title: "CIS Hardening Guide"
 weight: 80
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 
 :::info
 请知悉，本文仅提供英文版。
