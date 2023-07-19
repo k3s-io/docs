@@ -3,8 +3,6 @@ title: "网络选项"
 weight: 25
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 
 本文介绍了 K3s 网络配置选项，包括配置或替换 Flannel，以及配置 IPv6。
 

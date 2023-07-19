@@ -2,8 +2,6 @@
 title: "离线安装"
 weight: 60
 ---
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 
 你可以使用两种不同的方法在离线环境中安装 K3s。离线环境指的是不直接连接到 Internet 的环境。你可以部署私有镜像仓库和 mirror docker.io，也可以手动部署镜像，例如用于小型集群。
 

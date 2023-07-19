@@ -2,8 +2,6 @@
 title: "Air-Gap Install"
 weight: 60
 ---
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 
 You can install K3s in an air-gapped environment using two different methods. An air-gapped environment is any environment that is not directly connected to the Internet. You can either deploy a private registry and mirror docker.io, or you can manually deploy images such as for small clusters.
 

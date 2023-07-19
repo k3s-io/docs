@@ -2,8 +2,6 @@
 title: "私有镜像仓库配置"
 weight: 55
 ---
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 
 你可以将 Containerd 配置为连接到私有镜像仓库，并在节点上使用私有镜像仓库拉取私有镜像。
 

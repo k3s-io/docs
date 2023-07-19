@@ -1,8 +1,6 @@
 ---
 title: secrets-encrypt
 ---
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 
 # k3s secrets-encrypt
 
