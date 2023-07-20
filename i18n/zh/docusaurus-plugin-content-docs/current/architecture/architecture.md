@@ -6,7 +6,6 @@ weight: 1
 import ThemedImage from '@theme/ThemedImage';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
-
 本文介绍了高可用（HA）K3s 服务器集群的架构，以及 K3s 与单节点服务器集群的区别。
 
 本文还描述了 Agent 节点是如何注册到 K3s Server 的。

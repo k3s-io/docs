@@ -3,7 +3,6 @@ title: "网络选项"
 weight: 25
 ---
 
-
 本文介绍了 K3s 网络配置选项，包括配置或替换 Flannel，以及配置 IPv6。
 
 > **注意**：有关 CoreDNS、Traefik 和 Service LB 的信息，请参阅[网络](../networking/networking.md)页面。

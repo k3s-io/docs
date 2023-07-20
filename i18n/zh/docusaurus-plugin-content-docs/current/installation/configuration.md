@@ -120,7 +120,9 @@ k3s server \
 从 [v1.21.0+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.21.0%2Bk3s1) 起可用
 :::
 
-支持多个配置文件。默认从 `/etc/rancher/k3s/config.yaml` 和 `/etc/rancher/k3s/config.yaml.d/*.yaml` 中按字母顺序读取配置文件。将使用给定键的最后一个值。可以将 `+` 附加到键，这样能将值附加到现有字符串或切片，而不是替换它。
+支持多个配置文件。默认从 `/etc/rancher/k3s/config.yaml` 和 `/etc/rancher/k3s/config.yaml.d/*.yaml` 中按字母顺序读取配置文件。
+
+默认情况下，将使用给定键的最后一个值。可以将 `+` 附加到键，这样能将值附加到现有字符串或切片，而不是替换它。后续文件中的所有此键也需要使用 `+` 来防止覆盖累积值。
 
 多个配置文件的示例如下：
 
@@ -134,13 +136,16 @@ node-label:
 
 # config.yaml.d/test1.yaml
 write-kubeconfig-mode: 600
-
+node-taint:
+  - alice=bob:NoExecute
 
 # config.yaml.d/test2.yaml
 write-kubeconfig-mode: 777
 node-label:
   - other=what
   - foo=three
+node-taint+:
+  - charlie=delta:NoSchedule
 
 ```
 
@@ -152,6 +157,9 @@ token: boop
 node-label:
   - other=what
   - foo=three
+node-taint:
+  - alice=bob:NoExecute
+  - charlie=delta:NoSchedule
 ```
 
 ## 组合使用

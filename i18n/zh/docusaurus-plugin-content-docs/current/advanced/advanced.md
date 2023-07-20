@@ -6,7 +6,6 @@ aliases:
   - /k3s/latest/en/configuration/
 ---
 
-
 本文描述了用于运行和管理 K3s 的高级设置，以及为 K3s 准备主机操作系统所需的步骤。
 
 ## 证书管理
