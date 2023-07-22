@@ -22,7 +22,7 @@ The following options must be set to the same value on all servers in the cluste
 * `--disable-cloud-controller`
 * `--disable-helm-controller`
 * `--disable-network-policy`
-* `--disable servicelb`
+* `--disable=servicelb` *note: other packaged components may be disabled on a per-server basis*
 * `--egress-selector-mode`
 * `--flannel-backend`
 * `--flannel-external-ip`
