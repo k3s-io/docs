@@ -4,10 +4,12 @@ weight: 30
 ---
 
 
-This section describes how to install an external load balancer for use with a High Availability (HA) K3s cluster. Two examples are provided: Nginx and HAProxy.
+This section describes how to install an external load balancer in front of a High Availability (HA) K3s cluster's server nodes. Two examples are provided: Nginx and HAProxy.
 
 :::tip
-An external loadbalancer should not be confused with the embedded ServiceLB, which is an internal load balancer that allows pods to maintain static IPs inside the cluster itself. For more details, see [Service Load Balancer](../networking/networking.md#service-load-balancer).
+An external load-balancers should not be confused with the embedded ServiceLB, which is an embedded controller that allows for use of Kubernetes LoadBalancer Services without deploying a third-party load-balancer controller. For more details, see [Service Load Balancer](../networking/networking.md#service-load-balancer). 
+
+External load-balancers can be used to provide a fixed registration address for registering nodes, or for external access to the Kubernetes API Server. For exposing LoadBalancer Services, external load-balancers can be used alongside or instead of ServiceLB, but in most cases, replacement load-balancer controllers such as MetalLB or Kube-VIP are a better choice.
 :::
 
 ## Prerequisites
@@ -129,7 +131,7 @@ server-3   Ready    control-plane,etcd,master   3m12s   v1.27.3+k3s1
 ## Nginx Load Balancer
 
 :::warning
-Nginx does not natively support a High Avaliability (HA) configuration. If setting up an HA cluster, having a single loadbalancer node will reintroduce a single point of failure.
+Nginx does not natively support a High Availability (HA) configuration. If setting up an HA cluster, having a single load balancer in front of K3s will reintroduce a single point of failure.
 :::
 
 [Nginx Open Source](http://nginx.org/) provides a TCP load balancer. See [Using nginx as HTTP load balancer](https://nginx.org/en/docs/http/load_balancing.html) for more info.
