@@ -108,7 +108,7 @@ K3s는 쿠버네티스용 오픈소스 분산형 블록 스토리지 시스템�
 longhorn.yaml을 적용하여 Longhorn을 설치합니다:
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/master/deploy/longhorn.yaml
+kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.5.1/deploy/longhorn.yaml
 ```
 
 Longhorn은 네임스페이스 `longhorn-system`에 설치됩니다.
