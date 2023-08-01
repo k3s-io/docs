@@ -33,6 +33,7 @@ module.exports = {
         'datastore/backup-restore',
         'datastore/ha-embedded',
         'datastore/ha',
+        'datastore/cluster-loadbalancer',
       ],
     },
     {

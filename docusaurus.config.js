@@ -104,14 +104,13 @@ module.exports = {
       '@docusaurus/plugin-client-redirects',
       {
         redirects: [
-          {
-            from: '/installation/ha',
-            to: '/datastore/ha',
-          },
-          {
-            from: '/installation/ha-embedded',
-            to: '/datastore/ha-embedded',
-          },
+          { from: '/installation/ha', to: '/datastore/ha' },
+          { from: '/installation/ha-embedded', to: '/datastore/ha-embedded' },
+          { from: '/installation/datastore', to: '/datastore' },
+          { from: '/installation/disable-flags', to: '/installation/server-roles' },
+          { from: '/backup-restore/backup-restore', to: '/datastore/backup-restore' },
+          { from: '/reference/agent-config', to: '/cli/agent' },
+          { from: '/reference/server-config', to: '/cli/server' },
         ],
       },
     ],

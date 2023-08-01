@@ -18,13 +18,18 @@ An HA K3s cluster with embedded etcd is composed of:
 * Optional: A **fixed registration address** for agent nodes to register with the cluster
 
 To get started, first launch a server node with the `cluster-init` flag to enable clustering and a token that will be used as a shared secret to join additional servers to the cluster.
+
 ```bash
-curl -sfL https://get.k3s.io | K3S_TOKEN=SECRET sh -s - server --cluster-init
+curl -sfL https://get.k3s.io | K3S_TOKEN=SECRET sh -s - server \
+    --cluster-init \
+    --tls-san=<FIXED_IP> # Optional, needed if using a fixed registration address
 ```
 
 After launching the first server, join the second and third servers to the cluster using the shared secret:
 ```bash
-curl -sfL https://get.k3s.io | K3S_TOKEN=SECRET sh -s - server --server https://<ip or hostname of server1>:6443
+curl -sfL https://get.k3s.io | K3S_TOKEN=SECRET sh -s - server \
+    --server https://<ip or hostname of server1>:6443 \
+    --tls-san=<FIXED_IP> # Optional, needed if using a fixed registration address
 ```
 
 Check to see that the second and third servers are now part of the cluster:
@@ -50,9 +55,12 @@ There are a few config flags that must be the same in all server nodes:
 * Feature related flags: `--secrets-encryption`
 
 ## Existing single-node clusters
+
+:::info Version Gate
+Available as of [v1.22.2+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.22.2%2Bk3s1)
+:::
+
 If you have an existing cluster using the default embedded SQLite database, you can convert it to etcd by simply restarting your K3s server with the `--cluster-init` flag. Once you've done that, you'll be able to add additional instances as described above.
 
 If an etcd datastore is found on disk either because that node has either initialized or joined a cluster already, the datastore arguments (`--cluster-init`, `--server`, `--datastore-endpoint`, etc) are ignored.
-
->**Important:** K3s v1.22.2 and newer support migration from SQLite to etcd. Older versions will create a new empty datastore if you add `--cluster-init` to an existing server.
 
