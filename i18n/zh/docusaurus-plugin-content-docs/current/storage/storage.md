@@ -107,7 +107,7 @@ K3s 支持 [Longhorn](https://github.com/longhorn/longhorn)，这是用于 Kuber
 应用 longhorn.yaml 来安装 Longhorn：
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/master/deploy/longhorn.yaml
+kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.5.1/deploy/longhorn.yaml
 ```
 
 Longhorn 将安装在命名空间 `longhorn-system` 中。
