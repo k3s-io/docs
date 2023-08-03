@@ -15,7 +15,17 @@ module.exports = {
     mermaid: true,
   },
   themes: [
-    '@docusaurus/theme-mermaid'
+    '@docusaurus/theme-mermaid',
+    [
+      "@easyops-cn/docusaurus-search-local",
+      /** @type {import("@easyops-cn/docusaurus-search-local").PluginOptions} */
+      ({
+        docsRouteBasePath: "/",
+        hashed: true,
+        highlightSearchTermsOnTargetPage: true,
+        indexBlog: false,
+      }),
+    ],
   ],
   i18n: {
     defaultLocale: "en",
@@ -67,11 +77,11 @@ module.exports = {
         },
       ],
     },
-    algolia: {
-      appId: 'LLOD7N3LJA',
-      apiKey: '4637c26b2ca6b8aeaf99a3ee421fb35c',
-      indexName: 'k3s',
-    },
+    // algolia: {
+    //   appId: 'LLOD7N3LJA',
+    //   apiKey: '4637c26b2ca6b8aeaf99a3ee421fb35c',
+    //   indexName: 'k3s',
+    // },
     footer: {
       style: 'dark',
       links: [],
