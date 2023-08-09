@@ -60,7 +60,7 @@ spec:
 Content placed in `/var/lib/rancher/k3s/server/static/` can be accessed anonymously via the Kubernetes APIServer from within the cluster. This URL can be templated using the special variable `%{KUBERNETES_API}%` in the `spec.chart` field. For example, the packaged Traefik component loads its chart from `https://%{KUBERNETES_API}%/static/charts/traefik-12.0.000.tgz`.
 
 :::note
-The `name` field should follow the Helm chart naming conventions. Refer to the [Helm Best Practicies documentation](https://helm.sh/docs/chart_best_practices/conventions/#chart-names) to learn more.
+The `name` field should follow the Helm chart naming conventions. Refer to the [Helm Best Practices documentation](https://helm.sh/docs/chart_best_practices/conventions/#chart-names) to learn more.
 :::
 
 ### Customizing Packaged Components with HelmChartConfig
