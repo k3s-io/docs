@@ -32,16 +32,8 @@ K3s 需要两个或更多的 Server 节点来实现 HA 配置。有关最低主�
 curl -sfL https://get.k3s.io | sh -s - server \
   --token=SECRET \
   --datastore-endpoint="mysql://username:password@tcp(hostname:3306)/database-name"
+  --tls-san=<FIXED_IP> # Optional, needed if using a fixed registration address
 ```
-
-:::note
-中国用户，可以使用以下方法加速安装：
-```
-curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn sh -s - server \
-  --token=SECRET \
-  --datastore-endpoint="mysql://username:password@tcp(hostname:3306)/database-name"
-```
-:::
 
 根据数据库类型的不同，数据存储端点的格式也不同。有关详细信息，请参阅[数据存储端点格式](../datastore/datastore.md#数据存储端点格式和功能)。
 
@@ -91,7 +83,22 @@ curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIR
 你需要备份 token 的值，因为恢复备份和添加节点时都需要该 token。以前，K3s 在使用外部 SQL 数据存储时不强制使用 token。
 :::
 
-### 4. 可选：加入 Agent 节点
+
+### 4. 可选：配置固定的注册地址
+
+Agent 节点需要一个 URL 来注册。这可以是任何 server 节点的 IP 或主机名，但在许多情况下，这些节点可能会随着时间的推移而改变。例如，如果在支持扩展组的云上运行集群，则可能会随着时间的推移创建和销毁节点，从而更改为与初始 Server 节点集不同的 IP。最好在 Server 节点前面有一个不会随时间变化的稳定端点。你可以使用许多方法来设置此端点，例如：
+
+* 4 层 (TCP) 负载均衡器
+* 轮询 DNS
+* 虚拟或弹性 IP 地址
+
+有关示例配置，请参阅[集群负载均衡器](./cluster-loadbalancer.md)。
+
+这个端点也可以用来访问 Kubernetes API。因此，你可以修改 [kubeconfig](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/) 文件来指向它，而不是特定的节点。
+
+要避免此类配置中的证书错误，请使用 `--tls-san YOUR_IP_OR_HOSTNAME_HERE` 选项来配置 Server。这个选项在 TLS 证书中增加了一个额外的主机名或 IP 作为 Subject Alternative Name，如果你想通过 IP 和主机名访问，可以多次指定。
+
+### 5. 可选：加入 Agent 节点
 
 因为 K3s Server 节点默认是可调度的，所以 HA K3s 集群不需要 Agent 节点。但是，你可能希望使用专门的 Agent 节点来运行应用程序和服务。
 
@@ -100,15 +107,3 @@ curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIR
 ```bash
 K3S_TOKEN=SECRET k3s agent --server https://server-or-fixed-registration-address:6443
 ```
-
-### 5. 可选：配置固定的注册地址
-
-Agent 节点需要一个 URL 来注册。这可以是任何 server 节点的 IP 或主机名，但在许多情况下，这些节点可能会随着时间的推移而改变。例如，如果你在支持缩放组的云中运行集群，你可能会纵向缩放 Server 节点组，导致节点被创建和销毁，从而导致 Server 节点集的 IP 发生改变。因此，你应该在 Server 节点前面有一个稳定的端点，而且它不会随时间推移而改变。你可以使用许多方法来设置此端点，例如：
-
-* 4 层 (TCP) 负载均衡器
-* 轮询 DNS
-* 虚拟或弹性 IP 地址
-
-这个端点也可以用来访问 Kubernetes API。因此，你可以修改 [kubeconfig](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/) 文件来指向它，而不是特定的节点。
-
-要避免此类配置中的证书错误，请使用 `--tls-san YOUR_IP_OR_HOSTNAME_HERE` 选项来配置 Server。这个选项在 TLS 证书中增加了一个额外的主机名或 IP 作为 Subject Alternative Name，如果你想通过 IP 和主机名访问，可以多次指定。

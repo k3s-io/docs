@@ -18,28 +18,19 @@ HA 嵌入式 etcd 集群必须由奇数个 Server 节点组成，以便 etcd 维
 * 可选：**固定注册地址**，供 Agent 节点注册到集群
 
 首先，启动一个带有 `cluster-init` 标志的 Server 节点来启用集群和一个令牌，该令牌将作为共享 secret，用于将其他 Server 加入集群。
-```bash
-curl -sfL https://get.k3s.io | K3S_TOKEN=SECRET sh -s - server --cluster-init
-```
 
-:::note
-中国用户，可以使用以下方法加速安装：
+```bash
+curl -sfL https://get.k3s.io | K3S_TOKEN=SECRET sh -s - server \
+    --cluster-init \
+    --tls-san=<FIXED_IP> # Optional, needed if using a fixed registration address
 ```
-curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn K3S_TOKEN=SECRET sh -s - server --cluster-init
-```
-:::
 
 启动第一台服务器后，使用共享 secret  将第二台和第三台服务器加入集群：
 ```bash
-curl -sfL https://get.k3s.io | K3S_TOKEN=SECRET sh -s - server --server https://<ip or hostname of server1>:6443
+curl -sfL https://get.k3s.io | K3S_TOKEN=SECRET sh -s - server \
+    --server https://<ip or hostname of server1>:6443 \
+    --tls-san=<FIXED_IP> # Optional, needed if using a fixed registration address
 ```
-
-:::note
-中国用户，可以使用以下方法加速安装：
-```
-curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn K3S_TOKEN=SECRET sh -s - server --server https://<ip or hostname of server1>:6443
-```
-:::
 
 检查第二个和第三个服务器是否已加入集群：
 
@@ -64,9 +55,12 @@ curl -sfL https://get.k3s.io | K3S_TOKEN=SECRET sh -s - agent --server https://<
 * 功能相关标志：`--secrets-encryption`
 
 ## 现有的单节点集群
+
+:::info 版本
+从 [v1.22.2+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.22.2%2Bk3s1) 起可用
+:::
+
 如果你有一个使用默认嵌入式 SQLite 数据库的现有集群，你可以通过使用 `--cluster-init` 标志重新启动你的 K3s server，从而将其转换为 etcd。完成此操作后，你将能够如上所述添加其他实例。
 
 如果由于节点已经初始化或加入了一个集群，导致在磁盘上发现一个 etcd 数据存储，那么数据存储参数（`--cluster-init`、`--server`、`--datastore-endpoint` 等）将被忽略。
-
-> **重要提示**：K3s v1.22.2 及更高版本支持将 SQLite 迁移到 etcd。如果你将 `--cluster-init` 添加到现有 server，旧版本将创建一个新的空数据存储。
 

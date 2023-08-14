@@ -253,6 +253,8 @@ curl -fsSL https://tailscale.com/install.sh | sh
 --vpn-auth-file=$PATH_TO_FILE
 ```
 
+或者，如果你有自己的 Tailscale 服务器（例如 headscale），则可以通过将 `,controlServerURL=$URL` 附加到 vpn-auth 参数来连接它。
+
 :::caution 警告
 
 如果你计划使用同一个 tailscale 网络运行多个 K3s 集群，请创建适当的 [ACL](https://tailscale.com/kb/1018/acls/) 来避免 IP 冲突，或为每个集群使用不同的 podCIDR 子网。

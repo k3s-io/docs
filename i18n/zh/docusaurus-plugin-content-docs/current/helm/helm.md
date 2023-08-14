@@ -60,7 +60,7 @@ spec:
 你可以通过集群内的 Kubernetes APIServer 匿名访问 `/var/lib/rancher/k3s/server/static/` 中的内容。此 URL 可以使用 `spec.chart` 字段中的特殊变量 `%{KUBERNETES_API}%` 进行模板化。例如，打包的 Traefik 组件通过 `https://%{KUBERNETES_API}%/static/charts/traefik-12.0.000.tgz` 加载 Chart。
 
 :::note
-`name` 字段需要遵循 Helm Chart 命名约定。如需了解更多信息，请参阅 [Helm 最佳实践文档](https://helm.sh/docs/chart_best_practices/conventions/#chart-names)。
+`name` 字段需要遵循 Helm Chart 命名约定。有关更多信息，请参阅 [Helm 最佳实践文档](https://helm.sh/docs/chart_best_practices/conventions/#chart-names)。
 :::
 
 ### 使用 HelmChartConfig 自定义打包组件
