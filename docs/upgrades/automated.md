@@ -129,3 +129,40 @@ kubectl -n system-upgrade get plans -o yaml
 kubectl -n system-upgrade get jobs -o yaml
 ```
 
+## Warning
+
+Downgrading your cluster was never supported and since versions below k3s-upgrade will cordon your nodes when downgrade is attempted:
+
+- v1.27.4+k3s1
+- v1.26.7+k3s1
+- v1.25.12+k3s1
+- v1.24.16+k3s1
+
+if you attempted it your pods in cluster should look something like this:
+```
+ubuntu@user:~$ kubectl get pods -A
+NAMESPACE        NAME                                                              READY   STATUS    RESTARTS   AGE
+kube-system      coredns-77ccd57875-9ng74                                          1/1     Running   0          19h
+kube-system      local-path-provisioner-957fdf8bc-9vwzn                            1/1     Running   0          19h
+kube-system      metrics-server-648b5df564-wzbnh                                   1/1     Running   0          19h
+kube-system      svclb-traefik-0bda8e84-hbjq8                                      2/2     Running   0          19h
+kube-system      svclb-traefik-0bda8e84-jg94l                                      2/2     Running   0          19h
+kube-system      svclb-traefik-0bda8e84-qkcs7                                      2/2     Running   0          19h
+kube-system      svclb-traefik-0bda8e84-tfhjq                                      2/2     Running   0          19h
+kube-system      traefik-64f55bb67d-4mm6s                                          1/1     Running   0          19h
+system-upgrade   apply-k3s-server-on-ip-172-31-0-16-with-7af95590a5af8e8c3-2cdc6   0/1     Error     0          9m25s
+system-upgrade   apply-k3s-server-on-ip-172-31-10-23-with-7af95590a5af8e8c-9xvwg   0/1     Error     0          14m
+system-upgrade   apply-k3s-server-on-ip-172-31-13-213-with-7af95590a5af8e8-8j72v   0/1     Error     0          18m
+system-upgrade   system-upgrade-controller-7c4b84d5d9-kkzr6                        1/1     Running   0          20m
+```
+and your nodes something like this:
+```
+NAME               STATUS                     ROLES                       AGE   VERSION
+ip-172-31-0-16     Ready,SchedulingDisabled   control-plane,etcd,master   19h   v1.27.4+k3s1
+ip-172-31-10-23    Ready,SchedulingDisabled   control-plane,etcd,master   19h   v1.27.4+k3s1
+ip-172-31-13-213   Ready,SchedulingDisabled   control-plane,etcd,master   19h   v1.27.4+k3s1
+ip-172-31-2-13     Ready                      <none>                      19h   v1.27.4+k3s1
+```
+
+You can make your node schedulable again by simpling uncordoning target node with the command `kubectl uncordon NODE_NAME` or you can set the version on your plan file to a newer one so k3s-upgrade can attempt again to upgrade your version. 
+
