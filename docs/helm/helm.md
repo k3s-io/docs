@@ -52,7 +52,7 @@ spec:
 | spec.bootstrap | False | Set to True if this chart is needed to bootstrap the cluster (Cloud Controller Manager, etc) |  |
 | spec.set |   | Override simple default Chart values. These take precedence over options set via valuesContent. | `--set` / `--set-string` |
 | spec.jobImage |   | Specify the image to use when installing the helm chart. E.g. rancher/klipper-helm:v0.3.0 . | |
-| spec.timeout | 300s | Timeout in seconds for Helm operations written as [Go duration string](https://pkg.go.dev/maze.io/x/duration#ParseDuration) (`300s`, `1h` etc) | `--timeout` |
+| spec.timeout | 300s | Timeout for Helm operations, as a [duration string](https://pkg.go.dev/time#ParseDuration) (`300s`, `10m`, `1h`, etc) | `--timeout` |
 | spec.failurePolicy | reinstall | Set to `abort` which case the Helm operation is aborted, pending manual intervention by the operator. | |
 | spec.valuesContent |   | Override complex default Chart values via YAML file content | `--values` |
 | spec.chartContent |   | Base64-encoded chart archive .tgz - overrides spec.chart | CHART |
