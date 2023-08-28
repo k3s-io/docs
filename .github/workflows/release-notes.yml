@@ -20,7 +20,7 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
-          commit-message: update release-notes.md
+          commit-message: update release-notes/k3s-*.md
           title: Update Release Notes
           body: Automated release notes update
           branch: update-release-notes
