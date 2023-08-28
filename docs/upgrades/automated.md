@@ -129,16 +129,10 @@ kubectl -n system-upgrade get plans -o yaml
 kubectl -n system-upgrade get jobs -o yaml
 ```
 
-## Warning
+:::Warning
+Kubernetes does not support downgrades of control-plane components. Starting with the 2023-07 releases ([v1.27.4+k3s1](https://github.com/k3s-io/k3s-upgrade/releases/tag/v1.27.4%2Bk3s1), [v1.26.7+k3s1](https://github.com/k3s-io/k3s-upgrade/releases/tag/v1.26.7%2Bk3s1), [v1.25.12+k3s1](https://github.com/k3s-io/k3s-upgrade/releases/tag/v1.25.12%2Bk3s1), [v1.24.16+k3s1](https://github.com/k3s-io/k3s-upgrade/releases/tag/v1.24.16%2Bk3s1)) the k3s-upgrade image used by upgrade plans will refuse to downgrade K3s, failing the plan and leaving your nodes cordoned.
 
-Downgrading your cluster was never supported and since versions below k3s-upgrade will cordon your nodes when downgrade is attempted:
-
-- v1.27.4+k3s1
-- v1.26.7+k3s1
-- v1.25.12+k3s1
-- v1.24.16+k3s1
-
-if you attempted it your pods in cluster should look something like this:
+If you attempted it your pods in cluster should look something like this:
 ```
 ubuntu@user:~$ kubectl get pods -A
 NAMESPACE        NAME                                                              READY   STATUS    RESTARTS   AGE
@@ -164,5 +158,7 @@ ip-172-31-13-213   Ready,SchedulingDisabled   control-plane,etcd,master   19h   
 ip-172-31-2-13     Ready                      <none>                      19h   v1.27.4+k3s1
 ```
 
-You can make your node schedulable again by simpling uncordoning target node with the command `kubectl uncordon NODE_NAME` or you can set the version on your plan file to a newer one so k3s-upgrade can attempt again to upgrade your version. 
+You can return your node to service by uncordoning it with the command `kubectl uncordon NODE_NAME`(only lasts until system-upgrade-controller next try), or by changing the version or channel on your plan to target a release that is the same or newer than what is currently running on the cluster.
 
+
+:::
