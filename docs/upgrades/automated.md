@@ -131,9 +131,11 @@ kubectl -n system-upgrade get jobs -o yaml
 
 
 ## Downgrade Prevention
+
 :::info Version Gate
 Starting with the 2023-07 releases ([v1.27.4+k3s1](https://github.com/k3s-io/k3s-upgrade/releases/tag/v1.27.4%2Bk3s1), [v1.26.7+k3s1](https://github.com/k3s-io/k3s-upgrade/releases/tag/v1.26.7%2Bk3s1), [v1.25.12+k3s1](https://github.com/k3s-io/k3s-upgrade/releases/tag/v1.25.12%2Bk3s1), [v1.24.16+k3s1](https://github.com/k3s-io/k3s-upgrade/releases/tag/v1.24.16%2Bk3s1))
 :::
+
 Kubernetes does not support downgrades of control-plane components. The k3s-upgrade image used by upgrade plans will refuse to downgrade K3s, failing the plan and leaving your nodes cordoned.
 
 Here is an example cluster, showing failed upgrade pods and cordoned nodes:
