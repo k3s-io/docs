@@ -135,30 +135,24 @@ kubectl -n system-upgrade get jobs -o yaml
 Starting with the 2023-07 releases ([v1.27.4+k3s1](https://github.com/k3s-io/k3s-upgrade/releases/tag/v1.27.4%2Bk3s1), [v1.26.7+k3s1](https://github.com/k3s-io/k3s-upgrade/releases/tag/v1.26.7%2Bk3s1), [v1.25.12+k3s1](https://github.com/k3s-io/k3s-upgrade/releases/tag/v1.25.12%2Bk3s1), [v1.24.16+k3s1](https://github.com/k3s-io/k3s-upgrade/releases/tag/v1.24.16%2Bk3s1))
 :::
 Kubernetes does not support downgrades of control-plane components. The k3s-upgrade image used by upgrade plans will refuse to downgrade K3s, failing the plan and leaving your nodes cordoned.
-If you attempted it your pods in cluster should look something like this:
-```
-ubuntu@user:~$ kubectl get pods -A
-NAMESPACE        NAME                                                              READY   STATUS    RESTARTS   AGE
-kube-system      coredns-77ccd57875-9ng74                                          1/1     Running   0          19h
-kube-system      local-path-provisioner-957fdf8bc-9vwzn                            1/1     Running   0          19h
-kube-system      metrics-server-648b5df564-wzbnh                                   1/1     Running   0          19h
-kube-system      svclb-traefik-0bda8e84-hbjq8                                      2/2     Running   0          19h
-kube-system      svclb-traefik-0bda8e84-jg94l                                      2/2     Running   0          19h
-kube-system      svclb-traefik-0bda8e84-qkcs7                                      2/2     Running   0          19h
-kube-system      svclb-traefik-0bda8e84-tfhjq                                      2/2     Running   0          19h
-kube-system      traefik-64f55bb67d-4mm6s                                          1/1     Running   0          19h
-system-upgrade   apply-k3s-server-on-ip-172-31-0-16-with-7af95590a5af8e8c3-2cdc6   0/1     Error     0          9m25s
-system-upgrade   apply-k3s-server-on-ip-172-31-10-23-with-7af95590a5af8e8c-9xvwg   0/1     Error     0          14m
-system-upgrade   apply-k3s-server-on-ip-172-31-13-213-with-7af95590a5af8e8-8j72v   0/1     Error     0          18m
-system-upgrade   system-upgrade-controller-7c4b84d5d9-kkzr6                        1/1     Running   0          20m
-```
-and your nodes something like this:
-```
+
+Here is an example cluster, showing failed upgrade pods and cordoned nodes:
+
+```console
+ubuntu@user:~$ kubectl get pods -n system-upgrade
+NAME                                                              READY   STATUS    RESTARTS   AGE
+apply-k3s-server-on-ip-172-31-0-16-with-7af95590a5af8e8c3-2cdc6   0/1     Error     0          9m25s
+apply-k3s-server-on-ip-172-31-10-23-with-7af95590a5af8e8c-9xvwg   0/1     Error     0          14m
+apply-k3s-server-on-ip-172-31-13-213-with-7af95590a5af8e8-8j72v   0/1     Error     0          18m
+system-upgrade-controller-7c4b84d5d9-kkzr6                        1/1     Running   0          20m
+ubuntu@user:~$ kubectl get nodes
 NAME               STATUS                     ROLES                       AGE   VERSION
 ip-172-31-0-16     Ready,SchedulingDisabled   control-plane,etcd,master   19h   v1.27.4+k3s1
 ip-172-31-10-23    Ready,SchedulingDisabled   control-plane,etcd,master   19h   v1.27.4+k3s1
 ip-172-31-13-213   Ready,SchedulingDisabled   control-plane,etcd,master   19h   v1.27.4+k3s1
 ip-172-31-2-13     Ready                      <none>                      19h   v1.27.4+k3s1
 ```
-
-You can return your node to service by deleting the plan `kubectl get plans -n system-upgrade` to get the plan name then `kubectl delete plans PLAN_NAME -n system-upgrade` then uncordoning it with the command `kubectl uncordon NODE_NAME`, or by changing the version or channel on your plan to target a release that is the same or newer than what is currently running on the cluster.
+You can return your cordoned nodes to service by either of the following methods:
+* Change the version or channel on your plan to target a release that is the same or newer than what is currently running on the cluster, so that the plan succeeds.
+* Delete the plan and manually uncordon the nodes.
+  Use `kubectl get plan -n system-upgrade` to find the plan name, then `kubectl delete plan -n system-upgrade PLAN_NAME` to delete it. Once the plan has been deleted, use `kubectl uncordon NODE_NAME` to uncordon each of the nodes.
