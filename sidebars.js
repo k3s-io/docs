@@ -21,7 +21,6 @@ module.exports = {
         'installation/airgap',
         'installation/server-roles',
         'installation/packaged-components',
-        'installation/kube-dashboard',
         'installation/uninstall',
       ],
     },
