@@ -22,7 +22,7 @@ weight: 1
 * `--disable-cloud-controller`
 * `--disable-helm-controller`
 * `--disable-network-policy`
-* `--disable-servicelb`
+* `--disable=servicelb` *注意：其他打包组件可能会在单独服务器上禁用*
 * `--egress-selector-mode`
 * `--flannel-backend`
 * `--flannel-external-ip`

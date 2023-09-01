@@ -129,3 +129,32 @@ kubectl -n system-upgrade get plans -o yaml
 kubectl -n system-upgrade get jobs -o yaml
 ```
 
+
+## 降级预防
+
+:::info 版本
+从 2023-07 版本（[v1.27.4+k3s1](https://github.com/k3s-io/k3s-upgrade/releases/tag/v1.27.4%2Bk3s1)、[v1.26.7+k3s1](https://github.com/k3s-io/k3s-upgrade/releases/tag/v1.26.7%2Bk3s1)、[v1.25.12+k3s1](https://github.com/k3s-io/k3s-upgrade/releases/tag/v1.25.12%2Bk3s1)、[v1.24.16+k3s1](https://github.com/k3s-io/k3s-upgrade/releases/tag/v1.24.16%2Bk3s1)）开始。
+:::
+
+Kubernetes 不支持 Control Plane 组件的降级。升级计划使用的 k3s-upgrade 镜像将拒绝降级 K3s，从而导致计划失败并让你的节点处于封锁状态。
+
+以下是一个示例集群，显示了失败的升级 Pod 和封锁的节点：
+
+```console
+ubuntu@user:~$ kubectl get pods -n system-upgrade
+NAME                                                              READY   STATUS    RESTARTS   AGE
+apply-k3s-server-on-ip-172-31-0-16-with-7af95590a5af8e8c3-2cdc6   0/1     Error     0          9m25s
+apply-k3s-server-on-ip-172-31-10-23-with-7af95590a5af8e8c-9xvwg   0/1     Error     0          14m
+apply-k3s-server-on-ip-172-31-13-213-with-7af95590a5af8e8-8j72v   0/1     Error     0          18m
+system-upgrade-controller-7c4b84d5d9-kkzr6                        1/1     Running   0          20m
+ubuntu@user:~$ kubectl get nodes
+NAME               STATUS                     ROLES                       AGE   VERSION
+ip-172-31-0-16     Ready,SchedulingDisabled   control-plane,etcd,master   19h   v1.27.4+k3s1
+ip-172-31-10-23    Ready,SchedulingDisabled   control-plane,etcd,master   19h   v1.27.4+k3s1
+ip-172-31-13-213   Ready,SchedulingDisabled   control-plane,etcd,master   19h   v1.27.4+k3s1
+ip-172-31-2-13     Ready                      <none>                      19h   v1.27.4+k3s1
+```
+你可以通过以下任一方法让封锁的节点恢复服务：
+* 更改计划中的版本或通道来定位与集群上当前运行的版本相同或更新的版本，以便计划成功。
+* 删除计划并手动取消节点封锁。
+   使用 `kubectl get plan -n system-upgrade` 查找计划名称，然后使用 `kubectl delete plan -n system-upgrade PLAN_NAME` 将其删除。删除计划后，使用 `kubectl uncordon NODE_NAME` 取消对每个节点的封锁。

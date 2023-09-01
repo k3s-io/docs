@@ -52,7 +52,7 @@ spec:
 | spec.bootstrap | False | 如果需要此 Chart 来引导集群（Cloud Controller Manager 等），请设置为 `True` |  |
 | spec.set |   | 覆盖简单的默认 Chart 值。优先于通过 valuesContent 设置的选项。 | `--set` / `--set-string` |
 | spec.jobImage |   | 指定安装 helm chart 时要使用的镜像。例如：rancher/klipper-helm:v0.3.0 | |
-| spec.timeout | 300 | Helm 操作的超时秒数 | `--timeout` |
+| spec.timeout | 300s | Helm 操作的超时，作为 [duration string](https://pkg.go.dev/time#ParseDuration)（`300s`、`10m`、`1h` 等） | `--timeout` |
 | spec.failurePolicy | reinstall | 如果设置为 `abort`，Helm 操作会被中止，等待操作人员的手动干预。 | |
 | spec.valuesContent |   | 通过 YAML 文件内容覆盖复杂的默认 Chart 值 | `--values` |
 | spec.chartContent |   | Base64 编码的 chart archive .tgz，覆盖 spec.chart | CHART |
