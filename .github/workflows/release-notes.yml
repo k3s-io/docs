@@ -1,0 +1,26 @@
+name: Collect all
+on:
+  workflow_dispatch
+
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  collect-all:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: Generate release notes
+        run: |
+          rm docs/release-notes/*.md
+          scripts/collect-all-release-notes.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          commit-message: update release-notes/k3s-*.md
+          title: Update Release Notes
+          body: Automated release notes update
+          branch: update-release-notes
