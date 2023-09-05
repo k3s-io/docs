@@ -38,6 +38,54 @@ spec:
       enabled: true
 ```
 
+Another example is deploying [cert-manager](https://cert-manager.io/) with authentication:
+
+```yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cert-manager
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  namespace: kube-system
+  name: cert-manager
+spec:
+  targetNamespace: cert-manager
+  createNamespace: true
+  version: v1.11.0
+  chart: cert-manager
+  repo: https://charts.jetstack.io
+  authSecret:
+    name: jetstack-auth
+  repoCAConfigMap:
+    name: jetstack-ca
+  set:
+    installCRDs: "true"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  namespace: kube-system
+  name: jetstack-auth
+type: kubernetes.io/basic-auth
+stringData:
+  username: user
+  password: pass
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: kube-system
+  name: jetstack-ca
+data:
+  ca.crt: |-
+    -----BEGIN CERTIFICATE-----
+    <YOUR CERTIFICATE>
+    -----END CERTIFICATE-----
+```
+
 #### HelmChart Field Definitions
 
 | Field | Default | Description | Helm Argument / Flag Equivalent |
