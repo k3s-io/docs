@@ -57,9 +57,9 @@ spec:
 | spec.backOffLimit | 1000 | Specify the number of retries before considering a job failed. | |
 | spec.timeout | 300s | Timeout for Helm operations, as a [duration string](https://pkg.go.dev/time#ParseDuration) (`300s`, `10m`, `1h`, etc) | `--timeout` |
 | spec.failurePolicy | reinstall | Set to `abort` which case the Helm operation is aborted, pending manual intervention by the operator. | |
-| spec.authSecret | | Pass basic username/pass auth to Chart repos via `kubernetes.io/basic-auth` | |
-| spec.authPassCredentials | false | Pass credentials to all domains | `--pass-credentials` |
-| spec.dockerRegsistrySecret | | Point to mounted docker auth secret via `kubernetes.io/dockerconfigjson`. Used to authenticate OCI-compliant Docker registries | |
+| spec.authSecret | | Reference to Secret of type `kubernetes.io/basic-auth` holding Basic auth credentials for the Chart repo. | |
+| spec.authPassCredentials | false | Pass Basic auth credentials to all domains. | `--pass-credentials` |
+| spec.dockerRegistrySecret | | Reference to Secret of type `kubernetes.io/dockerconfigjson` holding Docker auth credentials for the OCI-based registry acting as the Chart repo. | |
 | spec.valuesContent |   | Override complex default Chart values via YAML file content | `--values` |
 | spec.chartContent |   | Base64-encoded chart archive .tgz - overrides spec.chart | CHART |
 
