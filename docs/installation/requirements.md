@@ -31,10 +31,11 @@ Prior to May 2023 releases (v1.24.14+k3s1, v1.25.10+k3s1, v1.26.5+k3s1, v1.27.2+
 
 K3s is expected to work on most modern Linux systems.
 
-Some OSs have specific requirements:
+Some OSs have additional setup requirements:
 
-- If you are using **(Red Hat/CentOS) Enterprise Linux**, follow [these steps](../advanced/advanced.md#red-hat-enterprise-linux--centos) for additional setup.
-- If you are using **Raspberry Pi OS**, follow [these steps](../advanced/advanced.md#raspberry-pi) to switch to legacy iptables.
+- If you are using **RHEL/CentOS/Fedora**, follow [these steps](../advanced/advanced.md#red-hat-enterprise-linux--centos--fedora).
+- If you are using **Ubuntu/Debian**, follow [these steps](../advanced/advanced.md#ubuntu--debian).
+- If you are using **Raspberry Pi OS**, follow [these steps](../advanced/advanced.md#raspberry-pi).
 
 For more information on which OSs were tested with Rancher managed K3s clusters, refer to the [Rancher support and maintenance terms.](https://rancher.com/support-maintenance-terms/)
 

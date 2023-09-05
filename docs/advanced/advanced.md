@@ -292,7 +292,7 @@ The `--prefer-bundled-bin` flag is available starting with the 2022-12 releases 
 
 :::
 
-### Red Hat Enterprise Linux / CentOS
+### Red Hat Enterprise Linux / CentOS / Fedora
 
 It is recommended to turn off firewalld:
 ```bash
@@ -315,7 +315,7 @@ systemctl disable nm-cloud-setup.service nm-cloud-setup.timer
 reboot
 ```
 
-### Ubuntu
+### Ubuntu / Debian
 
 It is recommended to turn off ufw (uncomplicated firewall):
 ```bash
