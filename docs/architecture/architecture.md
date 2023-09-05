@@ -6,9 +6,7 @@ weight: 1
 import ThemedImage from '@theme/ThemedImage';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
-This page describes the architecture of a high-availability K3s server cluster and how it differs from a single-node server cluster.
-
-It also describes how agent nodes are registered with K3s servers.
+### Servers and Agents
 
 * A server node is defined as a host running the `k3s server` command, with control-plane and datastore components managed by K3s.
 * An agent node is defined as a host running the `k3s agent` command, without any datastore or control-plane components.
