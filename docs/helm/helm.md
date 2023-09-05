@@ -48,8 +48,8 @@ spec:
 | spec.createNamespace | false | Create target namespace if not present | `--create-namespace` |
 | spec.version |   | Helm Chart version (when installing from repository) | `--version` |
 | spec.repo |   | Helm Chart repository URL | `--repo` |
-| spec.repoCA | | Specify the certificates of HTTPS-enabled servers | `--ca-file` |
-| spec.repoCAConfigMap |  | Values of all keys in ConfigMap will be merged with repoCA | `--ca-file` |
+| spec.repoCA | | Verify certificates of HTTPS-enabled servers using this CA bundle. Should be a string containing one or more PEM-encoded CA Certificates. | `--ca-file` |
+| spec.repoCAConfigMap | | Reference to a ConfigMap containing CA Certificates to be be trusted by Helm. Can be used along with or instead of `repoCA` | `--ca-file` |
 | spec.helmVersion | v3 | Helm version to use (`v2` or `v3`) |  |
 | spec.bootstrap | False | Set to True if this chart is needed to bootstrap the cluster (Cloud Controller Manager, etc) |  |
 | spec.set |   | Override simple default Chart values. These take precedence over options set via valuesContent. | `--set` / `--set-string` |
