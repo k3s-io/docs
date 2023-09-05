@@ -45,15 +45,21 @@ spec:
 | metadata.name |   | Helm Chart name | NAME |
 | spec.chart |   | Helm Chart name in repository, or complete HTTPS URL to chart archive (.tgz) | CHART |
 | spec.targetNamespace | default | Helm Chart target namespace | `--namespace` |
+| spec.createNamespace | false | Create target namespace if not present | `--create-namespace` |
 | spec.version |   | Helm Chart version (when installing from repository) | `--version` |
 | spec.repo |   | Helm Chart repository URL | `--repo` |
 | spec.repoCA | | Specify the certificates of HTTPS-enabled servers | `--ca-file` |
+| spec.repoCAConfigMap |  | Values of all keys in ConfigMap will be merged with repoCA | `--ca-file` |
 | spec.helmVersion | v3 | Helm version to use (`v2` or `v3`) |  |
 | spec.bootstrap | False | Set to True if this chart is needed to bootstrap the cluster (Cloud Controller Manager, etc) |  |
 | spec.set |   | Override simple default Chart values. These take precedence over options set via valuesContent. | `--set` / `--set-string` |
 | spec.jobImage |   | Specify the image to use when installing the helm chart. E.g. rancher/klipper-helm:v0.3.0 . | |
+| spec.backOffLimit | 1000 | Specify the number of retries before considering a job failed. | |
 | spec.timeout | 300s | Timeout for Helm operations, as a [duration string](https://pkg.go.dev/time#ParseDuration) (`300s`, `10m`, `1h`, etc) | `--timeout` |
 | spec.failurePolicy | reinstall | Set to `abort` which case the Helm operation is aborted, pending manual intervention by the operator. | |
+| spec.authSecret | | Pass basic username/pass auth to Chart repos via `kubernetes.io/basic-auth` | |
+| spec.authPassCredentials | false | Pass credentials to all domains | `--pass-credentials` |
+| spec.dockerRegsistrySecret | | Point to mounted docker auth secret via `kubernetes.io/dockerconfigjson`. Used to authenticate OCI-compliant Docker registries | |
 | spec.valuesContent |   | Override complex default Chart values via YAML file content | `--values` |
 | spec.chartContent |   | Base64-encoded chart archive .tgz - overrides spec.chart | CHART |
 
@@ -64,12 +70,6 @@ The `name` field should follow the Helm chart naming conventions. Refer to the [
 :::
 
 ### Customizing Packaged Components with HelmChartConfig
-
-:::info Version Gate
-
-Available as of [v1.19.1+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.19.1%2Bk3s1)
-
-:::
 
 To allow overriding values for packaged components that are deployed as HelmCharts (such as Traefik), K3s supports customizing deployments via a HelmChartConfig resources. The HelmChartConfig resource must match the name and namespace of its corresponding HelmChart, and it supports providing additional `valuesContent`, which is passed to the `helm` command as an additional value file.
 
@@ -100,10 +100,6 @@ spec:
 ```
 
 ### Migrating from Helm v2
-
-:::info Version Gate
-As of [v1.17.0+k3s.1](https://github.com/k3s-io/k3s/releases/tag/v1.17.0%2Bk3s.1) Helm v3 is supported and used by default.
-:::
 
 K3s can handle either Helm v2 or Helm v3. If you wish to migrate to Helm v3, [this](https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/) blog post by Helm explains how to use a plugin to successfully migrate. Refer to the official Helm 3 documentation [here](https://helm.sh/docs/) for more information. Just be sure you have properly set your kubeconfig as per the section about [cluster access.](../cluster-access/cluster-access.md)
 
