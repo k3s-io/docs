@@ -17,6 +17,10 @@ Simply start K3s server with `--disable=traefik` and deploy your ingress.
 
 At this time K3s does not natively support Windows, however we are open to the idea in the future.
 
+### What exactly are Servers and Agents?
+
+For a breakdown on the components that make up a server and agent, see the [Architecture page](../architecture/architecture.md).
+
 ### How can I build from source?
 
 Please reference the K3s [BUILDING.md](https://github.com/k3s-io/k3s/blob/master/BUILDING.md) with instructions.
