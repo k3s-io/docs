@@ -38,7 +38,7 @@ spec:
       enabled: true
 ```
 
-A example of deploying a helm chart from a private repo with authentication:
+An example of deploying a helm chart from a private repo with authentication:
 
 ```yaml
 apiVersion: helm.cattle.io/v1
