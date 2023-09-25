@@ -1,4 +1,4 @@
-name: Collect all
+name: Collect Release Notes
 on:
   workflow_dispatch
 
@@ -16,7 +16,7 @@ jobs:
           rm docs/release-notes/*.md
           scripts/collect-all-release-notes.sh
         env:
-          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
