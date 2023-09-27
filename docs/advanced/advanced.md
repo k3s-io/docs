@@ -190,7 +190,7 @@ Because they do not host a kubelet, they cannot run pods or be managed by operat
 
 Running agentless servers may be advantageous if you want to obscure your control-plane nodes from discovery by agents and workloads, at the cost of increased administrative overhead caused by lack of cluster operator support.
 
-By default, the apiserver will not be able to make outgoing connections to any admission webhooks running in agents. To remedy this, also set the `--egress-selector-mode` server flag to either `pod` or `cluster`. If you are changing this flag in a cluster with already running agents, you'll need to restart the agents for the flag to take effect.
+By default, the apiserver on agentless servers will not be able to make outgoing connections to admission webhooks or aggregated apiservices running within the cluster. To remedy this, set the `--egress-selector-mode` server flag to either `pod` or `cluster`. If you are changing this flag on an existing cluster, you'll need to restart all nodes in the cluster for the option to take effect.
 
 ## Running Rootless Servers (Experimental)
 > **Warning:** This feature is experimental.
