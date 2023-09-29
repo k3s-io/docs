@@ -96,7 +96,7 @@ The following options must be set to the same value on all servers in the cluste
 | --------------------------- | ------------------------ | -------------------------------------------------------------------------------------------- |
 | `--bind-address` value      | 0.0.0.0                  | k3s bind address                                                                             |
 | `--https-listen-port` value | 6443                     | HTTPS listen port                                                                            |
-| `--advertise-address` value | node-external-ip/node-ip | IPv4 address that apiserver uses to advertise to members of the cluster                      |
+| `--advertise-address` value | node-external-ip/node-ip | IPv4/IPv6 address that apiserver advertises for its service endpoint<br/>Note that the primary `service-cidr` IP range must be of the same address family as the advertised address |
 | `--advertise-port` value    | listen-port/0            | Port that apiserver uses to advertise to members of the cluster                              |
 | `--tls-san` value           | N/A                      | Add additional hostnames or IPv4/IPv6 addresses as Subject Alternative Names on the TLS cert |
 
