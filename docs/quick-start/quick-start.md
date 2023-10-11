@@ -36,3 +36,35 @@ Setting the `K3S_URL` parameter causes the installer to configure K3s as an agen
 :::note
 Each machine must have a unique hostname. If your machines do not have unique hostnames, pass the `K3S_NODE_NAME` environment variable and provide a value with a valid and unique hostname for each node.
 :::
+
+Verify Installation
+--------------
+After completing the steps above, you can try entering the following command in the terminal to verify installation:
+```bash
+kubectl --help
+```
+If you get a guided after running this command that means your machine has successfully installed k3s. Next step you can enter the following command to get nodes information:
+```bash
+kubectl get nodes
+```
+If things go well, you will get result like this:
+```bash
+NAME        STATUS   ROLES                  AGE   VERSION
+k3smain     Ready    control-plane,master   8d    v1.27.6+k3s1
+k3snode01   Ready    <none>                 8d    v1.27.6+k3s1
+```
+Generally there will be no problems with this step in your k3s server. If you meet the following problem in your k3s agent, you need to check whether the file `/etc/rancher/k3s/k3s.yaml` exists in the k3s agent:
+```bash
+E1011 13:17:19.346505   11110 memcache.go:265] couldn't get current server API group list: Get "https://127.0.0.1:8080/api?timeout=32s": dial tcp 127.0.0.1:8080: connect: no route to host
+```
+To fix this problem, you can copy the file `/etc/rancher/k3s/k3s.yaml` from the k3s server, and change the `server` parameter to point to your k3s server:
+```bash
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: CERTIFICATE_AUTHORITY_DATA
+    server: https://K3S_SERVER_IP:6443
+  name: default
+...
+```
+Save file and try `kubectl get nodes` again, you may get the same result as it in the k3s server. For more information please refer the chapter 'Cluster Access' of this document.
