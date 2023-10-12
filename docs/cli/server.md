@@ -180,7 +180,8 @@ The following options must be set to the same value on all servers in the cluste
 | `--flannel-backend` wireguard           | N/A                  | Use `--flannel-backend=wireguard-native`                                                                      |
 | `--flannel-backend` value=option1=value | N/A                  | Use `--flannel-conf` to specify the flannel config file with the backend config                               |
 
-# K3s Server CLI Help
+
+## K3s Server CLI Help
 
 > If an option appears in brackets below, for example `[$K3S_TOKEN]`, it means that the option can be passed in as an environment variable of that name.
 
