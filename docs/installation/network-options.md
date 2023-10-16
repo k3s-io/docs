@@ -27,7 +27,6 @@ This page describes K3s network configuration options, including configuration o
  `--flannel-backend=host-gw` | Use IP routes to pod subnets via node IPs. Requires direct layer 2 connectivity between all nodes in the cluster. |
  `--flannel-backend=wireguard-native` | Use WireGuard to encapsulate and encrypt network traffic. May require additional kernel modules. |
  `--flannel-backend=ipsec` | Use strongSwan IPSec via the `swanctl` binary to encrypt network traffic. (Deprecated; will be removed in v1.27.0) |
- `--flannel-backend=wireguard` | Use WireGuard via the `wg` binary to encrypt network traffic. May require additional kernel modules and configuration. (Deprecated; will be removed in v1.26.0) |
  `--flannel-backend=none` | Disable Flannel entirely. |
 
 :::info Version Gate
@@ -36,7 +35,7 @@ K3s no longer includes strongSwan `swanctl` and `charon` binaries starting with 
 
 :::
 
-### Migrating from `wireguard` or `ipsec` to `wireguard-native`
+#### Migrating from `wireguard` or `ipsec` to `wireguard-native`
 
 The legacy `wireguard` backend requires installation of the `wg` tool on the host. This backend will be removed in K3s v1.26, in favor of `wireguard-native` backend, which directly interfaces with the kernel.
 
@@ -141,7 +140,7 @@ Stable support is available as of [v1.23.7+k3s1](https://github.com/k3s-io/k3s/r
 
 :::caution Known Issue 
 
-Kubernetes [Issue #111695](https://github.com/kubernetes/kubernetes/issues/111695) causes the Kubelet to ignore the node IPv6 addresses if you have a dual-stack environment and you are not using the primary network interface for cluster traffic. To avoid this bug, add the following flag to both K3s servers and agents:
+Before 1.27, Kubernetes [Issue #111695](https://github.com/kubernetes/kubernetes/issues/111695) causes the Kubelet to ignore the node IPv6 addresses if you have a dual-stack environment and you are not using the primary network interface for cluster traffic. To avoid this bug, use 1.27 or newer or add the following flag to both K3s servers and agents:
 
 ```
 --kubelet-arg="node-ip=0.0.0.0" # To proritize IPv4 traffic
@@ -162,6 +161,10 @@ To enable dual-stack in K3s, you must provide valid dual-stack `cluster-cidr` an
 Note that you may configure any valid `cluster-cidr` and `service-cidr` values, but the above masks are recommended. If you change the `cluster-cidr` mask, you should also change the `node-cidr-mask-size-ipv4` and `node-cidr-mask-size-ipv6` values to match the planned pods per node and total node count. The largest supported `service-cidr` mask is /12 for IPv4, and /112 for IPv6. Remember to allow ipv6 traffic if you are deploying in a public cloud.
 
 If you are using a custom CNI plugin, i.e. a CNI plugin other than Flannel, the additional configuration may be required. Please consult your plugin's dual-stack documentation and verify if network policies can be enabled.
+
+:::caution Known Issue
+When defining cluster-cidr and service-cidr with IPv6 as the primary family, the node-ip of all cluster members should be explicitly set, placing node's desired IPv6 address as the first address. By default, the kubelet always uses IPv4 as the primary address family.
+:::
 
 ## Single-stack IPv6 Networking
 
