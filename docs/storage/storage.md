@@ -30,7 +30,7 @@ Both components have out-of-tree alternatives that can be used with K3s: The Kub
 Kubernetes maintainers are actively migrating in-tree volume plugins to CSI drivers. For more information on this migration, please refer [here](https://kubernetes.io/blog/2021/12/10/storage-in-tree-to-csi-migration-status-update/).
 
 ## Setting up the Local Storage Provider
-K3s comes with Rancher's Local Path Provisioner and this enables the ability to create persistent volume claims out of the box using local storage on the respective node.
+K3s comes with Rancher's Local Path Provisioner, which provides the ability to use Persistent Volume Claims using local storage on the respective node. Note that because the Persistent Volumes are bound to local paths on the node, pods using these PVs will not be able to reschedule to other nodes, should the node hosting the volume become unavailable.
 
 Included below is a sample pod using a PV and PVC. For more details on the usage of the Local Path Provisioner please reference the [official documentation](https://github.com/rancher/local-path-provisioner/blob/master/README.md#usage).
 
