@@ -27,7 +27,7 @@ K3s supports the following datastore options:
   * [PostgreSQL](https://www.postgresql.org/) (certified against versions 10.7, 11.5, and 14.2)
 
 :::caution Prepared Statement Support
-K3s requires prepared statements support from the DB. This means that connection poolers such as [PgBouncer](https://www.pgbouncer.org/faq.html#how-to-use-prepared-statements-with-transaction-pooling) will not work with K3s.
+K3s requires prepared statements support from the DB. This means that connection poolers such as [PgBouncer](https://www.pgbouncer.org/faq.html#how-to-use-prepared-statements-with-transaction-pooling) may require additional configuration to work with K3s.
 :::
 
 ### External Datastore Configuration Parameters
