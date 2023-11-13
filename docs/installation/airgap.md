@@ -58,7 +58,7 @@ When running the K3s script with the `INSTALL_K3S_SKIP_DOWNLOAD` environment var
 
 #### SELinux RPM
 
-If you intend to deploy K3s with SELinux enabled, you will need also install the appropiate k3s-selinux RPM on all nodes. The latest version of the RPM can be found [here](https://github.com/k3s-io/k3s-selinux/releases/latest). For example, on CentOS 8:
+If you intend to deploy K3s with SELinux enabled, you will need also install the appropriate k3s-selinux RPM on all nodes. The latest version of the RPM can be found [here](https://github.com/k3s-io/k3s-selinux/releases/latest). For example, on CentOS 8:
 
 ```bash
 On internet accessible machine:
