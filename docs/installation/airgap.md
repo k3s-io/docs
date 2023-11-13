@@ -39,10 +39,14 @@ Once you have completed this, you may now go to the [Install K3s](#install-k3s) 
 
 ### Prerequisites
 
-- Before installing K3s, complete the [Private Registry Method](#private-registry-method) or the [Manually Deploy Images Method](#manually-deploy-images-method) above to prepopulate the images that K3s needs to install.
+Before installing K3s, complete the [Private Registry Method](#private-registry-method) or the [Manually Deploy Images Method](#manually-deploy-images-method) above to prepopulate the images that K3s needs to install.
+
+#### Binaries
 - Download the K3s binary from the [releases](https://github.com/k3s-io/k3s/releases) page, matching the same version used to get the airgap images. Place the binary in `/usr/local/bin` on each air-gapped node and ensure it is executable.
 - Download the K3s install script at [get.k3s.io](https://get.k3s.io). Place the install script anywhere on each air-gapped node, and name it `install.sh`.
-- If your nodes do not have an interface with a default route, a default route must be configured; even a black-hole route via a dummy interface will suffice. K3s requires a default route in order to auto-detect the node's primary IP, and for kube-proxy ClusterIP routing to function properly. To add a dummy route, do the following:
+
+#### Default Network Route
+If your nodes do not have an interface with a default route, a default route must be configured; even a black-hole route via a dummy interface will suffice. K3s requires a default route in order to auto-detect the node's primary IP, and for kube-proxy ClusterIP routing to function properly. To add a dummy route, do the following:
   ```
   ip link add dummy0 type dummy
   ip link set dummy0 up
@@ -52,6 +56,20 @@ Once you have completed this, you may now go to the [Install K3s](#install-k3s) 
 
 When running the K3s script with the `INSTALL_K3S_SKIP_DOWNLOAD` environment variable, K3s will use the local version of the script and binary.
 
+#### SELinux RPM
+
+If you intend to deploy K3s with SELinux enabled, you will need also install the appropiate k3s-selinux RPM on all nodes. The latest version of the RPM can be found [here](https://github.com/k3s-io/k3s-selinux/releases/latest). For example, on CentOS 8:
+
+```bash
+On internet accessible machine:
+curl -LO https://github.com/k3s-io/k3s-selinux/releases/download/v1.4.stable.1/k3s-selinux-1.4-1.el8.noarch.rpm
+
+# Transfer RPM to air-gapped machine
+On air-gapped machine:
+sudo yum install ./k3s-selinux-1.4-1.el8.noarch.rpm
+```
+
+See the [SELinux](../advanced/advanced.md#selinux-support) section for more information.
 
 ### Installing K3s in an Air-Gapped Environment
 
