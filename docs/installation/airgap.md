@@ -50,8 +50,8 @@ If your nodes do not have an interface with a default route, a default route mus
   ```
   ip link add dummy0 type dummy
   ip link set dummy0 up
-  ip addr add 169.254.255.254/31 dev dummy0
-  ip route add default via 169.254.255.255 dev dummy0 metric 1000
+  ip addr add 203.0.113.254/31 dev dummy0
+  ip route add default via 203.0.113.255 dev dummy0 metric 1000
   ```
 
 When running the K3s script with the `INSTALL_K3S_SKIP_DOWNLOAD` environment variable, K3s will use the local version of the script and binary.
