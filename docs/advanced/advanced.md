@@ -423,7 +423,7 @@ To force the install script to log a warning rather than fail, you can set the f
 
 To leverage SELinux, specify the `--selinux` flag when starting K3s servers and agents.
   
-This option can also be specified in the K3s [configuration file](#).
+This option can also be specified in the K3s [configuration file](../installation/configuration.md#configuration-file).
 
 ```
 selinux: true
