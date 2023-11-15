@@ -80,7 +80,7 @@ dark: useBaseUrl('/img/k3s-production-setup-dark.svg'),
 
 ### Agent 节点注册的工作原理
 
-Agent 节点通过 `k3s agent` 进程发起的 WebSocket 连接进行注册，连接由作为 agent 进程一部分运行的客户端负载均衡器维护。最初，Agent 通过本地负载均衡器端口 6443 连接到 supervisor（和 kube-apiserver）。负载均衡器维护了一个要连接的可用端点列表。默认（也是最初唯一的）端点由 `--server` 地址中的主机名播种。连接到集群后，Agent 会从默认命名空间中的 Kubernetes Service 端点列表中检索 kube-apiserver 地址列表。这些端点添加到负载均衡器，然后负载均衡器将保持与集群中所有 Server 稳定连接，提供与 kube-apiserver 的连接，从而容忍单个 Server 的中断。
+Agent 节点通过 `k3s agent` 进程发起的 WebSocket 连接进行注册，连接由作为 agent 进程一部分运行的客户端负载均衡器维护。最初，Agent 通过本地负载均衡器端口 6443 连接到 supervisor（和 kube-apiserver）。负载均衡器维护了一个要连接的可用端点列表。默认（也是最初唯一的）端点来源于 `--server` 地址中的主机名。连接到集群后，Agent 会从默认命名空间中的 Kubernetes Service 端点列表中检索 kube-apiserver 地址列表。这些端点添加到负载均衡器，然后负载均衡器将保持与集群中所有 Server 稳定连接，提供与 kube-apiserver 的连接，从而容忍单个 Server 的中断。
 
 Agent 将使用节点集群 Secret 以及随机生成的节点密码注册到 Server，密码存储在 `/etc/rancher/node/password` 中。Server 会将各个节点的密码存储为 Kubernetes Secret，后续的任何尝试都必须使用相同的密码。节点密码 Secret 存储在 `kube-system` 命名空间中，名称使用 `<host>.node-password.k3s` 模板。这样做是为了保护节点 ID 的完整性。
 
