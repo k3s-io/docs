@@ -10,9 +10,15 @@ If you plan to use K3s with docker, Docker installed via a snap package is not r
 
 ### Iptables
 
-If you are running iptables in nftables mode instead of legacy you might encounter issues. We recommend utilizing newer iptables (such as 1.6.1+) to avoid issues. 
+Iptables versions 1.8.0-1.8.4 have known issues that can cause K3s to fail. Several popular Linux distributions ship with these versions by default. One bug causes the accumulation of duplicate rules, which negatively affects the performance and stability of the node. See [Issue #3117](https://github.com/k3s-io/k3s/issues/3117) for information on how to determine if you are affected by this problem.
 
-Additionally, versions 1.8.0-1.8.4 have known issues that can cause K3s to fail. See [Additional OS Preparations](../advanced/advanced.md#old-iptables-versions) for workarounds. 
+K3s includes a working version of iptables (v1.8.8) which functions properly. You can tell K3s to use its bundled version of iptables by starting K3s with the `--prefer-bundled-bin` option, or by uninstalling the iptables/nftables packages from your operating system.
+
+:::info Version Gate
+
+The `--prefer-bundled-bin` flag is available starting with the 2022-12 releases (v1.26.0+k3s1, v1.25.5+k3s1, v1.24.9+k3s1, v1.23.15+k3s1).
+
+:::
 
 ### Rootless Mode
 
