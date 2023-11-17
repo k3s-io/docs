@@ -59,7 +59,7 @@ Server Token 还用作密钥的 [PBKDF2](https://en.wikipedia.org/wiki/PBKDF2) �
 除非使用了自定义 CA 证书，否则在启动集群的第一个 Server 时只能使用短 Token 格式（仅密码）。这是因为只有在 Server 生成自签名集群 CA 证书后才能知道集群 CA 哈希值。
 :::
 
-有关使用自定义 CA 证书的更多信息，请参阅 [`k3s certificate` 文档](certificate.md#)。  
+有关使用自定义 CA 证书的更多信息，请参阅 [`k3s certificate` 文档](./certificate.md)。  
 有关备份集群的更多信息，请参阅[备份和恢复](../datastore/backup-restore.md)文档。
 
 ### Agent

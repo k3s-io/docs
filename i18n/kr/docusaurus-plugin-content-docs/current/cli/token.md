@@ -59,7 +59,7 @@ The server token is also used as the [PBKDF2](https://en.wikipedia.org/wiki/PBKD
 Unless custom CA certificates are in use, only the short (password-only) token format can be used when starting the first server in the cluster. This is because the cluster CA hash cannot be known until after the server has generated the self-signed cluster CA certificates.
 :::
 
-For more information on using custom CA certificates, see the [`k3s certificate` documentation](certificate.md#).  
+For more information on using custom CA certificates, see the [`k3s certificate` documentation](./certificate.md).  
 For more information on backing up your cluster, see the [Backup and Restore](../datastore/backup-restore.md) documentation.
 
 ### Agent
