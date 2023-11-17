@@ -32,9 +32,8 @@ Prior to May 2023 releases (v1.24.14+k3s1, v1.25.10+k3s1, v1.26.5+k3s1, v1.27.2+
 K3s is expected to work on most modern Linux systems.
 
 Some OSs have additional setup requirements:
-
-#### Red Hat Enterprise Linux / CentOS / Fedora
-<details>
+<Tabs queryString="os">
+<TabItem value="rhel" label="Red Hat Enterprise Linux / CentOS / Fedora">
 
 It is recommended to turn off firewalld:
 ```bash
@@ -56,11 +55,8 @@ If enabled, it is required to disable nm-cloud-setup and reboot the node:
 systemctl disable nm-cloud-setup.service nm-cloud-setup.timer
 reboot
 ```
-</details>
-
-#### Ubuntu / Debian
-
-<details>
+</TabItem>
+<TabItem value="debian" label="Ubuntu / Debian">
 
 Older Debian release may suffer from a known iptables bug. See [Known Issues](../known-issues/known-issues.md#iptables).
 
@@ -77,11 +73,8 @@ ufw allow from 10.43.0.0/16 to any #services
 ```
 
 Additional ports may need to be opened depending on your setup. See [Inbound Rules](#inbound-rules-for-k3s-server-nodes) for more information. If you change the default CIDR for pods or services, you will need to update the firewall rules accordingly.
-</details>
-
-#### Raspberry Pi
-
-<details>
+</TabItem>
+<TabItem value="pi" label="Raspberry Pi">
 
 Raspberry Pi OS is Debian based, and may suffer from a known iptables bug. See [Known Issues](../known-issues/known-issues.md#iptables).
 
@@ -96,7 +89,8 @@ Starting with Ubuntu 21.10, vxlan support on Raspberry Pi has been moved into a 
 ```bash
 sudo apt install linux-modules-extra-raspi
 ```
-</details>
+</TabItem>
+</Tabs>
 
 For more information on which OSs were tested with Rancher managed K3s clusters, refer to the [Rancher support and maintenance terms.](https://rancher.com/support-maintenance-terms/)
 
