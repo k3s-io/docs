@@ -42,10 +42,10 @@ The following options must be set to the same value on all servers in the cluste
 | `--datastore-keyfile` value           | `K3S_DATASTORE_KEYFILE`    | TLS key file used to secure datastore backend communication                                              |
 | `--etcd-expose-metrics`               | N/A                        | Expose etcd metrics to client interface (default: false)                                                 |
 | `--etcd-disable-snapshots`            | N/A                        | Disable automatic etcd snapshots                                                                         |
-| `--etcd-snapshot-name` value          | N/A                        | Set the base name of etcd snapshots. Default: etcd-snapshot-`<unix-timestamp>` (default:"etcd-snapshot") |
+| `--etcd-snapshot-name` value          | N/A                        | Set the base name of etcd snapshots. Default: etcd-snapshot-\<unix-timestamp\> (default:"etcd-snapshot") |
 | `--etcd-snapshot-schedule-cron` value | N/A                        | Snapshot interval time in cron spec. eg. every 5 hours '0 */5 _ \* _' (default: "0 */12 \* \* \*")      |
 | `--etcd-snapshot-retention` value     | N/A                        | Number of snapshots to retain (default: 5)                                                               |
-| `--etcd-snapshot-dir` value           | N/A                        | Directory to save db snapshots (default: ${data-dir}/db/snapshots)                                       |
+| `--etcd-snapshot-dir` value           | N/A                        | Directory to save db snapshots (default: $\{data-dir\}/db/snapshots)                                       |
 | `--etcd-s3`                           | N/A                        | Enable backup to S3                                                                                      |
 | `--etcd-s3-endpoint` value            | N/A                        | S3 endpoint url (default: "s3.amazonaws.com")                                                            |
 | `--etcd-s3-endpoint-ca` value         | N/A                        | S3 custom CA cert to connect to S3 endpoint                                                              |
@@ -203,7 +203,7 @@ OPTIONS:
    --advertise-address value                  (listener) IPv4 address that apiserver uses to advertise to members of the cluster (default: node-external-ip/node-ip)
    --advertise-port value                     (listener) Port that apiserver uses to advertise to members of the cluster (default: listen-port) (default: 0)
    --tls-san value                            (listener) Add additional hostnames or IPv4/IPv6 addresses as Subject Alternative Names on the server TLS cert
-   --data-dir value, -d value                 (data) Folder to hold state (default: /var/lib/rancher/k3s or ${HOME}/.rancher/k3s if not root)
+   --data-dir value, -d value                 (data) Folder to hold state (default: /var/lib/rancher/k3s or $\{HOME\}/.rancher/k3s if not root)
    --cluster-cidr value                       (networking) IPv4/IPv6 network CIDRs to use for pod IPs (default: 10.42.0.0/16)
    --service-cidr value                       (networking) IPv4/IPv6 network CIDRs to use for service IPs (default: 10.43.0.0/16)
    --service-node-port-range value            (networking) Port range to reserve for services with NodePort visibility (default: "30000-32767")
@@ -238,7 +238,7 @@ OPTIONS:
    --etcd-snapshot-name value                 (db) Set the base name of etcd snapshots (default: etcd-snapshot-<unix-timestamp>) (default: "etcd-snapshot")
    --etcd-snapshot-schedule-cron value        (db) Snapshot interval time in cron spec. eg. every 5 hours '* */5 * * *' (default: "0 */12 * * *")
    --etcd-snapshot-retention value            (db) Number of snapshots to retain (default: 5)
-   --etcd-snapshot-dir value                  (db) Directory to save db snapshots. (default: ${data-dir}/db/snapshots)
+   --etcd-snapshot-dir value                  (db) Directory to save db snapshots. (default: $\{data-dir\}/db/snapshots)
    --etcd-snapshot-compress                   (db) Compress etcd snapshot
    --etcd-s3                                  (db) Enable backup to S3
    --etcd-s3-endpoint value                   (db) S3 endpoint url (default: "s3.amazonaws.com")
