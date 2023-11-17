@@ -46,7 +46,7 @@ This guide makes the assumption that K3s is running as a Systemd unit. Your inst
 **Remediation:**
 Run the below command (based on the file location on your system) on the
 control plane node.
-For example, `chmod 644 /etc/kubernetes/manifests/kube-apiserver.yaml``
+For example, `chmod 644 /etc/kubernetes/manifests/kube-apiserver.yaml`
 
 ### 1.1.2 Ensure that the API server pod specification file ownership is set to root:root (Automated)
 
