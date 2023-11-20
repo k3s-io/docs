@@ -130,7 +130,7 @@ server-3   Ready    control-plane,etcd,master   3m12s   v1.27.3+k3s1
 
 ## Nginx Load Balancer
 
-:::warning
+:::danger
 Nginx does not natively support a High Availability (HA) configuration. If setting up an HA cluster, having a single load balancer in front of K3s will reintroduce a single point of failure.
 :::
 
