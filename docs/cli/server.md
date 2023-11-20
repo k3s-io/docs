@@ -34,29 +34,31 @@ The following options must be set to the same value on all servers in the cluste
 
 ### Database
 
-| Flag                                  | Environment Variable       | Description                                                                                              |
-| ------------------------------------- | -------------------------- | -------------------------------------------------------------------------------------------------------- |
-| `--datastore-endpoint` value          | `K3S_DATASTORE_ENDPOINT`   | Specify etcd, Mysql, Postgres, or Sqlite (default) data source name                                      |
-| `--datastore-cafile` value            | `K3S_DATASTORE_CAFILE`     | TLS Certificate Authority file used to secure datastore backend communication                            |
-| `--datastore-certfile` value          | `K3S_DATASTORE_CERTFILE`   | TLS certification file used to secure datastore backend communication                                    |
-| `--datastore-keyfile` value           | `K3S_DATASTORE_KEYFILE`    | TLS key file used to secure datastore backend communication                                              |
-| `--etcd-expose-metrics`               | N/A                        | Expose etcd metrics to client interface (default: false)                                                 |
-| `--etcd-disable-snapshots`            | N/A                        | Disable automatic etcd snapshots                                                                         |
-| `--etcd-snapshot-name` value          | N/A                        | Set the base name of etcd snapshots. Default: etcd-snapshot-`<unix-timestamp>` (default:"etcd-snapshot") |
-| `--etcd-snapshot-schedule-cron` value | N/A                        | Snapshot interval time in cron spec. eg. every 5 hours '0 */5 _ \* _' (default: "0 */12 \* \* \*")      |
-| `--etcd-snapshot-retention` value     | N/A                        | Number of snapshots to retain (default: 5)                                                               |
-| `--etcd-snapshot-dir` value           | N/A                        | Directory to save db snapshots (default: ${data-dir}/db/snapshots)                                       |
-| `--etcd-s3`                           | N/A                        | Enable backup to S3                                                                                      |
-| `--etcd-s3-endpoint` value            | N/A                        | S3 endpoint url (default: "s3.amazonaws.com")                                                            |
-| `--etcd-s3-endpoint-ca` value         | N/A                        | S3 custom CA cert to connect to S3 endpoint                                                              |
-| `--etcd-s3-skip-ssl-verify`           | N/A                        | Disables S3 SSL certificate validation                                                                   |
-| `--etcd-s3-access-key` value          | `AWS_ACCESS_KEY_ID`        | S3 access key                                                                                            |
-| `--etcd-s3-secret-key` value          | `AWS_SECRET_ACCESS_KEY`    | S3 secret key                                                                                            |
-| `--etcd-s3-bucket` value              | N/A                        | S3 bucket name                                                                                           |
-| `--etcd-s3-region` value              | N/A                        | S3 region / bucket location (optional) (default: "us-east-1")                                            |
-| `--etcd-s3-folder` value              | N/A                        | S3 folder                                                                                                |
-| `--etcd-s3-insecure`                  | Disables S3 over HTTPS     |
-| `--etcd-s3-timeout` value             | S3 timeout (default: 5m0s) |
+| Flag                                  | Environment Variable     | Default                            | Description                                                                   |
+|---------------------------------------|--------------------------|------------------------------------|-------------------------------------------------------------------------------|
+| `--datastore-endpoint` value          | `K3S_DATASTORE_ENDPOINT` |                                    | Specify etcd, Mysql, Postgres, or Sqlite data source name                     |
+| `--datastore-cafile` value            | `K3S_DATASTORE_CAFILE`   |                                    | TLS Certificate Authority file used to secure datastore backend communication |
+| `--datastore-certfile` value          | `K3S_DATASTORE_CERTFILE` |                                    | TLS certification file used to secure datastore backend communication         |
+| `--datastore-keyfile` value           | `K3S_DATASTORE_KEYFILE`  |                                    | TLS key file used to secure datastore backend communication                   |
+| `--etcd-expose-metrics`               |                          | false                              | Expose etcd metrics to client interface                                       |
+| `--etcd-disable-snapshots`            |                          | false                              | Disable automatic etcd snapshots                                              |
+| `--etcd-snapshot-name` value          |                          | "etcd-snapshot-&lt;unix-timestamp&gt;" | Set the base name of etcd snapshots.                                          |
+| `--etcd-snapshot-schedule-cron` value |                          | "0 */12 \* \* \*"                  | Snapshot interval time in cron spec. eg. every 5 hours '0 */5 _ \* _'         |
+| `--etcd-snapshot-retention` value     |                          | 5                                  | Number of snapshots to retain                                                 |
+| `--etcd-snapshot-dir` value           |                          | $\{data-dir\}/db/snapshots         | Directory to save db snapshots                                                |
+| `--etcd-s3`                           |                          |                                    | Enable backup to S3                                                           |
+| `--etcd-s3-endpoint` value            |                          | "s3.amazonaws.com"                 | S3 endpoint url                                                               |
+| `--etcd-s3-endpoint-ca` value         |                          |                                    | S3 custom CA cert to connect to S3 endpoint                                   |
+| `--etcd-s3-skip-ssl-verify`           |                          |                                    | Disables S3 SSL certificate validation                                        |
+| `--etcd-s3-access-key` value          | `AWS_ACCESS_KEY_ID`      |                                    | S3 access key                                                                 |
+| `--etcd-s3-secret-key` value          | `AWS_SECRET_ACCESS_KEY`  |                                    | S3 secret key                                                                 |
+| `--etcd-s3-bucket` value              |                          |                                    | S3 bucket name                                                                |
+| `--etcd-s3-region` value              |                          | "us-east-1"                        | S3 region / bucket location (optional)                                        |
+| `--etcd-s3-folder` value              |                          |                                    | S3 folder                                                                     |
+| `--etcd-s3-insecure`                  |                          |                                    | Disables S3 over HTTPS                                                        |
+| `--etcd-s3-timeout` value             |                          | 5m0s                               | S3 timeout (default: 5m0s)                                                    |
+
+
 
 
 ### Cluster Options

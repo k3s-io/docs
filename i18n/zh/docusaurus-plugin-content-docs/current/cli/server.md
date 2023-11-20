@@ -42,10 +42,10 @@ weight: 1
 | `--datastore-keyfile` value | `K3S_DATASTORE_KEYFILE` | 用于保护数据存储后端通信的 TLS 密钥文件 |
 | `--etcd-expose-metrics` | N/A | 向客户端接口公开 etcd 指标（默认值：false） |
 | `--etcd-disable-snapshots` | N/A | 禁用自动 etcd 快照 |
-| `--etcd-snapshot-name` value | N/A | 设置 etcd 快照的基本名称。默认值：etcd-snapshot-`<unix-timestamp>`（默认值：“etcd-snapshot”） |
+| `--etcd-snapshot-name` value | N/A | 设置 etcd 快照的基本名称。默认值：etcd-snapshot-\<unix-timestamp\>（默认值：“etcd-snapshot”） |
 | `--etcd-snapshot-schedule-cron` value | N/A | cron 规范中的快照间隔时间。eg. 每 5 小时 '0 */5 _ \* _'（默认值："0 */12 \* \* \*"） |
 | `--etcd-snapshot-retention` value | N/A | 要保留的快照数量（默认值：5） |
-| `--etcd-snapshot-dir` value | N/A | 保存数据库快照的目录（默认值：${data-dir}/db/snapshots） |
+| `--etcd-snapshot-dir` value | N/A | 保存数据库快照的目录（默认值：$\{data-dir\}/db/snapshots） |
 | `--etcd-s3` | N/A | 启用备份到 S3 |
 | `--etcd-s3-endpoint` value | N/A | S3 端点 URL（默认值：“s3.amazonaws.com”） |
 | `--etcd-s3-endpoint-ca` value | N/A | S3 自定义 CA 证书，用于连接到 S3 端点 |
@@ -203,7 +203,7 @@ OPTIONS:
    --advertise-address value                  (listener) IPv4 address that apiserver uses to advertise to members of the cluster (default: node-external-ip/node-ip)
    --advertise-port value                     (listener) Port that apiserver uses to advertise to members of the cluster (default: listen-port) (default: 0)
    --tls-san value                            (listener) Add additional hostnames or IPv4/IPv6 addresses as Subject Alternative Names on the server TLS cert
-   --data-dir value, -d value                 (data) Folder to hold state (default: /var/lib/rancher/k3s or ${HOME}/.rancher/k3s if not root)
+   --data-dir value, -d value                 (data) Folder to hold state (default: /var/lib/rancher/k3s or $\{HOME\}/.rancher/k3s if not root)
    --cluster-cidr value                       (networking) IPv4/IPv6 network CIDRs to use for pod IPs (default: 10.42.0.0/16)
    --service-cidr value                       (networking) IPv4/IPv6 network CIDRs to use for service IPs (default: 10.43.0.0/16)
    --service-node-port-range value            (networking) Port range to reserve for services with NodePort visibility (default: "30000-32767")
@@ -238,7 +238,7 @@ OPTIONS:
    --etcd-snapshot-name value                 (db) Set the base name of etcd snapshots (default: etcd-snapshot-<unix-timestamp>) (default: "etcd-snapshot")
    --etcd-snapshot-schedule-cron value        (db) Snapshot interval time in cron spec. eg. every 5 hours '* */5 * * *' (default: "0 */12 * * *")
    --etcd-snapshot-retention value            (db) Number of snapshots to retain (default: 5)
-   --etcd-snapshot-dir value                  (db) Directory to save db snapshots. (default: ${data-dir}/db/snapshots)
+   --etcd-snapshot-dir value                  (db) Directory to save db snapshots. (default: $\{data-dir\}/db/snapshots)
    --etcd-snapshot-compress                   (db) Compress etcd snapshot
    --etcd-s3                                  (db) Enable backup to S3
    --etcd-s3-endpoint value                   (db) S3 endpoint url (default: "s3.amazonaws.com")

@@ -46,7 +46,7 @@ This guide makes the assumption that K3s is running as a Systemd unit. Your inst
 **Remediation:**
 Run the below command (based on the file location on your system) on the
 control plane node.
-For example, chmod 644 /etc/kubernetes/manifests/kube-apiserver.yaml
+For example, `chmod 644 /etc/kubernetes/manifests/kube-apiserver.yaml`
 
 ### 1.1.2 Ensure that the API server pod specification file ownership is set to root:root (Automated)
 
@@ -55,7 +55,7 @@ For example, chmod 644 /etc/kubernetes/manifests/kube-apiserver.yaml
 
 **Remediation:**
 Run the below command (based on the file location on your system) on the control plane node.
-For example, chown root:root /etc/kubernetes/manifests/kube-apiserver.yaml
+For example, `chown root:root /etc/kubernetes/manifests/kube-apiserver.yaml`
 
 ### 1.1.3 Ensure that the controller manager pod specification file permissions are set to 644 or more restrictive (Automated)
 
@@ -64,7 +64,7 @@ For example, chown root:root /etc/kubernetes/manifests/kube-apiserver.yaml
 
 **Remediation:**
 Run the below command (based on the file location on your system) on the control plane node.
-For example, chmod 644 /etc/kubernetes/manifests/kube-controller-manager.yaml
+For example, `chmod 644 /etc/kubernetes/manifests/kube-controller-manager.yaml`
 
 ### 1.1.4 Ensure that the controller manager pod specification file ownership is set to root:root (Automated)
 
@@ -73,7 +73,7 @@ For example, chmod 644 /etc/kubernetes/manifests/kube-controller-manager.yaml
 
 **Remediation:**
 Run the below command (based on the file location on your system) on the control plane node.
-For example, chown root:root /etc/kubernetes/manifests/kube-controller-manager.yaml
+For example, `chown root:root /etc/kubernetes/manifests/kube-controller-manager.yaml`
 
 ### 1.1.5 Ensure that the scheduler pod specification file permissions are set to 644 or more restrictive (Automated)
 
@@ -82,7 +82,7 @@ For example, chown root:root /etc/kubernetes/manifests/kube-controller-manager.y
 
 **Remediation:**
 Run the below command (based on the file location on your system) on the control plane node.
-For example, chmod 644 /etc/kubernetes/manifests/kube-scheduler.yaml
+For example, `chmod 644 /etc/kubernetes/manifests/kube-scheduler.yaml`
 
 ### 1.1.6 Ensure that the scheduler pod specification file ownership is set to root:root (Automated)
 
@@ -91,7 +91,7 @@ For example, chmod 644 /etc/kubernetes/manifests/kube-scheduler.yaml
 
 **Remediation:**
 Run the below command (based on the file location on your system) on the control plane node.
-For example, chown root:root /etc/kubernetes/manifests/kube-scheduler.yaml
+For example, `chown root:root /etc/kubernetes/manifests/kube-scheduler.yaml`
 
 ### 1.1.7 Ensure that the etcd pod specification file permissions are set to 644 or more restrictive (Automated)
 
@@ -100,8 +100,7 @@ For example, chown root:root /etc/kubernetes/manifests/kube-scheduler.yaml
 
 **Remediation:**
 Run the below command (based on the file location on your system) on the control plane node.
-For example,
-chmod 644 /etc/kubernetes/manifests/etcd.yaml
+For example, `chmod 644 /etc/kubernetes/manifests/etcd.yaml`
 
 ### 1.1.8 Ensure that the etcd pod specification file ownership is set to root:root (Automated)
 
@@ -110,8 +109,7 @@ chmod 644 /etc/kubernetes/manifests/etcd.yaml
 
 **Remediation:**
 Run the below command (based on the file location on your system) on the control plane node.
-For example,
-chown root:root /etc/kubernetes/manifests/etcd.yaml
+For example, `chown root:root /etc/kubernetes/manifests/etcd.yaml`
 
 ### 1.1.9 Ensure that the Container Network Interface file permissions are set to 644 or more restrictive (Manual)
 
@@ -120,7 +118,7 @@ chown root:root /etc/kubernetes/manifests/etcd.yaml
 
 **Remediation:**
 Run the below command (based on the file location on your system) on the control plane node.
-For example, chmod 644 <path/to/cni/files>
+For example, `chmod 644 <path/to/cni/files>`
 
 ### 1.1.10 Ensure that the Container Network Interface file ownership is set to root:root (Manual)
 
@@ -129,8 +127,7 @@ For example, chmod 644 <path/to/cni/files>
 
 **Remediation:**
 Run the below command (based on the file location on your system) on the control plane node.
-For example,
-chown root:root <path/to/cni/files>
+For example, `chown root:root <path/to/cni/files>`
 
 ### 1.1.11 Ensure that the etcd data directory permissions are set to 700 or more restrictive (Automated)
 
@@ -306,8 +303,7 @@ permissions=644
 
 **Remediation:**
 Run the below command (based on the file location on your system) on the control plane node.
-For example,
-chown root:root scheduler
+For example, `chown root:root scheduler`
 
 **Audit:**
 
@@ -535,8 +531,10 @@ Follow the Kubernetes documentation and set up the TLS connection between the
 apiserver and kubelets. Then, edit API server pod specification file
 /etc/kubernetes/manifests/kube-apiserver.yaml on the control plane node and set the
 kubelet client certificate and key parameters as below.
+```
 --kubelet-client-certificate=<path/to/client-certificate-file>
 --kubelet-client-key=<path/to/client-key-file>
+```
 
 **Audit:**
 
@@ -680,8 +678,10 @@ Sep 13 13:26:40 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:
 Follow the Kubernetes documentation and set the desired limits in a configuration file.
 Then, edit the API server pod specification file /etc/kubernetes/manifests/kube-apiserver.yaml
 and set the below parameters.
+```
 --enable-admission-plugins=...,EventRateLimit,...
 --admission-control-config-file=<path/to/configuration/file>
+```
 
 **Audit:**
 
@@ -1023,9 +1023,10 @@ to the public key file for service accounts. For example,
 Follow the Kubernetes documentation and set up the TLS connection between the apiserver and etcd.
 Then, edit the API server pod specification file /etc/kubernetes/manifests/kube-apiserver.yaml
 on the control plane node and set the etcd certificate and key file parameters.
+```
 --etcd-certfile=<path/to/client-certificate-file>
 --etcd-keyfile=<path/to/client-key-file>
-
+```
 **Audit Script:** `check_for_k3s_etcd.sh`
 
 ```bash
@@ -1116,8 +1117,10 @@ fi
 Follow the Kubernetes documentation and set up the TLS connection on the apiserver.
 Then, edit the API server pod specification file /etc/kubernetes/manifests/kube-apiserver.yaml
 on the control plane node and set the TLS certificate and private key file parameters.
+```
 --tls-cert-file=<path/to/tls-certificate-file>
 --tls-private-key-file=<path/to/tls-key-file>
+```
 
 **Audit:**
 
@@ -1146,7 +1149,7 @@ Sep 13 13:26:40 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:
 Follow the Kubernetes documentation and set up the TLS connection on the apiserver.
 Then, edit the API server pod specification file /etc/kubernetes/manifests/kube-apiserver.yaml
 on the control plane node and set the client certificate authority file.
---client-ca-file=<path/to/client-ca-file>
+`--client-ca-file=<path/to/client-ca-file>`
 
 **Audit:**
 
@@ -1175,7 +1178,7 @@ Sep 13 13:26:40 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:
 Follow the Kubernetes documentation and set up the TLS connection between the apiserver and etcd.
 Then, edit the API server pod specification file /etc/kubernetes/manifests/kube-apiserver.yaml
 on the control plane node and set the etcd certificate authority file parameter.
---etcd-cafile=<path/to/ca-file>
+`--etcd-cafile=<path/to/ca-file>`
 
 **Audit:**
 
@@ -1204,7 +1207,7 @@ Sep 13 13:26:40 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:
 Follow the Kubernetes documentation and configure a EncryptionConfig file.
 Then, edit the API server pod specification file /etc/kubernetes/manifests/kube-apiserver.yaml
 on the control plane node and set the --encryption-provider-config parameter to the path of that file.
-For example, --encryption-provider-config=</path/to/EncryptionConfig/File>
+For example, `--encryption-provider-config=</path/to/EncryptionConfig/File>`
 
 **Audit:**
 
@@ -1359,8 +1362,8 @@ Sep 13 13:26:40 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:
 
 **Remediation:**
 Edit the Controller Manager pod specification file /etc/kubernetes/manifests/kube-controller-manager.yaml
-on the control plane node and set the --root-ca-file parameter to the certificate bundle file`.
---root-ca-file=<path/to/file>
+on the control plane node and set the --root-ca-file parameter to the certificate bundle file.
+`--root-ca-file=<path/to/file>`
 
 **Audit:**
 
@@ -1483,8 +1486,10 @@ Sep 13 13:26:40 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:
 Follow the etcd service documentation and configure TLS encryption.
 Then, edit the etcd pod specification file /etc/kubernetes/manifests/etcd.yaml
 on the master node and set the below parameters.
+```
 --cert-file=</path/to/ca-file>
 --key-file=</path/to/key-file>
+```
 
 **Audit Script:** `check_for_k3s_etcd.sh`
 
@@ -1759,8 +1764,10 @@ Follow the etcd service documentation and configure peer TLS encryption as appro
 for your etcd cluster.
 Then, edit the etcd pod specification file /etc/kubernetes/manifests/etcd.yaml on the
 master node and set the below parameters.
+```
 --peer-client-file=</path/to/peer-cert-file>
 --peer-key-file=</path/to/peer-key-file>
+```
 
 **Audit Script:** `check_for_k3s_etcd.sh`
 
@@ -2036,7 +2043,7 @@ Follow the etcd documentation and create a dedicated certificate authority setup
 etcd service.
 Then, edit the etcd pod specification file /etc/kubernetes/manifests/etcd.yaml on the
 master node and set the below parameter.
---trusted-ca-file=</path/to/ca-file>
+`--trusted-ca-file=</path/to/ca-file>`
 
 **Audit Script:** `check_for_k3s_etcd.sh`
 
@@ -2442,7 +2449,7 @@ the location of the client CA file.
 If using command line arguments, edit the kubelet service file
 /etc/systemd/system/kubelet.service.d/10-kubeadm.conf on each worker node and
 set the below parameter in KUBELET_AUTHZ_ARGS variable.
---client-ca-file=<path/to/client-ca-file>
+`--client-ca-file=<path/to/client-ca-file>`
 Based on your system, restart the kubelet service. For example,
 systemctl daemon-reload
 systemctl restart kubelet.service
@@ -2595,8 +2602,10 @@ to the location of the corresponding private key file.
 If using command line arguments, edit the kubelet service file
 /etc/systemd/system/kubelet.service.d/10-kubeadm.conf on each worker node and
 set the below parameters in KUBELET_CERTIFICATE_ARGS variable.
+```
 --tls-cert-file=<path/to/tls-certificate-file>
 --tls-private-key-file=<path/to/tls-key-file>
+```
 Based on your system, restart the kubelet service. For example,
 systemctl daemon-reload
 systemctl restart kubelet.service

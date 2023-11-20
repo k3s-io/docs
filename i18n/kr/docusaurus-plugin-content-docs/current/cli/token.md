@@ -59,7 +59,7 @@ The server token is also used as the [PBKDF2](https://en.wikipedia.org/wiki/PBKD
 Unless custom CA certificates are in use, only the short (password-only) token format can be used when starting the first server in the cluster. This is because the cluster CA hash cannot be known until after the server has generated the self-signed cluster CA certificates.
 :::
 
-For more information on using custom CA certificates, see the [`k3s certificate` documentation](certificate.md#).  
+For more information on using custom CA certificates, see the [`k3s certificate` documentation](./certificate.md).  
 For more information on backing up your cluster, see the [Backup and Restore](../datastore/backup-restore.md) documentation.
 
 ### Agent
@@ -105,7 +105,7 @@ A token in secure format, including the cluster CA hash, will be written to stdo
 
 Flag | Description
 ---- | ----
-`--data-dir` value    |(data) Folder to hold state default /var/lib/rancher/k3s or ${HOME}/.rancher/k3s if not root
+`--data-dir` value    |(data) Folder to hold state default /var/lib/rancher/k3s or $\{HOME\}/.rancher/k3s if not root
 `--kubeconfig` value  | (cluster) Server to connect to [$KUBECONFIG]
 `--description` value | A human friendly description of how this token is used
 `--groups` value      | Extra groups that this token will authenticate as when used for authentication. (default: Default: "system:bootstrappers:k3s:default-node-token")
@@ -118,7 +118,7 @@ Delete one or more tokens. The full token can be provided, or just the token ID.
 
 Flag | Description
 ---- | ----
-`--data-dir` value   |(data) Folder to hold state default /var/lib/rancher/k3s or ${HOME}/.rancher/k3s if not root
+`--data-dir` value   |(data) Folder to hold state default /var/lib/rancher/k3s or $\{HOME\}/.rancher/k3s if not root
 `--kubeconfig` value |(cluster) Server to connect to [$KUBECONFIG]
 
 #### `k3s token generate`
@@ -129,7 +129,7 @@ You don't have to use this command in order to generate a token. You can do so y
 
 Flag | Description
 ---- | ----
-`--data-dir` value   | (data) Folder to hold state default /var/lib/rancher/k3s or ${HOME}/.rancher/k3s if not root
+`--data-dir` value   | (data) Folder to hold state default /var/lib/rancher/k3s or $\{HOME\}/.rancher/k3s if not root
 `--kubeconfig` value | (cluster) Server to connect to [$KUBECONFIG]
 
 #### `k3s token list`
@@ -138,6 +138,6 @@ List bootstrap tokens, showing their ID, description, and remaining time-to-live
 
 Flag | Description
 ---- | ----
-`--data-dir` value   | (data) Folder to hold state default /var/lib/rancher/k3s or ${HOME}/.rancher/k3s if not root
+`--data-dir` value   | (data) Folder to hold state default /var/lib/rancher/k3s or $\{HOME\}/.rancher/k3s if not root
 `--kubeconfig` value | (cluster) Server to connect to [$KUBECONFIG]
 `--output` value     | Output format. Valid options: text, json (default: "text")
