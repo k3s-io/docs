@@ -3,7 +3,7 @@ title: 卸载 K3s
 weight: 61
 ---
 
-:::caution
+:::warning
 卸载 K3s 会删除 local 集群数据、配置以及所有脚本和 CLI 工具。  
 不会删除外部数据存储中的任何数据，也不会删除使用外部 Kubernetes 存储卷的 Pod 创建的数据。
 :::

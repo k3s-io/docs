@@ -138,7 +138,7 @@ Stable support is available as of [v1.23.7+k3s1](https://github.com/k3s-io/k3s/r
 
 :::
 
-:::caution Known Issue 
+:::warning Known Issue 
 
 Before 1.27, Kubernetes [Issue #111695](https://github.com/kubernetes/kubernetes/issues/111695) causes the Kubelet to ignore the node IPv6 addresses if you have a dual-stack environment and you are not using the primary network interface for cluster traffic. To avoid this bug, use 1.27 or newer or add the following flag to both K3s servers and agents:
 
@@ -162,7 +162,7 @@ Note that you may configure any valid `cluster-cidr` and `service-cidr` values, 
 
 If you are using a custom CNI plugin, i.e. a CNI plugin other than Flannel, the additional configuration may be required. Please consult your plugin's dual-stack documentation and verify if network policies can be enabled.
 
-:::caution Known Issue
+:::warning Known Issue
 When defining cluster-cidr and service-cidr with IPv6 as the primary family, the node-ip of all cluster members should be explicitly set, placing node's desired IPv6 address as the first address. By default, the kubelet always uses IPv4 as the primary address family.
 :::
 
@@ -172,7 +172,7 @@ When defining cluster-cidr and service-cidr with IPv6 as the primary family, the
 Available as of [v1.22.9+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.22.9%2Bk3s1)
 :::
 
-:::caution Known Issue
+:::warning Known Issue
 If your IPv6 default route is set by a router advertisement (RA), you will need to set the sysctl `net.ipv6.conf.all.accept_ra=2`; otherwise, the node will drop the default route once it expires. Be aware that accepting RAs could increase the risk of [man-in-the-middle attacks](https://github.com/kubernetes/kubernetes/issues/91507).
 :::
 
@@ -186,11 +186,11 @@ Single-stack IPv6 clusters (clusters without IPv4) are supported on K3s using th
 
 A K3s cluster can still be deployed on nodes which do not share a common private network and are not directly connected (e.g. nodes in different public clouds). There are two options to achieve this: the embedded k3s multicloud solution and the integration with the `tailscale` VPN provider.
 
-:::caution Warning
+:::warning
 The latency between nodes will increase as external connectivity requires more hops. This will reduce the network performance and could also impact the health of the cluster if latency is too high.
 :::
 
-:::caution Warning
+:::warning
 Embedded etcd is not supported in this type of deployment. If using embedded etcd, all server nodes must be reachable to each other via their private IPs. Agents may be distributed over multiple networks, but all servers should be in the same location.
 :::
 
@@ -258,7 +258,7 @@ or provide that information in a file and use the parameter:
 
 Optionally, if you have your own Tailscale server (e.g. headscale), you can connect to it by appending `,controlServerURL=$URL` to the vpn-auth parameters
 
-:::caution Warning
+:::warning
 
 If you plan on running several K3s clusters using the same tailscale network, please create appropriate [ACLs](https://tailscale.com/kb/1018/acls/) to avoid IP conflicts or use different podCIDR subnets for each cluster.
 

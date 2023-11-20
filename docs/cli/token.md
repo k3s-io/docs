@@ -55,7 +55,7 @@ The server token can be used to join both server and agent nodes to the cluster.
 
 The server token is also used as the [PBKDF2](https://en.wikipedia.org/wiki/PBKDF2) passphrase for the key used to encrypt confidential information that is persisted to the datastore, such as the secrets-encryption configuration, wireguard keys, and private keys for cluster CA certificates and service-account tokens. For this reason, the token must be backed up alongside the cluster datastore itself.
 
-:::caution
+:::warning
 Unless custom CA certificates are in use, only the short (password-only) token format can be used when starting the first server in the cluster. This is because the cluster CA hash cannot be known until after the server has generated the self-signed cluster CA certificates.
 :::
 

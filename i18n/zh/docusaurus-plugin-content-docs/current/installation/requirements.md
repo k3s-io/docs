@@ -21,7 +21,7 @@ K3s 适用于以下架构：
 - arm64/aarch64
 - s390x
 
-:::caution ARM64 页面大小
+:::warning ARM64 页面大小
 
 在 2023 年 5 月版本（v1.24.14+k3s1、v1.25.10+k3s1、v1.26.5+k3s1、v1.27.2+k3s1）前，在 `aarch64/arm64` 系统上，操作系统必须使用 4k 页面大小。**RHEL9**、**Ubuntu**、**Raspberry PI OS** 和 **SLES** 都满足这个要求。
 

@@ -3,7 +3,7 @@ title: Uninstalling K3s
 weight: 61
 ---
 
-:::caution
+:::warning
 Uninstalling K3s deletes the local cluster data, configuration, and all of the scripts and CLI tools.  
 It does not remove any data from external datastores, or created by pods using external Kubernetes storage volumes.
 :::

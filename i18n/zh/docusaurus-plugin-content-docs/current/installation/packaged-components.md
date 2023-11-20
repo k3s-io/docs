@@ -31,7 +31,7 @@ K3s 封装了很多组件，这些组件通过 `manifests` 目录部署为 AddOn
 >    a lowercase RFC 1123 subdomain must consist of lower case alphanumeric characters, '-' or '.', and must start and end with an alphanumeric character
 >    (e.g. 'example.com', regex used for validation is '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*')`
 
-:::caution
+:::warning
 如果你有多个 Server 节点，并在多个 Server 上放置了额外的 AddOn 清单，那么你需要确保文件在节点之间保持同步。K3s 不会在节点之间同步 AddOn 的内容。如果不同的 Server 尝试部署冲突的清单，那么可能会出现问题。
 :::
 

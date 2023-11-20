@@ -95,7 +95,7 @@ kubectl get pvc
 
 ## Longhorn 구성하기
 
-:::caution
+:::warning
 
 Longhorn은 ARM32를 지원하지 않습니다.
 

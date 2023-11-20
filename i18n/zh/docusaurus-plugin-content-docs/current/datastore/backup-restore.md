@@ -5,7 +5,7 @@ weight: 26
 
 K3s 的备份和恢复方式取决于你使用的数据存储类型。
 
-:::caution
+:::warning
 除了备份数据存储本身，你还必须备份位于 `/var/lib/rancher/k3s/server/token` 的 Server Token 文件。
 使用备份进行恢复时，你必须恢复此文件，或将其值传递给 `--token` 选项。
 由于 Token 用于加密数据存储内的凭证数据，因此如果还原时没有使用相同的 Token 值，快照将无法使用。

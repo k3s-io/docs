@@ -26,7 +26,7 @@ K3s 支持以下数据存储选项：
    * [MariaDB](https://mariadb.org/)（针对版本 10.6.8 进行了认证）
    * [PostgreSQL](https://www.postgresql.org/)（针对版本 10.7、11.5 和 14.2 进行了认证）
 
-:::caution 准备语句支持
+:::warning 准备语句支持
 K3s 需要 DB 的准备语句支持。换言之，[PgBouncer](https://www.pgbouncer.org/faq.html#how-to-use-prepared-statements-with-transaction-pooling) 之类的连接池将无法与 K3s 一起使用。
 :::
 

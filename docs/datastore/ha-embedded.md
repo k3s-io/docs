@@ -3,7 +3,7 @@ title: "High Availability Embedded etcd"
 weight: 40
 ---
 
-:::caution
+:::warning
 Embedded etcd (HA) may have performance issues on slower disks such as Raspberry Pis running with SD cards.
 :::
 

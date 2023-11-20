@@ -21,7 +21,7 @@ K3s is available for the following architectures:
 - arm64/aarch64
 - s390x
 
-:::caution ARM64 Page Size
+:::warning ARM64 Page Size
 
 Prior to May 2023 releases (v1.24.14+k3s1, v1.25.10+k3s1, v1.26.5+k3s1, v1.27.2+k3s1), on `aarch64/arm64` systems, the OS must use a 4k page size. **RHEL9**, **Ubuntu**, **Raspberry PI OS**, and **SLES** all meet this requirement.
 
