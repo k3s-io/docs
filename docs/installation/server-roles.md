@@ -35,6 +35,15 @@ k3s-server-1   Ready    etcd                        5h39m   v1.20.4+k3s1
 k3s-server-2   Ready    control-plane,master        5h39m   v1.20.4+k3s1
 ```
 
+### Prevent workloads on control-plane nodes
+
+By default, server nodes are schedulable and workloads can be launched on them. If you wish to have a dedicated control plane where no user workloads will run, use the `node-taint` parameter. Here is an example of adding a node taint to the configuration file:
+```yaml
+# /etc/rancher/k3s/config.yaml
+node-taint:
+  - "CriticalAddonsOnly=true:NoExecute"
+```
+
 ## Adding Roles To Existing Servers
 
 Roles can be added to existing dedicated nodes by restarting K3s with the disable flags removed. For example ,if you want to add the `control-plane` role to a dedicated `etcd` node, you can remove the `--disable-apiserver --disable-controller-manager --disable-scheduler` flags from the systemd unit or config file, and restart the service.
