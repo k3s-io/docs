@@ -156,7 +156,7 @@ Kubernetes [Issue #111695](https://github.com/kubernetes/kubernetes/issues/11169
 要在 K3s 中启用双栈，你必须在所有 server 节点上提供有效的双栈 `cluster-cidr` 和 `service-cidr`。以下是一个有效配置的示例：
 
 ```
---cluster-cidr=10.42.0.0/16,2001:cafe:42:0::/56 --service-cidr=10.43.0.0/16,2001:cafe:42:1::/112
+--cluster-cidr=10.42.0.0/16,2001:cafe:42::/56 --service-cidr=10.43.0.0/16,2001:cafe:43::/112
 ```
 
 请注意，你可以配置任何有效的 `cluster-cidr` 和 `service-cidr` 值，但建议使用上述掩码。如果更改 `cluster-cidr` 掩码，则还应更改 `node-cidr-mask-size-ipv4` 和 `node-cidr-mask-size-ipv6` 值以匹配每个节点的计划 pod 和节点总数。对于 IPv4，支持的最大 `service-cidr` 掩码是 /12，而 IPv6 的是 /112。如果你在公共云中部署，请记住允许 ipv6 流量。
@@ -176,7 +176,7 @@ Kubernetes [Issue #111695](https://github.com/kubernetes/kubernetes/issues/11169
 你可以使用 `--cluster-cidr` 和 `--service-cidr` 标志在 K3s 上使用单栈 IPv6 集群（没有 IPv4 的集群）。以下是一个有效配置的示例：
 
 ```bash
---cluster-cidr=2001:cafe:42:0::/56 --service-cidr=2001:cafe:42:1::/112
+--cluster-cidr=2001:cafe:42::/56 --service-cidr=2001:cafe:43::/112
 ```
 
 ## 分布式混合或多云集群
@@ -234,7 +234,7 @@ K3s 可以与 [Tailscale](https://tailscale.com/) 集成，以便节点使用 Ta
 "autoApprovers": {
         "routes": {
             "10.42.0.0/16":        ["your_account@xyz.com"],
-            "2001:cafe:42:0::/56": ["your_account@xyz.com"],
+            "2001:cafe:42::/56": ["your_account@xyz.com"],
         },
     },
 ```
