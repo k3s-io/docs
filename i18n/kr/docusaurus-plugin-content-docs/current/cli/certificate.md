@@ -106,7 +106,7 @@ graph TD
 
 #### Using the Example Script
 
-:::important
+:::info 중요한
 If you want to sign the cluster CA certificates with an existing root CA using the example script, you must place the root and intermediate files in the target directory prior to running the script.
 If the files do not exist, the script will create new root and intermediate CA certificates.
 :::
