@@ -63,7 +63,7 @@ If you are having an issue with deploying K3s, you should:
 
 1) Check the [Known Issues](../known-issues/known-issues.md) page.
 
-2) Check that you have resolved any [Additional OS Preparation](../advanced/advanced.md#additional-os-preparations). Run `k3s check-config` and ensure that it passes.
+2) Check that you have resolved any [Additional OS Preparation](../installation/requirements.md#operating-systems). Run `k3s check-config` and ensure that it passes.
 
 3) Search the K3s [Issues](https://github.com/k3s-io/k3s/issues) and [Discussions](https://github.com/k3s-io/k3s/discussions) for one that matches your problem.
 

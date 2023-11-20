@@ -32,10 +32,65 @@ Prior to May 2023 releases (v1.24.14+k3s1, v1.25.10+k3s1, v1.26.5+k3s1, v1.27.2+
 K3s is expected to work on most modern Linux systems.
 
 Some OSs have additional setup requirements:
+<Tabs queryString="os">
+<TabItem value="rhel" label="Red Hat Enterprise Linux / CentOS / Fedora">
 
-- If you are using **RHEL/CentOS/Fedora**, follow [these steps](../advanced/advanced.md#red-hat-enterprise-linux--centos--fedora).
-- If you are using **Ubuntu/Debian**, follow [these steps](../advanced/advanced.md#ubuntu--debian).
-- If you are using **Raspberry Pi OS**, follow [these steps](../advanced/advanced.md#raspberry-pi).
+It is recommended to turn off firewalld:
+```bash
+systemctl disable firewalld --now
+```
+
+If you wish to keep firewalld enabled, by default, the following rules are required:
+```bash
+firewall-cmd --permanent --add-port=6443/tcp #apiserver
+firewall-cmd --permanent --zone=trusted --add-source=10.42.0.0/16 #pods
+firewall-cmd --permanent --zone=trusted --add-source=10.43.0.0/16 #services
+firewall-cmd --reload
+```
+
+Additional ports may need to be opened depending on your setup. See [Inbound Rules](#inbound-rules-for-k3s-server-nodes) for more information. If you change the default CIDR for pods or services, you will need to update the firewall rules accordingly.
+
+If enabled, it is required to disable nm-cloud-setup and reboot the node:
+```bash
+systemctl disable nm-cloud-setup.service nm-cloud-setup.timer
+reboot
+```
+</TabItem>
+<TabItem value="debian" label="Ubuntu / Debian">
+
+Older Debian release may suffer from a known iptables bug. See [Known Issues](../known-issues/known-issues.md#iptables).
+
+It is recommended to turn off ufw (uncomplicated firewall):
+```bash
+ufw disable
+```
+
+If you wish to keep ufw enabled, by default, the following rules are required:
+```bash
+ufw allow 6443/tcp #apiserver
+ufw allow from 10.42.0.0/16 to any #pods
+ufw allow from 10.43.0.0/16 to any #services
+```
+
+Additional ports may need to be opened depending on your setup. See [Inbound Rules](#inbound-rules-for-k3s-server-nodes) for more information. If you change the default CIDR for pods or services, you will need to update the firewall rules accordingly.
+</TabItem>
+<TabItem value="pi" label="Raspberry Pi">
+
+Raspberry Pi OS is Debian based, and may suffer from a known iptables bug. See [Known Issues](../known-issues/known-issues.md#iptables).
+
+Standard Raspberry Pi OS installations do not start with `cgroups` enabled. **K3S** needs `cgroups` to start the systemd service. `cgroups`can be enabled by appending `cgroup_memory=1 cgroup_enable=memory` to `/boot/cmdline.txt`.
+
+Example cmdline.txt:
+```
+console=serial0,115200 console=tty1 root=PARTUUID=58b06195-02 rootfstype=ext4 elevator=deadline fsck.repair=yes rootwait cgroup_memory=1 cgroup_enable=memory
+```
+
+Starting with Ubuntu 21.10, vxlan support on Raspberry Pi has been moved into a separate kernel module. 
+```bash
+sudo apt install linux-modules-extra-raspi
+```
+</TabItem>
+</Tabs>
 
 For more information on which OSs were tested with Rancher managed K3s clusters, refer to the [Rancher support and maintenance terms.](https://rancher.com/support-maintenance-terms/)
 
@@ -89,7 +144,7 @@ Flannel relies on the [Bridge CNI plugin](https://www.cni.dev/plugins/current/ma
 
 Typically, all outbound traffic is allowed.
 
-Additional changes to the firewall may be required depending on the OS used. See [Additional OS Preparations](../advanced/advanced.md#additional-os-preparations).
+Additional changes to the firewall may be required depending on the OS used.
 
 ## Large Clusters
 
