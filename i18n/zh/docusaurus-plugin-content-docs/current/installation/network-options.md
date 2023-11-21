@@ -139,7 +139,7 @@ K3s Agent 和 Server 维护节点之间的 websocket 隧道，这些隧道用于
 
 :::
 
-:::caution 已知问题
+:::warning 已知问题
 
 Kubernetes [Issue #111695](https://github.com/kubernetes/kubernetes/issues/111695) 导致了一个问题。如果你有一个双栈环境而且你没有为集群流量使用主要网卡，那么 Kubelet 会忽略节点 IPv6 地址。为避免此错误，请将以下标志添加到 K3s Server 和 Agent ：
 
@@ -169,7 +169,7 @@ Kubernetes [Issue #111695](https://github.com/kubernetes/kubernetes/issues/11169
 从 [v1.22.9+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.22.9%2Bk3s1) 起可用
 :::
 
-:::caution 已知问题
+:::warning 已知问题
 如果你的 IPv6 默认路由是由路由器公告（RA）设置的，你需要设置 sysctl `net.ipv6.conf.all.accept_ra=2`。否则，一旦默认路由过期，节点将放弃该路由。请注意，接受 RA 可能会增加[中间人攻击](https://github.com/kubernetes/kubernetes/issues/91507)的风险。
 :::
 
@@ -183,11 +183,11 @@ Kubernetes [Issue #111695](https://github.com/kubernetes/kubernetes/issues/11169
 
 K3s 集群仍然可以部署在不共享公共私有网络且不直接连接的节点上（例如不同公有云中的节点）。有两种选择可以实现这一点：嵌入式 k3s 多云解决方案和集成 `tailscale` VPN 提供程序。
 
-:::caution 警告
+:::warning 警告
 如果外部连接需要更多的跃点，那么节点之间的延迟会变高。延迟太高会降低网络性能，还可能影响集群的运行。
 :::
 
-:::caution
+:::warning
 此类部署不支持嵌入式 etcd。如果使用嵌入式 etcd，所有 Server 节点必须可以通过其私有 IP 相互访问。Agent 可能分布在多个网络上，但所有 server 都应该位于同一位置。
 :::
 
@@ -255,7 +255,7 @@ curl -fsSL https://tailscale.com/install.sh | sh
 
 或者，如果你有自己的 Tailscale 服务器（例如 headscale），则可以通过将 `,controlServerURL=$URL` 附加到 vpn-auth 参数来连接它。
 
-:::caution 警告
+:::warning 警告
 
 如果你计划使用同一个 tailscale 网络运行多个 K3s 集群，请创建适当的 [ACL](https://tailscale.com/kb/1018/acls/) 来避免 IP 冲突，或为每个集群使用不同的 podCIDR 子网。
 

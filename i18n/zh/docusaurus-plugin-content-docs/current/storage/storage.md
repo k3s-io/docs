@@ -93,7 +93,7 @@ kubectl get pvc
 
 ## 设置 Longhorn
 
-:::caution
+:::warning
 
 Longhorn 不支持 ARM32。
 

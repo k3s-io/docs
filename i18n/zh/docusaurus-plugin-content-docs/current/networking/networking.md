@@ -116,7 +116,7 @@ ServiceLB 控制器会监视 Kubernetes [Service](https://kubernetes.io/docs/con
 
 :::
 
-:::caution 警告
+:::warning 警告
 启用此标志后，网络策略控制器将无法正常工作。
 :::
 
@@ -149,6 +149,6 @@ spec:
 :::note
 已拥有 CIDR 的节点无法获得新的 CIDR。你必须移除或重启它。
 :::
-:::caution 警告
+:::warning 警告
 你可以使用 `ipv4` 和 `ipv6` 来定义双栈 CIDR，但 `perNodeHostBits` 是相同的。使用 `--cluster-cidr` 来定义双栈配置时，`kube-controller` 上的 `--node-cidr-mask-size-ipv6` 标志需要具有与 IPv4 相同的大小。
 :::

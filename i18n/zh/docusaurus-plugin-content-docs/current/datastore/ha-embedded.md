@@ -3,7 +3,7 @@ title: "高可用嵌入式 etcd"
 weight: 40
 ---
 
-:::caution
+:::warning
 嵌入式 etcd (HA) 在速度较慢的磁盘（例如使用 SD 卡运行的 Raspberry Pi）上可能会出现性能问题。
 :::
 

@@ -25,7 +25,7 @@ weight: 20
 1. 将 system-upgrade-controller 安装到集群中
 1. 配置计划
 
-:::caution
+:::warning
 如果 K3s 集群由 Rancher 管理，你需要使用 Rancher UI 来管理升级。
 - 如果 K3s 集群是导入到 Rancher 的，Rancher 将管理 system-upgrade-controller 部署和计划。不要按照此页面上的步骤操作。
 - 如果 K3s 集群是由 Rancher 预配的，Rancher 将使用系统 Agent 来管理版本升级。不要按照此页面上的步骤操作。

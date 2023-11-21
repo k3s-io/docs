@@ -21,7 +21,7 @@ K3s is available for the following architectures:
 - arm64/aarch64
 - s390x
 
-:::caution ARM64 Page Size
+:::warning ARM64 Page Size
 
 Prior to May 2023 releases (v1.24.14+k3s1, v1.25.10+k3s1, v1.26.5+k3s1, v1.27.2+k3s1), on `aarch64/arm64` systems, the OS must use a 4k page size. **RHEL9**, **Ubuntu**, **Raspberry PI OS**, and **SLES** all meet this requirement.
 
@@ -127,7 +127,7 @@ If you plan on achieving high availability with embedded etcd, server nodes must
 The VXLAN port on nodes should not be exposed to the world as it opens up your cluster network to be accessed by anyone. Run your nodes behind a firewall/security group that disables access to port 8472.
 :::
 
-:::warning
+:::danger
 Flannel relies on the [Bridge CNI plugin](https://www.cni.dev/plugins/current/main/bridge/) to create a L2 network that switches traffic. Rogue pods with `NET_RAW` capabilities can abuse that L2 network to launch attacks such as [ARP spoofing](https://static.sched.com/hosted_files/kccncna19/72/ARP%20DNS%20spoof.pdf). Therefore, as documented in the [Kubernetes docs](https://kubernetes.io/docs/concepts/security/pod-security-standards/), please set a restricted profile that disables `NET_RAW` on non-trustable pods.
 :::
 

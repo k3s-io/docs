@@ -130,7 +130,7 @@ server-3   Ready    control-plane,etcd,master   3m12s   v1.27.3+k3s1
 
 ## Nginx 负载均衡器
 
-:::caution
+:::warning
 Nginx 本身不支持高可用性 (HA) 配置。如果设置 HA 集群，在 K3 前面使用单个负载均衡器将重新引入单一故障点。
 :::
 

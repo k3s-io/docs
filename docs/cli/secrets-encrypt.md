@@ -19,7 +19,7 @@ K3s contains a CLI tool `secrets-encrypt`, which enables automatic control over 
 - Rotating and deleting encryption keys
 - Reencrypting secrets
 
-:::caution
+:::warning
 Failure to follow proper procedure for rotating encryption keys can leave your cluster permanently corrupted. Proceed with caution.
 :::
 

@@ -106,7 +106,7 @@ graph TD
 
 #### 使用示例脚本
 
-:::important
+:::info 重要的
 如果要使用示例脚本通过现有根 CA 来签发集群 CA 证书，则必须在运行脚本之前将根文件和中间文件放在目标目录中。
 如果文件不存在，脚本将创建新的根 CA 证书和中间 CA 证书。
 :::
@@ -142,7 +142,7 @@ curl -sL https://github.com/k3s-io/k3s/raw/master/contrib/util/generate-custom-c
 要轮换自定义 CA 证书，请使用 `k3s certificate rotate-ca` 子命令。
 更新后的文件必须暂存到一个临时目录中，加载到数据存储中，并且必须在所有节点上重启 K3s 才能使用更新后的证书。
 
-:::caution
+:::warning
 不要覆盖 `/var/lib/rancher/k3s/server/tls` 中正在使用的数据。  
 将更新的证书和密钥暂存到单独的目录中。
 :::
@@ -185,7 +185,7 @@ Token 可能存储在 `.env` 文件、systemd 单元或 config.yaml 中，具体
 要轮换 K3s 生成的自签名 CA 证书，请使用 `k3s certificate rotate-ca` 子命令。
 更新后的文件必须暂存到一个临时目录中，加载到数据存储中，并且必须在所有节点上重启 K3s 才能使用更新后的证书。
 
-:::caution
+:::warning
 不要覆盖 `/var/lib/rancher/k3s/server/tls` 中正在使用的数据。  
 将更新的证书和密钥暂存到单独的目录中。
 :::
@@ -294,7 +294,7 @@ service-account Issuer 密钥是用于签发 service-account Token 的 RSA 私�
 轮换 service-account Issuer 密钥时，文件中至少应保留一个旧密钥，以免现有 service-account Token 失效。
 它可以通过使用 `k3s certificate rotate-ca` 独立于集群 CA 进行轮换，这样能仅安装包含新旧密钥的更新的 `service.key` 文件。
 
-:::caution
+:::warning
 不要覆盖 `/var/lib/rancher/k3s/server/tls` 中正在使用的数据。  
 将更新的密钥暂存到单独的目录中。
 :::

@@ -23,7 +23,7 @@ for minor in $MINORS; do
             title="---\nhide_table_of_contents: true\n---\n\n# ${minor}.X\n"
             echo -e "${title}" >> $k3s_table
             upgrade_link="[Urgent Upgrade Notes](https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-${minor:1}.md#urgent-upgrade-notes)"
-            upgrade_warning=":::caution Upgrade Notice\nBefore upgrading from earlier releases, be sure to read the Kubernetes ${upgrade_link}.\n:::\n"
+            upgrade_warning=":::warning Upgrade Notice\nBefore upgrading from earlier releases, be sure to read the Kubernetes ${upgrade_link}.\n:::\n"
             echo -e "${upgrade_warning}" >> $k3s_table
             echo -n "| Version | Release date " >> $k3s_table
             echo "$body"  | grep "^|" | tail -n+3 | awk -F'|' '{ print $2 }' | while read column; do echo -n "| $column " >> $k3s_table; done

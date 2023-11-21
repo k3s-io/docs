@@ -106,7 +106,7 @@ graph TD
 
 #### Using the Example Script
 
-:::important
+:::info Important
 If you want to sign the cluster CA certificates with an existing root CA using the example script, you must place the root and intermediate files in the target directory prior to running the script.
 If the files do not exist, the script will create new root and intermediate CA certificates.
 :::
@@ -142,7 +142,7 @@ If the script generated root and/or intermediate CA files, you should back up th
 To rotate custom CA certificates, use the `k3s certificate rotate-ca` subcommand.
 Updated files must be staged into a temporary directory, loaded into the datastore, and k3s must be restarted on all nodes to use the updated certificates.
 
-:::caution
+:::warning
 You must not overwrite the currently in-use data in `/var/lib/rancher/k3s/server/tls`.  
 Stage the updated certificates and keys into a separate directory.
 :::
@@ -185,7 +185,7 @@ The token may be stored in a `.env` file, systemd unit, or config.yaml, dependin
 To rotate the K3s-generated self-signed CA certificates, use the `k3s certificate rotate-ca` subcommand.
 Updated files must be staged into a temporary directory, loaded into the datastore, and k3s must be restarted on all nodes to use the updated certificates.
 
-:::caution
+:::warning
 You must not overwrite the currently in-use data in `/var/lib/rancher/k3s/server/tls`.  
 Stage the updated certificates and keys into a separate directory.
 :::
@@ -294,7 +294,7 @@ The service-account issuer key is an RSA private key used to sign service-accoun
 When rotating the service-account issuer key, at least one old key should be retained in the file so that existing service-account tokens are not invalidated.
 It can be rotated independent of the cluster CAs by using the `k3s certificate rotate-ca` to install only an updated `service.key` file that includes both the new and old keys.
 
-:::caution
+:::warning
 You must not overwrite the currently in-use data in `/var/lib/rancher/k3s/server/tls`.  
 Stage the updated key into a separate directory.
 :::

@@ -122,7 +122,7 @@ Stable support is available as of [v1.23.7+k3s1](https://github.com/k3s-io/k3s/r
 
 :::
 
-:::caution Known Issue 
+:::warning Known Issue 
 
 Kubernetes v1.24 and v1.25 include [an issue](https://github.com/kubernetes/kubernetes/issues/111695) that ignores the node IPv6 addresses if you have a dual-stack environment and you are not using the primary network interface for cluster traffic. To avoid this bug, add the following flag to both K3s servers and agents:
 
@@ -152,7 +152,7 @@ If you are using a custom CNI plugin, i.e. a CNI plugin other than Flannel, the 
 Available as of [v1.22.9+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.22.9%2Bk3s1)
 :::
 
-:::caution Known Issue
+:::warning Known Issue
 If your IPv6 default route is set by a router advertisement (RA), you will need to set the sysctl `net.ipv6.conf.all.accept_ra=2`; otherwise, the node will drop the default route once it expires. Be aware that accepting RAs could increase the risk of [man-in-the-middle attacks](https://github.com/kubernetes/kubernetes/issues/91507).
 :::
 
@@ -189,11 +189,11 @@ systemctl restart k3s
 ```
 :::
 
-:::caution Warning
+:::warning
 The latency between nodes will increase as external connectivity requires more hops. This will reduce the network performance and could also impact the health of the cluster if latency is too high.
 :::
 
-:::caution Warning
+:::warning
 Embedded etcd will not use external IPs for communication. If using embedded etcd; all server nodes must be reachable to each other via their private IPs.
 :::
 

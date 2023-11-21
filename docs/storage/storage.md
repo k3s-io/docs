@@ -93,7 +93,7 @@ The status should be Bound for each.
 
 ## Setting up Longhorn
 
-:::caution
+:::warning
 
 Longhorn does not support ARM32.
 

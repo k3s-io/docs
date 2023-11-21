@@ -55,7 +55,7 @@ Server Token 可用于将 Server 和 Agent 节点加入集群。一旦创建了�
 
 Server Token 还用作密钥的 [PBKDF2](https://en.wikipedia.org/wiki/PBKDF2) 密码，该密钥用于加密持久保存到数据存储的机密信息，例如 Secret 加密配置、wireguard 密钥，集群 CA 证书的私钥以及 service-account Token。因此，Token 必须与集群数据存储一起备份。
 
-:::caution
+:::warning
 除非使用了自定义 CA 证书，否则在启动集群的第一个 Server 时只能使用短 Token 格式（仅密码）。这是因为只有在 Server 生成自签名集群 CA 证书后才能知道集群 CA 哈希值。
 :::
 

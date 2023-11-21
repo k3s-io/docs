@@ -21,7 +21,7 @@ K3s 适用于以下架构：
 - arm64/aarch64
 - s390x
 
-:::caution ARM64 页面大小
+:::warning ARM64 页面大小
 
 在 2023 年 5 月版本（v1.24.14+k3s1、v1.25.10+k3s1、v1.26.5+k3s1、v1.27.2+k3s1）前，在 `aarch64/arm64` 系统上，操作系统必须使用 4k 页面大小。**RHEL9**、**Ubuntu**、**Raspberry PI OS** 和 **SLES** 都满足这个要求。
 
@@ -71,7 +71,7 @@ K3s Server 需要 6443 端口才能被所有节点访问。
 节点上的 VXLAN 端口会开放集群网络，让任何人均能访问集群。因此，不要将 VXLAN 端口暴露给外界。请使用禁用 8472 端口的防火墙/安全组来运行节点。
 :::
 
-:::warning
+:::danger
 Flannel 依赖 [Bridge CNI 插件](https://www.cni.dev/plugins/current/main/bridge/)来创建交换流量的 L2 网络。具有 `NET_RAW` 功能的 Rogue pod 可以滥用该 L2 网络来发动攻击，如 [ARP 欺骗](https://static.sched.com/hosted_files/kccncna19/72/ARP%20DNS%20spoof.pdf)。因此，如 [Kubernetes 文档](https://kubernetes.io/docs/concepts/security/pod-security-standards/)所述，请设置一个受限配置文件，在不可信任的 Pod 上禁用 `NET_RAW`。
 :::
 
