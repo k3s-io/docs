@@ -145,7 +145,9 @@ Flag | Description
 
 #### `k3s token rotate`
 
-Rotate original server token with a new bootstrap token. After running this command, you must restart all servers with the new token.
+Rotate original server token with a new bootstrap token. After running this command, all servers and any agents that originally joined with the old token must be restarted with the new token.
+
+If you do not specify a new token, one will be generated for you.
 
  Flag | Description                                                                                
  ---- | ----
