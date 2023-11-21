@@ -1,0 +1,4 @@
+[codespell]
+skip = .git,./src,./node_modules,*.js,*.json,./build,./.github,yarn.lock
+check-filenames = true
+ignore-words-list = aks,ec2,eks,gce,gcp,ro,shouldnot,pullrequest

@@ -20,5 +20,3 @@ weight: 25
 ```bash
 cat /var/lib/rancher/k3s/server/token
 ```
-
-- **Experimental Dqlite:** The experimental embedded Dqlite data store was deprecated in K3s v1.19.1. Please note that upgrades from experimental Dqlite to experimental embedded etcd are not supported. If you attempt an upgrade, it will not succeed, and data will be lost.
