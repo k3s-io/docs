@@ -37,9 +37,9 @@ To rotate secrets encryption keys on a single-server cluster:
 
 1. Start the K3s server with the flag `--secrets-encryption`
 
-:::note 
-Starting K3s without encryption and enabling it at a later time is currently *not* supported.
-:::
+    :::note 
+    Starting K3s without encryption and enabling it at a later time is currently *not* supported.
+    :::
 
 2. Rotate secrets encryption keys
     ```
@@ -61,9 +61,9 @@ To rotate secrets encryption keys on HA setups:
 
 1. Start up all three K3s servers with the `--secrets-encryption` flag. For brevity, the servers will be referred to as S1, S2, S3.
 
-:::note
-Starting K3s without encryption and enabling it at a later time is currently *not* supported.
-:::
+    :::note
+    Starting K3s without encryption and enabling it at a later time is currently *not* supported.
+    :::
 
 2. Rotate secrets encryption keys on S1
 
@@ -104,9 +104,9 @@ To rotate secrets encryption keys on a single-server cluster:
 
 1. Start the K3s server with the flag `--secrets-encryption`
 
-:::note 
-Starting K3s without encryption and enabling it at a later time is currently *not* supported.
-:::
+    :::note 
+    Starting K3s without encryption and enabling it at a later time is currently *not* supported.
+    :::
 
 2. Prepare
 
@@ -146,14 +146,13 @@ The steps are the same for both embedded DB and external DB clusters.
 
 To rotate secrets encryption keys on HA setups:
 
-:::note Notes
 
-- Starting K3s without encryption and enabling it at a later time is currently *not* supported.
-- While not required, it is recommended that you pick one server node from which to run the `secrets-encrypt` commands.
-
-:::
 
 1. Start up all three K3s servers with the `--secrets-encryption` flag. For brevity, the servers will be referred to as S1, S2, S3.
+    :::note Notes
+    - Starting K3s without encryption and enabling it at a later time is currently *not* supported.
+    - While not required, it is recommended that you pick one server node from which to run the `secrets-encrypt` commands.
+    :::
 
 2. Prepare on S1
 
