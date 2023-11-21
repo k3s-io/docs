@@ -92,6 +92,7 @@ COMMANDS:
    delete    Delete bootstrap tokens on the server
    generate  Generate and print a bootstrap token, but do not create it on the server
    list      List bootstrap tokens on the server
+   rotate    Rotate original server token with a new bootstrap token
 
 OPTIONS:
    --help, -h  show help
@@ -141,3 +142,16 @@ Flag | Description
 `--data-dir` value   | Folder to hold state (default: /var/lib/rancher/k3s or $\{HOME\}/.rancher/k3s if not root)
 `--kubeconfig` value | Server to connect to [$KUBECONFIG]
 `--output` value     | Output format. Valid options: text, json (default: "text")
+
+#### `k3s token rotate`
+
+Rotate original server token with a new bootstrap token. After running this command, you must restart all servers with the new token.
+
+ Flag | Description                                                                                
+ ---- | ----
+`--data-dir` value   | Folder to hold state (default: /var/lib/rancher/k3s or $\{HOME\}/.rancher/k3s if not root)
+`--kubeconfig` value | Server to connect to [$KUBECONFIG]     
+`--server` value     | Server to connect to (default: "https://127.0.0.1:6443") [$K3S_URL]                                                    
+`--token` value      | Existing token used to join a server or agent to a cluster [$K3S_TOKEN]                   
+`--new-token` value  | New token that replaces existing token   
+
