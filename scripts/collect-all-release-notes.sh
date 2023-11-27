@@ -38,8 +38,8 @@ for minor in $MINORS; do
         previous=$patch
         # Remove the component table from each individual release notes
         perl -i -p0e 's/^## Embedded Component Versions.*?^-----/-----/gms' "${file}"
-        # Add extra levels for Docusaurus Sidebar
-        sed -i 's/^# Release/## Release/' "${file}"
+        # Add extra levels for Docusaurus Sidebar and link to GH release page
+        sed -i 's/^# Release \(.*\)/## Release [\1](https:\/\/github.com\/k3s-io\/k3s\/releases\/tag\/\1)/' "${file}"
         sed -i 's/^## Changes since/### Changes since/' "${file}"
     done
     echo -e "\n<br />\n" >> $k3s_table
