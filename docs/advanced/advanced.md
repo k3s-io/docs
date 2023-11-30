@@ -136,6 +136,28 @@ For advanced customization for this file you can create another file called `con
 The `config.toml.tmpl` will be treated as a Go template file, and the `config.Node` structure is being passed to the template. See [this folder](https://github.com/k3s-io/k3s/blob/master/pkg/agent/templates) for Linux and Windows examples on how to use the structure to customize the configuration file.
 The config.Node golang struct is defined [here](https://github.com/k3s-io/k3s/blob/master/pkg/daemons/config/types.go#L37)
 
+### Base template
+
+:::info Version Gate
+Available as of September 2023 releases: v1.24.17+k3s1, v1.25.13+k3s1, v1.26.8+k3s1, v1.27.5+k3s1, v1.28.1+k3s1
+:::
+
+You can link to the K3s generated template instead of copying it. This is useful if you want to use the base template and only add a few extra lines.
+
+```toml
+#/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl
+
+{{ template "base" . }}
+
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes."custom"]
+  runtime_type = "io.containerd.runc.v2"
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes."custom".options]
+  BinaryName = "/usr/bin/custom-container-runtime"
+
+```
+
+
+
 ## NVIDIA Container Runtime Support
 
 K3s will automatically detect and configure the NVIDIA container runtime if it is present when K3s starts.
