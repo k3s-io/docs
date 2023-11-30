@@ -33,7 +33,7 @@ Running K3s with Rootless mode is experimental and has several [known issues.](.
 
 ### Upgrading Hardened Clusters from v1.24.x to v1.25.x {#hardened-125}
 
-Kubernetes removed PodSecurityPolicy from v1.25 in favor of Pod Security Standards. You can read more about PSS in the [upstream documentation](https://kubernetes.io/docs/concepts/security/pod-security-standards/). For K3S, there are some manual steps that must be taken if any `PodSecurityPoliciy` has been configured on the nodes.
+Kubernetes removed PodSecurityPolicy from v1.25 in favor of Pod Security Standards. You can read more about PSS in the [upstream documentation](https://kubernetes.io/docs/concepts/security/pod-security-standards/). For K3S, there are some manual steps that must be taken if any `PodSecurityPolicy` has been configured on the nodes.
 
 1. On all nodes, update the `kube-apiserver-arg` value to remove the `PodSecurityPolicy` admission-plugin. Add the following arg value instead: `'admission-control-config-file=/var/lib/rancher/k3s/server/psa.yaml'`, but do NOT restart or upgrade K3S yet. Below is an example of what a configuration file might look like after this update for the node to be hardened:
 ```yaml
