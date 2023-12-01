@@ -155,9 +155,6 @@ You can extend the K3s base template instead of copy-pasting the complete stock 
   BinaryName = "/usr/bin/custom-container-runtime"
 
 ```
-
-
-
 ## NVIDIA Container Runtime Support
 
 K3s will automatically detect and configure the NVIDIA container runtime if it is present when K3s starts.
