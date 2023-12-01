@@ -142,7 +142,7 @@ The config.Node golang struct is defined [here](https://github.com/k3s-io/k3s/bl
 Available as of September 2023 releases: v1.24.17+k3s1, v1.25.13+k3s1, v1.26.8+k3s1, v1.27.5+k3s1, v1.28.1+k3s1
 :::
 
-You can link to the K3s generated template instead of copying it. This is useful if you want to use the base template and only add a few extra lines.
+You can extend the K3s base template instead of copy-pasting the complete stock template out of the K3s source code. This is useful if you need to build on the existing configuration, and add a few extra lines at the end.
 
 ```toml
 #/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl
