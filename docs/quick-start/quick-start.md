@@ -40,11 +40,3 @@ Setting the `K3S_URL` parameter causes the installer to configure K3s as an agen
 :::note
 Each machine must have a unique hostname. If your machines do not have unique hostnames, pass the `K3S_NODE_NAME` environment variable and provide a value with a valid and unique hostname for each node.
 :::
-
-## Bootstrapping a Multi-Node K3s cluster via Ansible
-
-For users seeking to bootstrap a multi-node K3s cluster, we recommend the use of an Ansible script. This approach simplifies the process of setting up a K3s cluester by automating the installation and configuration of each node.
-
-For this, take a look at [k3s-io/k3s-ansible](https://github.com/k3s-io/k3s-ansible) repository. These scripts provides a convenient way to install K3s on your nodes, allowing you to focus on the configuration of your cluster rather than the installation process.
-
-This approach is particularly useful for creating a High Availability (HA) Kubernetes cluster, as it can be customized to suit the specific requirements of the cluster.

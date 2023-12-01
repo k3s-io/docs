@@ -5,12 +5,16 @@ weight: 30
 
 This section describes how to install a high-availability K3s cluster with an external database.
 
+:::note
+To rapidly deploy large HA clusters, see [Related Projects](/related-projects)
+:::
+
 Single server clusters can meet a variety of use cases, but for environments where uptime of the Kubernetes control plane is critical, you can run K3s in an HA configuration. An HA K3s cluster is composed of:
 
-* Two or more **server nodes** that will serve the Kubernetes API and run other control plane services
-* An **external datastore** (as opposed to the embedded SQLite datastore used in single-server setups)
-* Optional: Zero or more **agent nodes** that are designated to run your apps and services
-* Optional: A **fixed registration address** for agent nodes to register with the cluster
+- Two or more **server nodes** that will serve the Kubernetes API and run other control plane services
+- An **external datastore** (as opposed to the embedded SQLite datastore used in single-server setups)
+- Optional: Zero or more **agent nodes** that are designated to run your apps and services
+- Optional: A **fixed registration address** for agent nodes to register with the cluster
 
 For more details on how these components work together, refer to the [architecture section.](../architecture/architecture.md#high-availability-k3s)
 
@@ -19,9 +23,11 @@ For more details on how these components work together, refer to the [architectu
 Setting up an HA cluster requires the following steps:
 
 ### 1. Create an External Datastore
+
 You will first need to create an external datastore for the cluster. See the [Cluster Datastore Options](datastore.md) documentation for more details.
 
 ### 2. Launch Server Nodes
+
 K3s requires two or more server nodes for this HA configuration. See the [Requirements](../installation/requirements.md) guide for minimum machine requirements.
 
 When running the `k3s server` command on these nodes, you must set the `datastore-endpoint` parameter so that K3s knows how to connect to the external datastore. The `token` parameter can also be used to set a deterministic token when adding nodes. When empty, this token will be generated automatically for further use.
@@ -52,6 +58,7 @@ Once you've launched the `k3s server` process on all server nodes, ensure that t
 The same example command in Step 2 can be used to join additional server nodes, where the token from the first node needs to be used.
 
 If the first server node was started without the `--token` CLI flag or `K3S_TOKEN` variable, the token value can be retrieved from any server already joined to the cluster:
+
 ```bash
 cat /var/lib/rancher/k3s/server/token
 ```
@@ -66,26 +73,25 @@ curl -sfL https://get.k3s.io | sh -s - server \
 
 There are a few config flags that must be the same in all server nodes:
 
-* Network related flags: `--cluster-dns`, `--cluster-domain`, `--cluster-cidr`, `--service-cidr`
-* Flags controlling the deployment of certain components: `--disable-helm-controller`, `--disable-kube-proxy`, `--disable-network-policy` and any component passed to `--disable`
-* Feature related flags: `--secrets-encryption`
+- Network related flags: `--cluster-dns`, `--cluster-domain`, `--cluster-cidr`, `--service-cidr`
+- Flags controlling the deployment of certain components: `--disable-helm-controller`, `--disable-kube-proxy`, `--disable-network-policy` and any component passed to `--disable`
+- Feature related flags: `--secrets-encryption`
 
 :::note
 Ensure that you retain a copy of this token as it is required when restoring from backup and adding nodes. Previously, K3s did not enforce the use of a token when using external SQL datastores.
 :::
 
-
 ### 4. Optional: Configure a Fixed Registration Address
 
 Agent nodes need a URL to register against. This can be the IP or hostname of any server node, but in many cases those may change over time. For example, if running your cluster in a cloud that supports scaling groups, nodes may be created and destroyed over time, changing to different IPs from the initial set of server nodes. It would be best to have a stable endpoint in front of the server nodes that will not change over time. This endpoint can be set up using any number approaches, such as:
 
-* A layer-4 (TCP) load balancer
-* Round-robin DNS
-* Virtual or elastic IP addresses
+- A layer-4 (TCP) load balancer
+- Round-robin DNS
+- Virtual or elastic IP addresses
 
 See [Cluster Loadbalancer](./cluster-loadbalancer.md) for example configurations.
 
-This endpoint can also be used for accessing the Kubernetes API. So you can, for example, modify your [kubeconfig](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/) file to point to it instead of a specific node. 
+This endpoint can also be used for accessing the Kubernetes API. So you can, for example, modify your [kubeconfig](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/) file to point to it instead of a specific node.
 
 To avoid certificate errors in such a configuration, you should configure the server with the `--tls-san YOUR_IP_OR_HOSTNAME_HERE` option. This option adds an additional hostname or IP as a Subject Alternative Name in the TLS cert, and it can be specified multiple times if you would like to access via both the IP and the hostname.
 
