@@ -19,15 +19,15 @@ This page describes K3s network configuration options, including configuration o
   You must ensure that WireGuard kernel modules are available on every node, both servers and agents, before attempting to use the WireGuard Flannel backend.
 
 
-|  CLI Flag and Value                  | Description                                                                                                                                                           |
-|--------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `--flannel-ipv6-masq`                | Apply masquerading rules to IPv6 traffic (default for IPv4). Only applies on dual-stack or IPv6-only clusters. Compatible with any Flannel backend other than `none`. |
-| `--flannel-external-ip`              | Use node external IP addresses as the destination for Flannel traffic, instead of internal IPs. Only applies when --node-external-ip is set on a node.                |
-| `--flannel-backend=vxlan`            | Use VXLAN to encapsulate the packets. May require additional kernel modules on Raspberry Pi.                                                                          |
-| `--flannel-backend=host-gw`          | Use IP routes to pod subnets via node IPs. Requires direct layer 2 connectivity between all nodes in the cluster.                                                     |
-| `--flannel-backend=wireguard-native` | Use WireGuard to encapsulate and encrypt network traffic. May require additional kernel modules.                                                                      |
-| `--flannel-backend=ipsec`            | Use strongSwan IPSec via the `swanctl` binary to encrypt network traffic. (Deprecated; will be removed in v1.27.0)                                                    |
-| `--flannel-backend=none`             | Disable Flannel entirely.                                                                                                                                             |
+| CLI Flag and Value | Description |
+|--------------------|-------------|
+| `--flannel-ipv6-masq` | Apply masquerading rules to IPv6 traffic (default for IPv4). Only applies on dual-stack or IPv6-only clusters. Compatible with any Flannel backend other than `none`. |
+| `--flannel-external-ip` | Use node external IP addresses as the destination for Flannel traffic, instead of internal IPs. Only applies when --node-external-ip is set on a node. |
+| `--flannel-backend=vxlan` | Use VXLAN to encapsulate the packets. May require additional kernel modules on Raspberry Pi. |
+| `--flannel-backend=host-gw` | Use IP routes to pod subnets via node IPs. Requires direct layer 2 connectivity between all nodes in the cluster. |
+| `--flannel-backend=wireguard-native` | Use WireGuard to encapsulate and encrypt network traffic. May require additional kernel modules. |
+| `--flannel-backend=ipsec` | Use strongSwan IPSec via the `swanctl` binary to encrypt network traffic. (Deprecated; will be removed in v1.27.0) |
+| `--flannel-backend=none` | Disable Flannel entirely. |
 
 :::info Version Gate
 
