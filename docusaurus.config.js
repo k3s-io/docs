@@ -24,6 +24,7 @@ module.exports = {
         hashed: true,
         highlightSearchTermsOnTargetPage: true,
         indexBlog: false,
+        ignoreFiles: [/release-notes\/.*/],
       }),
     ],
   ],
