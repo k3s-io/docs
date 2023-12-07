@@ -29,7 +29,7 @@ The `--prefer-bundled-bin` flag is available starting with the 2022-12 releases 
 
 ### Rootless Mode
 
-Running K3s with Rootless mode is experimental and has several [known issues.](../advanced/advanced.md#known-issues-with-rootless-mode)
+Running K3s with Rootless mode is experimental and has several [known issues.](./advanced.md#known-issues-with-rootless-mode)
 
 ### Upgrading Hardened Clusters from v1.24.x to v1.25.x {#hardened-125}
 
@@ -55,7 +55,7 @@ kubelet-arg:
   - 'streaming-connection-idle-timeout=5m'
   - 'make-iptables-util-chains=true'
 ```
-2. Create the `/var/lib/rancher/k3s/server/psa.yaml` file with the following contents. You may want to exempt more namespaces as well. The below example exempts `kube-system` (required), `cis-operator-system` (optional, but useful for when running security scans through Rancher), and `system-upgrade` (required if doing [Automated Upgrades](../upgrades/automated.md)).
+2. Create the `/var/lib/rancher/k3s/server/psa.yaml` file with the following contents. You may want to exempt more namespaces as well. The below example exempts `kube-system` (required), `cis-operator-system` (optional, but useful for when running security scans through Rancher), and `system-upgrade` (required if doing [Automated Upgrades](./upgrades/automated.md)).
 ```yaml
 apiVersion: apiserver.config.k8s.io/v1
 kind: AdmissionConfiguration
@@ -76,7 +76,7 @@ plugins:
       runtimeClasses: []
       namespaces: [kube-system, cis-operator-system, system-upgrade]
 ```
-3. Perform the upgrade as normal. If doing [Automated Upgrades](../upgrades/automated.md), ensure that the namespace where the `system-upgrade-controller` pod is running in is setup to be privileged in accordance with the [Pod Security levels](https://kubernetes.io/docs/concepts/security/pod-security-admission/#pod-security-levels):
+3. Perform the upgrade as normal. If doing [Automated Upgrades](./upgrades/automated.md), ensure that the namespace where the `system-upgrade-controller` pod is running in is setup to be privileged in accordance with the [Pod Security levels](https://kubernetes.io/docs/concepts/security/pod-security-admission/#pod-security-levels):
 ```yaml
 apiVersion: v1
 kind: Namespace
@@ -92,7 +92,7 @@ metadata:
     pod-security.kubernetes.io/warn: privileged
     pod-security.kubernetes.io/warn-version: v1.25
 ```
-4. After the upgrade is complete, remove any remaining PSP resources from the cluster. In many cases, there may be PodSecurityPolicies and associated RBAC resources in custom files used for hardening within `/var/lib/rancher/k3s/server/manifests/`. Remove those resources and k3s will update automatically. Sometimes, due to timing, some of these may be left in the cluster, in which case you will need to delete them manually. If the [Hardening Guide](../security/hardening-guide.md) was previously followed, you should be able to delete them via the following:
+4. After the upgrade is complete, remove any remaining PSP resources from the cluster. In many cases, there may be PodSecurityPolicies and associated RBAC resources in custom files used for hardening within `/var/lib/rancher/k3s/server/manifests/`. Remove those resources and k3s will update automatically. Sometimes, due to timing, some of these may be left in the cluster, in which case you will need to delete them manually. If the [Hardening Guide](./security/hardening-guide.md) was previously followed, you should be able to delete them via the following:
 ```sh
 # Get the resources associated with PSPs
 $ kubectl get roles,clusterroles,rolebindings,clusterrolebindings -A | grep -i psp

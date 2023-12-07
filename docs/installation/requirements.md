@@ -58,7 +58,7 @@ reboot
 </TabItem>
 <TabItem value="debian" label="Ubuntu / Debian">
 
-Older Debian release may suffer from a known iptables bug. See [Known Issues](../known-issues/known-issues.md#iptables).
+Older Debian release may suffer from a known iptables bug. See [Known Issues](../known-issues.md#iptables).
 
 It is recommended to turn off ufw (uncomplicated firewall):
 ```bash
@@ -76,7 +76,7 @@ Additional ports may need to be opened depending on your setup. See [Inbound Rul
 </TabItem>
 <TabItem value="pi" label="Raspberry Pi">
 
-Raspberry Pi OS is Debian based, and may suffer from a known iptables bug. See [Known Issues](../known-issues/known-issues.md#iptables).
+Raspberry Pi OS is Debian based, and may suffer from a known iptables bug. See [Known Issues](../known-issues.md#iptables).
 
 Standard Raspberry Pi OS installations do not start with `cgroups` enabled. **K3S** needs `cgroups` to start the systemd service. `cgroups`can be enabled by appending `cgroup_memory=1 cgroup_enable=memory` to `/boot/cmdline.txt`.
 

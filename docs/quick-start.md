@@ -3,11 +3,11 @@ title: "Quick-Start Guide"
 weight: 10
 ---
 
-This guide will help you quickly launch a cluster with default options. The [installation section](../installation/installation.md) covers in greater detail how K3s can be set up.
+This guide will help you quickly launch a cluster with default options. The [installation section](./installation/installation.md) covers in greater detail how K3s can be set up.
 
-Make sure your nodes meet the the [requirements](../installation/requirements.md) before proceeding.
+Make sure your nodes meet the the [requirements](./installation/requirements.md) before proceeding.
 
-For information on how K3s components work together, refer to the [architecture section.](../architecture/architecture.md)
+For information on how K3s components work together, refer to the [architecture section.](./architecture.md)
 
 :::info
 New to Kubernetes? The official Kubernetes docs already have some great tutorials outlining the basics [here](https://kubernetes.io/docs/tutorials/kubernetes-basics/).

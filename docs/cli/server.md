@@ -169,7 +169,7 @@ The following options must be set to the same value on all servers in the cluste
 | `--enable-pprof`       | Enable pprof endpoint on supervisor port |
 | `--docker`             | Use cri-dockerd instead of containerd    |
 | `--prefer-bundled-bin` | Prefer bundled userspace binaries over host binaries |
-| `--disable-agent`      | See "[Running Agentless Servers (Experimental)](../advanced/advanced.md#running-agentless-servers-experimental)" |
+| `--disable-agent`      | See "[Running Agentless Servers (Experimental)](../advanced.md#running-agentless-servers-experimental)" |
 
 
 ### Deprecated Options

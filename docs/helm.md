@@ -5,9 +5,9 @@ weight: 42
 
 Helm is the package management tool of choice for Kubernetes. Helm charts provide templating syntax for Kubernetes YAML manifest documents. With Helm, developers or cluster administrators can create configurable templates known as Charts, instead of just using static manifests. For more information about creating your own Chart catalog, check out the docs at [https://helm.sh/docs/intro/quickstart/](https://helm.sh/docs/intro/quickstart/).
 
-K3s does not require any special configuration to support Helm. Just be sure you have properly set the kubeconfig path as per the [cluster access](../cluster-access/cluster-access.md) documentation. 
+K3s does not require any special configuration to support Helm. Just be sure you have properly set the kubeconfig path as per the [cluster access](./cluster-access.md) documentation. 
 
-K3s includes a [Helm Controller](https://github.com/k3s-io/helm-controller/) that manages installing, upgrading/reconfiguring, and uninstalling Helm charts using a HelmChart Custom Resource Definition (CRD). Paired with [auto-deploying AddOn manifests](../installation/packaged-components.md), installing a Helm chart on your cluster can be automated by creating a single file on disk.
+K3s includes a [Helm Controller](https://github.com/k3s-io/helm-controller/) that manages installing, upgrading/reconfiguring, and uninstalling Helm charts using a HelmChart Custom Resource Definition (CRD). Paired with [auto-deploying AddOn manifests](./installation/packaged-components.md), installing a Helm chart on your cluster can be automated by creating a single file on disk.
 
 ### Using the Helm Controller
 
@@ -145,7 +145,7 @@ spec:
 
 ### Migrating from Helm v2
 
-K3s can handle either Helm v2 or Helm v3. If you wish to migrate to Helm v3, [this](https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/) blog post by Helm explains how to use a plugin to successfully migrate. Refer to the official Helm 3 documentation [here](https://helm.sh/docs/) for more information. Just be sure you have properly set your kubeconfig as per the section about [cluster access.](../cluster-access/cluster-access.md)
+K3s can handle either Helm v2 or Helm v3. If you wish to migrate to Helm v3, [this](https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/) blog post by Helm explains how to use a plugin to successfully migrate. Refer to the official Helm 3 documentation [here](https://helm.sh/docs/) for more information. Just be sure you have properly set your kubeconfig as per the section about [cluster access.](./cluster-access.md)
 
 :::note
 Helm 3 no longer requires Tiller and the `helm init` command. Refer to the official documentation for details.

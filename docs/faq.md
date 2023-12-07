@@ -7,7 +7,7 @@ The FAQ is updated periodically and designed to answer the questions our users m
 
 ### Is K3s a suitable replacement for Kubernetes?
 
-K3s is a CNCF-certified Kubernetes distribution, and can do everything required of a standard Kubernetes cluster. It is just a more lightweight version. See the [main](../introduction.md) docs page for more details.
+K3s is a CNCF-certified Kubernetes distribution, and can do everything required of a standard Kubernetes cluster. It is just a more lightweight version. See the [main](./introduction.md) docs page for more details.
 
 ### How can I use my own Ingress instead of Traefik?
 
@@ -19,7 +19,7 @@ At this time K3s does not natively support Windows, however we are open to the i
 
 ### What exactly are Servers and Agents?
 
-For a breakdown on the components that make up a server and agent, see the [Architecture page](../architecture/architecture.md).
+For a breakdown on the components that make up a server and agent, see the [Architecture page](./architecture.md).
 
 ### How can I build from source?
 
@@ -41,15 +41,15 @@ Kubernetes uses a logging framework known as `klog`, which uses a single logging
 Since K3s runs all Kubernetes components within a single process, it is not possible to configure different log levels or destinations for individual Kubernetes components.
 Use of the `-v=<level>` or `--vmodule=<module>=<level>` component args will likely not have the desired effect. 
 
-See [Additional Logging Sources](../advanced/advanced.md#additional-logging-sources) for even more log options.
+See [Additional Logging Sources](./advanced.md#additional-logging-sources) for even more log options.
 
 ### Can I run K3s in Docker?
 
-Yes, there are multiple ways to run K3s in Docker. See [Advanced Options](../advanced/advanced.md#running-k3s-in-docker) for more details.
+Yes, there are multiple ways to run K3s in Docker. See [Advanced Options](./advanced.md#running-k3s-in-docker) for more details.
 
 ### What is the difference between K3s Server and Agent Tokens?
 
-For more information on managing K3s join tokens, see the [`k3s token` command documentation](../cli/token.md).
+For more information on managing K3s join tokens, see the [`k3s token` command documentation](./cli/token.md).
 
 ### How compatible are different versions of K3s?
 
@@ -61,9 +61,9 @@ In short, servers can be newer than agents, but agents cannot be newer than serv
  
 If you are having an issue with deploying K3s, you should:
 
-1) Check the [Known Issues](../known-issues/known-issues.md) page.
+1) Check the [Known Issues](./known-issues.md) page.
 
-2) Check that you have resolved any [Additional OS Preparation](../installation/requirements.md#operating-systems). Run `k3s check-config` and ensure that it passes.
+2) Check that you have resolved any [Additional OS Preparation](./installation/requirements.md#operating-systems). Run `k3s check-config` and ensure that it passes.
 
 3) Search the K3s [Issues](https://github.com/k3s-io/k3s/issues) and [Discussions](https://github.com/k3s-io/k3s/discussions) for one that matches your problem.
 

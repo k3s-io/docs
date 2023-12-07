@@ -10,7 +10,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 * A server node is defined as a host running the `k3s server` command, with control-plane and datastore components managed by K3s.
 * An agent node is defined as a host running the `k3s agent` command, without any datastore or control-plane components.
-* Both servers and agents run the kubelet, container runtime, and CNI. See the [Advanced Options](../advanced/advanced.md#running-agentless-servers-experimental) documentation for more information on running agentless servers.
+* Both servers and agents run the kubelet, container runtime, and CNI. See the [Advanced Options](./advanced.md#running-agentless-servers-experimental) documentation for more information on running agentless servers.
 
 ![](/img/how-it-works-k3s-revised.svg)
 
