@@ -5,9 +5,9 @@ weight: 42
 
 헬름(Helm)은 쿠버네티스를 위한 패키지 관리 도구입니다. 헬름 차트는 쿠버네티스 YAML 매니페스트 문서를 위한 템플릿 구문을 제공합니다. 개발자 또는 클러스터 관리자는 헬름을 사용하여 정적 매니페스트만 사용하는 대신 차트라는 구성 가능한 템플릿을 만들 수 있다. 자신만의 차트 카탈로그 생성에 대한 자세한 내용은 [https://helm.sh/docs/intro/quickstart/](https://helm.sh/docs/intro/quickstart/)에서 문서를 확인하세요.
 
-K3s는 헬름을 지원하기 위한 별도의 구성이 필요하지 않습니다. 다만, [클러스터 액세스](../cluster-access/cluster-access.md) 문서에 따라 kubeconfig 경로를 올바르게 설정했는지 확인하면 됩니다.
+K3s는 헬름을 지원하기 위한 별도의 구성이 필요하지 않습니다. 다만, [클러스터 액세스](./cluster-access.md) 문서에 따라 kubeconfig 경로를 올바르게 설정했는지 확인하면 됩니다.
 
-K3s에는 헬름 차트의 설치, 업그레이드/재구성 및 제거를 관리하는 [Helm Controller](https://github.com/k3s-io/helm-controller/)가 포함되어 있으며, 헬름 차트 커스텀 리소스 정의(CRD)를 사용하여 헬름 차트를 설치, 업그레이드/재구성 및 제거할 수 있습니다. 애드온 매니페스트 자동 배포](../installation/packaged-components.md)와 함께 사용하면 디스크에 단일 파일을 생성하여 클러스터에 헬름 차트를 설치하는 것을 자동화할 수 있습니다.
+K3s에는 헬름 차트의 설치, 업그레이드/재구성 및 제거를 관리하는 [Helm Controller](https://github.com/k3s-io/helm-controller/)가 포함되어 있으며, 헬름 차트 커스텀 리소스 정의(CRD)를 사용하여 헬름 차트를 설치, 업그레이드/재구성 및 제거할 수 있습니다. 애드온 매니페스트 자동 배포](./installation/packaged-components.md)와 함께 사용하면 디스크에 단일 파일을 생성하여 클러스터에 헬름 차트를 설치하는 것을 자동화할 수 있습니다.
 
 ### 헬름 컨트롤러 사용하기
 
@@ -105,7 +105,7 @@ spec:
 v1.17.[v1.17.0+k3s.1](https://github.com/k3s-io/k3s/releases/tag/v1.17.0%2Bk3s.1)부터 헬름 v3가 기본적으로 지원 및 사용됩니다.
 :::
 
-K3s는 헬름 v2 또는 헬름 v3를 처리할 수 있습니다. 헬름 v3로 마이그레이션하려는 경우, [이](https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/) 헬름 블로그 게시물에서 플러그인을 사용하여 성공적으로 마이그레이션하는 방법을 설명합니다. 자세한 내용은 헬름 3 공식 문서 [여기](https://helm.sh/docs/)를 참고하세요. [클러스터 접근](../cluster-access/cluster-access.md)에 대한 섹션에 따라 kubeconfig를 올바르게 설정했는지 확인하세요.
+K3s는 헬름 v2 또는 헬름 v3를 처리할 수 있습니다. 헬름 v3로 마이그레이션하려는 경우, [이](https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/) 헬름 블로그 게시물에서 플러그인을 사용하여 성공적으로 마이그레이션하는 방법을 설명합니다. 자세한 내용은 헬름 3 공식 문서 [여기](https://helm.sh/docs/)를 참고하세요. [클러스터 접근](./cluster-access.md)에 대한 섹션에 따라 kubeconfig를 올바르게 설정했는지 확인하세요.
 
 :::note
 헬름 3에서는 더 이상 Tiller와 `helm init` 명령이 필요하지 않습니다. 자세한 내용은 공식 문서를 참고하세요.

@@ -3,9 +3,9 @@ title: "빠른 시작 가이드"
 weight: 10
 ---
 
-이 가이드는 기본 옵션으로 클러스터를 빠르게 시작하는 데 도움이 됩니다. [설치 섹션](../installation/installation.md)에서는 K3s를 설정하는 방법에 대해 자세히 설명합니다.
+이 가이드는 기본 옵션으로 클러스터를 빠르게 시작하는 데 도움이 됩니다. [설치 섹션](./installation/installation.md)에서는 K3s를 설정하는 방법에 대해 자세히 설명합니다.
 
-K3s 구성 요소들이 작동하는 방식에 대한 자세한 내용은 [아키텍처 섹션](../architecture/architecture.md)을 참조하세요.
+K3s 구성 요소들이 작동하는 방식에 대한 자세한 내용은 [아키텍처 섹션](./architecture.md)을 참조하세요.
 
 :::info
 Kubernetes를 처음 사용하시나요?

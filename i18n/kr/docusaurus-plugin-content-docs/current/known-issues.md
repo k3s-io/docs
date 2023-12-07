@@ -13,11 +13,11 @@ weight: 70
 
 레거시 대신 nftables 모드에서 iptables를 실행하는 경우 문제가 발생할 수 있습니다. 문제를 방지하려면 최신 버전(예: 1.6.1+)의 iptables를 사용하는 것이 좋습니다.
 
-또한 1.8.0-1.8.4 버전에는 K3s가 실패할 수 있는 알려진 문제가 있습니다. 해결 방법은 [추가 OS 준비](../advanced/advanced.md#old-iptables-versions)를 참조하세요.
+또한 1.8.0-1.8.4 버전에는 K3s가 실패할 수 있는 알려진 문제가 있습니다. 해결 방법은 [추가 OS 준비](./advanced.md#old-iptables-versions)를 참조하세요.
 
 ### Rootless Mode
 
-루트리스 모드로 K3s를 실행하는 것은 실험 중이며 몇 가지 [알려진 이슈](../advanced/advanced.md#known-issues-with-rootless-mode)가 있습니다.
+루트리스 모드로 K3s를 실행하는 것은 실험 중이며 몇 가지 [알려진 이슈](./advanced.md#known-issues-with-rootless-mode)가 있습니다.
 
 # 강화된(Hardened) 클러스터를 v1.24.x에서 v1.25.x로 업그레이드하기
 
@@ -68,7 +68,7 @@ plugins:
         namespaces: [kube-system, cis-operator-system, system-upgrade]
 ```
 
-3. 일반적으로 업그레이드를 수행합니다. [자동 업그레이드](../upgrades/automated.md)를 수행하는 경우 `system-upgrade-controller`가 실행되는 네임스페이스가 [파드 보안 수준](https://kubernetes.io/docs/concepts/security/pod-security-admission/#pod-security-levels)에 따라 권한이 부여된 것으로 설정되었는지 확인합니다.
+3. 일반적으로 업그레이드를 수행합니다. [자동 업그레이드](./upgrades/automated.md)를 수행하는 경우 `system-upgrade-controller`가 실행되는 네임스페이스가 [파드 보안 수준](https://kubernetes.io/docs/concepts/security/pod-security-admission/#pod-security-levels)에 따라 권한이 부여된 것으로 설정되었는지 확인합니다.
 
 ```yaml
 apiVersion: v1
@@ -86,7 +86,7 @@ metadata:
     pod-security.kubernetes.io/warn-version: v1.25
 ```
 
-4. 업그레이드가 완료된 후, 클러스터에서 남아있는 모든 PSP 리소스를 제거합니다. 대부분의 경우, `/var/lib/rancher/k3s/server/manifests/` 내부에서 강화를 위해 사용된 사용자 정의 파일에는 PodSecurityPolicies 및 관련 RBAC 리소스가 있을 수 있습니다. 이러한 리소스를 제거하면 k3s가 자동으로 업데이트됩니다. 때때로 시간이 지난 후에 이러한 리소스가 클러스터에 남아있을 수 있으므로 수동으로 삭제해야 합니다. 이전에 [강화 가이드](../security/hardening-guide.md)를 따르면 다음과 같이 삭제할 수 있습니다:
+4. 업그레이드가 완료된 후, 클러스터에서 남아있는 모든 PSP 리소스를 제거합니다. 대부분의 경우, `/var/lib/rancher/k3s/server/manifests/` 내부에서 강화를 위해 사용된 사용자 정의 파일에는 PodSecurityPolicies 및 관련 RBAC 리소스가 있을 수 있습니다. 이러한 리소스를 제거하면 k3s가 자동으로 업데이트됩니다. 때때로 시간이 지난 후에 이러한 리소스가 클러스터에 남아있을 수 있으므로 수동으로 삭제해야 합니다. 이전에 [강화 가이드](./security/hardening-guide.md)를 따르면 다음과 같이 삭제할 수 있습니다:
 
 ```sh
 # Get the resources associated with PSPs

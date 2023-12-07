@@ -12,7 +12,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 - 서버 노드는 `k3s server` 명령을 실행하는 호스트로 정의되며, 컨트롤 플레인 및 데이터스토어 구성 요소는 K3s에서 관리합니다.
 - 에이전트 노드는 데이터스토어 또는 컨트롤 플레인 구성 요소 없이 `k3s agent` 명령을 실행하는 호스트로 정의됩니다.
-- 서버와 에이전트 모두 kubelet, 컨테이너 런타임 및 CNI를 실행합니다. 에이전트 없는 서버 실행에 대한 자세한 내용은 [고급 옵션](../advanced/advanced.md#running-agentless-servers-experimental) 설명서를 참조하세요.
+- 서버와 에이전트 모두 kubelet, 컨테이너 런타임 및 CNI를 실행합니다. 에이전트 없는 서버 실행에 대한 자세한 내용은 [고급 옵션](./advanced.md#running-agentless-servers-experimental) 설명서를 참조하세요.
 
 ![](/img/how-it-works-k3s-revised.svg)
 

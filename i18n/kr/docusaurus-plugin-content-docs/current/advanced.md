@@ -15,19 +15,19 @@ aliases:
 
 K3s는 첫 번째 서버 노드를 시작하는 동안 자체 서명된 CA(인증 기관) 인증서를 생성합니다. 이 CA 인증서는 10년 동안 유효하며 자동으로 갱신되지 않습니다.
 
-사용자 지정 CA 인증서 사용 또는 자체 서명 CA 인증서 갱신에 대한 자세한 내용은 [`k3s 인증서 rotate-ca` 명령 설명서](../cli/certificate.md#certificate-authority-ca-certificates)를 참조하세요.
+사용자 지정 CA 인증서 사용 또는 자체 서명 CA 인증서 갱신에 대한 자세한 내용은 [`k3s 인증서 rotate-ca` 명령 설명서](./cli/certificate.md#certificate-authority-ca-certificates)를 참조하세요.
 
 ### 클라이언트 및 서버 인증서
 
 K3s 클라이언트 및 서버 인증서는 발급한 날로부터 365일 동안 유효합니다. 만료되었거나 만료 후 90일 이내에 만료된 인증서는 K3s를 시작할 때마다 자동으로 갱신됩니다.
 
-클라이언트 및 서버 인증서를 수동으로 로테이션하는 것에 대한 정보는 [`k3s 인증서 로테이션` 명령 설명서](../cli/certificate.md#client-and-server-certificates)를 참조하세요.
+클라이언트 및 서버 인증서를 수동으로 로테이션하는 것에 대한 정보는 [`k3s 인증서 로테이션` 명령 설명서](./cli/certificate.md#client-and-server-certificates)를 참조하세요.
 
 ## 토큰 관리
 
 기본적으로 K3s는 서버와 에이전트 모두에 단일 정적 토큰을 사용합니다. 이 토큰은 클러스터가 생성된 후에는 변경할 수 없습니다.
 에이전트 조인에만 사용할 수 있는 두 번째 정적 토큰을 활성화하거나 자동으로 만료되는 임시 `kubeadm` 스타일 조인 토큰을 생성할 수 있습니다.
-자세한 내용은 [`k3s token` 명령어 설명서](../cli/token.md)를 참고하세요.
+자세한 내용은 [`k3s token` 명령어 설명서](./cli/token.md)를 참고하세요.
 
 ## HTTP 프록시 구성하기
 
@@ -261,7 +261,7 @@ spec:
 
 ## 노드 레이블 및 테인트
 
-K3s 에이전트는 `--node-label` 및 `--node-taint` 옵션으로 구성할 수 있으며, 이 옵션은 kubelet에 레이블과 테인트를 추가합니다. 이 두 옵션은 [등록 시점에] 레이블 및/또는 테인트만 추가하므로(../cli/agent.md#node-labels-and-taints-for-agents), 노드가 클러스터에 처음 조인될 때만 설정할 수 있습니다.
+K3s 에이전트는 `--node-label` 및 `--node-taint` 옵션으로 구성할 수 있으며, 이 옵션은 kubelet에 레이블과 테인트를 추가합니다. 이 두 옵션은 [등록 시점에] 레이블 및/또는 테인트만 추가하므로(./cli/agent.md#node-labels-and-taints-for-agents), 노드가 클러스터에 처음 조인될 때만 설정할 수 있습니다.
 
 현재 모든 버전의 쿠버네티스는 노드가 `kubernetes.io` 및 `k8s.io` 접두사가 포함된 대부분의 레이블, 특히 `kubernetes.io/role` 레이블에 등록하는 것을 제한합니다. 허용되지 않는 레이블을 가진 노드를 시작하려고 하면 K3s가 시작되지 않습니다. 쿠버네티스 작성자가 언급했듯이:
 
@@ -315,7 +315,7 @@ firewall-cmd --permanent --zone=trusted --add-source=10.43.0.0/16 #services
 firewall-cmd --reload
 ```
 
-설정에 따라 추가 포트를 열어야 할 수도 있습니다. 자세한 내용은 [인바운드 규칙](../installation/requirements.md#inbound-rules-for-k3s-server-nodes)을 참조하세요. 파드 또는 서비스에 대한 기본 CIDR을 변경하는 경우, 그에 따라 방화벽 규칙을 업데이트해야 합니다.
+설정에 따라 추가 포트를 열어야 할 수도 있습니다. 자세한 내용은 [인바운드 규칙](./installation/requirements.md#inbound-rules-for-k3s-server-nodes)을 참조하세요. 파드 또는 서비스에 대한 기본 CIDR을 변경하는 경우, 그에 따라 방화벽 규칙을 업데이트해야 합니다.
 
 활성화된 경우, nm-cloud-setup을 비활성화하고 노드를 재부팅해야 합니다:
 
@@ -340,7 +340,7 @@ ufw allow from 10.42.0.0/16 to any #pods
 ufw allow from 10.43.0.0/16 to any #services
 ```
 
-설정에 따라 추가 포트를 열어야 할 수도 있습니다. 자세한 내용은 [인바운드 규칙](../installation/requirements.md#inbound-rules-for-k3s-server-nodes)을 참조한다. 파드 또는 서비스에 대한 기본 CIDR을 변경하는 경우, 그에 따라 방화벽 규칙을 업데이트해야 합니다.
+설정에 따라 추가 포트를 열어야 할 수도 있습니다. 자세한 내용은 [인바운드 규칙](./installation/requirements.md#inbound-rules-for-k3s-server-nodes)을 참조한다. 파드 또는 서비스에 대한 기본 CIDR을 변경하는 경우, 그에 따라 방화벽 규칙을 업데이트해야 합니다.
 
 ### Raspberry Pi
 
@@ -416,7 +416,7 @@ v1.19.4+k3s1부터 사용 가능
 <Tabs>
 <TabItem value="자동 설치" default>
 
-에어 갭(폐쇄망) 설치를 수행하지 않는 경우 호환되는 시스템에서 [설치 스크립트](../installation/configuration.md#configuration-with-install-script)는 랜처 RPM 저장소에서 SELinux RPM을 자동으로 설치합니다. 자동 설치는 `INSTALL_K3S_SKIP_SELINUX_RPM=true`로 설정하여 건너뛸 수 있습니다.
+에어 갭(폐쇄망) 설치를 수행하지 않는 경우 호환되는 시스템에서 [설치 스크립트](./installation/configuration.md#configuration-with-install-script)는 랜처 RPM 저장소에서 SELinux RPM을 자동으로 설치합니다. 자동 설치는 `INSTALL_K3S_SKIP_SELINUX_RPM=true`로 설정하여 건너뛸 수 있습니다.
 
 </TabItem>
 
@@ -438,7 +438,7 @@ yum install -y https://rpm.rancher.io/k3s/latest/common/centos/7/noarch/k3s-seli
 
 SELinux를 활용하려면 K3s 서버 및 에이전트를 시작할 때 `--selinux` 플래그를 지정하세요.
 
-이 옵션은 K3s [구성 파일](../installation/configuration.md#configuration-file)에서도 지정할 수 있습니다.
+이 옵션은 K3s [구성 파일](./installation/configuration.md#configuration-file)에서도 지정할 수 있습니다.
 
 ```
 selinux: true

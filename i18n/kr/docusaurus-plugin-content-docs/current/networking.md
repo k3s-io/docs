@@ -5,9 +5,9 @@ weight: 35
 
 이 페이지는 CoreDNS, Traefik 인그레스 컨트롤러, Klipper 서비스 로드밸런서가 K3s 내에서 작동하는 방식을 설명합니다.
 
-Flannel 구성 옵션 및 백엔드 선택에 대한 자세한 내용이나 자체 CNI 설정 방법은 [설치 네트워크 옵션](../installation/network-options.md) 페이지를 참조하세요.
+Flannel 구성 옵션 및 백엔드 선택에 대한 자세한 내용이나 자체 CNI 설정 방법은 [설치 네트워크 옵션](./installation/network-options.md) 페이지를 참조하세요.
 
-K3s를 위해 어떤 포트를 열어야 하는지에 대한 정보는 [네트워킹 요구 사항](../installation/requirements.md#networking)을 참조하세요.
+K3s를 위해 어떤 포트를 열어야 하는지에 대한 정보는 [네트워킹 요구 사항](./installation/requirements.md#networking)을 참조하세요.
 
 ## CoreDNS
 
@@ -21,9 +21,9 @@ CoreDNS를 설치하지 않은 경우 클러스터 DNS 공급자를 직접 설�
 
 Traefik 인그레스 컨트롤러는 포트 80과 443을 사용하는 로드밸런서 서비스를 배포합니다. 기본적으로 ServiceLB는 모든 클러스터 멤버에 이러한 포트를 노출하므로 다른 HostPort 또는 NodePort 파드에서는 이러한 포트를 사용할 수 없습니다.
 
-서버를 시작할 때 기본적으로 Traefik이 배포됩니다. 자세한 내용은 [패키지 컴포넌트 관리](../installation/packaged-components.md)를 참고하세요. 기본 설정 파일은 `/var/lib/rancher/k3s/server/manifests/traefik.yaml`에 있습니다.
+서버를 시작할 때 기본적으로 Traefik이 배포됩니다. 자세한 내용은 [패키지 컴포넌트 관리](./installation/packaged-components.md)를 참고하세요. 기본 설정 파일은 `/var/lib/rancher/k3s/server/manifests/traefik.yaml`에 있습니다.
 
-K3s가 시작할 때 이 파일을 기본값으로 대체하므로 `traefik.yaml` 파일을 수동으로 편집해서는 안 됩니다. 대신, `/var/lib/rancher/k3s/server/manifests`에 `HelmChartConfig` 매니페스트를 추가로 생성하여 Traefik을 사용자 정의해야 합니다. 자세한 내용과 예제는 [HelmChartConfig 패키지 컴포넌트 커스터마이징](../helm/helm.md#customizing-packaged-components-with-helmchartconfig)을 참고하세요. 사용 가능한 구성 값에 대한 자세한 내용은 공식 [Traefik 헬름 구성 매개변수](https://github.com/traefik/traefik-helm-chart/tree/master/traefik)를 참고하세요.
+K3s가 시작할 때 이 파일을 기본값으로 대체하므로 `traefik.yaml` 파일을 수동으로 편집해서는 안 됩니다. 대신, `/var/lib/rancher/k3s/server/manifests`에 `HelmChartConfig` 매니페스트를 추가로 생성하여 Traefik을 사용자 정의해야 합니다. 자세한 내용과 예제는 [HelmChartConfig 패키지 컴포넌트 커스터마이징](./helm.md#customizing-packaged-components-with-helmchartconfig)을 참고하세요. 사용 가능한 구성 값에 대한 자세한 내용은 공식 [Traefik 헬름 구성 매개변수](https://github.com/traefik/traefik-helm-chart/tree/master/traefik)를 참고하세요.
 
 클러스터에서 Traefik을 제거하려면 `--disable=traefik` 플래그를 사용하여 모든 서버를 시작합니다.
 

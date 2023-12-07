@@ -30,8 +30,8 @@ K3s is expected to work on most modern Linux systems.
 
 Some OSs have specific requirements:
 
-- If you are using **(Red Hat/CentOS) Enterprise Linux**, follow [these steps](../advanced/advanced.md#red-hat-enterprise-linux--centos) for additional setup.
-- If you are using **Raspberry Pi OS**, follow [these steps](../advanced/advanced.md#raspberry-pi) to switch to legacy iptables.
+- If you are using **(Red Hat/CentOS) Enterprise Linux**, follow [these steps](../advanced.md#red-hat-enterprise-linux--centos) for additional setup.
+- If you are using **Raspberry Pi OS**, follow [these steps](../advanced.md#raspberry-pi) to switch to legacy iptables.
 
 For more information on which OSs were tested with Rancher managed K3s clusters, refer to the [Rancher support and maintenance terms.](https://rancher.com/support-maintenance-terms/)
 
@@ -81,7 +81,7 @@ Flannel relies on the [Bridge CNI plugin](https://www.cni.dev/plugins/current/ma
 
 Typically, all outbound traffic is allowed.
 
-Additional changes to the firewall may be required depending on the OS used. See [Additional OS Preparations](../advanced/advanced.md#additional-os-preparations).
+Additional changes to the firewall may be required depending on the OS used. See [Additional OS Preparations](../advanced.md#additional-os-preparations).
 
 ## Large Clusters
 
