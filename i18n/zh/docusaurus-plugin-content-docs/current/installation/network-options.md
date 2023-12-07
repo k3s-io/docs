@@ -5,7 +5,7 @@ weight: 25
 
 本文介绍了 K3s 网络配置选项，包括配置或替换 Flannel，以及配置 IPv6。
 
-> **注意**：有关 CoreDNS、Traefik 和 Service LB 的信息，请参阅[网络](../networking/networking.md)页面。
+> **注意**：有关 CoreDNS、Traefik 和 Service LB 的信息，请参阅[网络](../networking.md)页面。
 
 ## Flannel 选项
 
@@ -13,7 +13,7 @@ weight: 25
 
 * Flannel 只能在 Server 节点上设置选项，并且集群中的所有 Server 上都必须相同。
 * Flannel 的默认后端是 `vxlan`。要启用加密，请使用 `wireguard-native` 后端。
-* 在 Rasperry Pi 上使用 `vxlan` 和最新版本的 Ubuntu 需要[额外的准备工作](../advanced/advanced.md#raspberry-pi)。
+* 在 Rasperry Pi 上使用 `vxlan` 和最新版本的 Ubuntu 需要[额外的准备工作](../advanced.md#raspberry-pi)。
 * 在某些 Linux 发行版上使用 `wireguard-native` 作为 Flannel 后端可能需要额外的模块。有关详细信息，请参阅 [WireGuard 安装指南](https://www.wireguard.com/install/)。
    WireGuard 的安装步骤将确保为你的操作系统安装适当的内核模块。
    在尝试使用 WireGuard Flannel 后端之前，你必须确保 WireGuard 内核模块在每个节点（包括 Server 和 Agent）上都可用。

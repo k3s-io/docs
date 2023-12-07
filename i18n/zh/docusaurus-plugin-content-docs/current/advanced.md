@@ -14,19 +14,19 @@ aliases:
 
 K3s 在第一个 Server 节点启动时生成自签名 CA 证书。这些 CA 证书的有效期为 10 年，不会自动更新。
 
-有关使用自定义 CA 证书或更新自签名 CA 证书的信息，请参阅 [`k3s certificate rotate-ca` 命令文档](../cli/certificate.md#certificate-authority-ca-certificates)。
+有关使用自定义 CA 证书或更新自签名 CA 证书的信息，请参阅 [`k3s certificate rotate-ca` 命令文档](./cli/certificate.md#certificate-authority-ca-certificates)。
 
 ### 客户端和服务器证书
 
 K3s 客户端和服务器证书自颁发日起 365 天内有效。每次启动 K3s 时，已过期或 90 天内过期的证书都会自动更新。
 
-有关手动轮换客户端和服务器证书的信息，请参阅 [`k3s certificate rotate` 命令文档](../cli/certificate.md#client-and-server-certificates)。
+有关手动轮换客户端和服务器证书的信息，请参阅 [`k3s certificate rotate` 命令文档](./cli/certificate.md#client-and-server-certificates)。
 
 ## Token 管理
 
 默认情况下，K3s 为 Server 和 Agent 使用单个静态 Token。创建集群后不能更改此 Token。
 你可以启用只能用于加入 Agent 的第二个静态 Token，或创建自动过期的临时 `kubeadm` 联接样式 Token。
-有关详细信息，请参阅 [`k3s token` 命令文档](../cli/token.md)。
+有关详细信息，请参阅 [`k3s token` 命令文档](./cli/token.md)。
 
 ## 配置 HTTP 代理
 
@@ -256,7 +256,7 @@ rootlesskit 和 slirp4nets 使用的一些配置可以通过环境变量来设�
 
 ## 节点标签和污点
 
-K3s Agent 可以通过 `--node-label` 和 `--node-taint` 选项来配置，它们会为 kubelet 添加标签和污点。这两个选项仅在[注册时](../cli/agent.md#agent-的节点标签和污点)添加标签和/或污点，因此只能在节点首次加入集群时设置。
+K3s Agent 可以通过 `--node-label` 和 `--node-taint` 选项来配置，它们会为 kubelet 添加标签和污点。这两个选项仅在[注册时](./cli/agent.md#agent-的节点标签和污点)添加标签和/或污点，因此只能在节点首次加入集群时设置。
 
 当前所有的 Kubernetes 版本都限制节点注册到带有 `kubernetes.io` 和 `k8s.io` 前缀的大部分标签，特别是 `kubernetes.io/role` 标签。如果你尝试启动带有不允许的标签的节点，K3s 将无法启动。正如 Kubernetes 作者所说：
 
@@ -307,7 +307,7 @@ firewall-cmd --permanent --zone=trusted --add-source=10.43.0.0/16 #services
 firewall-cmd --reload
 ```
 
-你可能还需要打开其他端口。有关详细信息，请参阅[入站规则](../installation/requirements.md#k3s-server-节点的入站规则)。如果更改了 pod 或服务的默认 CIDR，则需要相应地更新防火墙规则。
+你可能还需要打开其他端口。有关详细信息，请参阅[入站规则](./installation/requirements.md#k3s-server-节点的入站规则)。如果更改了 pod 或服务的默认 CIDR，则需要相应地更新防火墙规则。
 
 如果启用，则需要禁用 nm-cloud-setup 并重新启动节点：
 ```bash
@@ -329,7 +329,7 @@ ufw allow from 10.42.0.0/16 to any #pods
 ufw allow from 10.43.0.0/16 to any #services
 ```
 
-你可能还需要打开其他端口。有关详细信息，请参阅[入站规则](../installation/requirements.md#k3s-server-节点的入站规则)。如果更改了 pod 或服务的默认 CIDR，则需要相应地更新防火墙规则。
+你可能还需要打开其他端口。有关详细信息，请参阅[入站规则](./installation/requirements.md#k3s-server-节点的入站规则)。如果更改了 pod 或服务的默认 CIDR，则需要相应地更新防火墙规则。
 
 ### Raspberry Pi
 
@@ -401,7 +401,7 @@ sudo docker cp k3s-server-1:/etc/rancher/k3s/k3s.yaml ~/.kube/config
 <Tabs>
 <TabItem value="自动安装" default>
 
-如果系统兼容，而且没有进行离线安装，那么[安装脚本](../installation/configuration.md#使用安装脚本的选项)将自动从 Rancher RPM 仓库安装 SELinux RPM。你通过设置 `INSTALL_K3S_SKIP_SELINUX_RPM=true` 来跳过自动安装。
+如果系统兼容，而且没有进行离线安装，那么[安装脚本](./installation/configuration.md#使用安装脚本的选项)将自动从 Rancher RPM 仓库安装 SELinux RPM。你通过设置 `INSTALL_K3S_SKIP_SELINUX_RPM=true` 来跳过自动安装。
 
 </TabItem>
 

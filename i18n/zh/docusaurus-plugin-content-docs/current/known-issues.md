@@ -12,11 +12,11 @@ weight: 70
 
 如果你使用 nftables 模式而不是传统模式来运行 iptables，则可能会遇到问题。我们建议使用较新的 iptables（例如 1.6.1+）来避免出现问题。
 
-此外，版本 1.8.0-1.8.4 存在可能导致 K3s 失败的问题。有关解决方法，请参阅[其他操作系统准备](../advanced/advanced.md#旧的-iptables-版本)。
+此外，版本 1.8.0-1.8.4 存在可能导致 K3s 失败的问题。有关解决方法，请参阅[其他操作系统准备](./advanced.md#旧的-iptables-版本)。
 
 ### Rootless 模式
 
-使用 Rootless 模式运行 K3s 是实验性的，存在几个[已知问题](../advanced/advanced.md#rootless-模式的已知问题)。
+使用 Rootless 模式运行 K3s 是实验性的，存在几个[已知问题](./advanced.md#rootless-模式的已知问题)。
 
 ### 将强化集群从 v1.24.x 升级到 v1.25.x {#hardened-125}
 
@@ -42,7 +42,7 @@ kubelet-arg:
   - 'streaming-connection-idle-timeout=5m'
   - 'make-iptables-util-chains=true'
 ```
-2. 使用以下内容创建 `/var/lib/rancher/k3s/server/psa.yaml` 文件。你可能还想豁免更多命名空间。下面的示例豁免了 `kube-system`（必需）、`cis-operator-system`（可选，但在通过 Rancher 运行安全扫描时很有用）和 `system- upgrade`（如果执行[自动升级](../upgrades/automated.md)则需要）。
+2. 使用以下内容创建 `/var/lib/rancher/k3s/server/psa.yaml` 文件。你可能还想豁免更多命名空间。下面的示例豁免了 `kube-system`（必需）、`cis-operator-system`（可选，但在通过 Rancher 运行安全扫描时很有用）和 `system- upgrade`（如果执行[自动升级](./upgrades/automated.md)则需要）。
 ```yaml
 apiVersion: apiserver.config.k8s.io/v1
 kind: AdmissionConfiguration
@@ -63,7 +63,7 @@ plugins:
       runtimeClasses: []
       namespaces: [kube-system, cis-operator-system, system-upgrade]
 ```
-3. 正常执行升级。如果使用[自动升级](../upgrades/automated.md)，请确保运行 `system-upgrade-controller` pod 的命名空间按照 [Pod 安全级别](https://kubernetes.io/docs/concepts/security/pod-security-admission/#pod-security-levels)的要求设置为 privileged。
+3. 正常执行升级。如果使用[自动升级](./upgrades/automated.md)，请确保运行 `system-upgrade-controller` pod 的命名空间按照 [Pod 安全级别](https://kubernetes.io/docs/concepts/security/pod-security-admission/#pod-security-levels)的要求设置为 privileged。
 ```yaml
 apiVersion: v1
 kind: Namespace
@@ -79,7 +79,7 @@ metadata:
     pod-security.kubernetes.io/warn: privileged
     pod-security.kubernetes.io/warn-version: v1.25
 ```
-4. 升级完成后，从集群中移除剩余的 PSP 资源。在许多情况下，在 `/var/lib/rancher/k3s/server/manifests/` 中用于加固的自定义文件中可能存在 PodSecurityPolicies 和关联的 RBAC 资源。删除这些资源，然后 K3s 将自动更新。由于时间原因，一些资源可能会留在集群中，在这种情况下，你需要手动删除它们。如果之前遵循了[强化指南](../security/hardening-guide.md)，你应该能够通过以下方式删除它们：
+4. 升级完成后，从集群中移除剩余的 PSP 资源。在许多情况下，在 `/var/lib/rancher/k3s/server/manifests/` 中用于加固的自定义文件中可能存在 PodSecurityPolicies 和关联的 RBAC 资源。删除这些资源，然后 K3s 将自动更新。由于时间原因，一些资源可能会留在集群中，在这种情况下，你需要手动删除它们。如果之前遵循了[强化指南](./security/hardening-guide.md)，你应该能够通过以下方式删除它们：
 ```sh
 # 获取与 PSP 关联的资源
 $ kubectl get roles,clusterroles,rolebindings,clusterrolebindings -A | grep -i psp

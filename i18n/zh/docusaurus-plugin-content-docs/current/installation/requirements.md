@@ -33,8 +33,8 @@ K3s 有望在大多数现代 Linux 系统上运行。
 
 一些操作系统有特定的要求：
 
-- 如果你使用 **Red Hat/CentOS Enterprise Linux**，请按照[这些步骤](../advanced/advanced.md#red-hat-enterprise-linux--centos)进行其他设置。
-- 如果你使用 **Raspberry Pi OS**，请按照[这些步骤](../advanced/advanced.md#raspberry-pi)切换到旧版 iptables。
+- 如果你使用 **Red Hat/CentOS Enterprise Linux**，请按照[这些步骤](../advanced.md#red-hat-enterprise-linux--centos)进行其他设置。
+- 如果你使用 **Raspberry Pi OS**，请按照[这些步骤](../advanced.md#raspberry-pi)切换到旧版 iptables。
 
 关于 Rancher 管理的 K3s 集群测试了哪些操作系统，请参阅 [Rancher 支持和维护条款](https://rancher.com/support-maintenance-terms/)。
 
@@ -88,7 +88,7 @@ Flannel 依赖 [Bridge CNI 插件](https://www.cni.dev/plugins/current/main/brid
 
 所有出站流量通常都是允许的。
 
-你可能需要根据使用的操作系统对防火墙进行其他更改。有关更多信息，请参阅[其他操作系统准备](../advanced/advanced.md#其他操作系统准备)。
+你可能需要根据使用的操作系统对防火墙进行其他更改。有关更多信息，请参阅[其他操作系统准备](../advanced.md#其他操作系统准备)。
 
 ## 大型集群
 

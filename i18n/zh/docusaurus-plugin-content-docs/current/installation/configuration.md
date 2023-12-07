@@ -3,11 +3,11 @@ title: "配置选项"
 weight: 20
 ---
 
-本文重点介绍首次设置 K3s 时常用的选项。如需了解详情，请参阅有关[高级选项和配置](../advanced/advanced.md)以及 [server](../cli/server.md) 和 [agent](../cli/agent.md) 命令的文档。
+本文重点介绍首次设置 K3s 时常用的选项。如需了解详情，请参阅有关[高级选项和配置](../advanced.md)以及 [server](../cli/server.md) 和 [agent](../cli/agent.md) 命令的文档。
 
 ## 使用安装脚本的选项
 
-如[快速入门指南](../quick-start/quick-start.md)中所述，你可以使用 https://get.k3s.io 上提供的安装脚本在基于 systemd 和 openrc 的系统上将 K3s 安装为服务。
+如[快速入门指南](../quick-start.md)中所述，你可以使用 https://get.k3s.io 上提供的安装脚本在基于 systemd 和 openrc 的系统上将 K3s 安装为服务。
 
 你可以结合使用 `INSTALL_K3S_EXEC`、`K3S_` 环境变量和命令标志将配置传递给服务配置。
 带前缀的环境变量、`INSTALL_K3S_EXEC` 值和尾附的 shell 参数都保存在服务配置中。

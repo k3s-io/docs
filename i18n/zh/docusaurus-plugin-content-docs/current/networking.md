@@ -5,9 +5,9 @@ weight: 35
 
 本文介绍了 CoreDNS、Traefik Ingress controller 和 Klipper service load balancer 是如何在 K3s 中工作的。
 
-有关 Flannel 配置选项和后端选择，以及如何设置自己的 CNI，请参阅[安装网络选项](../installation/network-options.md)页面。
+有关 Flannel 配置选项和后端选择，以及如何设置自己的 CNI，请参阅[安装网络选项](./installation/network-options.md)页面。
 
-有关 K3s 需要开放哪些端口，请参考[网络要求](../installation/requirements.md#网络)。
+有关 K3s 需要开放哪些端口，请参考[网络要求](./installation/requirements.md#网络)。
 
 ## CoreDNS
 
@@ -21,9 +21,9 @@ CoreDNS 在 Server 启动时自动部署。要禁用它，请使用 `--disable=c
 
 Traefik Ingress Controller 部署了一个使用端口 80 和 443 的 LoadBalancer Service。默认情况下，ServiceLB 将在所有集群成员上公开这些端口，换言之，这些端口无法用于其他 HostPort 或 NodePort pod。
 
-Traefik 在启动服务器时默认部署。有关详细信息，请参阅[管理打包组件](../installation/packaged-components.md)。默认配置文件位于 `/var/lib/rancher/k3s/server/manifests/traefik.yaml`。
+Traefik 在启动服务器时默认部署。有关详细信息，请参阅[管理打包组件](./installation/packaged-components.md)。默认配置文件位于 `/var/lib/rancher/k3s/server/manifests/traefik.yaml`。
 
-不要手动编辑 `traefik.yaml` 文件，因为 K3s 会在启动时使用默认值替换该文件。相反，你需要通过在 `/var/lib/rancher/k3s/server/manifests` 中创建其他 `HelmChartConfig` 清单来自定义 Traefik。有关更多详细信息和示例，请参阅[使用 HelmChartConfig 自定义打包组件](../helm/helm.md#使用-helmchartconfig-自定义打包组件)。有关配置值的更多信息，请参阅[官方 Traefik Helm 配置参数](https://github.com/traefik/traefik-helm-chart/tree/master/traefik)。
+不要手动编辑 `traefik.yaml` 文件，因为 K3s 会在启动时使用默认值替换该文件。相反，你需要通过在 `/var/lib/rancher/k3s/server/manifests` 中创建其他 `HelmChartConfig` 清单来自定义 Traefik。有关更多详细信息和示例，请参阅[使用 HelmChartConfig 自定义打包组件](./helm.md#使用-helmchartconfig-自定义打包组件)。有关配置值的更多信息，请参阅[官方 Traefik Helm 配置参数](https://github.com/traefik/traefik-helm-chart/tree/master/traefik)。
 
 要从集群中删除 Traefik，请使用 `--disable=traefik` 标志来启动所有 Server。
 

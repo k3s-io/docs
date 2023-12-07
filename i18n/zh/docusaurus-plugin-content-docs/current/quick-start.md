@@ -3,9 +3,9 @@ title: "快速入门指南"
 weight: 10
 ---
 
-本指南帮助你使用默认选项快速启动集群。[安装部分](../installation/installation.md)更详细地介绍了如何设置 K3s。
+本指南帮助你使用默认选项快速启动集群。[安装部分](./installation/installation.md)更详细地介绍了如何设置 K3s。
 
-有关 K3s 组件如何协同工作的信息，请参阅[架构](../architecture/architecture.md)。
+有关 K3s 组件如何协同工作的信息，请参阅[架构](./architecture.md)。
 
 :::info
 Kubernetes 新手？Kubernetes 官方文档介绍了一些很好的[基础知识教程](https://kubernetes.io/docs/tutorials/kubernetes-basics/)。
