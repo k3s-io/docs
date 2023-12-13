@@ -1,7 +1,6 @@
 module.exports = {
   mySidebar: [
     'introduction',
-    'architecture',
      'quick-start',
     {
       type: 'category',
@@ -29,7 +28,6 @@ module.exports = {
         'datastore/cluster-loadbalancer',
       ],
     },
-    'cluster-access',
     {
       type: 'category',
       label: 'Upgrades',
@@ -40,9 +38,6 @@ module.exports = {
         'upgrades/automated',
       ],
     },
-    'storage',
-    'networking',
-    'helm',
     {
       type: 'category',
       label: 'Security',
@@ -66,6 +61,11 @@ module.exports = {
         'cli/token',
       ],
     },
+    'architecture',
+    'cluster-access',
+    'storage',
+    'networking',
+    'helm',
     'advanced',
     {
       type: 'category',
