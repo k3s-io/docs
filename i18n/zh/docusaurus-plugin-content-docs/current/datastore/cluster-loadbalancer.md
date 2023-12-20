@@ -7,7 +7,7 @@ weight: 30
 本节介绍如何在高可用性 (HA) K3s 集群的 Server 节点前安装外部负载均衡器。此处提供了两个示例：Nginx 和 HAProxy。
 
 :::tip
-不要混淆外部负载均衡器与嵌入式 ServiceLB，后者是一个嵌入式控制器，允许在不部署第三方负载均衡器控制器的情况下使用 Kubernetes LoadBalancer Service。有关更多详细信息，请参阅 [Service Load Balancer](../networking/networking.md#service-load-balancer)。
+不要混淆外部负载均衡器与嵌入式 ServiceLB，后者是一个嵌入式控制器，允许在不部署第三方负载均衡器控制器的情况下使用 Kubernetes LoadBalancer Service。有关更多详细信息，请参阅 [Service Load Balancer](../networking.md#service-load-balancer)。
 
 外部负载均衡器可用于提供固定的注册地址来注册节点，或用于从外部访问 Kubernetes API Server。为了公开 LoadBalancer Service，外部负载均衡器可以与 ServiceLB 一起使用或代替 ServiceLB，但在大多数情况下，替代负载均衡器控制器（例如 MetalLB 或 Kube-VIP）是更好的选择。
 :::

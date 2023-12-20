@@ -5,7 +5,7 @@ weight: 25
 
 This page describes K3s network configuration options, including configuration or replacement of Flannel, and configuring IPv6.
 
-> **Note:** Please reference the [Networking](../networking/networking.md) page for information about CoreDNS, Traefik, and the Service LB.
+> **Note:** Please reference the [Networking](../networking.md) page for information about CoreDNS, Traefik, and the Service LB.
 
 ## Flannel Options
 

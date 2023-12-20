@@ -167,7 +167,7 @@ weight: 1
 | `--enable-pprof` | 在 supervisor 端口上启用 pprof 端点 |
 | `--docker` | 使用 cri-dockerd 而不是 containerd |
 | `--prefer-bundled-bin` | 偏向打包的用户空间二进制文件，而不是主机二进制文件 |
-| `--disable-agent` | 请参阅[运行无 Agent 的 Server（实验性）](../advanced/advanced.md#运行无-agent-的-server实验性) |
+| `--disable-agent` | 请参阅[运行无 Agent 的 Server（实验性）](../advanced.md#运行无-agent-的-server实验性) |
 
 
 ### 已弃用选项

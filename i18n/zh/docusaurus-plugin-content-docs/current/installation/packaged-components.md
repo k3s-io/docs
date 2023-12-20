@@ -66,7 +66,7 @@ kube-system   coredns-85cb69466-vcq7j                  1/1     Running   0      
 
 ## Helm AddOn
 
-有关通过自动部署清单来管理 Helm Chart 的更多信息，请参阅 [Helm](../helm/helm.md)。
+有关通过自动部署清单来管理 Helm Chart 的更多信息，请参阅 [Helm](../helm.md)。
 
 
 

@@ -69,7 +69,7 @@ On air-gapped machine:
 sudo yum install ./k3s-selinux-1.4-1.el8.noarch.rpm
 ```
 
-See the [SELinux](../advanced/advanced.md#selinux-support) section for more information.
+See the [SELinux](../advanced.md#selinux-support) section for more information.
 
 ### Installing K3s in an Air-Gapped Environment
 

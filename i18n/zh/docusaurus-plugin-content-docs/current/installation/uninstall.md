@@ -10,7 +10,7 @@ weight: 61
 
 如果你使用安装脚本安装了 K3s，安装过程中会生成一个卸载 K3s 的脚本。
 
-如果你想在卸载和重新安装后将节点重新加入现有集群，请务必从集群中删除节点，确保删除了节点密码 Secret。有关详细信息，请参阅[节点注册](../architecture/architecture.md#how-agent-node-registration-works)文档。
+如果你想在卸载和重新安装后将节点重新加入现有集群，请务必从集群中删除节点，确保删除了节点密码 Secret。有关详细信息，请参阅[节点注册](../architecture.md#how-agent-node-registration-works)文档。
 
 ### 卸载 Server
 要从 Server 节点卸载 K3s，请运行：

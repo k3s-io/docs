@@ -3,11 +3,11 @@ title: "Configuration Options"
 weight: 20
 ---
 
-This page focuses on the options that are commonly used when setting up K3s for the first time. Refer to the documentation on [Advanced Options and Configuration](../advanced/advanced.md) and the [server](../cli/server.md) and [agent](../cli/agent.md) command documentation for more in-depth coverage.
+This page focuses on the options that are commonly used when setting up K3s for the first time. Refer to the documentation on [Advanced Options and Configuration](../advanced.md) and the [server](../cli/server.md) and [agent](../cli/agent.md) command documentation for more in-depth coverage.
 
 ## Configuration with install script
 
-As mentioned in the [Quick-Start Guide](../quick-start/quick-start.md), you can use the installation script available at https://get.k3s.io to install K3s as a service on systemd and openrc based systems.
+As mentioned in the [Quick-Start Guide](../quick-start.md), you can use the installation script available at https://get.k3s.io to install K3s as a service on systemd and openrc based systems.
 
 You can use a combination of `INSTALL_K3S_EXEC`, `K3S_` environment variables, and command flags to pass configuration to the service configuration. The prefixed environment variables, `INSTALL_K3S_EXEC` value, and trailing shell arguments are all persisted into the service configuration. After installation, configuration may be altered by editing the environment file, editing the service configuration, or simply re-running the installer with new options.
 

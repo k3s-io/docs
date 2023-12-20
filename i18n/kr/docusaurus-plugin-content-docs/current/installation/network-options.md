@@ -6,7 +6,7 @@ weight: 25
 
 This page describes K3s network configuration options, including configuration or replacement of Flannel, and configuring IPv6.
 
-> **Note:** Please reference the [Networking](../networking/networking.md) page for information about CoreDNS, Traefik, and the Service LB.
+> **Note:** Please reference the [Networking](../networking.md) page for information about CoreDNS, Traefik, and the Service LB.
 
 ## Flannel Options
 
@@ -14,7 +14,7 @@ This page describes K3s network configuration options, including configuration o
 
 * Flannel options can only be set on server nodes, and must be identical on all servers in the cluster.
 * The default backend for Flannel is `vxlan`. To enable encryption, use the `wireguard-native` backend.
-* Using `vxlan` on Rasperry Pi with recent versions of Ubuntu requires [additional preparation](../advanced/advanced.md#raspberry-pi).
+* Using `vxlan` on Rasperry Pi with recent versions of Ubuntu requires [additional preparation](../advanced.md#raspberry-pi).
 * Using `wireguard-native` as the Flannel backend may require additional modules on some Linux distributions. Please see the [WireGuard Install Guide](https://www.wireguard.com/install/) for details.
   The WireGuard install steps will ensure the appropriate kernel modules are installed for your operating system.
   You must ensure that WireGuard kernel modules are available on every node, both servers and agents, before attempting to use the WireGuard Flannel backend.

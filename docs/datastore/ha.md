@@ -16,7 +16,7 @@ Single server clusters can meet a variety of use cases, but for environments whe
 - Optional: Zero or more **agent nodes** that are designated to run your apps and services
 - Optional: A **fixed registration address** for agent nodes to register with the cluster
 
-For more details on how these components work together, refer to the [architecture section.](../architecture/architecture.md#high-availability-k3s)
+For more details on how these components work together, refer to the [architecture section.](../architecture.md#high-availability-k3s)
 
 ## Installation Outline
 
