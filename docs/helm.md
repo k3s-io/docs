@@ -133,14 +133,11 @@ spec:
   valuesContent: |-
     image:
       name: traefik
-      tag: v2.8.5
-    forwardedHeaders:
-      enabled: true
-      trustedIPs:
-        - 10.0.0.0/8
-    ssl:
-      enabled: true
-      permanentRedirect: false
+      tag: 2.9.10
+    web:
+      forwardedHeaders:
+        trustedIPs:
+          - 10.0.0.0/8
 ```
 
 ### Migrating from Helm v2
