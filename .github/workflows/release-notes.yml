@@ -29,3 +29,4 @@ jobs:
           title: Update Release Notes
           body: Automated release notes update
           branch: update-release-notes
+          signoff: true
