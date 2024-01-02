@@ -22,10 +22,14 @@ jobs:
         run: scripts/collect-all-release-notes.sh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Get current month and year
+        id: date
+        run: echo "::set-output name=month_year::$(date +'%B %Y')"
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
           commit-message: update release-notes/k3s-*.md
-          title: Update Release Notes
+          title: Update Release Notes ${{ steps.date.outputs.month_year }}
           body: Automated release notes update
           branch: update-release-notes
+          signoff: true
