@@ -23,7 +23,7 @@ K3s is available for the following architectures:
 
 :::warning ARM64 Page Size
 
-Prior to May 2023 releases (v1.24.14+k3s1, v1.25.10+k3s1, v1.26.5+k3s1, v1.27.2+k3s1), on `aarch64/arm64` systems, the OS must use a 4k page size. **RHEL9**, **Ubuntu**, **Raspberry PI OS**, and **SLES** all meet this requirement.
+Prior to May 2023 releases (v1.24.14+k3s1, v1.25.10+k3s1, v1.26.5+k3s1, v1.27.2+k3s1), on `aarch64/arm64` systems, the kernel must use 4k pages. **RHEL9**, **Ubuntu**, **Raspberry PI OS**, and **SLES** all meet this requirement.
 
 :::
 
@@ -48,7 +48,7 @@ firewall-cmd --permanent --zone=trusted --add-source=10.43.0.0/16 #services
 firewall-cmd --reload
 ```
 
-Additional ports may need to be opened depending on your setup. See [Inbound Rules](#inbound-rules-for-k3s-server-nodes) for more information. If you change the default CIDR for pods or services, you will need to update the firewall rules accordingly.
+Additional ports may need to be opened depending on your setup. See [Inbound Rules](#inbound-rules-for-k3s-nodes) for more information. If you change the default CIDR for pods or services, you will need to update the firewall rules accordingly.
 
 If enabled, it is required to disable nm-cloud-setup and reboot the node:
 ```bash
@@ -72,7 +72,7 @@ ufw allow from 10.42.0.0/16 to any #pods
 ufw allow from 10.43.0.0/16 to any #services
 ```
 
-Additional ports may need to be opened depending on your setup. See [Inbound Rules](#inbound-rules-for-k3s-server-nodes) for more information. If you change the default CIDR for pods or services, you will need to update the firewall rules accordingly.
+Additional ports may need to be opened depending on your setup. See [Inbound Rules](#inbound-rules-for-k3s-nodes) for more information. If you change the default CIDR for pods or services, you will need to update the firewall rules accordingly.
 </TabItem>
 <TabItem value="pi" label="Raspberry Pi">
 
@@ -131,7 +131,7 @@ The VXLAN port on nodes should not be exposed to the world as it opens up your c
 Flannel relies on the [Bridge CNI plugin](https://www.cni.dev/plugins/current/main/bridge/) to create a L2 network that switches traffic. Rogue pods with `NET_RAW` capabilities can abuse that L2 network to launch attacks such as [ARP spoofing](https://static.sched.com/hosted_files/kccncna19/72/ARP%20DNS%20spoof.pdf). Therefore, as documented in the [Kubernetes docs](https://kubernetes.io/docs/concepts/security/pod-security-standards/), please set a restricted profile that disables `NET_RAW` on non-trustable pods.
 :::
 
-### Inbound Rules for K3s Server Nodes
+### Inbound Rules for K3s Nodes
 
 | Protocol | Port      | Source    | Destination | Description
 |----------|-----------|-----------|-------------|------------
@@ -141,6 +141,8 @@ Flannel relies on the [Bridge CNI plugin](https://www.cni.dev/plugins/current/ma
 | TCP      | 10250     | All nodes | All nodes   | Kubelet metrics
 | UDP      | 51820     | All nodes | All nodes   | Required only for Flannel Wireguard with IPv4
 | UDP      | 51821     | All nodes | All nodes   | Required only for Flannel Wireguard with IPv6
+| TCP      | 5001      | All nodes | All nodes   | Required only for embedded distributed registry (Spegel)
+| TCP      | 6443      | All nodes | All nodes   | Required only for embedded distributed registry (Spegel)
 
 Typically, all outbound traffic is allowed.
 

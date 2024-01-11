@@ -1,30 +1,30 @@
 ---
-title: "配置选项"
+title: "Configuration Options"
 weight: 20
 ---
 
-本文重点介绍首次设置 K3s 时常用的选项。如需了解详情，请参阅有关[高级选项和配置](../advanced.md)以及 [server](../cli/server.md) 和 [agent](../cli/agent.md) 命令的文档。
+This page focuses on the options that are commonly used when setting up K3s for the first time. Refer to the documentation on [Advanced Options and Configuration](../advanced.md) and the [server](../cli/server.md) and [agent](../cli/agent.md) command documentation for more in-depth coverage.
 
-## 使用安装脚本的选项
+## Configuration with install script
 
-如[快速入门指南](../quick-start.md)中所述，你可以使用 https://get.k3s.io 上提供的安装脚本在基于 systemd 和 openrc 的系统上将 K3s 安装为服务。
+As mentioned in the [Quick-Start Guide](../quick-start.md), you can use the installation script available at https://get.k3s.io to install K3s as a service on systemd and openrc based systems.
 
-你可以结合使用 `INSTALL_K3S_EXEC`、`K3S_` 环境变量和命令标志将配置传递给服务配置。
-带前缀的环境变量、`INSTALL_K3S_EXEC` 值和尾附的 shell 参数都保存在服务配置中。
-安装后，如果需要更改配置，你可以编辑环境文件、编辑服务配置或简单使用新选项重新运行安装程序。
+You can use a combination of `INSTALL_K3S_EXEC`, `K3S_` environment variables, and command flags to pass configuration to the service configuration.
+The prefixed environment variables, `INSTALL_K3S_EXEC` value, and trailing shell arguments are all persisted into the service configuration.
+After installation, configuration may be altered by editing the environment file, editing the service configuration, or simply re-running the installer with new options.
 
-为了说明这一点，以下命令均同样地没有 Flannel 和使用令牌的情况下注册 Server：
+To illustrate this, the following commands all result in the same behavior of registering a server without flannel and with a token:
 
 ```bash
 curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server" sh -s - --flannel-backend none --token 12345
 curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --flannel-backend none" K3S_TOKEN=12345 sh -s -
 curl -sfL https://get.k3s.io | K3S_TOKEN=12345 sh -s - server --flannel-backend none
 # server is assumed below because there is no K3S_URL
-curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--flannel-backend none --token 12345" sh -s -
+curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--flannel-backend none --token 12345" sh -s - 
 curl -sfL https://get.k3s.io | sh -s - --flannel-backend none --token 12345
 ```
 
-注册 Agent 时，以下命令都会导致同样的行为：
+When registering an agent, the following commands all result in the same behavior:
 
 ```bash
 curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="agent --server https://k3s.example.com --token mypassword" sh -s -
@@ -33,60 +33,62 @@ curl -sfL https://get.k3s.io | K3S_URL=https://k3s.example.com sh -s - agent --t
 curl -sfL https://get.k3s.io | K3S_URL=https://k3s.example.com K3S_TOKEN=mypassword sh -s - # agent is assumed because of K3S_URL
 ```
 
-有关所有环境变量的详细信息，请参阅[环境变量](../reference/env-variables.md)。
+For details on all environment variables, see [Environment Variables.](../reference/env-variables.md)
 
-:::info
-如果你在运行安装脚本时进行了配置，但在重新运行安装脚本时没有重新设置，则原始值将会丢失。
+:::info Note
+If you set configuration when running the install script, but do not set it again when re-running the install script, the original values will be lost.
 
-[配置文件](#配置文件) 的内容不受安装脚本管理。
-要让你的配置独立于安装脚本，请使用配置文件而不是传递环境变量或使用安装脚本参数。
+The contents of the [configuration file](#configuration-file) are not managed by the install script.
+If you want your configuration to be independent from the install script, you should use a configuration file instead of passing environment variables or arguments to the install script.
 :::
 
-## 二进制配置
+## Configuration with binary
 
-如前所述，安装脚本主要是将 K3s 配置为服务来运行。  
-如果你选择不使用该脚本，你可以通过我们的 [Releases 页面](https://github.com/k3s-io/k3s/releases/latest)下载二进制文件，将其放在你的路径上，然后执行它即可运行 K3s。对于永久安装而言这不是特别有用，但如果执行不需要将 K3s 作为系统服务管理的快速测试，这可能有用。
+As stated, the installation script is primarily concerned with configuring K3s to run as a service.  
+If you choose to not use the script, you can run K3s simply by downloading the binary from our [release page](https://github.com/k3s-io/k3s/releases/latest), placing it on your path, and executing it. This is not particularly useful for permanent installations, but may be useful when performing quick tests that do not merit managing K3s as a system service.
 ```bash
 curl -Lo /usr/local/bin/k3s https://github.com/k3s-io/k3s/releases/download/v1.26.5+k3s1/k3s; chmod a+x /usr/local/bin/k3s
 ```
 
-你可以通过设置 `K3S_` 环境变量来传递配置：
+You can pass configuration by setting `K3S_` environment variables:
 ```bash
 K3S_KUBECONFIG_MODE="644" k3s server
 ```
 
-或使用命令标志：
+Or command flags:
 ```bash
 k3s server --write-kubeconfig-mode=644
 ```
 
-K3s Agent 也可以这样配置：
+The k3s agent can also be configured this way:
 
 ```bash
 k3s agent --server https://k3s.example.com --token mypassword
 ```
 
-关于配置 K3s Server 的详细信息，请参阅 [`K3s Server` 文档](../cli/server.md)。  
-有关配置 K3s Agent 的详细信息，请参阅 [`K3s Agent` 文档](../cli/agent.md)。  
-你还可以使用 `--help` 标志来查看所有可用选项及其对应的环境变量。
+For details on configuring the K3s server, see the [`k3s server` documentation](../cli/server.md).  
+For details on configuring the K3s agent, see the [`k3s agent` documentation](../cli/agent.md).  
+You can also use the `--help` flag to see a list of all available options, and their corresponding environment variables.
 
-:::info 匹配标志
-匹配 Server 节点上的关键标志是非常重要的。例如，如果你在 master 节点上使用了 `--disable servicelb` 或 `--cluster-cidr=10.200.0.0/16` 标志，但是没有在其他 Server 节点上进行相同的设置，节点将无法加入。它们会显示 `failed to validate server configuration: critical configuration value mismatch` 错误。
-有关必须在 Server 节点上设置的标志的更多信息，请参阅 Server 配置文档（上方链接）。
+:::info Matching Flags
+It is important to match critical flags on your server nodes. For example, if you use the flag
+`--disable servicelb` or `--cluster-cidr=10.200.0.0/16` on your master node, but don't set it on other server nodes, the nodes will fail to join. They will print errors such as:
+`failed to validate server configuration: critical configuration value mismatch.`
+See the Server Configuration documentation (linked above) for more information on which flags must be set identically on server nodes.
 :::
-## 配置文件
+## Configuration File
 
-:::info 版本
+:::info Version Gate
 
-从 [v1.19.1+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.19.1%2Bk3s1) 起可用
+Available as of [v1.19.1+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.19.1%2Bk3s1)
 
 :::
 
-除了使用环境变量和 CLI 参数之外，你还可以使用配置文件配置 K3s。
+In addition to configuring K3s with environment variables and CLI arguments, K3s can also use a config file.
 
-默认情况下，安装时将使用位于 `/etc/rancher/k3s/config.yaml` 的 YAML 文件中的值。
+By default, values present in a YAML file located at `/etc/rancher/k3s/config.yaml` will be used on install.
 
-下面是一个 `server` 配置文件的基本示例：
+An example of a basic `server` config file is below:
 
 ```yaml
 write-kubeconfig-mode: "0644"
@@ -98,7 +100,7 @@ node-label:
 cluster-init: true
 ```
 
-等效于以下 CLI 参数：
+This is equivalent to the following CLI arguments:
 
 ```bash
 k3s server \
@@ -109,22 +111,22 @@ k3s server \
   --cluster-init
 ```
 
-一般来说，CLI 参数映射到各自的 YAML 键，可重复的 CLI 参数被表示为 YAML 列表。布尔标志在 YAML 文件中表示为 `true` 或 `false`。
+In general, CLI arguments map to their respective YAML key, with repeatable CLI arguments being represented as YAML lists. Boolean flags are represented as `true` or `false` in the YAML file.
 
-也可以同时使用配置文件和 CLI 参数。 在这种情况下，值将从两个来源加载，但 CLI 参数将优先。 对于 `--node-label` 等可重复参数，CLI 参数将覆盖列表中的所有值。
+It is also possible to use both a configuration file and CLI arguments. In these situations, values will be loaded from both sources, but CLI arguments will take precedence. For repeatable arguments such as `--node-label`, the CLI arguments will overwrite all values in the list.
 
-最后，配置文件的位置可以通过 CLI 参数 `--config FILE, -c FILE` 或者环境变量 `$K3S_CONFIG_FILE` 来改变。
+Finally, the location of the config file can be changed either through the CLI argument `--config FILE, -c FILE`, or the environment variable `$K3S_CONFIG_FILE`.
 
-### 多个配置文件
-:::info 版本
-从 [v1.21.0+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.21.0%2Bk3s1) 起可用
+### Multiple Config Files
+:::info Version Gate
+Available as of [v1.21.0+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.21.0%2Bk3s1)
 :::
 
-支持多个配置文件。默认从 `/etc/rancher/k3s/config.yaml` 和 `/etc/rancher/k3s/config.yaml.d/*.yaml` 中按字母顺序读取配置文件。
+Multiple configuration files are supported. By default, configuration files are read from `/etc/rancher/k3s/config.yaml` and `/etc/rancher/k3s/config.yaml.d/*.yaml` in alphabetical order. 
 
-默认情况下，将使用给定键的最后一个值。可以将 `+` 附加到键，这样能将值附加到现有字符串或切片，而不是替换它。后续文件中的所有此键也需要使用 `+` 来防止覆盖累积值。
+By default, the last value found for a given key will be used. A `+` can be appended to the key to append the value to the existing string or slice, instead of replacing it. All occurrences of this key in subsequent files will also require a `+` to prevent overwriting the accumulated value.
 
-多个配置文件的示例如下：
+An example of multiple config files is below:
 
 ```yaml
 # config.yaml
@@ -149,7 +151,7 @@ node-taint+:
 
 ```
 
-因此，最终配置如下：
+This results in a final configuration of:
 
 ```yaml
 write-kubeconfig-mode: 777
@@ -162,30 +164,30 @@ node-taint:
   - charlie=delta:NoSchedule
 ```
 
-## 组合使用
+## Putting it all together
 
-你可以把上述所有选项组合成一个示例。
+All of the above options can be combined into a single example.
 
-`config.yaml` 文件创建在 `/etc/rancher/k3s/config.yaml` 中：
+A `config.yaml` file is created at `/etc/rancher/k3s/config.yaml`:
 
 ```yaml
 token: "secret"
 debug: true
 ```
 
-然后使用环境变量和标志组合来运行安装脚本：
+Then the installation script is run with a combination of environment variables and flags:
 
 ```bash
 curl -sfL https://get.k3s.io | K3S_KUBECONFIG_MODE="644" INSTALL_K3S_EXEC="server" sh -s - --flannel-backend none
 ```
 
-或者，如果你已经安装了 K3s 二进制文件：
+Or if you have already installed the K3s Binary:
 ```bash
 K3S_KUBECONFIG_MODE="644" k3s server --flannel-backend none
 ```
 
-Server 情况如下：
-- kubeconfig 文件权限为 `644`
-- Flannel 后端设置为 `none`
-- 令牌设置为 `secret`
-- 启用调试日志记录
+This results in a server with:
+- A kubeconfig file with permissions `644`
+- Flannel backend set to `none`
+- The token set to `secret`
+- Debug logging enabled

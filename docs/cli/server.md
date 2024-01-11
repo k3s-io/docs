@@ -24,6 +24,7 @@ The following options must be set to the same value on all servers in the cluste
 * `--disable-network-policy`
 * `--disable=servicelb` *note: other packaged components may be disabled on a per-server basis*
 * `--egress-selector-mode`
+* `--embedded-registry`
 * `--flannel-backend`
 * `--flannel-external-ip`
 * `--flannel-ipv6-masq`
@@ -170,6 +171,7 @@ The following options must be set to the same value on all servers in the cluste
 | `--docker`             | Use cri-dockerd instead of containerd    |
 | `--prefer-bundled-bin` | Prefer bundled userspace binaries over host binaries |
 | `--disable-agent`      | See "[Running Agentless Servers (Experimental)](../advanced.md#running-agentless-servers-experimental)" |
+| `--embedded-registry`  | See "[Embedded Registry Mirror](../installation/registry-mirror.md)" |
 
 
 ### Deprecated Options

@@ -5,35 +5,54 @@ weight: 60
 
 You can install K3s in an air-gapped environment using two different methods. An air-gapped environment is any environment that is not directly connected to the Internet. You can either deploy a private registry and mirror docker.io, or you can manually deploy images such as for small clusters.
 
-## Private Registry Method
+## Load Images
 
-This document assumes you have already created your nodes in your air-gap environment and have a Docker private registry on your bastion host.
+### Private Registry Method
 
-If you have not yet set up a private Docker registry, refer to the official documentation [here](https://docs.docker.com/registry/deploying/#run-an-externally-accessible-registry).
+These steps assume you have already created nodes in your air-gap environment,
+are using the bundled containerd as the container runtime,
+and have a OCI-compliant private registry available in your environment.
 
-### Create the Registry YAML
+If you have not yet set up a private Docker registry, refer to the [official Registry documentation](https://docs.docker.com/registry/deploying/#run-an-externally-accessible-registry).
 
-Follow the [Private Registry Configuration](private-registry.md) guide to create and configure the registry.yaml file.
+#### Create the Registry YAML and Push Images
 
-Once you have completed this, you may now go to the [Install K3s](#install-k3s) section below.
+1. Obtain the images archive for your architecture from the [releases](https://github.com/k3s-io/k3s/releases) page for the version of K3s you will be running.
+2. Use `docker image load k3s-airgap-images-amd64.tar.zst` to import images from the tar file into docker.
+3. Use `docker tag` and `docker push` to retag and push the loaded images to your private registry.
+4. Follow the [Private Registry Configuration](private-registry.md) guide to create and configure the `registries.yaml` file.
+5. Proceed to the [Install K3s](#install-k3s) section below.
 
+### Manually Deploy Images Method
 
-## Manually Deploy Images Method
+These steps assume you have already created nodes in your air-gap environment,
+are using the bundled containerd as the container runtime,
+and cannot or do not want to use a private registry.
 
-We are assuming you have created your nodes in your air-gap environment and use containerd as container runtime.
-This method requires you to manually deploy the necessary images to each node and is appropriate for edge deployments where running a private registry is not practical.
+This method requires you to manually deploy the necessary images to each node, and is appropriate for edge deployments where running a private registry is not practical.
 
-### Prepare the Images Directory and K3s Binary
-Obtain the images tar file for your architecture from the [releases](https://github.com/k3s-io/k3s/releases) page for the version of K3s you will be running.
+#### Prepare the Images Directory and Airgap Image Tarball
 
-Place the tar file in the `images` directory, for example:
+1. Obtain the images archive for your architecture from the [releases](https://github.com/k3s-io/k3s/releases) page for the version of K3s you will be running.
+2. Download the imagess archive to the agent's images directory, for example:
+  ```bash
+  sudo mkdir -p /var/lib/rancher/k3s/agent/images/
+  sudo curl -L -O /var/lib/rancher/k3s/agent/images/k3s-airgap-images-amd64.tar.zst https://github.com/k3s-io/k3s/releases/download/v1.29.1-rc2%2Bk3s1/k3s-airgap-images-amd64.tar.zst
+  ```
+3. Proceed to the [Install K3s](#install-k3s) section below.
 
-```bash
-sudo mkdir -p /var/lib/rancher/k3s/agent/images/
-sudo cp ./k3s-airgap-images-$ARCH.tar /var/lib/rancher/k3s/agent/images/
-```
+### Embedded Registry Mirror
 
-Once you have completed this, you may now go to the [Install K3s](#install-k3s) section below.
+:::info Version Gate
+The Embedded Registry Mirror is available as an experimental feature as of January 2024 releases: v1.26.13+k3s1, v1.27.10+k3s1, v1.28.6+k3s1, v1.29.1+k3s1
+:::
+
+K3s includes an embedded distributed OCI-compliant registry mirror.
+When enabled and properly configured, images available in the containerd image store on any node
+can be pulled by other cluster members without access to an external image registry.
+
+The mirrored images may be sourced from an upstream registry, registry mirror, or airgap image tarball.
+For more information on enabling the embedded distributed registry mirror, see the [Embedded Registry Mirror](./registry-mirror.md) documentation.
 
 ## Install K3s
 
@@ -119,7 +138,7 @@ K3S_DATASTORE_ENDPOINT='mysql://username:password@tcp(hostname:3306)/database-na
 </Tabs>
 
 :::note
-K3s additionally provides a `--resolv-conf` flag for kubelets, which may help with configuring DNS in air-gap networks.
+K3s's `--resolv-conf` flag is passed through to the kubelet, which may help with configuring pod DNS resolution in air-gap networks where the host does not have upstream nameservers configured.
 :::
 
 ## Upgrading

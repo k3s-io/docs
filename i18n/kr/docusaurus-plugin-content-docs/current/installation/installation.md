@@ -1,16 +1,22 @@
 ---
-title: "설치"
+title: "Installation"
 weight: 20
 ---
 
-이 섹션에는 다양한 환경에서 K3s를 설치하기 위한 지침이 포함되어 있습니다. K3s 설치를 시작하기 전에 [요구 사항](requirements.md)을 충족했는지 확인하십시오.
+This section contains instructions for installing K3s in various environments. Please ensure you have met the [Requirements](requirements.md) before you begin installing K3s.
 
-[구성 옵션](configuration.md)에서는 K3s를 설치할 때 사용할 수 있는 옵션에 대한 안내를 제공합니다.
+[Configuration Options](configuration.md) provides guidance on the options available to you when installing K3s.
 
-[네트워크 옵션](network-options.md)에서는 K3s에서 사용할 수 있는 네트워크 옵션에 대한 안내를 제공합니다.
+[Network Options](network-options.md) provides guidance on the networking options available in k3s.
 
-[에어갭 설치](airgap.md)에서는 인터넷에 직접 접속할 수 없는 환경에서 K3s를 설정하는 방법을 자세히 설명합니다.
+[Private Registry Configuration](private-registry.md) covers use of `registries.yaml` to configure container image registry mirrors.
 
-[서버 역할](server-roles.md)에서는 전용 `control-plane` 또는 `etcd` 서버로 K3s를 설정하는 방법을 자세히 설명합니다.
+[Embedded Mirror](registry-mirror.md) shows how to enable the embedded distributed image registry mirror.
 
-[패키지 컴포넌트](packaged-components.md)에서는 패키지 컴포넌트를 비활성화하거나 자동 배포 매니페스트를 사용하여 직접 설치하는 방법을 자세히 설명합니다.
+[Air-Gap Install](airgap.md) details how to set up K3s in environments that do not have direct access to the Internet.
+
+[Managing Server Roles](server-roles.md) details how to set up K3s with dedicated `control-plane` or `etcd` servers.
+
+[Managing Packaged Components](packaged-components.md) details how to disable packaged components, or install your own using auto-deploying manifests.
+
+[Uninstalling K3s](uninstall.md) details how to remove K3s from a host.

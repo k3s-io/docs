@@ -1,87 +1,124 @@
 ---
-title: "离线安装"
+title: "Air-Gap Install"
 weight: 60
 ---
 
-你可以使用两种不同的方法在离线环境中安装 K3s。离线环境指的是不直接连接到 Internet 的环境。你可以部署私有镜像仓库和 mirror docker.io，也可以手动部署镜像，例如用于小型集群。
+You can install K3s in an air-gapped environment using two different methods. An air-gapped environment is any environment that is not directly connected to the Internet. You can either deploy a private registry and mirror docker.io, or you can manually deploy images such as for small clusters.
 
-## 私有镜像仓库
+## Load Images
 
-本文档假设你已经在离线环境中创建了节点，并且在堡垒主机上拥有 Docker 私有镜像仓库。
+### Private Registry Method
 
-如果你尚未设置私有 Docker 镜像仓库，请参阅[官方文档](https://docs.docker.com/registry/deploying/#run-an-externally-accessible-registry)。
+These steps assume you have already created nodes in your air-gap environment,
+are using the bundled containerd as the container runtime,
+and have a OCI-compliant private registry available in your environment.
 
-### 创建镜像仓库 YAML
+If you have not yet set up a private Docker registry, refer to the [official Registry documentation](https://docs.docker.com/registry/deploying/#run-an-externally-accessible-registry).
 
-按照[私有镜像仓库配置](private-registry.md)指南创建和配置 registry.yaml 文件。
+#### Create the Registry YAML and Push Images
 
-完成此操作后，你现在可以转到下面的[安装 K3s](#安装-k3s) 部分。
+1. Obtain the images archive for your architecture from the [releases](https://github.com/k3s-io/k3s/releases) page for the version of K3s you will be running.
+2. Use `docker image load k3s-airgap-images-amd64.tar.zst` to import images from the tar file into docker.
+3. Use `docker tag` and `docker push` to retag and push the loaded images to your private registry.
+4. Follow the [Private Registry Configuration](private-registry.md) guide to create and configure the `registries.yaml` file.
+5. Proceed to the [Install K3s](#install-k3s) section below.
 
+### Manually Deploy Images Method
 
-## 手动部署镜像
+These steps assume you have already created nodes in your air-gap environment,
+are using the bundled containerd as the container runtime,
+and cannot or do not want to use a private registry.
 
-我们假设你已经在离线环境中创建了节点并使用 Containerd 作为容器运行时。
-此方法需要你手动将必要的镜像部署到每个节点，适用于无法运行私有镜像仓库的边缘部署。
+This method requires you to manually deploy the necessary images to each node, and is appropriate for edge deployments where running a private registry is not practical.
 
-### 准备镜像目录和 K3s 二进制文件
-从 [Releases](https://github.com/k3s-io/k3s/releases) 页面获取要运行的 K3s 版本的镜像 tar 文件。
+#### Prepare the Images Directory and Airgap Image Tarball
 
-将 tar 文件放在 `images` 目录下，例如：
+1. Obtain the images archive for your architecture from the [releases](https://github.com/k3s-io/k3s/releases) page for the version of K3s you will be running.
+2. Download the imagess archive to the agent's images directory, for example:
+  ```bash
+  sudo mkdir -p /var/lib/rancher/k3s/agent/images/
+  sudo curl -L -O /var/lib/rancher/k3s/agent/images/k3s-airgap-images-amd64.tar.zst https://github.com/k3s-io/k3s/releases/download/v1.29.1-rc2%2Bk3s1/k3s-airgap-images-amd64.tar.zst
+  ```
+3. Proceed to the [Install K3s](#install-k3s) section below.
+
+### Embedded Registry Mirror
+
+:::info Version Gate
+The Embedded Registry Mirror is available as an experimental feature as of January 2024 releases: v1.26.13+k3s1, v1.27.10+k3s1, v1.28.6+k3s1, v1.29.1+k3s1
+:::
+
+K3s includes an embedded distributed OCI-compliant registry mirror.
+When enabled and properly configured, images available in the containerd image store on any node
+can be pulled by other cluster members without access to an external image registry.
+
+The mirrored images may be sourced from an upstream registry, registry mirror, or airgap image tarball.
+For more information on enabling the embedded distributed registry mirror, see the [Embedded Registry Mirror](./registry-mirror.md) documentation.
+
+## Install K3s
+
+### Prerequisites
+
+Before installing K3s, complete the [Private Registry Method](#private-registry-method) or the [Manually Deploy Images Method](#manually-deploy-images-method) above to prepopulate the images that K3s needs to install.
+
+#### Binaries
+- Download the K3s binary from the [releases](https://github.com/k3s-io/k3s/releases) page, matching the same version used to get the airgap images. Place the binary in `/usr/local/bin` on each air-gapped node and ensure it is executable.
+- Download the K3s install script at [get.k3s.io](https://get.k3s.io). Place the install script anywhere on each air-gapped node, and name it `install.sh`.
+
+#### Default Network Route
+If your nodes do not have an interface with a default route, a default route must be configured; even a black-hole route via a dummy interface will suffice. K3s requires a default route in order to auto-detect the node's primary IP, and for kube-proxy ClusterIP routing to function properly. To add a dummy route, do the following:
+  ```
+  ip link add dummy0 type dummy
+  ip link set dummy0 up
+  ip addr add 203.0.113.254/31 dev dummy0
+  ip route add default via 203.0.113.255 dev dummy0 metric 1000
+  ```
+
+When running the K3s script with the `INSTALL_K3S_SKIP_DOWNLOAD` environment variable, K3s will use the local version of the script and binary.
+
+#### SELinux RPM
+
+If you intend to deploy K3s with SELinux enabled, you will need also install the appropriate k3s-selinux RPM on all nodes. The latest version of the RPM can be found [here](https://github.com/k3s-io/k3s-selinux/releases/latest). For example, on CentOS 8:
 
 ```bash
-sudo mkdir -p /var/lib/rancher/k3s/agent/images/
-sudo cp ./k3s-airgap-images-$ARCH.tar /var/lib/rancher/k3s/agent/images/
+On internet accessible machine:
+curl -LO https://github.com/k3s-io/k3s-selinux/releases/download/v1.4.stable.1/k3s-selinux-1.4-1.el8.noarch.rpm
+
+# Transfer RPM to air-gapped machine
+On air-gapped machine:
+sudo yum install ./k3s-selinux-1.4-1.el8.noarch.rpm
 ```
 
-完成此操作后，你现在可以转到下面的[安装 K3s](#安装-k3s) 部分。
+See the [SELinux](../advanced.md#selinux-support) section for more information.
 
-## 安装 K3s
+### Installing K3s in an Air-Gapped Environment
 
-### 先决条件
-
-- 在安装 K3s 之前，完成上面的[私有镜像仓库](#私有镜像仓库)或[手动部署镜像](#手动部署镜像)操作，预填充 K3s 需要安装的镜像。
-- 从 [Releases](https://github.com/k3s-io/k3s/releases) 页面下载 K3s 二进制文件，该文件需要匹配用于获取离线镜像的版本。将二进制文件放在每个离线节点上的 `/usr/local/bin` 中，并确保文件是可执行的。
-- 在 [get.k3s.io](https://get.k3s.io) 下载 K3s 安装脚本。将安装脚本放在每个离线节点上的任何位置，并将其命名为 `install.sh`。
-- 如果你的节点没有带默认路由的接口，则必须配置默认路由，使用虚拟接口的黑洞路由也足够了。K3s 需要一个默认路由来自动检测节点的主 IP，并使 kube-proxy ClusterIP 路由正常运行。要添加虚拟路由，请执行以下操作：
-   ```
-   ip link add dummy0 type dummy
-   ip link set dummy0 up
-   ip addr add 169.254.255.254/31 dev dummy0
-   ip route add default via 169.254.255.255 dev dummy0 metric 1000
-   ```
-
-使用 `INSTALL_K3S_SKIP_DOWNLOAD` 环境变量运行 K3s 脚本时，K3s 将使用脚本的本地版本和二进制文件。
-
-
-### 在离线环境中安装 K3s
-
-你可以在一台或多台服务器上安装 K3s，如下所述。
+You can install K3s on one or more servers as described below.
 
 <Tabs>
-<TabItem value="单节点配置" default>
+<TabItem value="Single Server Configuration" default>
 
-要在单个服务器上安装 K3s，只需在 Server 节点上执行以下操作：
+To install K3s on a single server, simply do the following on the server node:
 
 ```bash
 INSTALL_K3S_SKIP_DOWNLOAD=true ./install.sh
 ```
 
-要添加其他 Agent，请在每个 Agent 节点上执行以下操作。
+To add additional agents, do the following on each agent node: 
 
 ```bash
 INSTALL_K3S_SKIP_DOWNLOAD=true K3S_URL=https://<SERVER_IP>:6443 K3S_TOKEN=<YOUR_TOKEN> ./install.sh
 ```
 
 :::note
-Server 的 Token 通常位于 `/var/lib/rancher/k3s/server/token`。
+The token from the server is typically found at `/var/lib/rancher/k3s/server/token`.
 :::
 
 </TabItem>
-<TabItem value="高可用配置" default>
+<TabItem value="High Availability Configuration" default>
 
-参考[具有外部数据库的高可用](../datastore/ha.md)或[具有嵌入式数据库的高可用](../datastore/ha-embedded.md)指南。你需要调整安装命令来指定 `INSTALL_K3S_SKIP_DOWNLOAD=true`，并在本地运行安装脚本，而不是使用 curl。你还将使用 `INSTALL_K3S_EXEC='args'` 为 K3s 提供参数。
+Reference the [High Availability with an External DB](../datastore/ha.md) or [High Availability with Embedded DB](../datastore/ha-embedded.md) guides. You will be tweaking install commands so you specify `INSTALL_K3S_SKIP_DOWNLOAD=true` and run your install script locally instead of via curl. You will also utilize `INSTALL_K3S_EXEC='args'` to supply any arguments to k3s.
 
-例如，具有外部数据库的高可用指南的第二步提到了以下内容：
+For example, step two of the High Availability with an External DB guide mentions the following:
 
 ```bash
 curl -sfL https://get.k3s.io | sh -s - server \
@@ -89,7 +126,7 @@ curl -sfL https://get.k3s.io | sh -s - server \
   --datastore-endpoint="mysql://username:password@tcp(hostname:3306)/database-name"
 ```
 
-你需要修改此类示例，如下所示：
+Instead, you would modify such examples like below:
 
 ```bash
 INSTALL_K3S_SKIP_DOWNLOAD=true INSTALL_K3S_EXEC='server --token=SECRET' \
@@ -101,31 +138,33 @@ K3S_DATASTORE_ENDPOINT='mysql://username:password@tcp(hostname:3306)/database-na
 </Tabs>
 
 :::note
-K3s 还为 kubelet 提供了一个 `--resolv-conf` 标志，有助于在离线网络中配置 DNS。
+K3s's `--resolv-conf` flag is passed through to the kubelet, which may help with configuring pod DNS resolution in air-gap networks where the host does not have upstream nameservers configured.
 :::
 
-## 升级
+## Upgrading
 
-### 安装脚本方法
+### Install Script Method
 
-你可以通过以下方式完成离线环境的升级：
+Upgrading an air-gap environment can be accomplished in the following manner:
 
-1. 从 [Releases](https://github.com/k3s-io/k3s/releases) 页面下载要升级的 K3s 版本的新离线镜像 tar 包。将 tar 文件放在每个节点上的 `/var/lib/rancher/k3s/agent/images/` 目录中。删除旧的 tar 文件。
-2. 复制并替换每个节点上 `/usr/local/bin` 中的旧 K3s 二进制文件。复制 [K3s 安装脚本](https://get.k3s.io)（因为脚本可能自上次版本发布以来已更改）。使用相同的环境变量再次运行脚本。
-3. 重启 K3s 服务（如果安装程序没有自动重启 K3s 的话）。
+1. Download the new air-gap images (tar file) from the [releases](https://github.com/k3s-io/k3s/releases) page for the version of K3s you will be upgrading to. Place the tar in the `/var/lib/rancher/k3s/agent/images/` directory on each
+node. Delete the old tar file.
+2. Copy and replace the old K3s binary in `/usr/local/bin` on each node. Copy over the install script at https://get.k3s.io (as it is possible it has changed since the last release). Run the script again just as you had done in the past
+with the same environment variables.
+3. Restart the K3s service (if not restarted automatically by installer).
 
 
-### 自动升级
+### Automated Upgrades Method
 
-K3s 支持[自动升级](../upgrades/automated.md)。要在离线环境中启用此功能，你必须确保所需的镜像在你的私有镜像仓库中可用。
+K3s supports [automated upgrades](../upgrades/automated.md). To enable this in air-gapped environments, you must ensure the required images are available in your private registry.
 
-你将需要与你打算升级到的 K3s 版本相对应的 rancher/k3s-upgrade 版本。注意，镜像标签将 K3s 版本中的 `+` 替换为 `-`，因为 Docker 镜像不支持 `+`。
+You will need the version of rancher/k3s-upgrade that corresponds to the version of K3s you intend to upgrade to. Note, the image tag replaces the `+` in the K3s release with a `-` because Docker images do not support `+`.
 
-你还需要在你要部署的 `system-upgrade-controller` 清单 YAML 中指定的 `system-upgrade-controller` 和 `kubectl` 版本。在[这里](https://github.com/rancher/system-upgrade-controller/releases/latest)检查 `system-upgrad-controller` 的最新版本，并下载 `system-upgrade-controller.yaml` 来确定你需要推送到私有镜像仓库的版本。例如，在 `system-upgrade-controller` 的 v0.4.0 版本中，清单 YAML 中指定了这些镜像：
+You will also need the versions of system-upgrade-controller and kubectl that are specified in the system-upgrade-controller manifest YAML that you will deploy. Check for the latest release of the system-upgrade-controller [here](https://github.com/rancher/system-upgrade-controller/releases/latest) and download the system-upgrade-controller.yaml to determine the versions you need to push to your private registry. For example, in release v0.4.0 of the system-upgrade-controller, these images are specified in the manifest YAML:
 
 ```
 rancher/system-upgrade-controller:v0.4.0
 rancher/kubectl:v0.17.0
 ```
 
-将必要的 rancher/k3s-upgrade、rancher/system-upgrade-controller 和 rancher/kubectl 镜像添加到私有镜像仓库后，请按照[自动升级](../upgrades/automated.md)指南进行操作。
+Once you have added the necessary rancher/k3s-upgrade, rancher/system-upgrade-controller, and rancher/kubectl images to your private registry, follow the [automated upgrades](../upgrades/automated.md) guide.

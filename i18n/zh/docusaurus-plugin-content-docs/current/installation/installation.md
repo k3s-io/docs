@@ -1,16 +1,22 @@
 ---
-title: "安装"
+title: "Installation"
 weight: 20
 ---
 
-本文包含了在各种环境下安装 K3s 的说明。在开始安装 K3s 之前，请确保已满足 [K3s 的安装要求](requirements.md)。
+This section contains instructions for installing K3s in various environments. Please ensure you have met the [Requirements](requirements.md) before you begin installing K3s.
 
-[配置选项](configuration.md)提供了安装 K3s 时可用选项的指南。
+[Configuration Options](configuration.md) provides guidance on the options available to you when installing K3s.
 
-[网络选项](network-options.md)提供了 K3s 中可用网络选项的指南。
+[Network Options](network-options.md) provides guidance on the networking options available in k3s.
 
-[离线安装](airgap.md)详细介绍了如何在无法直接访问互联网的环境中设置 K3s。
+[Private Registry Configuration](private-registry.md) covers use of `registries.yaml` to configure container image registry mirrors.
 
-[管理 Server 角色](server-roles.md)详细介绍了如何使用专用 `control-plane` 或 `etcd` Server 设置 K3s。
+[Embedded Mirror](registry-mirror.md) shows how to enable the embedded distributed image registry mirror.
 
-[管理打包组件](packaged-components.md)详细介绍了如何禁用打包组件，或使用自动部署清单安装你自己的组件。
+[Air-Gap Install](airgap.md) details how to set up K3s in environments that do not have direct access to the Internet.
+
+[Managing Server Roles](server-roles.md) details how to set up K3s with dedicated `control-plane` or `etcd` servers.
+
+[Managing Packaged Components](packaged-components.md) details how to disable packaged components, or install your own using auto-deploying manifests.
+
+[Uninstalling K3s](uninstall.md) details how to remove K3s from a host.

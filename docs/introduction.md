@@ -8,37 +8,35 @@ Lightweight Kubernetes. Easy to install, half the memory, all in a binary of les
 Great for:
 
 * Edge
-* IoT
-* CI
+* Homelab
+* Internet of Things (IoT)
+* Continuous Integration (CI)
 * Development
-* ARM
-* Embedding K8s
+* Single board computers (ARM)
+* Air-gapped environments
+* Embedded K8s
 * Situations where a PhD in K8s clusterology is infeasible
 
 # What is K3s?
 
 K3s is a fully compliant Kubernetes distribution with the following enhancements:
 
-* Packaged as a single binary.
-* Lightweight storage backend based on sqlite3 as the default storage mechanism. etcd3, MySQL, Postgres are also available.
+* Distributed as a single binary or minimal container image.
+* Lightweight datastore based on sqlite3 as the default storage backend. etcd3, MySQL, and Postgres are also available.
 * Wrapped in simple launcher that handles a lot of the complexity of TLS and options.
 * Secure by default with reasonable defaults for lightweight environments.
-* Simple but powerful "batteries-included" features have been added, such as: 
-    * local storage provider 
-    * service load balancer
-    * Helm controller
-    * Traefik ingress controller.
-* Operation of all Kubernetes control plane components is encapsulated in a single binary and process. This allows K3s to automate and manage complex cluster operations like distributing certificates.
-* External dependencies have been minimized (just a modern kernel and cgroup mounts needed). K3s packages the required dependencies, including:
-    * containerd
-    * Flannel (CNI)
-    * CoreDNS
-    * Traefik (Ingress)
-    * Klipper-lb (Service LB)
-    * Embedded network policy controller
-    * Embedded local-path-provisioner
+* Operation of all Kubernetes control plane components is encapsulated in a single binary and process, allowing K3s to automate and manage complex cluster operations like distributing certificates.
+* External dependencies have been minimized; the only requirements are a modern kernel and cgroup mounts.
+* Packages the required dependencies for easy "batteries-included" cluster creation:
+    * containerd / cri-dockerd container runtime (CRI)
+    * Flannel Container Network Interface (CNI)
+    * CoreDNS Cluster DNS
+    * Traefik Ingress controller
+    * ServiceLB Load-Balancer controller
+    * Kube-router Network Policy controller
+    * Local-path-provisioner Persistent Volume controller
+    * Spegel distributed container image registry mirror
     * Host utilities (iptables, socat, etc)
-
 
 # What's with the name?
 
