@@ -3,37 +3,79 @@ title: "Private Registry Configuration"
 weight: 55
 ---
 
-Containerd can be configured to connect to private registries and use them to pull private images on the node.
+Containerd can be configured to connect to private registries and use them to pull images as needed by the kubelet.
 
-Upon startup, K3s will check to see if a `registries.yaml` file exists at `/etc/rancher/k3s/` and instruct containerd to use any registries defined in the file. If you wish to use a private registry, then you will need to create this file as root on each node that will be using the registry.
+Upon startup, K3s will check to see if `/etc/rancher/k3s/registries.yaml` exists. If so, the registry configuration contained in this file is used when generating the containerd configuration.
+* If you want to use a private registry as a mirror for a public registry such as docker.io, then you will need to configure `registries.yaml` on each node that you want to use the mirror.
+* If your private registry requires authentication, uses custom TLS certificates, or does not use TLS, you will need to configure `registries.yaml` on each node that will pull images from your registry.
 
-Note that server nodes are schedulable by default. If you have not tainted the server nodes and will be running workloads on them, please ensure you also create the `registries.yaml` file on each server as well.
+Note that server nodes are schedulable by default. If you have not tainted the server nodes and will be running workloads on them,
+please ensure you also create the `registries.yaml` file on each server as well.
 
-Configuration in containerd can be used to connect to a private registry with a TLS connection and with registries that enable authentication as well. The following section will explain the `registries.yaml` file and give different examples of using private registry configuration in K3s.
+## Default Endpoint Fallback
+
+Containerd has an implicit "default endpoint" for all registries.
+The default endpoint is always tried as a last resort, even if there are other endpoints listed for that registry in `registries.yaml`.
+For example, when pulling `registry.example.com:5000/rancher/mirrored-pause:3.6`, containerd will use a default endpoint of `https://registry.example.com:5000/v2`.
+* The default endpoint for `docker.io` is `https://index.docker.io/v2`.  
+* The default endpoint for all other registries is `https://<REGISTRY>/v2`, where `<REGISTRY>` is the registry hostname and optional port.  
+
+In order to be recognized as a registry, the first component of the image name must contain at least one period or colon.
+For historical reasons, images without a registry specified in their name are implicitly identified as being from `docker.io`.
+
+:::info Version Gate
+The `--disable-default-registry-endpoint` option is available as an experimental feature as of January 2024 releases: v1.26.13+k3s1, v1.27.10+k3s1, v1.28.6+k3s1, v1.29.1+k3s1
+:::
+
+Nodes may be started with the `--disable-default-registry-endpoint` option.
+When this is set, containerd will not fall back to the default registry endpoint, and will only pull from configured mirror endpoints,
+along with the distributed registry if it is enabled.
+
+This may be desired if your cluster is in a true air-gapped environment where the upstream registry is not available,
+or if you wish to have only some nodes pull from the upstream registry.
+
+Disabling the default registry endpoint applies only to registries configured via `registries.yaml`.
+If the registry is not explicitly configured via mirror entry in `registries.yaml`, the default fallback behavior will still be used.
 
 ## Registries Configuration File
 
-The file consists of two main sections:
+The file consists of two top-level keys, with subkeys for each registry:
 
-- mirrors
-- configs
+```yaml
+mirrors:
+  <REGISTRY>:
+    endpoint:
+      - https://<REGISTRY>/v2
+configs:
+  <REGISTRY>:
+    auth:
+      username: <BASIC AUTH USERNAME>
+      password: <BASIC AUTH PASSWORD>
+      token: <BEARER TOKEN>
+    tls:
+      ca_file: <PATH TO SERVER CA>
+      cert_file: <PATH TO CLIENT CERT>
+      key_file: <PATH TO CLIENT KEY>
+      insecure_skip_verify: <SKIP TLS CERT VERIFICATION BOOLEAN>
+```
 
 ### Mirrors
 
-Mirrors is a directive that defines the names and endpoints of the private registries, for example:
+The mirrors section defines the names and endpoints of registries, for example:
 
 ```
 mirrors:
-  mycustomreg.com:
+  registry.example.com:
     endpoint:
-      - "https://mycustomreg.com:5000"
+      - "https://registry.example.com:5000"
 ```
 
-Each mirror must have a name and set of endpoints. When pulling an image from a registry, containerd will try these endpoint URLs one by one, and use the first working one.
+Each mirror must have a name and set of endpoints. When pulling an image from a registry, containerd will try these endpoint URLs, plus the default endpoint, and use the first working one.
 
 #### Redirects
 
-If a public registry is used as a mirror, such as when configuring a [pull through cache](https://docs.docker.com/registry/recipes/mirror/), images pulls are transparently redirected.
+If the private registry is used as a mirror for another registry, such as when configuring a [pull through cache](https://docs.docker.com/registry/recipes/mirror/),
+images pulls are transparently redirected to the listed endpoints. The original registry name is passed to the mirror endpoint via the `ns` query parameter.
 
 For example, if you have a mirror configured for `docker.io`:
 
@@ -41,16 +83,17 @@ For example, if you have a mirror configured for `docker.io`:
 mirrors:
   docker.io:
     endpoint:
-      - "https://mycustomreg.com:5000"
+      - "https://registry.example.com:5000"
 ```
 
-Then pulling `docker.io/rancher/coredns-coredns:1.6.3` will transparently pull the image from `https://mycustomreg.com:5000/rancher/coredns-coredns:1.6.3`.
+Then pulling `docker.io/rancher/mirrored-pause:3.6` will transparently pull the image as `registry.example.com:5000/rancher/mirrored-pause:3.6`.
 
 #### Rewrites
 
-Each mirror can have a set of rewrites. Rewrites can change the tag of an image based on a regular expression. This is useful if the organization/project structure in the mirror registry is different to the upstream one.
+Each mirror can have a set of rewrites. Rewrites can change the name of an image based on regular expressions.
+This is useful if the organization/project structure in the private registry is different than the registry it is mirroring.
 
-For example, the following configuration would transparently pull the image `docker.io/rancher/coredns-coredns:1.6.3` from `registry.example.com:5000/mirrorproject/rancher-images/coredns-coredns:1.6.3`:
+For example, the following configuration would transparently pull the image `docker.io/rancher/mirrored-pause:3.6` as `registry.example.com:5000/mirrorproject/rancher-images/mirrored-pause:3.6`:
 
 ```
 mirrors:
@@ -61,7 +104,8 @@ mirrors:
       "^rancher/(.*)": "mirrorproject/rancher-images/$1"
 ```
 
-The image will still be stored under the original name so that a `crictl image ls` will show `docker.io/rancher/coredns-coredns:1.6.3` as available on the node, even though the image was pulled from the mirrored registry with a different name.
+When using redirects and rewrites, images will still be stored under the original name.
+For example, `crictl image ls` will show `docker.io/rancher/mirrored-pause:3.6` as available on the node, even though the image was pulled from the mirrored registry with a different name.
 
 ### Configs
 
@@ -97,9 +141,9 @@ Below are examples showing how you may configure `/etc/rancher/k3s/registries.ya
 mirrors:
   docker.io:
     endpoint:
-      - "https://mycustomreg.com:5000"
+      - "https://registry.example.com:5000"
 configs:
-  "mycustomreg:5000":
+  "registry.example.com:5000":
     auth:
       username: xxxxxx # this is the registry username
       password: xxxxxx # this is the registry password
@@ -116,9 +160,9 @@ configs:
 mirrors:
   docker.io:
     endpoint:
-      - "https://mycustomreg.com:5000"
+      - "https://registry.example.com:5000"
 configs:
-  "mycustomreg:5000":
+  "registry.example.com:5000":
     tls:
       cert_file: # path to the cert file used in the registry
       key_file:  # path to the key file used in the registry
@@ -138,9 +182,9 @@ Below are examples showing how you may configure `/etc/rancher/k3s/registries.ya
 mirrors:
   docker.io:
     endpoint:
-      - "http://mycustomreg.com:5000"
+      - "http://registry.example.com:5000"
 configs:
-  "mycustomreg:5000":
+  "registry.example.com:5000":
     auth:
       username: xxxxxx # this is the registry username
       password: xxxxxx # this is the registry password
@@ -153,7 +197,7 @@ configs:
 mirrors:
   docker.io:
     endpoint:
-      - "http://mycustomreg.com:5000"
+      - "http://registry.example.com:5000"
 ```
 </TabItem>
 </Tabs>
@@ -162,17 +206,22 @@ mirrors:
  
 In order for the registry changes to take effect, you need to restart K3s on each node.
 
+## Troubleshooting Image Pulls
+
+When Kubernetes experiences problems pulling an image, the error displayed by the kubelet may only reflect the terminal error returned
+by the pull attempt made against the default endpoint, making it appear that the configured endpoints are not being used.
+
+Check the containerd log on the node at `/var/lib/rancher/k3s/agent/containerd/containerd.log` for detailed information on the root cause of the failure.
+
 ## Adding Images to the Private Registry
 
-First, obtain the `k3s-images.txt` file from GitHub for the release you are working with.
-Pull the K3s images listed on the k3s-images.txt file from docker.io
+Mirroring images to a private registry requires a host with Docker or other 3rd party tooling that is capable of pulling and pushing images.  
+The steps below assume you have a host with dockerd and the docker CLI tools, and access to both docker.io and your private registry.
 
-Example: `docker pull docker.io/rancher/coredns-coredns:1.6.3`
-
-Then, retag the images to the private registry.
-
-Example: `docker tag rancher/coredns-coredns:1.6.3 mycustomreg.com:5000/coredns-coredns`
-
-Last, push the images to the private registry.
-
-Example: `docker push mycustomreg.com:5000/coredns-coredns`
+1. Obtain the `k3s-images.txt` file from GitHub for the release you are working with.
+2. Pull each of the K3s images listed on the k3s-images.txt file from docker.io.  
+   Example: `docker pull docker.io/rancher/mirrored-pause:3.6`
+3. Retag the images to the private registry.  
+   Example: `docker tag docker.io/rancher/mirrored-pause:3.6 registry.example.com:5000/rancher/mirrored-pause:3.6`
+4. Push the images to the private registry.  
+   Example: `docker push registry.example.com:5000/rancher/mirrored-pause:3.6`

@@ -35,11 +35,11 @@ K3s no longer includes strongSwan `swanctl` and `charon` binaries starting with 
 
 :::
 
-#### Migrating from `wireguard` or `ipsec` to `wireguard-native`
+### Migrating from `wireguard` or `ipsec` to `wireguard-native`
 
-The legacy `wireguard` backend requires installation of the `wg` tool on the host. This backend will be removed in K3s v1.26, in favor of `wireguard-native` backend, which directly interfaces with the kernel.
+The legacy `wireguard` backend requires installation of the `wg` tool on the host. This backend is not available in K3s v1.26 and higher, in favor of `wireguard-native` backend, which directly interfaces with the kernel.
 
-The legacy `ipsec` backend requires installation of the `swanctl` and `charon` binaries on the host. This backend will be removed in K3s v1.27, in favor of the `wireguard-native` backend.
+The legacy `ipsec` backend requires installation of the `swanctl` and `charon` binaries on the host. This backend is not available in K3s v1.27 and higher, in favor of the `wireguard-native` backend.
 
 We recommend that users migrate to the new backend as soon as possible. The migration requires a short period of downtime while nodes come up with the new configuration. You should follow these two steps:
 
@@ -120,14 +120,16 @@ K3s agents and servers maintain websocket tunnels between nodes that are used to
 This allows agents to operate without exposing the kubelet and container runtime streaming ports to incoming connections, and for the control-plane to connect to cluster services when operating with the agent disabled.
 This functionality is equivalent to the [Konnectivity](https://kubernetes.io/docs/tasks/extend-kubernetes/setup-konnectivity/) service commonly used on other Kubernetes distributions, and is managed via the apiserver's egress selector configuration.
 
+The default mode is `agent`. `pod` or `cluster` modes are recommended when running [agentless servers](../advanced.md#running-agentless-servers-experimental), in order to provide the apiserver with access to cluster service endpoints in the absence of flannel and kube-proxy.
+
 The egress selector mode may be configured on servers via the `--egress-selector-mode` flag, and offers four modes:
 * `disabled`: The apiserver does not use agent tunnels to communicate with kubelets or cluster endpoints.
   This mode requires that servers run the kubelet, CNI, and kube-proxy, and have direct connectivity to agents, or the apiserver will not be able to access service endpoints or perform `kubectl exec` and `kubectl logs`.
 * `agent` (default): The apiserver uses agent tunnels to communicate with kubelets.
   This mode requires that the servers also run the kubelet, CNI, and kube-proxy, or the apiserver will not be able to access service endpoints.
-* `pod`: The apiserver uses agent tunnels to communicate with kubelets and service endpoints, routing endpoint connections to the correct agent by watching Nodes.
-  **NOTE**: This will not work when using a CNI that uses its own IPAM and does not respect the node's PodCIDR allocation. `cluster` or `agent` should be used with these CNIs instead.
-* `cluster`: The apiserver uses agent tunnels to communicate with kubelets and service endpoints, routing endpoint connections to the correct agent by watching Endpoints.
+* `pod`: The apiserver uses agent tunnels to communicate with kubelets and service endpoints, routing endpoint connections to the correct agent by watching Nodes and Endpoints.  
+  **NOTE**: This mode will not work when using a CNI that uses its own IPAM and does not respect the node's PodCIDR allocation. `cluster` or `agent` mode should be used with these CNIs instead.
+* `cluster`: The apiserver uses agent tunnels to communicate with kubelets and service endpoints, routing endpoint connections to the correct agent by watching Pods and Endpoints. This mode has the highest portability across different cluster configurations, at the cost of increased overhead.
 
 ## Dual-stack (IPv4 + IPv6) Networking
 

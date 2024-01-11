@@ -79,6 +79,7 @@ Options are documented on this page as CLI flags, but can also be passed as conf
 | `--rootless` | Run rootless                          |
 | `--docker`   | Use cri-dockerd instead of containerd |
 | `--prefer-bundled-bin` | Prefer bundled userspace binaries over host binaries |
+| `--disable-default-registry-endpoint` | See "[Default Endpoint Fallback](../installation/private-registry.md#default-endpoint-fallback)"
 
 ### Deprecated
 

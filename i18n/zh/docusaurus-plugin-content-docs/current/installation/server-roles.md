@@ -1,33 +1,33 @@
 ---
-title: "管理 Server 角色"
+title: "Managing Server Roles"
 weight: 60
 ---
 
-使用 `--cluster-init` 启动 K3s Server 将运行所有 control-plane 组件，包括 apiserver、controller-manager、scheduler 和 etcd。你可以通过禁用特定组件来将 control-plane 和 etcd 角色拆分到单独的节点上。
+Starting the K3s server with `--cluster-init` will run all control-plane components, including the apiserver, controller-manager, scheduler, and etcd. It is possible to disable specific components in order to split the control-plane and etcd roles on to separate nodes.
 
 :::info
-本文档仅适用于使用嵌入式 etcd 的情况。如果没有使用嵌入式 etcd，所有 Server 都将具有 control-plane 角色并运行 control-plane 组件。
+This document is only relevant when using embedded etcd. When not using embedded etcd, all servers will have the control-plane role and run control-plane components.
 :::
 
-## 专用 `etcd` 节点
-要创建仅具有 `etcd` 角色的 server，请在禁用所有 control plane 组件的情况下启动 K3s：
+## Dedicated `etcd` Nodes
+To create a server with only the `etcd` role, start K3s with all the control-plane components disabled:
 ```
 curl -fL https://get.k3s.io | sh -s - server --cluster-init --disable-apiserver --disable-controller-manager --disable-scheduler
 ```
 
-第一个节点将启动 etcd，然后等待其他 `etcd` 和/或 `control-plane` 节点加入。在加入启用了 `control-plane` 组件的其他 server 之前，集群将无法使用。
+This first node will start etcd, and wait for additional `etcd` and/or `control-plane` nodes to join. The cluster will not be usable until you join an additional server with the `control-plane` components enabled.
 
-## 专用 `control-plane` 节点
+## Dedicated `control-plane` Nodes
 :::note
-专用 `control-plane` 节点不能是集群中的第一个 server。在加入专用 `control-plane` 节点之前，必须有一个具有 `etcd` 角色的现有节点。
+A dedicated `control-plane` node cannot be the first server in the cluster; there must be an existing node with the `etcd` role before joining dedicated `control-plane` nodes.
 :::
 
-要创建仅具有 `control-plane` 角色的 server，请在 `--disable-etcd` 的情况下启动 K3s：
+To create a server with only the `control-plane` role, start k3s with etcd disabled:
 ```bash
-curl -fL https://get.k3s.io | sh -s - server --token <token> --disable-etcd --server https://<etcd-only-node>:6443
+curl -fL https://get.k3s.io | sh -s - server --token <token> --disable-etcd --server https://<etcd-only-node>:6443 
 ```
 
-创建专用 Server 节点后，所选角色将在 `kubectl get node` 中可见：
+After creating dedicated server nodes, the selected roles will be visible in `kubectl get node`:
 ```bash
 $ kubectl get nodes
 NAME           STATUS   ROLES                       AGE     VERSION
@@ -35,13 +35,13 @@ k3s-server-1   Ready    etcd                        5h39m   v1.20.4+k3s1
 k3s-server-2   Ready    control-plane,master        5h39m   v1.20.4+k3s1
 ```
 
-## 将角色添加到现有 server
+## Adding Roles To Existing Servers
 
-如果在删除了 disable 标志的情况下重启 K3s，你可以将角色添加到现有的专用节点。例如，要将 `control-plane` 角色添加到专用的 `etcd` 节点，你可以从 systemd 单元或配置文件中删除 `--disable-apiserver --disable-controller -manager --disable-scheduler` 标记，并重启服务。
+Roles can be added to existing dedicated nodes by restarting K3s with the disable flags removed. For example ,if you want to add the `control-plane` role to a dedicated `etcd` node, you can remove the `--disable-apiserver --disable-controller-manager --disable-scheduler` flags from the systemd unit or config file, and restart the service.
 
-## 配置文件语法
+## Configuration File Syntax
 
-与所有其他 CLI 标志一样，你可以使用[配置文件](configuration.md#配置文件)来禁用组件，而不是将选项作为 CLI 标志传递。例如，要创建专用的 `etcd` 节点，你可以将以下值放在 `/etc/rancher/k3s/config.yaml` 中：
+As with all other CLI flags, you can use the  [Configuration File](configuration.md#configuration-file) to disable components, instead of passing the options as CLI flags. For example, to create a dedicated `etcd` node, you can place the following values in `/etc/rancher/k3s/config.yaml`:
 
 ```yaml
 cluster-init: true

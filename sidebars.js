@@ -11,6 +11,7 @@ module.exports = {
         'installation/configuration',
         'installation/network-options',
         'installation/private-registry',
+        'installation/registry-mirror',
         'installation/airgap',
         'installation/server-roles',
         'installation/packaged-components',
