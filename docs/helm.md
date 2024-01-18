@@ -134,10 +134,11 @@ spec:
     image:
       name: traefik
       tag: 2.9.10
-    web:
-      forwardedHeaders:
-        trustedIPs:
-          - 10.0.0.0/8
+    ports:
+      web:
+        forwardedHeaders:
+          trustedIPs:
+            - 10.0.0.0/8
 ```
 
 ### Migrating from Helm v2
