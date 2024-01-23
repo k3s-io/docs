@@ -29,7 +29,7 @@ If nodes cannot reach each other, it may take longer for images to be pulled, as
 ## Enabling Registry Mirroring
 
 Enabling mirroring for a registry allows a node to both pull images from that registry from other nodes, and share the registry's images with other nodes.
-If a registry is enabled for mirroring on some nodes, but not on others, only the nodes will the registry enabled will exchange images from that registry.
+If a registry is enabled for mirroring on some nodes, but not on others, only the nodes with the registry enabled will exchange images from that registry.
 
 In order to enable mirroring of images from an upstream container registry, nodes must have an entry in the `mirrors` section of `registries.yaml` for that registry.
 The registry does not need to have any endpoints listed, it just needs to be present.
@@ -50,17 +50,11 @@ mirrors:
       - https://mirror.example.com
 ```
 
-If you are using your private registry directly, instead of as a mirror for an upstream, you may enable mirroring in the same way public registries are enabled.  
-Note that if you are using the `--disable-default-endpoint` option, you should explicitly list the default endpoint, in order to allow the image pull to fall back to the registry itself.
+If you are using a private registry directly, instead of as a mirror for an upstream registry, you may enable distributed mirroring in the same way public
+registries are enabled - by listing it in the mirrors section: 
 ```yaml
 mirrors:
-  mirror.example.com
-    endpoint:
-      - https://mirror.example.com
-configs:
   mirror.example.com:
-    tls:
-      ca_file: /path/to/mirror-ca.pem
 ```
 
 If no registries are enabled for mirroring on a node, that node does not participate in the distributed registry in any capacity.
@@ -72,6 +66,17 @@ For more information on the structure of the `registries.yaml` file, see [Privat
 By default, containerd will fall back to the default endpoint when pulling from registries with mirror endpoints configured. If you want to disable this,
 and only pull images from the configured mirrors and/or the embedded mirror, see the [Default Endpoint Fallback](./private-registry.md#default-endpoint-fallback)
 section of the Private Registry Configuration documentation.
+
+Note that if you are using the `--disable-default-endpoint` option and want to allow pulling directly from a particular registry, while disallowing the rest,
+you can explicitly provide an endpoint in order to allow the image pull to fall back to the registry itself:
+```yaml
+mirrors:
+  docker.io:           # no default endpoint, pulls will fail if not available on a node
+  registry.k8s.io:     # no default endpoint, pulls will fail if not available on a node
+  mirror.example.com:  # explicit default endpoint, can pull from upstream if not available on a node
+    endpoint:
+      - https://mirror.example.com
+```
 
 ## Security
 
