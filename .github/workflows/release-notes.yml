@@ -3,7 +3,7 @@ on:
   workflow_dispatch
 
 env:
-  MINORS: "v1.25 v1.26 v1.27 v1.28"
+  MINORS: "v1.26 v1.27 v1.28 v1.29"
 permissions:
   contents: write
   pull-requests: write
