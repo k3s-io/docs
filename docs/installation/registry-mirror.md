@@ -117,5 +117,5 @@ You would then be able to pull those images from all cluster members, as long as
 The embedded registry is read-only, and cannot be pushed to directly using `docker push` or other common tools that interact with OCI registries.
 
 Images can be manually made available via the embedded registry by running `ctr -n k8s.io image pull` to pull an image,
-or by loading image archives via the `ctr -n k8s.io import` or `ctr -n k8s.io load` commands.
+or by loading image archives via the `ctr -n k8s.io image import` or `ctr -n k8s.io image load` commands.
 Note that the `k8s.io` namespace must be specified when managing images via `ctr` in order for them to be visible to the kubelet.
