@@ -33,6 +33,24 @@ K3s is expected to work on most modern Linux systems.
 
 Some OSs have additional setup requirements:
 <Tabs queryString="os">
+<TabItem value="suse" label="SUSE Linux Enterprise / openSUSE">
+
+It is recommended to turn off firewalld:
+```bash
+systemctl disable firewalld --now
+```
+
+If you wish to keep firewalld enabled, by default, the following rules are required:
+```bash
+firewall-cmd --permanent --add-port=6443/tcp #apiserver
+firewall-cmd --permanent --zone=trusted --add-source=10.42.0.0/16 #pods
+firewall-cmd --permanent --zone=trusted --add-source=10.43.0.0/16 #services
+firewall-cmd --reload
+```
+
+Additional ports may need to be opened depending on your setup. See [Inbound Rules](#inbound-rules-for-k3s-nodes) for more information. If you change the default CIDR for pods or services, you will need to update the firewall rules accordingly.
+
+</TabItem>
 <TabItem value="rhel" label="Red Hat Enterprise Linux / CentOS / Fedora">
 
 It is recommended to turn off firewalld:
