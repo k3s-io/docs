@@ -78,6 +78,17 @@ mirrors:
       - https://mirror.example.com
 ```
 
+### Latest Tag
+
+When no tag is specified for a container image, the implicit default tag is `latest`. This tag is frequently
+updated to point at the most recent version of the image. Because this tag will point at a different revisions
+of an image depending on when it is pulled, the distributed registry **will not** pull the `latest` tag from
+other nodes. This forces containerd go out to an upstream registry or registry mirror to ensure a consistent
+view of what the `latest` tag refers to.
+
+This aligns with the [special `imagePullPolicy` defaulting](https://kubernetes.io/docs/concepts/containers/images/#imagepullpolicy-defaulting)
+observed by Kubernetes when using the `latest` tag for a container image.
+
 ## Security
 
 ### Authentication
