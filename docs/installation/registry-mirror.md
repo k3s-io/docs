@@ -21,6 +21,9 @@ Any image available in the containerd image store on any node, can be pulled by 
 Images imported via [air-gap image tar files](./airgap.md#manually-deploy-images-method) are pinned in containerd to
 ensure that they remain available and are not pruned by Kubelet garbage collection.
 
+The peer to peer port can changed from 5001 by setting the `K3S_P2P_PORT` environment variable for the K3s service. The port must be set to the same value on all nodes.
+Changing the port is unsupported and not recommended.
+
 ### Requirements
 
 When the embedded registry mirror is enabled, all nodes must be able to reach each other via their internal IP addresses, on TCP ports 5001 and 6443.
@@ -57,6 +60,16 @@ mirrors:
   mirror.example.com:
 ```
 
+:::info Version Gate
+Wildcard support is available as of the March 2024 releases: v1.26.15+k3s1, v1.27.12+k3s1, v1.28.8+k3s1, v1.29.3+k3s1
+:::
+
+The `"*"` wildcard mirror entry can be used to enable distributed mirroring of all registries. Note that the asterisk MUST be quoted:
+```yaml
+mirrors:
+  "*":
+```
+
 If no registries are enabled for mirroring on a node, that node does not participate in the distributed registry in any capacity.
 
 For more information on the structure of the `registries.yaml` file, see [Private Registry Configuration](./private-registry.md).
@@ -88,6 +101,9 @@ view of what the `latest` tag refers to.
 
 This aligns with the [special `imagePullPolicy` defaulting](https://kubernetes.io/docs/concepts/containers/images/#imagepullpolicy-defaulting)
 observed by Kubernetes when using the `latest` tag for a container image.
+
+Mirroring the `latest` tag can be enabled by setting the `K3S_P2P_ENABLE_LATEST=true` environment variable for the K3s service.
+This is unsupported and not recommended, for the reasons discussed above.
 
 ## Security
 
