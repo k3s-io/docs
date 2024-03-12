@@ -130,6 +130,28 @@ The `auth` part consists of either username/password or authentication token:
 
 Below are basic examples of using private registries in different modes:
 
+### Wildcard Support
+
+:::info Version Gate
+Wildcard support is available as of the March 2024 releases: v1.26.15+k3s1, v1.27.12+k3s1, v1.28.8+k3s1, v1.29.3+k3s1
+:::
+
+The `"*"` wildcard entry can be used in the `mirrors` and `configs` sections to provide default configuration for all registries.
+The default configuration will only be used if there is no specific entry for that registry. Note that the asterisk MUST be quoted.
+
+In the following example, a local registry mirror will be used for all registries. TLS verification will be disabled for all registries, except `docker.io`.
+```yaml
+mirrors:
+  "*":
+    endpoint:
+      - "https://registry.example.com:5000"
+configs:
+  "docker.io":
+  "*":
+    tls:
+      insecure_skip_verify: true
+```
+
 ### With TLS
 
 Below are examples showing how you may configure `/etc/rancher/k3s/registries.yaml` on each node when using TLS.
