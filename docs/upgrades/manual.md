@@ -37,55 +37,32 @@ The contents of the [configuration file](../installation/configuration.md#config
 If you want your configuration to be independent from the install script, you should use a configuration file instead of passing environment variables or arguments to the install script.
 :::
 
-1. Stop the old k3s service
-    <Tabs>
-    <TabItem value="systemd">
+Running the install script will:
 
-    To stop servers:
-    ```sh
-    sudo systemctl stop k3s
-    ```
+1. Download the new k3s binary
+2. Stop the existing k3s service
+3. Start the new k3s service
 
-    To stop agents:
-    ```sh
-    sudo systemctl stop k3s-agent
-    ```
-    </TabItem>
-    <TabItem value="OpenRC">
+For example, to upgrade to the current stable release:
 
-    To stop servers:
-    ```sh
-    sudo rc-service k3s stop
-    ```
+```sh
+curl -sfL https://get.k3s.io | <EXISTING_K3S_ENV> sh -s - <EXISTING_K3S_ARGS>
+```
 
-    To stop agents:
-    ```sh
-    sudo rc-service k3s-agent stop
-    ```
-    </TabItem>
-    </Tabs>
-2. Run the install script to download and start the new k3s service
+If you want to upgrade to a newer version in a specific channel (such as latest) you can specify the channel:
+```sh
+curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL=latest <EXISTING_K3S_ENV> sh -s - <EXISTING_K3S_ARGS>
+```
 
-    For example, to upgrade to the current stable release:
+If you want to upgrade to a specific version you can run the following command:
 
-    ```sh
-    curl -sfL https://get.k3s.io | <EXISTING_K3S_ENV> sh -s - <EXISTING_K3S_ARGS>
-    ```
+```sh
+curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=vX.Y.Z+k3s1 <EXISTING_K3S_ENV> sh -s - <EXISTING_K3S_ARGS>
+```
 
-    If you want to upgrade to a newer version in a specific channel (such as latest) you can specify the channel:
-    ```sh
-    curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL=latest <EXISTING_K3S_ENV> sh -s - <EXISTING_K3S_ARGS>
-    ```
-
-    If you want to upgrade to a specific version you can run the following command:
-
-    ```sh
-    curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=vX.Y.Z+k3s1 <EXISTING_K3S_ENV> sh -s - <EXISTING_K3S_ARGS>
-    ```
-
-    :::tip 
-    If you want to download the new verision of k3s, but not start it, you can use the `INSTALL_K3S_SKIP_START=true` environment variable.
-    :::
+:::tip 
+If you want to download the new verision of k3s, but not start it, you can use the `INSTALL_K3S_SKIP_START=true` environment variable.
+:::
 
 ### Upgrade K3s Using the Binary
 
