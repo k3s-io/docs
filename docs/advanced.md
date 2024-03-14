@@ -155,21 +155,23 @@ You can extend the K3s base template instead of copy-pasting the complete stock 
   BinaryName = "/usr/bin/custom-container-runtime"
 
 ```
-## NVIDIA Container Runtime Support
 
-K3s will automatically detect and configure the NVIDIA container runtime if it is present when K3s starts.
+## NVIDIA Container Toolkit Support
+
+K3s will automatically detect and configure the NVIDIA container toolkit if it is present when K3s starts.
 
 1. Install the nvidia-container package repository on the node by following the instructions at:
-    https://nvidia.github.io/libnvidia-container/
-1. Install the nvidia container runtime packages. For example:
-   `apt install -y nvidia-container-runtime cuda-drivers-fabricmanager-515 nvidia-headless-515-server`
-1. Install K3s, or restart it if already installed:
+    <https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html>
+2. Install the nvidia container runtime packages. For example:
+   `apt-get install -y nvidia-container-toolkit cuda-drivers-fabricmanager-515 nvidia-headless-515-server`
+3. Install K3s, or restart it if already installed:
     `curl -ksL get.k3s.io | sh -`
-1. Confirm that the nvidia container runtime has been found by k3s:
+4. Confirm that the nvidia container runtime has been found by k3s:
     `grep nvidia /var/lib/rancher/k3s/agent/etc/containerd/config.toml`
 
 This will automatically add `nvidia` and/or `nvidia-experimental` runtimes to the containerd configuration, depending on what runtime executables are found.
 You must still add a RuntimeClass definition to your cluster, and deploy Pods that explicitly request the appropriate runtime by setting `runtimeClassName: nvidia` in the Pod spec:
+
 ```yaml
 apiVersion: node.k8s.io/v1
 kind: RuntimeClass
@@ -202,6 +204,7 @@ spec:
 Note that the NVIDIA Container Runtime is also frequently used with the [NVIDIA Device Plugin](https://github.com/NVIDIA/k8s-device-plugin/) and [GPU Feature Discovery](https://github.com/NVIDIA/gpu-feature-discovery/), which must be installed separately, with modifications to ensure that pod specs include `runtimeClassName: nvidia`, as mentioned above.
 
 ## Running Agentless Servers (Experimental)
+>
 > **Warning:** This feature is experimental.
 
 When started with the `--disable-agent` flag, servers do not run the kubelet, container runtime, or CNI. They do not register a Node resource in the cluster, and will not appear in `kubectl get nodes` output.
@@ -212,15 +215,16 @@ Running agentless servers may be advantageous if you want to obscure your contro
 By default, the apiserver on agentless servers will not be able to make outgoing connections to admission webhooks or aggregated apiservices running within the cluster. To remedy this, set the `--egress-selector-mode` server flag to either `pod` or `cluster`. If you are changing this flag on an existing cluster, you'll need to restart all nodes in the cluster for the option to take effect.
 
 ## Running Rootless Servers (Experimental)
+>
 > **Warning:** This feature is experimental.
 
 Rootless mode allows running K3s servers as an unprivileged user, so as to protect the real root on the host from potential container-breakout attacks.
 
-See https://rootlesscontaine.rs/ to learn more about Rootless Kubernetes.
+See <https://rootlesscontaine.rs/> to learn more about Rootless Kubernetes.
 
 ### Known Issues with Rootless mode
 
-* **Ports**
+- **Ports**
 
   When running rootless a new network namespace is created.  This means that K3s instance is running with networking fairly detached from the host.
   The only way to access Services run in K3s from the host is to set up port forwards to the K3s network namespace.
@@ -228,30 +232,31 @@ See https://rootlesscontaine.rs/ to learn more about Rootless Kubernetes.
 
   For example, a Service on port 80 will become 10080 on the host, but 8080 will become 8080 without any offset. Currently, only LoadBalancer Services are automatically bound.
 
-* **Cgroups**
+- **Cgroups**
 
   Cgroup v1 and Hybrid v1/v2 are not supported; only pure Cgroup v2 is supported. If K3s fails to start due to missing cgroups when running rootless, it is likely that your node is in Hybrid mode, and the "missing" cgroups are still bound to a v1 controller.
 
-* **Multi-node/multi-process cluster**
+- **Multi-node/multi-process cluster**
 
   Multi-node rootless clusters, or multiple rootless k3s processes on the same node, are not currently supported. See [#6488](https://github.com/k3s-io/k3s/issues/6488#issuecomment-1314998091) for more details.
 
 ### Starting Rootless Servers
-* Enable cgroup v2 delegation, see https://rootlesscontaine.rs/getting-started/common/cgroup2/ .
+
+- Enable cgroup v2 delegation, see <https://rootlesscontaine.rs/getting-started/common/cgroup2/> .
   This step is required; the rootless kubelet will fail to start without the proper cgroups delegated.
 
-* Download `k3s-rootless.service` from [`https://github.com/k3s-io/k3s/blob/<VERSION>/k3s-rootless.service`](https://github.com/k3s-io/k3s/blob/master/k3s-rootless.service).
+- Download `k3s-rootless.service` from [`https://github.com/k3s-io/k3s/blob/<VERSION>/k3s-rootless.service`](https://github.com/k3s-io/k3s/blob/master/k3s-rootless.service).
   Make sure to use the same version of `k3s-rootless.service` and `k3s`.
 
-* Install `k3s-rootless.service` to `~/.config/systemd/user/k3s-rootless.service`.
+- Install `k3s-rootless.service` to `~/.config/systemd/user/k3s-rootless.service`.
   Installing this file as a system-wide service (`/etc/systemd/...`) is not supported.
   Depending on the path of `k3s` binary, you might need to modify the `ExecStart=/usr/local/bin/k3s ...` line of the file.
 
-* Run `systemctl --user daemon-reload`
+- Run `systemctl --user daemon-reload`
 
-* Run `systemctl --user enable --now k3s-rootless`
+- Run `systemctl --user enable --now k3s-rootless`
 
-* Run `KUBECONFIG=~/.kube/k3s.yaml kubectl get pods -A`, and make sure the pods are running.
+- Run `KUBECONFIG=~/.kube/k3s.yaml kubectl get pods -A`, and make sure the pods are running.
 
 > **Note:** Don't try to run `k3s server --rootless` on a terminal, as terminal sessions do not allow cgroup v2 delegation.
 > If you really need to try it on a terminal, use `systemd-run --user -p Delegate=yes --tty k3s server --rooless` to wrap it in a systemd scope.
@@ -271,9 +276,9 @@ Some of the configuration used by rootlesskit and slirp4nets can be set by envir
 
 ### Troubleshooting Rootless
 
-* Run `systemctl --user status k3s-rootless` to check the daemon status
-* Run `journalctl --user -f -u k3s-rootless` to see the daemon log
-* See also https://rootlesscontaine.rs/
+- Run `systemctl --user status k3s-rootless` to check the daemon status
+- Run `journalctl --user -f -u k3s-rootless` to see the daemon log
+- See also <https://rootlesscontaine.rs/>
 
 ## Node Labels and Taints
 
@@ -290,8 +295,9 @@ If you want to change node labels and taints after node registration, or add res
 ## Starting the Service with the Installation Script
 
 The installation script will auto-detect if your OS is using systemd or openrc and enable and start the service as part of the installation process.
-* When running with openrc, logs will be created at `/var/log/k3s.log`. 
-* When running with systemd, logs will be created in `/var/log/syslog` and viewed using `journalctl -u k3s` (or `journalctl -u k3s-agent` on agents).
+
+- When running with openrc, logs will be created at `/var/log/k3s.log`.
+- When running with systemd, logs will be created in `/var/log/syslog` and viewed using `journalctl -u k3s` (or `journalctl -u k3s-agent` on agents).
 
 An example of disabling auto-starting and service enablement with the install script:
 
@@ -327,12 +333,14 @@ sudo docker run \
   -d rancher/k3s:v1.24.10-k3s1 \
   server
 ```
+
 :::note
 You must specify a valid K3s version as the tag; the `latest` tag is not maintained.  
 Docker images do not allow a `+` sign in tags, use a `-` in the tag instead.
 :::
 
 Once K3s is up and running, you can copy the admin kubeconfig out of the Docker container for use:
+
 ```bash
 sudo docker cp k3s-server-1:/etc/rancher/k3s/k3s.yaml ~/.kube/config
 ```
@@ -348,7 +356,7 @@ Available as of v1.19.4+k3s1
 
 :::
 
-If you are installing K3s on a system where SELinux is enabled by default (such as CentOS), you must ensure the proper SELinux policies have been installed. 
+If you are installing K3s on a system where SELinux is enabled by default (such as CentOS), you must ensure the proper SELinux policies have been installed.
 
 <Tabs>
 <TabItem value="Automatic Installation" default>
@@ -360,6 +368,7 @@ The [install script](./installation/configuration.md#configuration-with-install-
 <TabItem value="Manual Installation" default>
 
 The necessary policies can be installed with the following commands:
+
 ```bash
 yum install -y container-selinux selinux-policy-base
 yum install -y https://rpm.rancher.io/k3s/latest/common/centos/7/noarch/k3s-selinux-1.4-1.el7.noarch.rpm
@@ -392,7 +401,7 @@ According to [Harter, et al.](https://www.usenix.org/conference/fast16/technical
 
 To address this issue, k3s experimentally supports *lazy pulling* of image contents.
 This allows k3s to start a container before the entire image has been pulled.
-Instead, the necessary chunks of contents (e.g. individual files) are fetched on-demand. 
+Instead, the necessary chunks of contents (e.g. individual files) are fetched on-demand.
 Especially for large images, this technique can shorten the container startup latency.
 
 To enable lazy pulling, the target image needs to be formatted as [*eStargz*](https://github.com/containerd/stargz-snapshotter/blob/main/docs/stargz-estargz.md).
@@ -451,8 +460,9 @@ helm install --create-namespace -n cattle-logging-system rancher-logging --set a
 Packets dropped by network policies can be logged. The packet is sent to the iptables NFLOG action, which shows the packet details, including the network policy that blocked it.
 
 If there is a lot of traffic, the number of log messages could be very high. To control the log rate on a per-policy basis, set the `limit` and `limit-burst` iptables parameters by adding the following annotations to the network policy in question:
-* `kube-router.io/netpol-nflog-limit=<LIMIT-VALUE>`
-* `kube-router.io/netpol-nflog-limit-burst=<LIMIT-BURST-VALUE>`
+
+- `kube-router.io/netpol-nflog-limit=<LIMIT-VALUE>`
+- `kube-router.io/netpol-nflog-limit-burst=<LIMIT-BURST-VALUE>`
 
 Default values are `limit=10/minute` and `limit-burst=10`. Check the [iptables manual](https://www.netfilter.org/documentation/HOWTO/packet-filtering-HOWTO-7.html#:~:text=restrict%20the%20rate%20of%20matches) for more information on the format and possible values for these fields.
 
@@ -460,7 +470,9 @@ To convert NFLOG packets to log entries, install ulogd2 and configure `[log1]` t
 When a packet is blocked by network policy rules, a log message will appear in `/var/log/ulog/syslogemu.log`.
 
 Packets sent to the NFLOG netlink socket can also be read by using command-line tools like tcpdump or tshark:
+
 ```bash
 tcpdump -ni nflog:100
 ```
+
 While more readily available, tcpdump will not show the name of the network policy that blocked the packet. Use wireshark's tshark command instead to display the full NFLOG packet header, including the `nflog.prefix` field that contains the policy name.
