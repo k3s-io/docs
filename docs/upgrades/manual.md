@@ -40,8 +40,8 @@ If you want your configuration to be independent from the install script, you sh
 Running the install script will:
 
 1. Download the new k3s binary
-2. Stop the existing k3s service
-3. Start the new k3s service
+2. Update the systemd unit or openrc init script to reflect the args passed to the install script
+3. Restart the k3s service
 
 For example, to upgrade to the current stable release:
 
