@@ -24,7 +24,7 @@ K3s supports the following datastore options:
   * [etcd](https://etcd.io/) (certified against version 3.5.4)
   * [MySQL](https://www.mysql.com/) (certified against versions 5.7 and 8.0)
   * [MariaDB](https://mariadb.org/) (certified against version 10.6.8)
-  * [PostgreSQL](https://www.postgresql.org/) (certified against versions 10.7, 11.5, and 14.2)
+  * [PostgreSQL](https://www.postgresql.org/) (certified against versions 12.16, 13.12, 14.9 and 15.4)
 
 :::warning Prepared Statement Support
 K3s requires prepared statements support from the DB. This means that connection poolers such as [PgBouncer](https://www.pgbouncer.org/faq.html#how-to-use-prepared-statements-with-transaction-pooling) may require additional configuration to work with K3s.
