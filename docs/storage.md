@@ -107,7 +107,7 @@ Below we cover a simple example. For more information, refer to the [official do
 Apply the longhorn.yaml to install Longhorn:
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.5.1/deploy/longhorn.yaml
+kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.6.0/deploy/longhorn.yaml
 ```
 
 Longhorn will be installed in the namespace `longhorn-system`.
