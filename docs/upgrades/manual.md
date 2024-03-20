@@ -37,6 +37,12 @@ The contents of the [configuration file](../installation/configuration.md#config
 If you want your configuration to be independent from the install script, you should use a configuration file instead of passing environment variables or arguments to the install script.
 :::
 
+Running the install script will:
+
+1. Download the new k3s binary
+2. Update the systemd unit or openrc init script to reflect the args passed to the install script
+3. Restart the k3s service
+
 For example, to upgrade to the current stable release:
 
 ```sh
@@ -51,42 +57,18 @@ curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL=latest <EXISTING_K3S_ENV> sh 
 If you want to upgrade to a specific version you can run the following command:
 
 ```sh
-curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=vX.Y.Z-rc1 <EXISTING_K3S_ENV> sh -s - <EXISTING_K3S_ARGS>
+curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=vX.Y.Z+k3s1 <EXISTING_K3S_ENV> sh -s - <EXISTING_K3S_ARGS>
 ```
 
-### Manually Upgrade K3s Using the Binary
+:::tip 
+If you want to download the new verision of k3s, but not start it, you can use the `INSTALL_K3S_SKIP_START=true` environment variable.
+:::
 
-Or to manually upgrade K3s:
+### Upgrade K3s Using the Binary
+
+To upgrade K3s manually, you can download the desired version of the K3s binary and replace the existing binary with the new one.
 
 1. Download the desired version of the K3s binary from [releases](https://github.com/k3s-io/k3s/releases)
 2. Copy the downloaded binary to `/usr/local/bin/k3s` (or your desired location)
 3. Stop the old k3s binary
 4. Launch the new k3s binary
-
-### Restarting K3s
-
-Restarting K3s is supported by the installation script for systemd and OpenRC.
-
-**systemd**
-
-To restart servers manually:
-```sh
-sudo systemctl restart k3s
-```
-
-To restart agents manually:
-```sh
-sudo systemctl restart k3s-agent
-```
-
-**OpenRC**
-
-To restart servers manually:
-```sh
-sudo service k3s restart
-```
-
-To restart agents manually:
-```sh
-sudo service k3s-agent restart
-```
