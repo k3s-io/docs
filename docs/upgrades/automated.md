@@ -43,12 +43,19 @@ When attempting to upgrade to a new version of K3s, the [Kubernetes version skew
 :::
 
 ### Install the system-upgrade-controller
+
  The system-upgrade-controller can be installed as a deployment into your cluster. The deployment requires a service-account, clusterRoleBinding, and a configmap. To install these components, run the following command:
+
 ```bash
 kubectl apply -f https://github.com/rancher/system-upgrade-controller/releases/latest/download/system-upgrade-controller.yaml
 ```
 The controller can be configured and customized via the previously mentioned configmap, but the controller must be redeployed for the changes to be applied.
 
+To be able to apply plans, the system-upgrade-controller CRD has to be deployed:
+
+```bash
+kubectl apply -f https://github.com/rancher/system-upgrade-controller/releases/latest/download/crd.yaml
+```
 
 ### Configure plans
 It is recommended you create at least two plans: a plan for upgrading server (control-plane) nodes and a plan for upgrading agent nodes. You can create additional plans as needed to control the rollout of the upgrade across nodes. Once the plans are created, the controller will pick them up and begin to upgrade your cluster.  
