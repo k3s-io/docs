@@ -9,7 +9,16 @@ module.exports = {
       items:[
         'installation/requirements',
         'installation/configuration',
-        'installation/network-options',
+        {
+          type: 'category',
+          label: 'Network Options',
+	  link: { type: 'doc', id: 'installation/network-options/network-options'},
+          items: [
+            'installation/network-options/basic-network-options',
+            'installation/network-options/distributed-multicloud',
+            'installation/network-options/multus-ipams',
+          ],
+        },
         'installation/private-registry',
         'installation/registry-mirror',
         'installation/airgap',

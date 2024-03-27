@@ -5,7 +5,7 @@ weight: 35
 
 This page explains how CoreDNS, Traefik Ingress controller, Network Policy controller, and ServiceLB load balancer controller work within K3s.
 
-Refer to the [Installation Network Options](./installation/network-options.md) page for details on Flannel configuration options and backend selection, or how to set up your own CNI.
+Refer to the [Installation Network Options](./installation/network-options/network-options.md) page for details on Flannel configuration options and backend selection, or how to set up your own CNI.
 
 For information on which ports need to be opened for K3s, refer to the [Networking Requirements](./installation/requirements.md#networking).
 
