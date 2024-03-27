@@ -1383,7 +1383,7 @@
     vfile "^6.0.1"
     webpack "^5.88.1"
 
-"@docusaurus/module-type-aliases@3.2.0", "@docusaurus/module-type-aliases@^3.0.1":
+"@docusaurus/module-type-aliases@3.2.0", "@docusaurus/module-type-aliases@^3.2.0":
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/@docusaurus/module-type-aliases/-/module-type-aliases-3.2.0.tgz#ef883d8418f37e551eca72adc409014e720786d4"
   integrity sha512-jRSp9YkvBwwNz6Xgy0RJPsnie+Ebb//gy7GdbkJ2pW2gvvlYKGib2+jSF0pfIzvyZLulfCynS1KQdvDKdSl8zQ==
@@ -1587,7 +1587,7 @@
     tslib "^2.6.0"
     utility-types "^3.10.0"
 
-"@docusaurus/theme-common@3.2.0", "@docusaurus/theme-common@^3.0.1":
+"@docusaurus/theme-common@3.2.0", "@docusaurus/theme-common@^3.2.0":
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/@docusaurus/theme-common/-/theme-common-3.2.0.tgz#67f5f1a1e265e1f1a5b9fa7bfb4bf7b98dfcf981"
   integrity sha512-sFbw9XviNJJ+760kAcZCQMQ3jkNIznGqa6MQ70E5BnbP+ja36kGgPOfjcsvAcNey1H1Rkhh3p2Mhf4HVLdKVVw==

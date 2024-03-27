@@ -9,7 +9,6 @@ module.exports = {
       items:[
         'installation/requirements',
         'installation/configuration',
-        'installation/network-options',
         'installation/private-registry',
         'installation/registry-mirror',
         'installation/airgap',
@@ -65,7 +64,17 @@ module.exports = {
     'architecture',
     'cluster-access',
     'storage',
-    'networking',
+    {
+      type: 'category',
+      label: 'Networking',
+      link: { type: 'doc', id: 'networking/networking'},
+      items: [
+        'networking/basic-network-options',
+        'networking/distributed-multicloud',
+        'networking/multus-ipams',
+        'networking/networking-services',
+      ],
+    },
     'helm',
     'advanced',
     {

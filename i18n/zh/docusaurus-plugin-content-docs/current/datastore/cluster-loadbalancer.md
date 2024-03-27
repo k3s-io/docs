@@ -1,62 +1,62 @@
 ---
-title: 集群负载均衡器
+title: Cluster Load Balancer
 weight: 30
 ---
 
 
-本节介绍如何在高可用性 (HA) K3s 集群的 Server 节点前安装外部负载均衡器。此处提供了两个示例：Nginx 和 HAProxy。
+This section describes how to install an external load balancer in front of a High Availability (HA) K3s cluster's server nodes. Two examples are provided: Nginx and HAProxy.
 
 :::tip
-不要混淆外部负载均衡器与嵌入式 ServiceLB，后者是一个嵌入式控制器，允许在不部署第三方负载均衡器控制器的情况下使用 Kubernetes LoadBalancer Service。有关更多详细信息，请参阅 [Service Load Balancer](../networking.md#service-load-balancer)。
+External load-balancers should not be confused with the embedded ServiceLB, which is an embedded controller that allows for use of Kubernetes LoadBalancer Services without deploying a third-party load-balancer controller. For more details, see [Service Load Balancer](../networking/networking-services.md#service-load-balancer). 
 
-外部负载均衡器可用于提供固定的注册地址来注册节点，或用于从外部访问 Kubernetes API Server。为了公开 LoadBalancer Service，外部负载均衡器可以与 ServiceLB 一起使用或代替 ServiceLB，但在大多数情况下，替代负载均衡器控制器（例如 MetalLB 或 Kube-VIP）是更好的选择。
+External load-balancers can be used to provide a fixed registration address for registering nodes, or for external access to the Kubernetes API Server. For exposing LoadBalancer Services, external load-balancers can be used alongside or instead of ServiceLB, but in most cases, replacement load-balancer controllers such as MetalLB or Kube-VIP are a better choice.
 :::
 
-## 先决条件
+## Prerequisites
 
-本示例中的所有节点都运行 Ubuntu 20.04。
+All nodes in this example are running Ubuntu 20.04.
 
-这两个示例假设已在 3 个节点上安装了[具有嵌入式 etcd 的 HA K3s 集群](../datastore/ha-embedded.md)。
+For both examples, assume that a [HA K3s cluster with embedded etcd](../datastore/ha-embedded.md) has been installed on 3 nodes.
 
-每个 K3s Server 配置有：
+Each k3s server is configured with:
 ```yaml
 # /etc/rancher/k3s/config.yaml
 token: lb-cluster-gd
 tls-san: 10.10.10.100
 ```
 
-节点的主机名和 IP 为：
+The nodes have hostnames and IPs of: 
 * server-1: `10.10.10.50`
 * server-2: `10.10.10.51`
 * server-3: `10.10.10.52`
 
 
-用于负载均衡的两个节点配置了以下主机名和 IP：
+Two additional nodes for load balancing are configured with hostnames and IPs of:
 * lb-1: `10.10.10.98`
 * lb-2: `10.10.10.99`
 
-存在三个附加节点，其主机名和 IP 为：
+Three additional nodes exist with hostnames and IPs of:
 * agent-1: `10.10.10.101`
 * agent-2: `10.10.10.102`
 * agent-3: `10.10.10.103`
 
-## 设置负载均衡器
+## Setup Load Balancer
 <Tabs>
 <TabItem value="HAProxy" default>
 
-[HAProxy](http://www.haproxy.org/) 是一个提供 TCP 负载均衡器的开源选项。它还支持负载均衡器本身的 HA，确保各个级别的冗余。有关详细信息，请参阅 [HAProxy 文档](http://docs.haproxy.org/2.8/intro.html)。
+[HAProxy](http://www.haproxy.org/) is an open source option that provides a TCP load balancer. It also supports HA for the load balancer itself, ensuring redundancy at all levels. See [HAProxy Documentation](http://docs.haproxy.org/2.8/intro.html) for more info.
 
-此外，我们将使用 KeepAlived 来生成用于访问集群的虚拟 IP (VIP)。有关详细信息，请参阅 [KeepAlived 文档](https://www.keepalived.org/manpage.html)。
+Additionally, we will use KeepAlived to generate a virtual IP (VIP) that will be used to access the cluster. See [KeepAlived Documentation](https://www.keepalived.org/manpage.html) for more info.
 
 
 
-1) 安装 HAProxy 和 KeepAlived：
+1) Install HAProxy and KeepAlived:
 
 ```bash
 sudo apt-get install haproxy keepalived
 ```
 
-2) 将以下内容添加到 lb-1 和 lb-2 上的 `/etc/haproxy/haproxy.cfg` 中：
+2) Add the following to `/etc/haproxy/haproxy.cfg` on lb-1 and lb-2:
 
 ```
 frontend k3s-frontend
@@ -74,7 +74,7 @@ backend k3s-backend
     server server-2 10.10.10.51:6443 check
     server server-3 10.10.10.52:6443 check
 ```
-3) 将以下内容添加到 lb-1 和 lb-2 上的 `/etc/keepalived/keepalived.conf` 中：
+3) Add the following to `/etc/keepalived/keepalived.conf` on lb-1 and lb-2:
 
 ```
 vrrp_script chk_haproxy {
@@ -99,20 +99,20 @@ vrrp_instance haproxy-vip {
 }
 ```
 
-6) 在 lb-1 和 lb-2 上重启 HAProxy 和 KeepAlived：
+6) Restart HAProxy and KeepAlived on lb-1 and lb-2:
 
 ```bash
 systemctl restart haproxy
 systemctl restart keepalived
 ```
 
-5) 在 agent-1、agent-2、agent-3 上执行以下命令来安装 K3s 并加入集群：
+5) On agent-1, agent-2, and agent-3, run the following command to install k3s and join the cluster:
 
 ```bash
 curl -sfL https://get.k3s.io | K3S_TOKEN=lb-cluster-gd sh -s - agent --server https://10.10.10.100:6443
 ```
 
-你现在可以从 Server 节点使用 `kubectl` 与集群交互。
+You can now use `kubectl` from server node to interact with the cluster.
 ```bash
 root@server-1 $ k3s kubectl get nodes -A
 NAME       STATUS   ROLES                       AGE     VERSION
@@ -128,15 +128,15 @@ server-3   Ready    control-plane,etcd,master   3m12s   v1.27.3+k3s1
 
 <TabItem value="Nginx">
 
-## Nginx 负载均衡器
+## Nginx Load Balancer
 
-:::warning
-Nginx 本身不支持高可用性 (HA) 配置。如果设置 HA 集群，在 K3 前面使用单个负载均衡器将重新引入单一故障点。
+:::danger
+Nginx does not natively support a High Availability (HA) configuration. If setting up an HA cluster, having a single load balancer in front of K3s will reintroduce a single point of failure.
 :::
 
-[Nginx 开源](http://nginx.org/)提供 TCP 负载均衡器。有关详细信息，请参阅[使用 Nginx 作为 HTTP 负载均衡器](https://nginx.org/en/docs/http/load_balancing.html)。
+[Nginx Open Source](http://nginx.org/) provides a TCP load balancer. See [Using nginx as HTTP load balancer](https://nginx.org/en/docs/http/load_balancing.html) for more info.
 
-1) 在 lb-1 上创建一个包含以下内容的 `nginx.conf` 文件：
+1) Create a `nginx.conf` file on lb-1 with the following contents:
 
 ```
 events {}
@@ -155,9 +155,9 @@ stream {
 }
 ```
 
-2) 在 lb-1 上运行 Nginx 负载均衡器：
+2) Run the Nginx load balancer on lb-1:
 
-使用 Docker：
+Using docker:
 
 ```bash
 docker run -d --restart unless-stopped \
@@ -166,20 +166,20 @@ docker run -d --restart unless-stopped \
     nginx:stable
 ```
 
-或者[安装 Nginx](https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-open-source/) 然后运行：
+Or [install nginx](https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-open-source/) and then run:
 
 ```bash
 cp nginx.conf /etc/nginx/nginx.conf
 systemctl start nginx
 ```
 
-3) 在 agent-1、agent-2、agent-3 上执行以下命令来安装 K3s 并加入集群：
+3) On agent-1, agent-2, and agent-3, run the following command to install k3s and join the cluster:
 
 ```bash
 curl -sfL https://get.k3s.io | K3S_TOKEN=lb-cluster-gd sh -s - agent --server https://10.10.10.99:6443
 ```
 
-你现在可以从 Server 节点使用 `kubectl` 与集群交互。
+You can now use `kubectl` from server node to interact with the cluster.
 ```bash
 root@server1 $ k3s kubectl get nodes -A
 NAME       STATUS   ROLES                       AGE     VERSION
