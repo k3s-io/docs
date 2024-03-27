@@ -5,7 +5,7 @@ weight: 35
 
 本文介绍了 CoreDNS、Traefik Ingress controller 和 Klipper service load balancer 是如何在 K3s 中工作的。
 
-有关 Flannel 配置选项和后端选择，以及如何设置自己的 CNI，请参阅[安装网络选项](./installation/network-options.md)页面。
+有关 Flannel 配置选项和后端选择，以及如何设置自己的 CNI，请参阅[安装网络选项](./installation/network-options/network-options.md)页面。
 
 有关 K3s 需要开放哪些端口，请参考[网络要求](./installation/requirements.md#网络)。
 

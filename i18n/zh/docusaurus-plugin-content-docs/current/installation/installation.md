@@ -7,7 +7,7 @@ This section contains instructions for installing K3s in various environments. P
 
 [Configuration Options](configuration.md) provides guidance on the options available to you when installing K3s.
 
-[Network Options](network-options.md) provides guidance on the networking options available in k3s.
+[Network Options](network-options/network-options.md) provides guidance on the networking options available in k3s.
 
 [Private Registry Configuration](private-registry.md) covers use of `registries.yaml` to configure container image registry mirrors.
 
