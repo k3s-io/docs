@@ -180,7 +180,7 @@ weight: 1
 | `--flannel-backend` wireguard | N/A | 使用 `--flannel-backend=wireguard-native` |
 | `--flannel-backend` value=option1=value | N/A | 使用 `--flannel-conf` 指定带有后端配置的 Flannel 配置文件 |
 
-# K3s Server CLI 帮助
+# K3s Server CLI 帮助 {#k3s-server-cli-help}
 
 > 如果某个选项出现在括号中（例如 `[$K3S_TOKEN]`），该选项可以作为该名称的环境变量传入。
 
