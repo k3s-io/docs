@@ -254,7 +254,7 @@ See https://rootlesscontaine.rs/ to learn more about Rootless Kubernetes.
 * Run `KUBECONFIG=~/.kube/k3s.yaml kubectl get pods -A`, and make sure the pods are running.
 
 > **Note:** Don't try to run `k3s server --rootless` on a terminal, as terminal sessions do not allow cgroup v2 delegation.
-> If you really need to try it on a terminal, use `systemd-run --user -p Delegate=yes --tty k3s server --rooless` to wrap it in a systemd scope.
+> If you really need to try it on a terminal, use `systemd-run --user -p Delegate=yes --tty k3s server --rootless` to wrap it in a systemd scope.
 
 ### Advanced Rootless Configuration
 
