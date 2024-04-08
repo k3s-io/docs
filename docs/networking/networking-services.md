@@ -1,13 +1,13 @@
 ---
-title: "Networking"
+title: "Networking Services"
 weight: 35
 ---
 
 This page explains how CoreDNS, Traefik Ingress controller, Network Policy controller, and ServiceLB load balancer controller work within K3s.
 
-Refer to the [Installation Network Options](./installation/network-options.md) page for details on Flannel configuration options and backend selection, or how to set up your own CNI.
+Refer to the [Installation Network Options](./basic-network-options.md) page for details on Flannel configuration options and backend selection, or how to set up your own CNI.
 
-For information on which ports need to be opened for K3s, refer to the [Networking Requirements](./installation/requirements.md#networking).
+For information on which ports need to be opened for K3s, refer to the [Networking Requirements](../installation/requirements.md#networking).
 
 ## CoreDNS
 
@@ -21,9 +21,9 @@ If you don't install CoreDNS, you will need to install a cluster DNS provider yo
 
 The Traefik ingress controller deploys a LoadBalancer Service that uses ports 80 and 443. By default, ServiceLB will expose these ports on all cluster members, meaning these ports will not be usable for other HostPort or NodePort pods.
 
-Traefik is deployed by default when starting the server. For more information see [Managing Packaged Components](./installation/packaged-components.md). The default config file is found in `/var/lib/rancher/k3s/server/manifests/traefik.yaml`.
+Traefik is deployed by default when starting the server. For more information see [Managing Packaged Components](../installation/packaged-components.md). The default config file is found in `/var/lib/rancher/k3s/server/manifests/traefik.yaml`.
 
-The `traefik.yaml` file should not be edited manually, as K3s will replace the file with defaults at startup. Instead, you should customize Traefik by creating an additional `HelmChartConfig` manifest in `/var/lib/rancher/k3s/server/manifests`. For more details and an example see [Customizing Packaged Components with HelmChartConfig](./helm.md#customizing-packaged-components-with-helmchartconfig). For more information on the possible configuration values, refer to the official [Traefik Helm Configuration Parameters.](https://github.com/traefik/traefik-helm-chart/tree/master/traefik).
+The `traefik.yaml` file should not be edited manually, as K3s will replace the file with defaults at startup. Instead, you should customize Traefik by creating an additional `HelmChartConfig` manifest in `/var/lib/rancher/k3s/server/manifests`. For more details and an example see [Customizing Packaged Components with HelmChartConfig](../helm.md#customizing-packaged-components-with-helmchartconfig). For more information on the possible configuration values, refer to the official [Traefik Helm Configuration Parameters.](https://github.com/traefik/traefik-helm-chart/tree/master/traefik).
 
 To remove Traefik from your cluster, start all servers with the `--disable=traefik` flag.
 
@@ -104,6 +104,4 @@ Before deploying an external CCM, you must start all K3s servers with the `--dis
 If you disable the built-in CCM and do not deploy and properly configure an external substitute, nodes will remain tainted and unschedulable.
 :::
 
-## Nodes Without a Hostname
 
-Some cloud providers, such as Linode, will create machines with "localhost" as the hostname and others may not have a hostname set at all. This can cause problems with domain name resolution. You can run K3s with the `--node-name` flag or `K3S_NODE_NAME` environment variable and this will pass the node name to resolve this issue.

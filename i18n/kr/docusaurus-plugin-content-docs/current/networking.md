@@ -5,7 +5,7 @@ weight: 35
 
 이 페이지는 CoreDNS, Traefik 인그레스 컨트롤러, Klipper 서비스 로드밸런서가 K3s 내에서 작동하는 방식을 설명합니다.
 
-Flannel 구성 옵션 및 백엔드 선택에 대한 자세한 내용이나 자체 CNI 설정 방법은 [설치 네트워크 옵션](./installation/network-options.md) 페이지를 참조하세요.
+Flannel 구성 옵션 및 백엔드 선택에 대한 자세한 내용이나 자체 CNI 설정 방법은 [설치 네트워크 옵션](./networking/basic-network-options.md) 페이지를 참조하세요.
 
 K3s를 위해 어떤 포트를 열어야 하는지에 대한 정보는 [네트워킹 요구 사항](./installation/requirements.md#networking)을 참조하세요.
 

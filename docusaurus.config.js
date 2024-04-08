@@ -122,6 +122,7 @@ module.exports = {
           { from: '/backup-restore/backup-restore', to: '/datastore/backup-restore' },
           { from: '/reference/agent-config', to: '/cli/agent' },
           { from: '/reference/server-config', to: '/cli/server' },
+	  { from: '/installation/network-options', to: '/networking/basic-network-options' },
         ],
       },
     ],
