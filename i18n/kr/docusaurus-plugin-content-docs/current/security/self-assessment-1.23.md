@@ -1004,10 +1004,14 @@ Sep 13 13:26:40 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:
 **Result:** Not Applicable
 
 **Remediation:**
-Edit the API server pod specification file /etc/kubernetes/manifests/kube-apiserver.yaml
-on the control plane node and set the --service-account-key-file parameter
-to the public key file for service accounts. For example,
-`--service-account-key-file=<filename>`.
+The request timeout limits the duration of API requests. The default value of 60 seconds is 
+sufficiently low already. Only change the default value if necessary. When extending this 
+limit, make sure to keep it low enough. A large value can exhaust API server resources and 
+make it prone for Denial-of-Service attacks.
+
+Edit the config file /etc/rancher/k3s/config.yaml on the control plane node and remove the 
+--request-timeout parameter or set it to an appropriate value if needed. For example,
+`--request-timeout=300s`.
 
 ### 1.2.26 Ensure that the --etcd-certfile and --etcd-keyfile arguments are set as appropriate (Automated)
 
