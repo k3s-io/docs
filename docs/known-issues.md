@@ -53,7 +53,6 @@ kube-controller-manager-arg:
   - 'use-service-account-credentials=true'
 kubelet-arg:
   - 'streaming-connection-idle-timeout=5m'
-  - 'make-iptables-util-chains=true'
 ```
 2. Create the `/var/lib/rancher/k3s/server/psa.yaml` file with the following contents. You may want to exempt more namespaces as well. The below example exempts `kube-system` (required), `cis-operator-system` (optional, but useful for when running security scans through Rancher), and `system-upgrade` (required if doing [Automated Upgrades](./upgrades/automated.md)).
 ```yaml

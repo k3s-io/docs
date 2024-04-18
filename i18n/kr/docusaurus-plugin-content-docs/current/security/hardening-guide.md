@@ -583,7 +583,6 @@ kube-controller-manager-arg:
   - 'use-service-account-credentials=true'
 kubelet-arg:
   - 'streaming-connection-idle-timeout=5m'
-  - 'make-iptables-util-chains=true'
 ```
 
 </TabItem>
@@ -607,7 +606,6 @@ kube-controller-manager-arg:
   - 'use-service-account-credentials=true'
 kubelet-arg:
   - 'streaming-connection-idle-timeout=5m'
-  - 'make-iptables-util-chains=true'
 ```
 
 </TabItem>
