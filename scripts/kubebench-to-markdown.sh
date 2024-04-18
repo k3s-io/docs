@@ -4,6 +4,46 @@
 yaml_file="$1"
 yaml_temp="$yaml_file.tmp"
 cp "$yaml_file" "$yaml_temp"
+
+
+handle_op_checks () {
+    test=$1
+    flag=$(echo "$test" | jq -r '.flag')
+    expected=""
+    if [ "$flag" == "permissions" ]; then
+        value=$(echo "$test" | jq -r '.compare.value')
+        expected="file permissions are \`$value\`"
+    elif [ "$flag" == "700" ]; then
+        value=$(echo "$test" | jq -r '.compare.value')
+        expected="directory permissions are \`$value\`"
+    elif [ "$flag" == "root:root" ]; then
+        expected="file owners are \`root:root\`"
+    elif [ "$(echo "$test" | jq -r '.compare')" != "null" ]; then
+        op=$(echo "$test" | jq -r '.compare.op')
+        value=$(echo "$test" | jq -r '.compare.value')
+        case $op in 
+            eq) op="equals" ;;
+            noteq) op="not equal" ;;
+            nothave) op="does not have" ;;
+            gte) op="greater than" ;;
+            null) op="" ;;
+        esac
+        case $value in 
+            null) value="" ;;
+        esac
+        expected="$flag $op $value"
+    else
+        set=$(echo "$test" | jq -r '.set')
+        if [ "$set" == "true" ]; then
+            expected="$flag is set"
+        elif [ "$set" == "false" ]; then
+            expected="$flag is not set"
+        else
+            expected="$flag is found" 
+        fi 
+    fi
+}
+
 # Replace kubebench variables with actual values
 sed -i 's/\$apiserverconf/\/etc\/kubernetes\/manifests\/kube-apiserver.yaml/g' "$yaml_temp"
 sed -i 's/\$schedulerconf/\/etc\/kubernetes\/manifests\/kube-scheduler.yaml/g' "$yaml_temp"
@@ -42,8 +82,9 @@ yq e '.groups[].checks | flatten' -o=json "$yaml_temp" | jq -c '.[]' | while rea
 
     # if scored is true and type doesn't exist, print "Result: Passed"
     if [ "$scored" == "true" ] && [ "$type" == "null" ]; then
-        test=$(echo "$check" | jq -r '.tests.test_items')
-        
+        tests=$(echo "$check" | jq -r '.tests.test_items')
+        bin_op=$(echo "$check" | jq -r '.tests.bin_op')
+
         echo "**Result:** Passed"
         echo
         echo "**Audit:**"
@@ -52,38 +93,27 @@ yq e '.groups[].checks | flatten' -o=json "$yaml_temp" | jq -c '.[]' | while rea
         echo "\`\`\`"
         echo
 
-        # Only print info on simple tests
-        if [ $(echo "$test" | jq -r 'length') -eq 1 ]; then
-            #if flag is permissions, print the permissions
-            flag=$(echo "$test" | jq -r '.[0].flag')
-            if [ "$flag" == "permissions" ]; then
-                expected=$(echo "$test" | jq -r '.[0].compare.value')
-                echo "**Expected:** file permissions are \`$expected\`"
-                echo
-            elif [ "$flag" == "root:root" ]; then
-                echo "**Expected:** file owners are \`root:root\`"
-                echo
-            elif [ "$(echo "$test" | jq -r '.[0].compare')" != "null" ]; then
-                op=$(echo "$test" | jq -r '.[0].compare.op')
-                value=$(echo "$test" | jq -r '.[0].compare.value')
-                case $op in 
-                    eq) op="equals" ;;
-                    nothave) op="does not have" ;;
-                    gte) op="greater than" ;;
-                    null) op="" ;;
-                esac
-                case $value in 
-                    null) value="" ;;
-                esac
-                echo "**Expected:** $flag $op $value"
-            elif [ "$(echo "$test" | jq -r '.[0].set')" != "null" ]; then
-                set=$(echo "$test" | jq -r '.[0].set')
-                if [ "$set" == "true" ]; then
-                    echo "**Expected:** $flag is set"
-                elif [ "$set" == "false" ]; then
-                    echo "**Expected:** $flag is not set"
-                fi
-            fi
+        if [ "$(echo "$tests" | jq -r 'length')" -eq 1 ]; then
+            handle_op_checks "$(echo "$tests" | jq -r '.[0]')"
+            echo "**Expected Result:** $expected"
+            echo
+            echo "**Returned Value:**"
+            echo "\`\`\`console"
+            echo 
+            echo "\`\`\`"
+            echo
+        elif [ "$bin_op" == "and" ] || [ "$bin_op" == "or" ]; then
+            handle_op_checks "$(echo "$tests" | jq -r '.[0]')"
+            echo "**Expected Result:**"
+            echo "$expected"
+            echo "$bin_op"
+            handle_op_checks "$(echo "$tests" | jq -r '.[1]')"
+            echo "$expected"
+            echo
+            echo "**Returned Value:**"
+            echo "\`\`\`console"
+            echo 
+            echo "\`\`\`"
             echo
         fi
     fi
