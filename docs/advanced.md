@@ -1,6 +1,5 @@
 ---
 title: "Advanced Options / Configuration"
-
 aliases:
   - /k3s/latest/en/running/
   - /k3s/latest/en/configuration/

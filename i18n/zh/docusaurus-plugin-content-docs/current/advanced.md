@@ -1,6 +1,5 @@
 ---
 title: "高级选项和配置"
-
 aliases:
   - /k3s/latest/en/running/
   - /k3s/latest/en/configuration/

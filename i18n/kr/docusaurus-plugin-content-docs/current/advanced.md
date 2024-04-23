@@ -1,6 +1,5 @@
 ---
 title: "고급 옵션 / 설정"
-
 aliases:
   - /k3s/latest/kr/running/
   - /k3s/latest/kr/configuration/
