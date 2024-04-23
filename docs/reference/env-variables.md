@@ -1,6 +1,5 @@
 ---
 title: Environment Variables
-weight: 3
 ---
 
 As mentioned in the [Quick-Start Guide](../quick-start.md), you can use the installation script available at https://get.k3s.io to install K3s as a service on systemd and openrc based systems.

@@ -1,6 +1,5 @@
 ---
 title: "Quick-Start Guide"
-weight: 10
 ---
 
 This guide will help you quickly launch a cluster with default options. The [installation section](./installation/installation.md) covers in greater detail how K3s can be set up.

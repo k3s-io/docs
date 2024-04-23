@@ -1,6 +1,5 @@
 ---
 title: "Embedded Registry Mirror"
-weight: 55
 ---
 
 :::info Version Gate

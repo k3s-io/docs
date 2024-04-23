@@ -1,6 +1,5 @@
 ---
 title: "Cluster Datastore"
-weight: 50
 ---
 
 

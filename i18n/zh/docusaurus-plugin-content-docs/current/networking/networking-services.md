@@ -1,6 +1,5 @@
 ---
 title: "Networking Services"
-weight: 35
 ---
 
 This page explains how CoreDNS, Traefik Ingress controller, Network Policy controller, and ServiceLB load balancer controller work within K3s.

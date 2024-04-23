@@ -1,6 +1,5 @@
 ---
 title: Secrets Encryption
-weight: 26
 ---
 
 # Secrets Encryption Config

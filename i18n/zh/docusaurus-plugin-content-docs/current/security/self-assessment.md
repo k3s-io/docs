@@ -1,6 +1,5 @@
 ---
 title: CIS Self Assessment Guide
-weight: 90
 ---
 
 :::info

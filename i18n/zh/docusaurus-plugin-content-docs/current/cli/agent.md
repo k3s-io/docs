@@ -1,6 +1,5 @@
 ---
 title: agent
-weight: 2
 ---
 
 # k3s agent

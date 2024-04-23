@@ -1,6 +1,5 @@
 ---
 title: 아키텍처
-weight: 1
 ---
 
 import ThemedImage from '@theme/ThemedImage';

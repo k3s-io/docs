@@ -1,6 +1,5 @@
 ---
 title: "Managing Packaged Components"
-weight: 60
 ---
 
 ## Auto-Deploying Manifests (AddOns)

@@ -1,6 +1,5 @@
 ---
 title: 集群访问
-weight: 21
 ---
 
 `/etc/rancher/k3s/k3s.yaml` 中存储的 kubeconfig 文件用于配置对 Kubernetes 集群的访问。如果你已经安装了上游的 Kubernetes 命令行工具（如 kubectl 或 helm)，你需要用正确的 kubeconfig 路径配置它们。这可以通过导出 `KUBECONFIG` 环境变量或调用 `--kubeconfig` 命令行标志来完成。有关详细信息，请参阅以下示例。

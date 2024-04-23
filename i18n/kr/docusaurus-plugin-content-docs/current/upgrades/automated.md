@@ -1,6 +1,5 @@
 ---
 title: "Automated Upgrades"
-weight: 20
 ---
 
 ### Overview

@@ -1,6 +1,5 @@
 ---
 title: Stopping K3s
-weight: 4
 ---
 
 

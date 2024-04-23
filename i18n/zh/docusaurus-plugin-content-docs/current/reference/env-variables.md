@@ -1,6 +1,5 @@
 ---
 title: 环境变量
-weight: 3
 ---
 
 如[快速入门指南](../quick-start.md)中所述，你可以使用 https://get.k3s.io 上提供的安装脚本在基于 systemd 和 openrc 的系统上将 K3s 安装为服务。

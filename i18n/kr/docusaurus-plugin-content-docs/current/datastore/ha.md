@@ -1,6 +1,5 @@
 ---
 title: High Availability External DB
-weight: 30
 ---
 
 > **Note:** Official support for installing Rancher on a Kubernetes cluster was introduced in our v1.0.0 release.

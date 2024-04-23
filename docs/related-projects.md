@@ -1,6 +1,5 @@
 ---
 title: "Related Projects"
-weight: 10
 ---
 
 Projects implementing the K3s distribution are welcome additions to help expand the community. This page will introduce you to a range of projects that are related to K3s and can help you further explore its capabilities and potential applications.

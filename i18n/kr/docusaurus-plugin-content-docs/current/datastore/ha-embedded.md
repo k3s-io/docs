@@ -1,6 +1,5 @@
 ---
 title: "High Availability Embedded etcd"
-weight: 40
 ---
 
 :::warning

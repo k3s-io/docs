@@ -1,6 +1,5 @@
 ---
 title: "Configuration Options"
-weight: 20
 ---
 
 This page focuses on the options that are commonly used when setting up K3s for the first time. Refer to the documentation on [Advanced Options and Configuration](../advanced.md) and the [server](../cli/server.md) and [agent](../cli/agent.md) command documentation for more in-depth coverage.

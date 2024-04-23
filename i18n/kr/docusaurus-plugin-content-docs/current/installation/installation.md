@@ -1,6 +1,5 @@
 ---
 title: "Installation"
-weight: 20
 ---
 
 This section contains instructions for installing K3s in various environments. Please ensure you have met the [Requirements](requirements.md) before you begin installing K3s.

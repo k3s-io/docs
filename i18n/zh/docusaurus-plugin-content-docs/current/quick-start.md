@@ -1,6 +1,5 @@
 ---
 title: "快速入门指南"
-weight: 10
 ---
 
 本指南帮助你使用默认选项快速启动集群。[安装部分](./installation/installation.md)更详细地介绍了如何设置 K3s。

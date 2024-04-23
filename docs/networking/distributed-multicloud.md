@@ -1,6 +1,5 @@
 ---
 title: "Distributed hybrid or multicloud cluster"
-weight: 25
 ---
 
 A K3s cluster can still be deployed on nodes which do not share a common private network and are not directly connected (e.g. nodes in different public clouds). There are two options to achieve this: the embedded k3s multicloud solution and the integration with the `tailscale` VPN provider.

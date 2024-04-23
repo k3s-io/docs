@@ -1,6 +1,5 @@
 ---
 title: "高可用嵌入式 etcd"
-weight: 40
 ---
 
 :::warning

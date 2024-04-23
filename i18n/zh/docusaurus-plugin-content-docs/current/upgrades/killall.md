@@ -1,6 +1,5 @@
 ---
 title: 停止 K3s
-weight: 4
 ---
 
 

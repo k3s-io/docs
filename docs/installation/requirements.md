@@ -1,6 +1,5 @@
 ---
 title: Requirements
-weight: 1
 ---
 
 K3s is very lightweight, but has some minimum requirements as outlined below.

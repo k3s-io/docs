@@ -1,6 +1,5 @@
 ---
 title: CIS Self Assessment Guide
-weight: 90
 ---
 
 ### CIS Kubernetes Benchmark v1.23 - K3s with Kubernetes v1.22 to v1.24
