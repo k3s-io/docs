@@ -1780,7 +1780,7 @@ it is set to an empty array.
 **Result:** WARN
 
 **Remediation:**
-Review the use of capabilites in applications running on your cluster. Where a namespace
+Review the use of capabilities in applications running on your cluster. Where a namespace
 contains applicaions which do not require any Linux capabities to operate consider adding
 a PSP which forbids the admission of containers which do not drop all capabilities.
 
