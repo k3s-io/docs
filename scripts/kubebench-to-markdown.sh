@@ -35,6 +35,9 @@ echo "$clean" | jq -c '.Controls[].tests[].results[]' | while read -r result; do
 
     case $status in 
         PASS | FAIL)
+            # Remove curly braces from expected result, conflicts with html embedding
+            expected_result=${expected_result//\{/}
+            expected_result=${expected_result//\}/}
             echo "**Result:** $status"
             echo 
             echo "**Audit:**"
@@ -44,7 +47,8 @@ echo "$clean" | jq -c '.Controls[].tests[].results[]' | while read -r result; do
             echo
             echo "**Expected Result:** $expected_result"
             echo
-            echo "<details><summary><b>Returned Value:</b></summary>"
+            echo "<details>"
+            echo "<summary><b>Returned Value:</b></summary>"
             echo
             echo "\`\`\`console"
             echo "$actual_value"
@@ -60,6 +64,8 @@ echo "$clean" | jq -c '.Controls[].tests[].results[]' | while read -r result; do
             echo
             ;;
         INFO)
+            remediation=${remediation//</&lt;}
+            remediation=${remediation//>/&gt;}
             echo "**Result:** Not Applicable"
             echo 
             echo "**Remediation:**"
