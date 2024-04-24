@@ -1,6 +1,5 @@
 ---
 title: High Availability External DB
-weight: 30
 ---
 
 This section describes how to install a high-availability K3s cluster with an external database.

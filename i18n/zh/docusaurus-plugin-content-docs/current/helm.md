@@ -1,6 +1,5 @@
 ---
 title: Helm
-weight: 42
 ---
 
 Helm 是 Kubernetes 的包管理工具。Helm Chart 为 Kubernetes YAML 清单文件提供了模板语法。借助 Helm，开发人员或集群管理员可以创建称为 Chart 的可配置模板，而不仅仅是使用静态清单。如果你需要创建自己的 Chart catalog，请参阅 [https://helm.sh/docs/intro/quickstart/](https://helm.sh/docs/intro/quickstart/)。

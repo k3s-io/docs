@@ -1,6 +1,5 @@
 ---
 title: "自动升级"
-weight: 20
 ---
 
 ### Overview

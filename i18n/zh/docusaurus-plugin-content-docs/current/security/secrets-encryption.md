@@ -1,6 +1,5 @@
 ---
 title: Secret 加密
-weight: 26
 ---
 
 # Secret 加密配置

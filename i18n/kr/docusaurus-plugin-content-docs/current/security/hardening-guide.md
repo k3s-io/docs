@@ -1,6 +1,5 @@
 ---
 title: "CIS Hardening Guide"
-weight: 80
 ---
 
 

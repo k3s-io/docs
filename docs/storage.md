@@ -1,6 +1,5 @@
 ---
 title: "Volumes and Storage"
-weight: 30
 ---
 
 When deploying an application that needs to retain data, you’ll need to create persistent storage. Persistent storage allows you to store application data external from the pod running your application. This storage practice allows you to maintain application data, even if the application’s pod fails.

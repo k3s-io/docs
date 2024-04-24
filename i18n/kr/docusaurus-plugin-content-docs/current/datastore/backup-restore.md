@@ -1,6 +1,5 @@
 ---
 title: Backup and Restore
-weight: 26
 ---
 
 The way K3s is backed up and restored depends on which type of datastore is used.

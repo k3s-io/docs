@@ -1,6 +1,5 @@
 ---
 title: Architecture
-weight: 1
 ---
 
 import ThemedImage from '@theme/ThemedImage';

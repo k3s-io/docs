@@ -1,6 +1,5 @@
 ---
 title: 헬름(Helm)
-weight: 42
 ---
 
 헬름(Helm)은 쿠버네티스를 위한 패키지 관리 도구입니다. 헬름 차트는 쿠버네티스 YAML 매니페스트 문서를 위한 템플릿 구문을 제공합니다. 개발자 또는 클러스터 관리자는 헬름을 사용하여 정적 매니페스트만 사용하는 대신 차트라는 구성 가능한 템플릿을 만들 수 있다. 자신만의 차트 카탈로그 생성에 대한 자세한 내용은 [https://helm.sh/docs/intro/quickstart/](https://helm.sh/docs/intro/quickstart/)에서 문서를 확인하세요.

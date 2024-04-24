@@ -1,6 +1,5 @@
 ---
 title: Cluster Load Balancer
-weight: 30
 ---
 
 

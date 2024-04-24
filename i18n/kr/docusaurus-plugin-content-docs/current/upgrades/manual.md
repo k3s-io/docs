@@ -1,6 +1,5 @@
 ---
 title: "Manual Upgrades"
-weight: 10
 ---
 
 You can upgrade K3s by using the installation script, or by manually installing the binary of the desired version.

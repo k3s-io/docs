@@ -1,6 +1,5 @@
 ---
 title: "Network Options"
-weight: 25
 ---
 
 This page describes K3s network configuration options, including configuration or replacement of Flannel, and configuring IPv6.

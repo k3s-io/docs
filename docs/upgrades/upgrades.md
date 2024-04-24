@@ -1,6 +1,5 @@
 ---
 title: "Upgrades"
-weight: 25
 ---
 
 ### Upgrading your K3s cluster

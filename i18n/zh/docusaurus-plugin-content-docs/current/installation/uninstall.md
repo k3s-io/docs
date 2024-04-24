@@ -1,6 +1,5 @@
 ---
 title: Uninstalling K3s
-weight: 61
 ---
 
 :::warning

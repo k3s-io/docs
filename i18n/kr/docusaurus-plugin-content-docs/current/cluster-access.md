@@ -1,6 +1,5 @@
 ---
 title: 클러스터 접근
-weight: 21
 ---
 
 `/etc/rancher/k3s/k3s.yaml`에 저장된 kubeconfig 파일은 쿠버네티스 클러스터에 대한 액세스를 구성하는 데 사용됩니다. kubectl 또는 helm과 같은 업스트림 Kubernetes 명령줄 도구를 설치한 경우 올바른 kubeconfig 경로로 구성해야 합니다. 이 작업은 `kubeconfig` 환경 변수를 내보내거나 `--kubeconfig` 명령줄 플래그를 호출하여 수행할 수 있습니다. 자세한 내용은 아래 예시를 참고하세요.

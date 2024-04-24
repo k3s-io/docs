@@ -1,6 +1,5 @@
 ---
 title: "Private Registry Configuration"
-weight: 55
 ---
 
 Containerd can be configured to connect to private registries and use them to pull images as needed by the kubelet.

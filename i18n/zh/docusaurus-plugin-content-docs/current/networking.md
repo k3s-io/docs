@@ -1,6 +1,5 @@
 ---
 title: "网络"
-weight: 35
 ---
 
 本文介绍了 CoreDNS、Traefik Ingress controller 和 Klipper service load balancer 是如何在 K3s 中工作的。

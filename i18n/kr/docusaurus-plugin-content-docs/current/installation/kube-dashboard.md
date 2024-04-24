@@ -1,6 +1,5 @@
 ---
 title: "Kubernetes Dashboard"
-weight: 60
 ---
 
 

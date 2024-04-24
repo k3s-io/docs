@@ -1,6 +1,5 @@
 ---
 title: CLI Tools
-weight: 1
 ---
 
 The K3s binary contains a number of additional tools the help you manage your cluster.

@@ -1,6 +1,5 @@
 ---
 title: "네트워킹"
-weight: 35
 ---
 
 이 페이지는 CoreDNS, Traefik 인그레스 컨트롤러, Klipper 서비스 로드밸런서가 K3s 내에서 작동하는 방식을 설명합니다.

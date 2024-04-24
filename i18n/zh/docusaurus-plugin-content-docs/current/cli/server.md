@@ -1,6 +1,5 @@
 ---
 title: server
-weight: 1
 ---
 
 # k3s server

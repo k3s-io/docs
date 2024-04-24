@@ -1,6 +1,5 @@
 ---
 title: "Networking"
-weight: 20
 ---
 
 This section contains instructions for configuring networking in K3s.
