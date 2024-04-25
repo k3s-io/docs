@@ -852,4 +852,4 @@ For `default` service accounts in the built-in namespaces (`kube-system`, `kube-
 
 ## Conclusion
 
-If you have followed this guide, your K3s cluster will be configured to comply with the CIS Kubernetes Benchmark. You can review the [CIS Benchmark Self-Assessment Guide](self-assessment.md) to understand the expectations of each of the benchmark's checks and how you can do the same on your cluster.
+If you have followed this guide, your K3s cluster will be configured to comply with the CIS Kubernetes Benchmark. You can review the [CIS 1.8 Self-Assessment Guide](self-assessment-1.8.md) to understand the expectations of each of the benchmark's checks and how you can do the same on your cluster.

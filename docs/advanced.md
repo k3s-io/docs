@@ -1,8 +1,5 @@
 ---
 title: "Advanced Options / Configuration"
-aliases:
-  - /k3s/latest/en/running/
-  - /k3s/latest/en/configuration/
 ---
 
 This section contains advanced information describing the different ways you can run and manage K3s, as well as steps necessary to prepare the host OS for K3s use.

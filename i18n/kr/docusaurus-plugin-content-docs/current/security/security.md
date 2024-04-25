@@ -7,4 +7,4 @@ title: "보안"
 아래 문서는 CIS 쿠버네티스 벤치마크 v1.23에 적용됩니다.
 
 - [강화 가이드](hardening-guide.md)
-- [CIS 벤치마크 자체 평가 가이드](self-assessment.md)
+- [CIS 벤치마크 자체 평가 가이드](self-assessment-1.23.md)

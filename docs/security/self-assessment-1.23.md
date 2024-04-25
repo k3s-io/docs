@@ -1,5 +1,5 @@
 ---
-title: CIS Self Assessment Guide
+title: CIS 1.23 Self Assessment Guide
 ---
 
 ### CIS Kubernetes Benchmark v1.23 - K3s with Kubernetes v1.22 to v1.24
