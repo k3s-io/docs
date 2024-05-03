@@ -74,7 +74,7 @@ plugins:
 </TabItem>
 <TabItem value="v1.24 and Older" default>
 
-K3s v1.24 and older support [Pod Security Policies (PSPs)](https://v1-24.docs.kubernetes.io/docs/concepts/security/pod-security-policy/) for controlling pod security. PSPs are enabled by passing the following flag to the K3s server:
+K3s v1.24 and older support [Pod Security Policies (PSPs)](https://kubernetes.io/docs/concepts/security/pod-security-policy/) for controlling pod security. PSPs are enabled by passing the following flag to the K3s server:
 
 ```
 --kube-apiserver-arg="enable-admission-plugins=NodeRestriction,PodSecurityPolicy"
