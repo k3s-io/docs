@@ -60,7 +60,7 @@ curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=vX.Y.Z+k3s1 <EXISTING_K3S_ENV
 ```
 
 :::tip 
-If you want to download the new verision of k3s, but not start it, you can use the `INSTALL_K3S_SKIP_START=true` environment variable.
+If you want to download the new version of k3s, but not start it, you can use the `INSTALL_K3S_SKIP_START=true` environment variable.
 :::
 
 ### Upgrade K3s Using the Binary
