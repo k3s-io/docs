@@ -39,3 +39,5 @@ Setting the `K3S_URL` parameter causes the installer to configure K3s as an agen
 :::note
 Each machine must have a unique hostname. If your machines do not have unique hostnames, pass the `K3S_NODE_NAME` environment variable and provide a value with a valid and unique hostname for each node.
 :::
+
+If interested in having more server nodes, see [High Availability Embedded etcd](./datastore/ha-embedded.md) and [High Availability External DB](./datastore/ha.md) pages for more information.
