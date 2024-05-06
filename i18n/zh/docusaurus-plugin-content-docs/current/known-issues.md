@@ -19,7 +19,7 @@ title: 已知问题
 
 ### 将强化集群从 v1.24.x 升级到 v1.25.x {#hardened-125}
 
-Kubernetes v1.25 删除了 PodSecurityPolicy，支持 Pod Security Standard（PSS）。你可以在[上游文档](https://kubernetes.io/docs/concepts/security/pod-security-standards/)中阅读有关 PSS 的更多信息。对于 K3s，如果在节点上配置了任何 `PodSecurityPoliciy`，则必须执行一些手动步骤。
+Kubernetes v1.25 删除了 PodSecurityPolicy，支持 Pod Security Standard（PSS）。你可以在[上游文档](https://kubernetes.io/docs/concepts/security/pod-security-standards/)中阅读有关 PSS 的更多信息。对于 K3s，如果在节点上配置了任何 `PodSecurityPolicy`，则必须执行一些手动步骤。
 
 1. 在所有节点上，更新 `kube-apiserver-arg` 值以删除 `PodSecurityPolicy` admission-plugin。添加以下参数值：`'admission-control-config-file=/var/lib/rancher/k3s/server/psa.yaml'`，但不要重启或升级 K3s。以下是节点加固更新后配置文件的示例：
 ```yaml
