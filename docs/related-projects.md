@@ -4,7 +4,7 @@ title: "Related Projects"
 
 Projects implementing the K3s distribution are welcome additions to help expand the community. This page will introduce you to a range of projects that are related to K3s and can help you further explore its capabilities and potential applications.
 
-These projects showcase the versatility and adaptability of K3s in various environments, as well as extensions of K3s. All of these these projects are useful in creating large scale High Availability (HA) Kubernetes clusters.
+These projects showcase the versatility and adaptability of K3s in various environments, as well as extensions of K3s. They are all useful in creating large scale High Availability (HA) Kubernetes clusters.
 
 ## k3s-ansible
 
