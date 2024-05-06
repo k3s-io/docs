@@ -6,19 +6,22 @@ title: "High Availability Embedded etcd"
 Embedded etcd (HA) may have performance issues on slower disks such as Raspberry Pis running with SD cards.
 :::
 
-:::info
-HA embedded etcd cluster must be comprised of an odd number of server nodes for etcd to maintain quorum. For a cluster with n servers, quorum is (n/2)+1. For any odd-sized cluster, adding one node will always increase the number of nodes necessary for quorum. Although adding a node to an odd-sized cluster appears better since there are more machines, the fault tolerance is worse since exactly the same number of nodes may fail without losing quorum but there are more nodes that can fail.
-:::
+<details>
+<summary>Why An Odd Number Of Server Nodes?</summary>
 
-:::note
-To rapidly deploy large HA clusters, see [Related Projects](/related-projects)
-:::
+HA embedded etcd cluster must be comprised of an odd number of server nodes for etcd to maintain quorum. For a cluster with n servers, quorum is (n/2)+1. For any odd-sized cluster, adding one node will always increase the number of nodes necessary for quorum. Although adding a node to an odd-sized cluster appears better since there are more machines, the fault tolerance is worse since exactly the same number of nodes may fail without losing quorum but there are more nodes that can fail.
+
+</details>
 
 An HA K3s cluster with embedded etcd is composed of:
 
 - Three or more **server nodes** that will serve the Kubernetes API and run other control plane services, as well as host the embedded etcd datastore.
 - Optional: Zero or more **agent nodes** that are designated to run your apps and services
 - Optional: A **fixed registration address** for agent nodes to register with the cluster
+
+:::note
+To rapidly deploy large HA clusters, see [Related Projects](../related-projects.md)
+:::
 
 To get started, first launch a server node with the `cluster-init` flag to enable clustering and a token that will be used as a shared secret to join additional servers to the cluster.
 
