@@ -70,8 +70,11 @@ echo "$clean" | jq -c '.Controls[].tests[].results[]' | while read -r result; do
             echo
             ;;
         WARN)
+            # fix html special characters and mispellings
             remediation=${remediation//</&lt;}
             remediation=${remediation//>/&gt;}
+            remediation=${remediation/capabilites/capabilities}
+            remediation=${remediation/applicaions/applications}
             echo "**Result:** $status"
             echo 
             echo "**Remediation:**"
