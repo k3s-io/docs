@@ -2,17 +2,15 @@
 title: CIS 1.23 Self Assessment Guide
 ---
 
-### CIS Kubernetes Benchmark v1.23 - K3s with Kubernetes v1.22 to v1.24
-
-#### Overview
+## Overview
 
 This document is a companion to the [K3s security hardening guide](hardening-guide.md). The hardening guide provides prescriptive guidance for hardening a production installation of K3s, and this benchmark guide is meant to help you evaluate the level of security of the hardened cluster against each control in the CIS Kubernetes Benchmark. It is to be used by K3s operators, security teams, auditors, and decision-makers.
 
-This guide is specific to the **v1.22**, **v1.23** and **v1.24** release line of K3s and the **v1.23** release of the CIS Kubernetes Benchmark.
+This guide is specific to the **v1.22-v1.23** release lines of K3s and the **v1.23** release of the CIS Kubernetes Benchmark.
 
 For more information about each control, including detailed descriptions and remediations for failing tests, you can refer to the corresponding section of the CIS Kubernetes Benchmark v1.6. You can download the benchmark, after creating a free account, in [Center for Internet Security (CIS)](https://www.cisecurity.org/benchmark/kubernetes/).
 
-#### Testing controls methodology
+### Testing controls methodology
 
 Each control in the CIS Kubernetes Benchmark was evaluated against a K3s cluster that was configured according to the accompanying hardening guide.
 
@@ -28,9 +26,6 @@ This guide makes the assumption that K3s is running as a Systemd unit. Your inst
 
 > NOTE: Only `automated` tests (previously called `scored`) are covered in this guide.
 
-### Controls
-
----
 
 ## 1.1 Control Plane Node Configuration Files
 ### 1.1.1 Ensure that the API server pod specification file permissions are set to 644 or more restrictive (Automated)

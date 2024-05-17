@@ -10,14 +10,15 @@
 # Remove 3.X checks, as k3s doesn't do them
 clean=$(jq 'del(.Controls[2])' "$1")
 
-# Print section titles, needs to be moved by hand to the right place
-sections=$(echo "$clean" | jq -c '.Controls[].tests[]')
-echo "$sections" | while read -r section; do
+# Save section titles in array, match later
+sections_raw=$(echo "$clean" | jq -c '.Controls[].tests[]')
+declare -A sections
+while read -r section; do
     id=$(echo "$section" | jq -r '.section')
     description=$(echo "$section" | jq -r '.desc')
-    echo "## $id $description"
-    echo
-done
+    sections[$id]=$description
+done < <(echo "$sections_raw")
+
 
 # Read all result entries, ignore high-level groups
 echo "$clean" | jq -c '.Controls[].tests[].results[]' | while read -r result; do
@@ -30,6 +31,18 @@ echo "$clean" | jq -c '.Controls[].tests[].results[]' | while read -r result; do
     expected_result=$(echo "$result" | jq -r '.expected_result')
     actual_value=$(echo "$result" | jq -r '.actual_value')
     remediation=$(echo "$result" | jq -r '.remediation')
+    # check if section matches the start of id
+    section_id_found=""
+    for section_id in "${!sections[@]}"; do
+        if [[ $id == $section_id* ]]; then
+            section_id_found=$section_id
+            echo "## $section_id ${sections[$section_id]}"
+            echo
+        fi
+    done
+    if [ -n "$section_id_found" ]; then
+        unset sections["$section_id_found"]
+    fi
     echo "### $id $title"
     echo
 
@@ -57,6 +70,11 @@ echo "$clean" | jq -c '.Controls[].tests[].results[]' | while read -r result; do
             echo
             ;;
         WARN)
+            # fix html special characters and misspellings
+            remediation=${remediation//</&lt;}
+            remediation=${remediation//>/&gt;}
+            remediation=${remediation/capabilites/capabilities}
+            remediation=${remediation/applicaions/applications}
             echo "**Result:** $status"
             echo 
             echo "**Remediation:**"
