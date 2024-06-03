@@ -23,7 +23,7 @@ K3s contains a CLI tool `secrets-encrypt`, which enables automatic control over 
 Failure to follow proper procedure for rotating encryption keys can leave your cluster permanently corrupted. Proceed with caution.
 :::
 
-### New Encryption Key Rotation (Expiremental)
+### New Encryption Key Rotation (Experimental)
 
 :::info Version Gate
 Available as of [v1.28.1+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.28.1%2Bk3s1). This new version of the tool utilized K8s [automatic config reloading](https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/#configure-automatic-reloading) which is currently in beta. GA is expected in v1.29.0
