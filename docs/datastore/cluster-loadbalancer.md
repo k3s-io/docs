@@ -175,7 +175,7 @@ systemctl start nginx
 3) On agent-1, agent-2, and agent-3, run the following command to install k3s and join the cluster:
 
 ```bash
-curl -sfL https://get.k3s.io | K3S_TOKEN=lb-cluster-gd sh -s - agent --server https://10.10.10.99:6443
+curl -sfL https://get.k3s.io | K3S_TOKEN=lb-cluster-gd sh -s - agent --server https://10.10.10.98:6443
 ```
 
 You can now use `kubectl` from server node to interact with the cluster.
