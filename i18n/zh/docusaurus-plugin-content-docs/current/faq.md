@@ -62,6 +62,7 @@ Kubernetes 使用名为 `klog` 的日志管理框架，该框架对进程中的�
 
 3) 在 K3s [Issues](https://github.com/k3s-io/k3s/issues) 和 [Discussions](https://github.com/k3s-io/k3s/discussions) 中搜索匹配的问题。
 
+<!--lint disable no-dead-urls-->
 4) 加入 [Rancher Slack](https://slack.rancher.io/) K3s 频道以获得帮助。
 
 5) 在 K3s Github 上提交[新 issue](https://github.com/k3s-io/k3s/issues/new/choose)，你可以描述你的设置和遇到的问题。

@@ -66,6 +66,7 @@ If you are having an issue with deploying K3s, you should:
 
 3) Search the K3s [Issues](https://github.com/k3s-io/k3s/issues) and [Discussions](https://github.com/k3s-io/k3s/discussions) for one that matches your problem.
 
+<!--lint disable no-dead-urls-->
 4) Join the [Rancher Slack](https://slack.rancher.io/) K3s channel to get help.
 
 5) Submit a [New Issue](https://github.com/k3s-io/k3s/issues/new/choose) on the K3s Github describing your setup and the issue you are experiencing.
