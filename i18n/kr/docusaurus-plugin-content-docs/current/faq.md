@@ -62,6 +62,7 @@ K3s를 배포하는 데 문제가 있는 경우 다음과 같이 하세요:
 
 3. K3s [이슈](https://github.com/k3s-io/k3s/issues) 및 [토론](https://github.com/k3s-io/k3s/discussions)에서 문제와 일치하는 항목을 검색합니다.
 
+<!--lint disable no-dead-urls-->
 4. [Rancher 슬랙](https://slack.rancher.io/) K3s 채널에 가입하여 도움을 받습니다.
 
 5. K3s 깃허브에 설정과 발생한 문제를 설명하는 [새 이슈](https://github.com/k3s-io/k3s/issues/new/choose)를 제출합니다.
