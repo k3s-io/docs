@@ -195,7 +195,7 @@ spec:
       value: all
 ```
 
-Note that the NVIDIA Container Runtime is also frequently used with the [NVIDIA Device Plugin](https://github.com/NVIDIA/k8s-device-plugin/) and [GPU Feature Discovery](https://github.com/NVIDIA/gpu-feature-discovery/), which must be installed separately, with modifications to ensure that pod specs include `runtimeClassName: nvidia`, as mentioned above.
+Note that the NVIDIA Container Runtime is also frequently used with [NVIDIA Device Plugin](https://github.com/NVIDIA/k8s-device-plugin/), with modifications to ensure that pod specs include `runtimeClassName: nvidia`, as mentioned above.
 
 ## Running Agentless Servers (Experimental)
 > **Warning:** This feature is experimental.
