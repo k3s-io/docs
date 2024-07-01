@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
+      - name: Set up Python 🐍
+        uses: actions/setup-python@v5
       - name: Remove old release notes
         run: |
           for minor in $MINORS; do
@@ -22,6 +24,11 @@ jobs:
         run: scripts/collect-all-release-notes.sh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install codespell and run spell check
+        run: |
+          python -m pip install --upgrade pip
+          pip install codespell
+          codespell
       - name: Get current month and year
         id: date
         run: echo "::set-output name=month_year::$(date +'%B %Y')"
