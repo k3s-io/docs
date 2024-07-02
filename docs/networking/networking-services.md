@@ -18,7 +18,11 @@ If you don't install CoreDNS, you will need to install a cluster DNS provider yo
 
 [Traefik](https://traefik.io/) is a modern HTTP reverse proxy and load balancer made to deploy microservices with ease. It simplifies networking complexity while designing, deploying, and running applications.
 
-The Traefik ingress controller deploys a LoadBalancer Service that uses ports 80 and 443. By default, ServiceLB will expose these ports on all cluster members, meaning these ports will not be usable for other HostPort or NodePort pods.
+The Traefik ingress controller deploys a LoadBalancer Service that uses ports 80 and 443, advertises the LoadBalancer Service's External IPs in the Status of Ingress resources it manages.
+
+By default, ServiceLB will use all nodes in the cluster to host the Traefik LoadBalancer Service, meaning ports 80 and 443 will not be usable for other HostPort or NodePort pods, and Ingress resources' Status will show all cluster members' node IPs.
+
+To restrict the nodes used by Traefik, and by extension the node IPs advertised in the Ingress Status, you can follow the instructions in the [Controlling ServiceLB Node Selection](#controlling-servicelb-node-selection) section below to limit what nodes ServiceLB runs on, or by adding some nodes to a LoadBalancer pool and restricting the Traefik Service to that pool by setting matching labels in the Traefik HelmChartConfig.
 
 Traefik is deployed by default when starting the server. For more information see [Managing Packaged Components](../installation/packaged-components.md). The default config file is found in `/var/lib/rancher/k3s/server/manifests/traefik.yaml`.
 
@@ -26,7 +30,7 @@ The `traefik.yaml` file should not be edited manually, as K3s will replace the f
 
 To remove Traefik from your cluster, start all servers with the `--disable=traefik` flag.
 
-K3s versions 1.20 and earlier include Traefik v1. K3s versions 1.21 and later install Traefik v2, unless an existing installation of Traefik v1 is found, in which case Traefik is not upgraded to v2. For more information on the specific version of Traefik included with K3s, consult the Release Notes for your version.
+K3s includes Traefik v2. K3s versions 1.21 through 1.30 install Traefik v2, unless an existing installation of Traefik v1 is found, in which case Traefik is not upgraded to v2. K3s versions 1.20 and earlier include Traefik v1. For more information on the specific version of Traefik included with K3s, consult the Release Notes for your version.
 
 To migrate from an older Traefik v1 instance please refer to the [Traefik documentation](https://doc.traefik.io/traefik/migration/v1-to-v2/) and [migration tool](https://github.com/traefik/traefik-migration-tool).
 
