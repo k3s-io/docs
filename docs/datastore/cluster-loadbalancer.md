@@ -82,7 +82,7 @@ vrrp_script chk_haproxy {
 }
 
 vrrp_instance haproxy-vip {
-   interface eth1
+    interface eth1
     state <STATE> # MASTER on lb-1, BACKUP on lb-2
     priority <PRIORITY> # 200 on lb-1, 100 on lb-2
 
