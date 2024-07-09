@@ -109,7 +109,7 @@ The arguments below have been added to the `server` subcommand. These flags exis
 To perform an on-demand etcd snapshot and save it to S3:
 
 ```bash
-k3s etcd-snapshot \
+k3s etcd-snapshot save \
   --s3 \
   --s3-bucket=<S3-BUCKET-NAME> \
   --s3-access-key=<S3-ACCESS-KEY> \
