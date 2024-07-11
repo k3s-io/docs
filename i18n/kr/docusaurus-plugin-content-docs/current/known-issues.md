@@ -12,7 +12,7 @@ title: 알려진 이슈
 
 레거시 대신 nftables 모드에서 iptables를 실행하는 경우 문제가 발생할 수 있습니다. 문제를 방지하려면 최신 버전(예: 1.6.1+)의 iptables를 사용하는 것이 좋습니다.
 
-또한 1.8.0-1.8.4 버전에는 K3s가 실패할 수 있는 알려진 문제가 있습니다. 해결 방법은 [추가 OS 준비](./advanced.md#old-iptables-versions)를 참조하세요.
+또한 1.8.0-1.8.4 버전에는 K3s가 실패할 수 있는 알려진 문제가 있습니다. 해결 방법은 [추가 OS 준비](./advanced.md#이전-iptables-버전)를 참조하세요.
 
 ### Rootless Mode
 
