@@ -102,7 +102,7 @@ Example cmdline.txt:
 console=serial0,115200 console=tty1 root=PARTUUID=58b06195-02 rootfstype=ext4 elevator=deadline fsck.repair=yes rootwait cgroup_memory=1 cgroup_enable=memory
 ```
 
-Starting with Ubuntu 21.10, vxlan support on Raspberry Pi has been moved into a separate kernel module. 
+With Ubuntu 21.10 to Ubuntu 23.10, vxlan support on Raspberry Pi was moved into a separate kernel module. This step in not required for Ubuntu 24.04 and later.
 ```bash
 sudo apt install linux-modules-extra-raspi
 ```
