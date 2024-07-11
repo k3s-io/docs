@@ -31,7 +31,7 @@ Available as of [v1.28.1+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.28.
 For older releases, see [Encryption Key Rotation Classic](#encryption-key-rotation-classic)
 :::
 
-<Tabs groupId="se">
+<Tabs groupId="se" queryString>
 <TabItem value="Single-Server" default>
 To rotate secrets encryption keys on a single-server cluster:
 
@@ -97,7 +97,7 @@ To rotate secrets encryption keys on HA setups:
 
 ### Encryption Key Rotation Classic
 
-<Tabs groupId="se">
+<Tabs groupId="se" queryString>
 <TabItem value="Single-Server" default>
 
 To rotate secrets encryption keys on a single-server cluster:
@@ -195,7 +195,7 @@ To rotate secrets encryption keys on HA setups:
 </Tabs>
 
 ### Secrets Encryption Disable/Re-enable
-<Tabs groupId="se">
+<Tabs groupId="se" queryString>
 <TabItem value="Single-Server" default>
 
 After launching a server with `--secrets-encryption` flag, secrets encryption can be disabled.

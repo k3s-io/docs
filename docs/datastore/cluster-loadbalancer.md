@@ -40,7 +40,7 @@ Three additional nodes exist with hostnames and IPs of:
 * agent-3: `10.10.10.103`
 
 ## Setup Load Balancer
-<Tabs>
+<Tabs queryString="ext-load-balancer">
 <TabItem value="HAProxy" default>
 
 [HAProxy](http://www.haproxy.org/) is an open source option that provides a TCP load balancer. It also supports HA for the load balancer itself, ensuring redundancy at all levels. See [HAProxy Documentation](http://docs.haproxy.org/2.8/intro.html) for more info.
