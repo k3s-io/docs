@@ -36,7 +36,7 @@ For example, a command like the following could be used to install the K3s serve
 ```bash
 curl -sfL https://get.k3s.io | sh -s - server \
   --token=SECRET \
-  --datastore-endpoint="mysql://username:password@tcp(hostname:3306)/database-name"
+  --datastore-endpoint="mysql://username:password@tcp(hostname:3306)/database-name" \
   --tls-san=<FIXED_IP> # Optional, needed if using a fixed registration address
 ```
 
@@ -92,7 +92,7 @@ See [Cluster Loadbalancer](./cluster-loadbalancer.md) for example configurations
 
 This endpoint can also be used for accessing the Kubernetes API. So you can, for example, modify your [kubeconfig](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/) file to point to it instead of a specific node.
 
-To avoid certificate errors in such a configuration, you should configure the server with the `--tls-san YOUR_IP_OR_HOSTNAME_HERE` option. This option adds an additional hostname or IP as a Subject Alternative Name in the TLS cert, and it can be specified multiple times if you would like to access via both the IP and the hostname.
+To avoid certificate errors in such a configuration, you should configure the server with the `--tls-san=YOUR_IP_OR_HOSTNAME_HERE` option. This option adds an additional hostname or IP as a Subject Alternative Name in the TLS cert, and it can be specified multiple times if you would like to access via both the IP and the hostname.
 
 ### 5. Optional: Join Agent Nodes
 
