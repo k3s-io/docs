@@ -35,7 +35,6 @@ kube-apiserver-arg:
   - "audit-log-maxbackup=10"
   - "audit-log-maxsize=100"
   - "request-timeout=300s"
-  - "service-account-lookup=true"
 kube-controller-manager-arg:
   - "terminated-pod-gc-threshold=10"
   - "use-service-account-credentials=true"
