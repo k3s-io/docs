@@ -418,7 +418,7 @@ journalctl -D /var/log/journal  -u k3s | grep 'Running kube-apiserver' | tail -n
 Kubernetesのドキュメントに従って、apiserverとkubelet間のTLS接続を設定してください。その後、コントロールプレーンノード上のAPIサーバーポッド仕様ファイル
 /etc/kubernetes/manifests/kube-apiserver.yamlを編集し、
 --kubelet-certificate-authorityパラメータを認証局の証明書ファイルへのパスに設定してください。
---kubelet-certificate-authority=<ca-string>
+--kubelet-certificate-authority=&lt;ca-string&gt;
 寛容 - 提供証明書を生成する際、特定のクラウドプロバイダーに必要なホスト名の上書きと併せて機能が破損する可能性があります。
 
 ### 1.2.6 --authorization-mode 引数が AlwaysAllow に設定されていないことを確認する（自動化）
