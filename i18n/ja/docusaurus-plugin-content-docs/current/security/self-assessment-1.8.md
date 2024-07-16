@@ -410,61 +410,60 @@ journalctl -D /var/log/journal  -u k3s | grep 'Running kube-apiserver' | tail -n
 ```
 </details>
 
-### 1.2.5 Ensure that the --kubelet-certificate-authority argument is set as appropriate (Automated)
+### 1.2.5 --kubelet-certificate-authority 引数が適切に設定されていることを確認する（自動化）
 
-**Result:** Not Applicable
+**結果:** 該当なし
 
-**Remediation:**
-Follow the Kubernetes documentation and setup the TLS connection between
-the apiserver and kubelets. Then, edit the API server pod specification file
-/etc/kubernetes/manifests/kube-apiserver.yaml on the control plane node and set the
---kubelet-certificate-authority parameter to the path to the cert file for the certificate authority.
---kubelet-certificate-authority=&lt;ca-string&gt;
-Permissive - When generating serving certificates, functionality could break in conjunction with hostname overrides which are required for certain cloud providers.
+**修正方法:**
+Kubernetesのドキュメントに従って、apiserverとkubelet間のTLS接続を設定してください。その後、コントロールプレーンノード上のAPIサーバーポッド仕様ファイル
+/etc/kubernetes/manifests/kube-apiserver.yamlを編集し、
+--kubelet-certificate-authorityパラメータを認証局の証明書ファイルへのパスに設定してください。
+--kubelet-certificate-authority=<ca-string>
+寛容 - 提供証明書を生成する際、特定のクラウドプロバイダーに必要なホスト名の上書きと併せて機能が破損する可能性があります。
 
-### 1.2.6 Ensure that the --authorization-mode argument is not set to AlwaysAllow (Automated)
+### 1.2.6 --authorization-mode 引数が AlwaysAllow に設定されていないことを確認する（自動化）
 
-**Result:** PASS
+**結果:** 合格
 
-**Audit:**
+**監査:**
 ```bash
 journalctl -D /var/log/journal  -u k3s | grep 'Running kube-apiserver' | tail -n1 | grep 'authorization-mode'
 ```
 
-**Expected Result:** '--authorization-mode' does not have 'AlwaysAllow'
+**期待される結果:** '--authorization-mode' に 'AlwaysAllow' が含まれていない
 
 <details>
-<summary><b>Returned Value:</b></summary>
+<summary><b>返された値:</b></summary>
 
 ```console
 2024-04-22 20:12:19 server-0 k3s[2397]: time="2024-04-22T20:12:19Z" level=info msg="Running kube-apiserver --admission-control-config-file=/var/lib/rancher/k3s/server/psa.yaml --advertise-address=10.10.10.100 --advertise-port=6443 --allow-privileged=true --anonymous-auth=false --api-audiences=https://kubernetes.default.svc.cluster.local,k3s --audit-log-maxage=30 --audit-log-maxbackup=10 --audit-log-maxsize=100 --audit-log-path=/var/lib/rancher/k3s/server/logs/audit.log --audit-policy-file=/var/lib/rancher/k3s/server/audit.yaml --authorization-mode=Node,RBAC --bind-address=127.0.0.1 --cert-dir=/var/lib/rancher/k3s/server/tls/temporary-certs --client-ca-file=/var/lib/rancher/k3s/server/tls/client-ca.crt --egress-selector-config-file=/var/lib/rancher/k3s/server/etc/egress-selector-config.yaml --enable-admission-plugins=NodeRestriction --enable-aggregator-routing=true --enable-bootstrap-token-auth=true --encryption-provider-config=/var/lib/rancher/k3s/server/cred/encryption-config.json --encryption-provider-config-automatic-reload=true --etcd-cafile=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt --etcd-certfile=/var/lib/rancher/k3s/server/tls/etcd/client.crt --etcd-keyfile=/var/lib/rancher/k3s/server/tls/etcd/client.key --etcd-servers=https://127.0.0.1:2379 --kubelet-certificate-authority=/var/lib/rancher/k3s/server/tls/server-ca.crt --kubelet-client-certificate=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.crt --kubelet-client-key=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.key --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname --profiling=false --proxy-client-cert-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.crt --proxy-client-key-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.key --requestheader-allowed-names=system:auth-proxy --requestheader-client-ca-file=/var/lib/rancher/k3s/server/tls/request-header-ca.crt --requestheader-extra-headers-prefix=X-Remote-Extra- --requestheader-group-headers=X-Remote-Group --requestheader-username-headers=X-Remote-User --secure-port=6444 --service-account-issuer=https://kubernetes.default.svc.cluster.local --service-account-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-account-lookup=true --service-account-signing-key-file=/var/lib/rancher/k3s/server/tls/service.current.key --service-cluster-ip-range=10.43.0.0/16 --service-node-port-range=30000-32767 --storage-backend=etcd3 --tls-cert-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.crt --tls-cipher-suites=TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305 --tls-private-key-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.key"
 ```
 </details>
 
-### 1.2.7 Ensure that the --authorization-mode argument includes Node (Automated)
+### 1.2.7 --authorization-mode 引数に Node が含まれていることを確認する（自動化）
 
-**Result:** PASS
+**結果:** 合格
 
-**Audit:**
+**監査:**
 ```bash
 journalctl -D /var/log/journal  -u k3s | grep 'Running kube-apiserver' | tail -n1 | grep 'authorization-mode'
 ```
 
-**Expected Result:** '--authorization-mode' has 'Node'
+**期待される結果:** '--authorization-mode' に 'Node' が含まれている
 
 <details>
-<summary><b>Returned Value:</b></summary>
+<summary><b>返された値:</b></summary>
 
 ```console
 2024-04-22 20:12:19 server-0 k3s[2397]: time="2024-04-22T20:12:19Z" level=info msg="Running kube-apiserver --admission-control-config-file=/var/lib/rancher/k3s/server/psa.yaml --advertise-address=10.10.10.100 --advertise-port=6443 --allow-privileged=true --anonymous-auth=false --api-audiences=https://kubernetes.default.svc.cluster.local,k3s --audit-log-maxage=30 --audit-log-maxbackup=10 --audit-log-maxsize=100 --audit-log-path=/var/lib/rancher/k3s/server/logs/audit.log --audit-policy-file=/var/lib/rancher/k3s/server/audit.yaml --authorization-mode=Node,RBAC --bind-address=127.0.0.1 --cert-dir=/var/lib/rancher/k3s/server/tls/temporary-certs --client-ca-file=/var/lib/rancher/k3s/server/tls/client-ca.crt --egress-selector-config-file=/var/lib/rancher/k3s/server/etc/egress-selector-config.yaml --enable-admission-plugins=NodeRestriction --enable-aggregator-routing=true --enable-bootstrap-token-auth=true --encryption-provider-config=/var/lib/rancher/k3s/server/cred/encryption-config.json --encryption-provider-config-automatic-reload=true --etcd-cafile=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt --etcd-certfile=/var/lib/rancher/k3s/server/tls/etcd/client.crt --etcd-keyfile=/var/lib/rancher/k3s/server/tls/etcd/client.key --etcd-servers=https://127.0.0.1:2379 --kubelet-certificate-authority=/var/lib/rancher/k3s/server/tls/server-ca.crt --kubelet-client-certificate=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.crt --kubelet-client-key=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.key --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname --profiling=false --proxy-client-cert-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.crt --proxy-client-key-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.key --requestheader-allowed-names=system:auth-proxy --requestheader-client-ca-file=/var/lib/rancher/k3s/server/tls/request-header-ca.crt --requestheader-extra-headers-prefix=X-Remote-Extra- --requestheader-group-headers=X-Remote-Group --requestheader-username-headers=X-Remote-User --secure-port=6444 --service-account-issuer=https://kubernetes.default.svc.cluster.local --service-account-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-account-lookup=true --service-account-signing-key-file=/var/lib/rancher/k3s/server/tls/service.current.key --service-cluster-ip-range=10.43.0.0/16 --service-node-port-range=30000-32767 --storage-backend=etcd3 --tls-cert-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.crt --tls-cipher-suites=TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305 --tls-private-key-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.key"
 ```
 </details>
 
-### 1.2.8 Ensure that the --authorization-mode argument includes RBAC (Automated)
+### 1.2.8 --authorization-mode 引数に RBAC が含まれていることを確認する（自動化）
 
-**Result:** PASS
+**結果:** 合格
 
-**Audit:**
+**監査:**
 ```bash
 journalctl -D /var/log/journal  -u k3s | grep 'Running kube-apiserver' | tail -n1 | grep 'authorization-mode'
 ```
@@ -663,27 +662,27 @@ Apr 22 20:12:19 server-0 k3s[2397]: time="2024-04-22T20:12:19Z" level=info msg="
 ```
 </details>
 
-### 1.2.23 Ensure that the --service-account-key-file argument is set as appropriate (Automated)
+### 1.2.23 --service-account-key-file 引数が適切に設定されていることを確認する(自動化)
 
-**Result:** Not Applicable
+**結果:** 該当なし
 
 **Remediation:**
 APIサーバーポッド仕様ファイル /etc/kubernetes/manifests/kube-apiserver.yaml を編集し、--service-account-key-file パラメータをサービスアカウントの公開鍵ファイルに設定します。例えば、
 --service-account-key-file=&lt;filename&gt;
 
-### 1.2.24 Ensure that the --etcd-certfile and --etcd-keyfile arguments are set as appropriate (Automated)
+### 1.2.24 --etcd-certfileと--etcd-keyfile引数が適切に設定されていることを確認する(自動化)
 
-**Result:** PASS
+**結果:** 合格
 
-**Audit:**
+**監査:**
 ```bash
 journalctl -D /var/log/journal -u k3s | grep 'Running kube-apiserver' | tail -n1
 ```
 
-**Expected Result:** '--etcd-certfile' が存在し、'--etcd-keyfile' が存在する
+**期待される結果:** '--etcd-certfile' が存在し、'--etcd-keyfile' が存在する
 
 <details>
-<summary><b>Returned Value:</b></summary>
+<summary><b>返された値:</b></summary>
 
 ```
 Apr 22 20:12:19 server-0 k3s[2397]: time="2024-04-22T20:12:19Z" level=info msg="Running kube-apiserver
@@ -693,19 +692,19 @@ Apr 22 20:12:19 server-0 k3s[2397]: time="2024-04-22T20:12:19Z" level=info msg="
 ```
 </details>
 
-### 1.2.25 Ensure that the --tls-cert-file and --tls-private-key-file arguments are set as appropriate (Automated)
+### 1.2.25 --tls-cert-fileと--tls-private-key-file引数が適切に設定されていることを確認する（自動化）
 
-**Result:** PASS
+**結果:** 合格
 
-**Audit:**
+**監査:**
 ```bash
 journalctl -D /var/log/journal -u k3s | grep -A1 'Running kube-apiserver' | tail -n2
 ```
 
-**Expected Result:** '--tls-cert-file' is present AND '--tls-private-key-file' is present
+**期待される結果:** '--tls-cert-file'が存在し、かつ'--tls-private-key-file'が存在する
 
 <details>
-<summary><b>Returned Value:</b></summary>
+<summary><b>返された値:</b></summary>
 
 ```console
 Apr 22 20:12:19 server-0 k3s[2397]: time="2024-04-22T20:12:19Z" level=info msg="Running kube-apiserver --admission-control-config-file=/var/lib/rancher/k3s/server/psa.yaml --advertise-address=10.10.10.100 --advertise-port=6443 --allow-privileged=true --anonymous-auth=false --api-audiences=https://kubernetes.default.svc.cluster.local,k3s --audit-log-maxage=30 --audit-log-maxbackup=10 --audit-log-maxsize=100 --audit-log-path=/var/lib/rancher/k3s/server/logs/audit.log --audit-policy-file=/var/lib/rancher/k3s/server/audit.yaml --authorization-mode=Node,RBAC --bind-address=127.0.0.1 --cert-dir=/var/lib/rancher/k3s/server/tls/temporary-certs --client-ca-file=/var/lib/rancher/k3s/server/tls/client-ca.crt --egress-selector-config-file=/var/lib/rancher/k3s/server/etc/egress-selector-config.yaml --enable-admission-plugins=NodeRestriction --enable-aggregator-routing=true --enable-bootstrap-token-auth=true --encryption-provider-config=/var/lib/rancher/k3s/server/cred/encryption-config.json --encryption-provider-config-automatic-reload=true --etcd-cafile=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt --etcd-certfile=/var/lib/rancher/k3s/server/tls/etcd/client.crt --etcd-keyfile=/var/lib/rancher/k3s/server/tls/etcd/client.key --etcd-servers=https://127.0.0.1:2379 --kubelet-certificate-authority=/var/lib/rancher/k3s/server/tls/server-ca.crt --kubelet-client-certificate=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.crt --kubelet-client-key=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.key --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname --profiling=false --proxy-client-cert-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.crt --proxy-client-key-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.key --requestheader-allowed-names=system:auth-proxy --requestheader-client-ca-file=/var/lib/rancher/k3s/server/tls/request-header-ca.crt --requestheader-extra-headers-prefix=X-Remote-Extra- --requestheader-group-headers=X-Remote-Group --requestheader-username-headers=X-Remote-User --secure-port=6444 --service-account-issuer=https://kubernetes.default.svc.cluster.local --service-account-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-account-lookup=true --service-account-signing-key-file=/var/lib/rancher/k3s/server/tls/service.current.key --service-cluster-ip-range=10.43.0.0/16 --service-node-port-range=30000-32767 --storage-backend=etcd3 --tls-cert-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.crt --tls-cipher-suites=TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305 --tls-private-key-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.key"
@@ -713,77 +712,77 @@ Apr 22 20:12:19 server-0 k3s[2397]: time="2024-04-22T20:12:19Z" level=info msg="
 ```
 </details>
 
-### 1.2.26 Ensure that the --client-ca-file argument is set as appropriate (Automated)
+### 1.2.26 --client-ca-file 引数が適切に設定されていることを確認する（自動化）
 
-**Result:** PASS
+**結果:** 合格
 
-**Audit:**
+**監査:**
 ```bash
 journalctl -D /var/log/journal  -u k3s | grep 'Running kube-apiserver' | tail -n1 | grep 'client-ca-file'
 ```
 
-**Expected Result:** '--client-ca-file' is present
+**期待される結果:** '--client-ca-file' が存在する
 
 <details>
-<summary><b>Returned Value:</b></summary>
+<summary><b>返された値:</b></summary>
 
 ```console
 Apr 22 20:12:19 server-0 k3s[2397]: time="2024-04-22T20:12:19Z" level=info msg="Running kube-apiserver --admission-control-config-file=/var/lib/rancher/k3s/server/psa.yaml --advertise-address=10.10.10.100 --advertise-port=6443 --allow-privileged=true --anonymous-auth=false --api-audiences=https://kubernetes.default.svc.cluster.local,k3s --audit-log-maxage=30 --audit-log-maxbackup=10 --audit-log-maxsize=100 --audit-log-path=/var/lib/rancher/k3s/server/logs/audit.log --audit-policy-file=/var/lib/rancher/k3s/server/audit.yaml --authorization-mode=Node,RBAC --bind-address=127.0.0.1 --cert-dir=/var/lib/rancher/k3s/server/tls/temporary-certs --client-ca-file=/var/lib/rancher/k3s/server/tls/client-ca.crt --egress-selector-config-file=/var/lib/rancher/k3s/server/etc/egress-selector-config.yaml --enable-admission-plugins=NodeRestriction --enable-aggregator-routing=true --enable-bootstrap-token-auth=true --encryption-provider-config=/var/lib/rancher/k3s/server/cred/encryption-config.json --encryption-provider-config-automatic-reload=true --etcd-cafile=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt --etcd-certfile=/var/lib/rancher/k3s/server/tls/etcd/client.crt --etcd-keyfile=/var/lib/rancher/k3s/server/tls/etcd/client.key --etcd-servers=https://127.0.0.1:2379 --kubelet-certificate-authority=/var/lib/rancher/k3s/server/tls/server-ca.crt --kubelet-client-certificate=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.crt --kubelet-client-key=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.key --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname --profiling=false --proxy-client-cert-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.crt --proxy-client-key-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.key --requestheader-allowed-names=system:auth-proxy --requestheader-client-ca-file=/var/lib/rancher/k3s/server/tls/request-header-ca.crt --requestheader-extra-headers-prefix=X-Remote-Extra- --requestheader-group-headers=X-Remote-Group --requestheader-username-headers=X-Remote-User --secure-port=6444 --service-account-issuer=https://kubernetes.default.svc.cluster.local --service-account-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-account-lookup=true --service-account-signing-key-file=/var/lib/rancher/k3s/server/tls/service.current.key --service-cluster-ip-range=10.43.0.0/16 --service-node-port-range=30000-32767 --storage-backend=etcd3 --tls-cert-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.crt --tls-cipher-suites=TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305 --tls-private-key-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.key"
 ```
 </details>
 
-### 1.2.27 Ensure that the --etcd-cafile argument is set as appropriate (Automated)
+### 1.2.27 --etcd-cafile 引数が適切に設定されていることを確認する（自動化）
 
-**Result:** PASS
+**結果:** 合格
 
-**Audit:**
+**監査:**
 ```bash
 journalctl -D /var/log/journal  -u k3s | grep 'Running kube-apiserver' | tail -n1 | grep 'etcd-cafile'
 ```
 
-**Expected Result:** '--etcd-cafile' is present
+**期待される結果:** '--etcd-cafile' が存在すること
 
 <details>
-<summary><b>Returned Value:</b></summary>
+<summary><b>返された値:</b></summary>
 
 ```console
 Apr 22 20:12:19 server-0 k3s[2397]: time="2024-04-22T20:12:19Z" level=info msg="Running kube-apiserver --admission-control-config-file=/var/lib/rancher/k3s/server/psa.yaml --advertise-address=10.10.10.100 --advertise-port=6443 --allow-privileged=true --anonymous-auth=false --api-audiences=https://kubernetes.default.svc.cluster.local,k3s --audit-log-maxage=30 --audit-log-maxbackup=10 --audit-log-maxsize=100 --audit-log-path=/var/lib/rancher/k3s/server/logs/audit.log --audit-policy-file=/var/lib/rancher/k3s/server/audit.yaml --authorization-mode=Node,RBAC --bind-address=127.0.0.1 --cert-dir=/var/lib/rancher/k3s/server/tls/temporary-certs --client-ca-file=/var/lib/rancher/k3s/server/tls/client-ca.crt --egress-selector-config-file=/var/lib/rancher/k3s/server/etc/egress-selector-config.yaml --enable-admission-plugins=NodeRestriction --enable-aggregator-routing=true --enable-bootstrap-token-auth=true --encryption-provider-config=/var/lib/rancher/k3s/server/cred/encryption-config.json --encryption-provider-config-automatic-reload=true --etcd-cafile=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt --etcd-certfile=/var/lib/rancher/k3s/server/tls/etcd/client.crt --etcd-keyfile=/var/lib/rancher/k3s/server/tls/etcd/client.key --etcd-servers=https://127.0.0.1:2379 --kubelet-certificate-authority=/var/lib/rancher/k3s/server/tls/server-ca.crt --kubelet-client-certificate=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.crt --kubelet-client-key=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.key --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname --profiling=false --proxy-client-cert-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.crt --proxy-client-key-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.key --requestheader-allowed-names=system:auth-proxy --requestheader-client-ca-file=/var/lib/rancher/k3s/server/tls/request-header-ca.crt --requestheader-extra-headers-prefix=X-Remote-Extra- --requestheader-group-headers=X-Remote-Group --requestheader-username-headers=X-Remote-User --secure-port=6444 --service-account-issuer=https://kubernetes.default.svc.cluster.local --service-account-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-account-lookup=true --service-account-signing-key-file=/var/lib/rancher/k3s/server/tls/service.current.key --service-cluster-ip-range=10.43.0.0/16 --service-node-port-range=30000-32767 --storage-backend=etcd3 --tls-cert-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.crt --tls-cipher-suites=TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305 --tls-private-key-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.key"
 ```
 </details>
 
-### 1.2.28 Ensure that the --encryption-provider-config argument is set as appropriate (Manual)
+### 1.2.28 --encryption-provider-config 引数が適切に設定されていることを確認する（手動）
 
-**Result:** Not Applicable
+**結果:** 適用外
 
-**Remediation:**
-Follow the Kubernetes documentation and configure a EncryptionConfig file.
-Then, edit the API server pod specification file /etc/kubernetes/manifests/kube-apiserver.yaml
-on the control plane node and set the --encryption-provider-config parameter to the path of that file.
-For example, --encryption-provider-config=&lt;/path/to/EncryptionConfig/File&gt;
-Permissive - Enabling encryption changes how data can be recovered as data is encrypted.
+**修正方法:**
+Kubernetes のドキュメントに従って EncryptionConfig ファイルを設定してください。
+その後、コントロールプレーンノード上の API サーバーポッド仕様ファイル /etc/kubernetes/manifests/kube-apiserver.yaml を編集し、
+--encryption-provider-config パラメータをそのファイルのパスに設定してください。
+例: --encryption-provider-config=&lt;/path/to/EncryptionConfig/File&gt;
+許容 - 暗号化を有効にすると、データが暗号化されるためデータの復旧方法が変更されます。
 
-### 1.2.29 Ensure that encryption providers are appropriately configured (Manual)
+### 1.2.29 暗号化プロバイダーが適切に設定されていることを確認する（手動）
 
-**Result:** Not Applicable
+**結果:** 適用外
 
-**Remediation:**
-Follow the Kubernetes documentation and configure a EncryptionConfig file.
-In this file, choose aescbc, kms or secretbox as the encryption provider.
-Permissive - Enabling encryption changes how data can be recovered as data is encrypted.
+**修正方法:**
+Kubernetes のドキュメントに従って EncryptionConfig ファイルを設定してください。
+このファイルで、aescbc、kms、または secretbox を暗号化プロバイダーとして選択してください。
+許容 - 暗号化を有効にすると、データが暗号化されるためデータの復旧方法が変更されます。
 
-### 1.2.30 Ensure that the API Server only makes use of Strong Cryptographic Ciphers (Manual)
+### 1.2.30 API サーバーが強力な暗号化暗号スイートのみを使用していることを確認する（手動）
 
-**Result:** PASS
+**結果:** 合格
 
-**Audit:**
+**監査:**
 ```bash
 journalctl -D /var/log/journal  -u k3s | grep 'Running kube-apiserver' | tail -n1 | grep 'tls-cipher-suites'
 ```
 
-**Expected Result:** '--tls-cipher-suites' contains valid elements from 'TLS_AES_128_GCM_SHA256,TLS_AES_256_GCM_SHA384,TLS_CHACHA20_POLY1305_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256,TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256,TLS_RSA_WITH_3DES_EDE_CBC_SHA,TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_128_GCM_SHA256,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_RSA_WITH_AES_256_GCM_SHA384'
+**期待される結果:** '--tls-cipher-suites' に 'TLS_AES_128_GCM_SHA256,TLS_AES_256_GCM_SHA384,TLS_CHACHA20_POLY1305_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256,TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256,TLS_RSA_WITH_3DES_EDE_CBC_SHA,TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_128_GCM_SHA256,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_RSA_WITH_AES_256_GCM_SHA384' からの有効な要素が含まれています
 
 <details>
-<summary><b>Returned Value:</b></summary>
+<summary><b>返された値:</b></summary>
 
 ```console
 Apr 22 20:12:19 server-0 k3s[2397]: time="2024-04-22T20:12:19Z" level=info msg="Running kube-apiserver --admission-control-config-file=/var/lib/rancher/k3s/server/psa.yaml --advertise-address=10.10.10.100 --advertise-port=6443 --allow-privileged=true --anonymous-auth=false --api-audiences=https://kubernetes.default.svc.cluster.local,k3s --audit-log-maxage=30 --audit-log-maxbackup=10 --audit-log-maxsize=100 --audit-log-path=/var/lib/rancher/k3s/server/logs/audit.log --audit-policy-file=/var/lib/rancher/k3s/server/audit.yaml --authorization-mode=Node,RBAC --bind-address=127.0.0.1 --cert-dir=/var/lib/rancher/k3s/server/tls/temporary-certs --client-ca-file=/var/lib/rancher/k3s/server/tls/client-ca.crt --egress-selector-config-file=/var/lib/rancher/k3s/server/etc/egress-selector-config.yaml --enable-admission-plugins=NodeRestriction --enable-aggregator-routing=true --enable-bootstrap-token-auth=true --encryption-provider-config=/var/lib/rancher/k3s/server/cred/encryption-config.json --encryption-provider-config-automatic-reload=true --etcd-cafile=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt --etcd-certfile=/var/lib/rancher/k3s/server/tls/etcd/client.crt --etcd-keyfile=/var/lib/rancher/k3s/server/tls/etcd/client.key --etcd-servers=https://127.0.0.1:2379 --kubelet-certificate-authority=/var/lib/rancher/k3s/server/tls/server-ca.crt --kubelet-client-certificate=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.crt --kubelet-client-key=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.key --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname --profiling=false --proxy-client-cert-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.crt --proxy-client-key-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.key --requestheader-allowed-names=system:auth-proxy --requestheader-client-ca-file=/var/lib/rancher/k3s/server/tls/request-header-ca.crt --requestheader-extra-headers-prefix=X-Remote-Extra- --requestheader-group-headers=X-Remote-Group --requestheader-username-headers=X-Remote-User --secure-port=6444 --service-account-issuer=https://kubernetes.default.svc.cluster.local --service-account-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-account-lookup=true --service-account-signing-key-file=/var/lib/rancher/k3s/server/tls/service.current.key --service-cluster-ip-range=10.43.0.0/16 --service-node-port-range=30000-32767 --storage-backend=etcd3 --tls-cert-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.crt --tls-cipher-suites=TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305 --tls-private-key-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.key"
@@ -945,19 +944,19 @@ Apr 22 20:12:19 server-0 k3s[2397]: time="2024-04-22T20:12:19Z" level=info msg="
 ```
 </details>
 
-### 1.4.2 Ensure that the --bind-address argument is set to 127.0.0.1 (Automated)
+### 1.4.2 --bind-addressの引数が127.0.0.1に設定されていることを確認する（自動化）
 
-**Result:** PASS
+**結果:** 合格
 
-**Audit:**
+**監査:**
 ```bash
 journalctl -D /var/log/journal  -u k3s | grep 'Running kube-scheduler' | tail -n1 | grep 'bind-address'
 ```
 
-**Expected Result:** '--bind-address' is equal to '127.0.0.1' OR '--bind-address' is not present
+**期待される結果:** '--bind-address'が'127.0.0.1'に等しい、または'--bind-address'が存在しない
 
 <details>
-<summary><b>Returned Value:</b></summary>
+<summary><b>返された値：</b></summary>
 
 ```console
 Apr 22 20:12:19 server-0 k3s[2397]: time="2024-04-22T20:12:19Z" level=info msg="Running kube-scheduler --authentication-kubeconfig=/var/lib/rancher/k3s/server/cred/scheduler.kubeconfig --authorization-kubeconfig=/var/lib/rancher/k3s/server/cred/scheduler.kubeconfig --bind-address=127.0.0.1 --kubeconfig=/var/lib/rancher/k3s/server/cred/scheduler.kubeconfig --profiling=false --secure-port=10259"
@@ -965,21 +964,21 @@ Apr 22 20:12:19 server-0 k3s[2397]: time="2024-04-22T20:12:19Z" level=info msg="
 </details>
 
 
-## 2 Etcd Node Configuration
+## 2 Etcdノードの設定
 
-### 2.1 Ensure that the --cert-file and --key-file arguments are set as appropriate (Automated)
+### 2.1 --cert-fileと--key-file引数が適切に設定されていることを確認する（自動化）
 
-**Result:** PASS
+**結果:** 合格
 
-**Audit:**
+**監査:**
 ```bash
 grep -A 5 'client-transport-security' /var/lib/rancher/k3s/server/db/etcd/config | grep -E 'cert-file|key-file'
 ```
 
-**Expected Result:** 'cert-file' is present AND 'key-file' is present
+**期待される結果:** 'cert-file'が存在し、かつ'key-file'が存在する
 
 <details>
-<summary><b>Returned Value:</b></summary>
+<summary><b>返された値:</b></summary>
 
 ```console
   cert-file: /var/lib/rancher/k3s/server/tls/etcd/server-client.crt
@@ -987,38 +986,38 @@ grep -A 5 'client-transport-security' /var/lib/rancher/k3s/server/db/etcd/config
 ```
 </details>
 
-### 2.2 Ensure that the --client-cert-auth argument is set to true (Automated)
+### 2.2 --client-cert-auth引数がtrueに設定されていることを確認する（自動化）
 
-**Result:** PASS
+**結果:** 合格
 
-**Audit:**
+**監査:**
 ```bash
 grep -A 5 'client-transport-security' /var/lib/rancher/k3s/server/db/etcd/config | grep 'client-cert-auth'
 ```
 
-**Expected Result:** '--client-cert-auth' is present OR 'client-cert-auth' is equal to 'true'
+**期待される結果:** '--client-cert-auth'が存在する、もしくは'client-cert-auth'が'true'に等しい
 
 <details>
-<summary><b>Returned Value:</b></summary>
+<summary><b>返された値:</b></summary>
 
 ```console
   client-cert-auth: true
 ```
 </details>
 
-### 2.3 Ensure that the --auto-tls argument is not set to true (Automated)
+### 2.3 --auto-tls引数がtrueに設定されていないことを確認する（自動化）
 
-**Result:** PASS
+**結果:** 合格
 
-**Audit:**
+**監査:**
 ```bash
 grep 'auto-tls' /var/lib/rancher/k3s/server/db/etcd/config | true
 ```
 
-**Expected Result:** 'ETCD_AUTO_TLS' is not present OR 'ETCD_AUTO_TLS' is present
+**期待される結果:** 'ETCD_AUTO_TLS'が存在しない、もしくは'ETCD_AUTO_TLS'が存在する
 
 <details>
-<summary><b>Returned Value:</b></summary>
+<summary><b>返された値:</b></summary>
 
 ```console
 error: process ID list syntax error
@@ -1035,19 +1034,19 @@ cat: /proc//environ: No such file or directory
 ```
 </details>
 
-### 2.4 Ensure that the --peer-cert-file and --peer-key-file arguments are set as appropriate (Automated)
+### 2.4 --peer-cert-fileと--peer-key-file引数が適切に設定されていることを確認する（自動化）
 
-**Result:** PASS
+**結果:** 合格
 
-**Audit:**
+**監査:**
 ```bash
 grep -A 5 'peer-transport-security' /var/lib/rancher/k3s/server/db/etcd/config | grep -E 'cert-file|key-file'
 ```
 
-**Expected Result:** 'cert-file' is present AND 'key-file' is present
+**期待される結果:** 'cert-file'が存在し、かつ'key-file'が存在する
 
 <details>
-<summary><b>Returned Value:</b></summary>
+<summary><b>返された値:</b></summary>
 
 ```console
   cert-file: /var/lib/rancher/k3s/server/tls/etcd/peer-server-client.crt
@@ -1055,38 +1054,38 @@ grep -A 5 'peer-transport-security' /var/lib/rancher/k3s/server/db/etcd/config |
 ```
 </details>
 
-### 2.5 Ensure that the --peer-client-cert-auth argument is set to true (Automated)
+### 2.5 --peer-client-cert-auth引数がtrueに設定されていることを確認する（自動化）
 
-**Result:** PASS
+**結果:** 合格
 
-**Audit:**
+**監査:**
 ```bash
 grep -A 5 'peer-transport-security' /var/lib/rancher/k3s/server/db/etcd/config | grep 'client-cert-auth'
 ```
 
-**Expected Result:** '--client-cert-auth' is present OR 'client-cert-auth' is equal to 'true'
+**期待される結果:** '--client-cert-auth'が存在する、もしくは'client-cert-auth'が'true'に等しい
 
 <details>
-<summary><b>Returned Value:</b></summary>
+<summary><b>返された値:</b></summary>
 
 ```console
   client-cert-auth: true
 ```
 </details>
 
-### 2.6 Ensure that the --peer-auto-tls argument is not set to true (Automated)
+### 2.6 --peer-auto-tls引数がtrueに設定されていないことを確認する（自動化）
 
-**Result:** PASS
+**結果:** 合格
 
-**Audit:**
+**監査:**
 ```bash
 grep 'peer-auto-tls' /var/lib/rancher/k3s/server/db/etcd/config | true
 ```
 
-**Expected Result:** 'ETCD_PEER_AUTO_TLS' is not present OR 'ETCD_PEER_AUTO_TLS' is present
+**期待される結果:** 'ETCD_PEER_AUTO_TLS'が存在しない、もしくは'ETCD_PEER_AUTO_TLS'が存在する
 
 <details>
-<summary><b>Returned Value:</b></summary>
+<summary><b>返された値:</b></summary>
 
 ```console
 error: process ID list syntax error
@@ -1103,19 +1102,19 @@ cat: /proc//environ: No such file or directory
 ```
 </details>
 
-### 2.7 Ensure that a unique Certificate Authority is used for etcd (Automated)
+### 2.7 etcdに対して一意の認証局が使用されていることを確認する（自動化）
 
-**Result:** PASS
+**結果:** 合格
 
-**Audit:**
+**監査:**
 ```bash
 grep 'trusted-ca-file' /var/lib/rancher/k3s/server/db/etcd/config
 ```
 
-**Expected Result:** 'trusted-ca-file' is present
+**期待される結果:** 'trusted-ca-file'が存在する
 
 <details>
-<summary><b>Returned Value:</b></summary>
+<summary><b>返された値:</b></summary>
 
 ```console
   trusted-ca-file: /var/lib/rancher/k3s/server/tls/etcd/server-ca.crt
@@ -1123,314 +1122,310 @@ grep 'trusted-ca-file' /var/lib/rancher/k3s/server/db/etcd/config
 ```
 </details>
 
+## 4.1 ワーカーノード設定ファイル
 
-## 4.1 Worker Node Configuration Files
+### 4.1.1 kubeletサービスファイルのパーミッションが600以上の制限に設定されていることを確認する（自動化）
 
-### 4.1.1 Ensure that the kubelet service file permissions are set to 600 or more restrictive (Automated)
+**結果:** 該当なし
 
-**Result:** Not Applicable
+**改善策:**
+各ワーカーノードで以下のコマンドを実行してください（システムのファイル位置に基づいて）。
+例：chmod 600 /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+該当なし - すべての設定はコンテナ実行時に引数として渡されます。
 
-**Remediation:**
-Run the below command (based on the file location on your system) on the each worker node.
-For example, chmod 600 /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
-Not Applicable - All configuration is passed in as arguments at container run time.
+### 4.1.2 kubeletサービスファイルの所有権がroot:rootに設定されていることを確認する（自動化）
 
-### 4.1.2 Ensure that the kubelet service file ownership is set to root:root (Automated)
+**結果:** 該当なし
 
-**Result:** Not Applicable
-
-**Remediation:**
-Run the below command (based on the file location on your system) on the each worker node.
-For example,
+**改善策:**
+各ワーカーノードで以下のコマンドを実行してください（システムのファイル位置に基づいて）。
+例：
 chown root:root /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
-Not Applicable.
- All configuration is passed in as arguments at container run time.
+該当なし。
+すべての設定はコンテナ実行時に引数として渡されます。
 
-### 4.1.3 If proxy kubeconfig file exists ensure permissions are set to 600 or more restrictive (Manual)
+### 4.1.3 プロキシkubeconfigファイルが存在する場合、パーミッションが600以上の制限に設定されていることを確認する（手動）
 
-**Result:** WARN
+**結果:** 警告
 
-**Remediation:**
-Run the below command (based on the file location on your system) on the each worker node.
-For example,
+**改善策:**
+各ワーカーノードで以下のコマンドを実行してください（システムのファイル位置に基づいて）。
+例：
 chmod 600 /var/lib/rancher/k3s/agent/kubeproxy.kubeconfig
 
-### 4.1.4 If proxy kubeconfig file exists ensure ownership is set to root:root (Manual)
+### 4.1.4 プロキシkubeconfigファイルが存在する場合、所有権がroot:rootに設定されていることを確認する（手動）
 
-**Result:** PASS
+**結果:** パス
 
-**Audit:**
+**監査:**
 ```bash
 /bin/sh -c 'if test -e /var/lib/rancher/k3s/agent/kubeproxy.kubeconfig; then stat -c %U:%G /var/lib/rancher/k3s/agent/kubeproxy.kubeconfig; fi' 
 ```
 
-**Expected Result:** 'root:root' is present
+**期待される結果:** 'root:root'が存在する
 
 <details>
-<summary><b>Returned Value:</b></summary>
+<summary><b>返された値:</b></summary>
 
 ```console
 root:root
 ```
 </details>
 
-### 4.1.5 Ensure that the --kubeconfig kubelet.conf file permissions are set to 600 or more restrictive (Automated)
+### 4.1.5 --kubeconfig kubelet.confファイルのパーミッションが600以上の制限に設定されていることを確認する（自動化）
 
-**Result:** PASS
+**結果:** パス
 
-**Audit:**
+**監査:**
 ```bash
 /bin/sh -c 'if test -e /var/lib/rancher/k3s/server/cred/admin.kubeconfig; then stat -c permissions=%a /var/lib/rancher/k3s/server/cred/admin.kubeconfig; fi' 
 ```
 
-**Expected Result:** permissions has permissions 600, expected 600 or more restrictive
+**期待される結果:** permissionsが600のパーミッションを持つ、期待される値は600以上の制限
 
 <details>
-<summary><b>Returned Value:</b></summary>
+<summary><b>返された値:</b></summary>
 
 ```console
 permissions=600
 ```
 </details>
 
-### 4.1.6 Ensure that the --kubeconfig kubelet.conf file ownership is set to root:root (Automated)
+### 4.1.6 --kubeconfig kubelet.confファイルの所有権がroot:rootに設定されていることを確認する（自動化）
 
-**Result:** PASS
+**結果:** パス
 
-**Audit:**
+**監査:**
 ```bash
 stat -c %U:%G /var/lib/rancher/k3s/agent/kubelet.kubeconfig
 ```
 
-**Expected Result:** 'root:root' is present
+**期待される結果:** 'root:root'が存在する
 
 <details>
-<summary><b>Returned Value:</b></summary>
+<summary><b>返された値:</b></summary>
 
 ```console
 root:root
 ```
 </details>
 
-### 4.1.7 Ensure that the certificate authorities file permissions are set to 600 or more restrictive (Manual)
+### 4.1.7 認証局ファイルのパーミッションが600以上の制限に設定されていることを確認する（手動）
 
-**Result:** PASS
+**結果:** パス
 
-**Audit:**
+**監査:**
 ```bash
 stat -c permissions=%a /var/lib/rancher/k3s/agent/client-ca.crt
 ```
 
-**Expected Result:** permissions has permissions 600, expected 600 or more restrictive
+**期待される結果:** permissionsが600のパーミッションを持つ、期待される値は600以上の制限
 
 <details>
-<summary><b>Returned Value:</b></summary>
+<summary><b>返された値:</b></summary>
 
 ```console
 permissions=600
 ```
 </details>
 
-### 4.1.8 Ensure that the client certificate authorities file ownership is set to root:root (Manual)
+### 4.1.8 クライアント認証局ファイルの所有権がroot:rootに設定されていることを確認する（手動）
 
-**Result:** PASS
+**結果:** パス
 
-**Audit:**
+**監査:**
 ```bash
 stat -c %U:%G /var/lib/rancher/k3s/agent/client-ca.crt
 ```
 
-**Expected Result:** 'root:root' is equal to 'root:root'
+**期待される結果:** 'root:root'が'root:root'と等しい
 
 <details>
-<summary><b>Returned Value:</b></summary>
+<summary><b>返された値:</b></summary>
 
 ```console
 root:root
 ```
 </details>
 
-### 4.1.9 Ensure that the kubelet --config configuration file has permissions set to 600 or more restrictive (Automated)
+### 4.1.9 kubelet --config設定ファイルのパーミッションが600以上の制限に設定されていることを確認する（自動化）
 
-**Result:** PASS
+**結果:** パス
 
-**Audit:**
+**監査:**
 ```bash
 /bin/sh -c 'if test -e /var/lib/rancher/k3s/agent/kubelet.kubeconfig; then stat -c permissions=%a /var/lib/rancher/k3s/agent/kubelet.kubeconfig; fi' 
 ```
 
-**Expected Result:** permissions has permissions 600, expected 600 or more restrictive
+**期待される結果:** permissionsが600のパーミッションを持つ、期待される値は600以上の制限
 
 <details>
-<summary><b>Returned Value:</b></summary>
+<summary><b>返された値:</b></summary>
 
 ```console
 permissions=600
 ```
 </details>
 
-### 4.1.10 Ensure that the kubelet --config configuration file ownership is set to root:root (Automated)
+### 4.1.10 kubelet --config設定ファイルの所有権がroot:rootに設定されていることを確認する（自動化）
 
-**Result:** PASS
+**結果:** パス
 
-**Audit:**
+**監査:**
 ```bash
 /bin/sh -c 'if test -e /var/lib/rancher/k3s/agent/kubelet.kubeconfig; then stat -c %U:%G /var/lib/rancher/k3s/agent/kubelet.kubeconfig; fi' 
 ```
 
-**Expected Result:** 'root:root' is present
+**期待される結果:** 'root:root'が存在する
 
 <details>
-<summary><b>Returned Value:</b></summary>
+<summary><b>返された値:</b></summary>
 
 ```console
 root:root
 ```
 </details>
 
-
 ## 4.2 Kubelet
 
-### 4.2.1 Ensure that the --anonymous-auth argument is set to false (Automated)
+### 4.2.1 --anonymous-auth 引数が false に設定されていることを確認する（自動化）
 
-**Result:** PASS
+**結果:** 合格
 
-**Audit:**
+**監査:**
 ```bash
 /bin/sh -c 'if test $(journalctl -D /var/log/journal -u k3s | grep "Running kube-apiserver" | wc -l) -gt 0; then journalctl -D /var/log/journal -u k3s | grep "Running kube-apiserver" | tail -n1 | grep "anonymous-auth" | grep -v grep; else echo "--anonymous-auth=false"; fi' 
 ```
 
-**Expected Result:** '--anonymous-auth' is equal to 'false'
+**期待される結果:** '--anonymous-auth' が 'false' に等しい
 
 <details>
-<summary><b>Returned Value:</b></summary>
+<summary><b>返された値:</b></summary>
 
 ```console
 Apr 22 20:12:19 server-0 k3s[2397]: time="2024-04-22T20:12:19Z" level=info msg="Running kube-apiserver --admission-control-config-file=/var/lib/rancher/k3s/server/psa.yaml --advertise-address=10.10.10.100 --advertise-port=6443 --allow-privileged=true --anonymous-auth=false --api-audiences=https://kubernetes.default.svc.cluster.local,k3s --audit-log-maxage=30 --audit-log-maxbackup=10 --audit-log-maxsize=100 --audit-log-path=/var/lib/rancher/k3s/server/logs/audit.log --audit-policy-file=/var/lib/rancher/k3s/server/audit.yaml --authorization-mode=Node,RBAC --bind-address=127.0.0.1 --cert-dir=/var/lib/rancher/k3s/server/tls/temporary-certs --client-ca-file=/var/lib/rancher/k3s/server/tls/client-ca.crt --egress-selector-config-file=/var/lib/rancher/k3s/server/etc/egress-selector-config.yaml --enable-admission-plugins=NodeRestriction --enable-aggregator-routing=true --enable-bootstrap-token-auth=true --encryption-provider-config=/var/lib/rancher/k3s/server/cred/encryption-config.json --encryption-provider-config-automatic-reload=true --etcd-cafile=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt --etcd-certfile=/var/lib/rancher/k3s/server/tls/etcd/client.crt --etcd-keyfile=/var/lib/rancher/k3s/server/tls/etcd/client.key --etcd-servers=https://127.0.0.1:2379 --kubelet-certificate-authority=/var/lib/rancher/k3s/server/tls/server-ca.crt --kubelet-client-certificate=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.crt --kubelet-client-key=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.key --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname --profiling=false --proxy-client-cert-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.crt --proxy-client-key-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.key --requestheader-allowed-names=system:auth-proxy --requestheader-client-ca-file=/var/lib/rancher/k3s/server/tls/request-header-ca.crt --requestheader-extra-headers-prefix=X-Remote-Extra- --requestheader-group-headers=X-Remote-Group --requestheader-username-headers=X-Remote-User --secure-port=6444 --service-account-issuer=https://kubernetes.default.svc.cluster.local --service-account-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-account-lookup=true --service-account-signing-key-file=/var/lib/rancher/k3s/server/tls/service.current.key --service-cluster-ip-range=10.43.0.0/16 --service-node-port-range=30000-32767 --storage-backend=etcd3 --tls-cert-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.crt --tls-cipher-suites=TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305 --tls-private-key-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.key"
 ```
 </details>
 
-### 4.2.2 Ensure that the --authorization-mode argument is not set to AlwaysAllow (Automated)
+### 4.2.2 --authorization-modeの引数がAlwaysAllowに設定されていないことを確認する（自動化）
 
-**Result:** PASS
+**結果:** 合格
 
-**Audit:**
+**監査:**
 ```bash
 /bin/sh -c 'if test $(journalctl -D /var/log/journal -u k3s | grep "Running kube-apiserver" | wc -l) -gt 0; then journalctl -D /var/log/journal -u k3s | grep "Running kube-apiserver" | tail -n1 | grep "authorization-mode" | grep -v grep; else echo "--authorization-mode=Webhook"; fi' 
 ```
 
-**Expected Result:** '--authorization-mode' does not have 'AlwaysAllow'
+**期待される結果:** '--authorization-mode'に'AlwaysAllow'が含まれていない
 
 <details>
-<summary><b>Returned Value:</b></summary>
+<summary><b>返された値:</b></summary>
 
 ```console
 Apr 22 20:12:19 server-0 k3s[2397]: time="2024-04-22T20:12:19Z" level=info msg="Running kube-apiserver --admission-control-config-file=/var/lib/rancher/k3s/server/psa.yaml --advertise-address=10.10.10.100 --advertise-port=6443 --allow-privileged=true --anonymous-auth=false --api-audiences=https://kubernetes.default.svc.cluster.local,k3s --audit-log-maxage=30 --audit-log-maxbackup=10 --audit-log-maxsize=100 --audit-log-path=/var/lib/rancher/k3s/server/logs/audit.log --audit-policy-file=/var/lib/rancher/k3s/server/audit.yaml --authorization-mode=Node,RBAC --bind-address=127.0.0.1 --cert-dir=/var/lib/rancher/k3s/server/tls/temporary-certs --client-ca-file=/var/lib/rancher/k3s/server/tls/client-ca.crt --egress-selector-config-file=/var/lib/rancher/k3s/server/etc/egress-selector-config.yaml --enable-admission-plugins=NodeRestriction --enable-aggregator-routing=true --enable-bootstrap-token-auth=true --encryption-provider-config=/var/lib/rancher/k3s/server/cred/encryption-config.json --encryption-provider-config-automatic-reload=true --etcd-cafile=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt --etcd-certfile=/var/lib/rancher/k3s/server/tls/etcd/client.crt --etcd-keyfile=/var/lib/rancher/k3s/server/tls/etcd/client.key --etcd-servers=https://127.0.0.1:2379 --kubelet-certificate-authority=/var/lib/rancher/k3s/server/tls/server-ca.crt --kubelet-client-certificate=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.crt --kubelet-client-key=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.key --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname --profiling=false --proxy-client-cert-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.crt --proxy-client-key-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.key --requestheader-allowed-names=system:auth-proxy --requestheader-client-ca-file=/var/lib/rancher/k3s/server/tls/request-header-ca.crt --requestheader-extra-headers-prefix=X-Remote-Extra- --requestheader-group-headers=X-Remote-Group --requestheader-username-headers=X-Remote-User --secure-port=6444 --service-account-issuer=https://kubernetes.default.svc.cluster.local --service-account-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-account-lookup=true --service-account-signing-key-file=/var/lib/rancher/k3s/server/tls/service.current.key --service-cluster-ip-range=10.43.0.0/16 --service-node-port-range=30000-32767 --storage-backend=etcd3 --tls-cert-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.crt --tls-cipher-suites=TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305 --tls-private-key-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.key"
 ```
 </details>
 
-### 4.2.3 Ensure that the --client-ca-file argument is set as appropriate (Automated)
+### 4.2.3 --client-ca-file 引数が適切に設定されていることを確認する（自動化）
 
-**Result:** PASS
+**結果:** 合格
 
-**Audit:**
+**監査:**
 ```bash
 /bin/sh -c 'if test $(journalctl -D /var/log/journal -u k3s | grep "Running kube-apiserver" | wc -l) -gt 0; then journalctl -D /var/log/journal -u k3s | grep "Running kube-apiserver" | tail -n1 | grep "client-ca-file" | grep -v grep; else echo "--client-ca-file=/var/lib/rancher/k3s/server/tls/request-header-ca.crt"; fi' 
 ```
 
-**Expected Result:** '--client-ca-file' is present
+**期待される結果:** '--client-ca-file' が存在する
 
 <details>
-<summary><b>Returned Value:</b></summary>
-
+<summary><b>返された値:</b></summary>
 ```console
 Apr 22 20:12:19 server-0 k3s[2397]: time="2024-04-22T20:12:19Z" level=info msg="Running kube-apiserver --admission-control-config-file=/var/lib/rancher/k3s/server/psa.yaml --advertise-address=10.10.10.100 --advertise-port=6443 --allow-privileged=true --anonymous-auth=false --api-audiences=https://kubernetes.default.svc.cluster.local,k3s --audit-log-maxage=30 --audit-log-maxbackup=10 --audit-log-maxsize=100 --audit-log-path=/var/lib/rancher/k3s/server/logs/audit.log --audit-policy-file=/var/lib/rancher/k3s/server/audit.yaml --authorization-mode=Node,RBAC --bind-address=127.0.0.1 --cert-dir=/var/lib/rancher/k3s/server/tls/temporary-certs --client-ca-file=/var/lib/rancher/k3s/server/tls/client-ca.crt --egress-selector-config-file=/var/lib/rancher/k3s/server/etc/egress-selector-config.yaml --enable-admission-plugins=NodeRestriction --enable-aggregator-routing=true --enable-bootstrap-token-auth=true --encryption-provider-config=/var/lib/rancher/k3s/server/cred/encryption-config.json --encryption-provider-config-automatic-reload=true --etcd-cafile=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt --etcd-certfile=/var/lib/rancher/k3s/server/tls/etcd/client.crt --etcd-keyfile=/var/lib/rancher/k3s/server/tls/etcd/client.key --etcd-servers=https://127.0.0.1:2379 --kubelet-certificate-authority=/var/lib/rancher/k3s/server/tls/server-ca.crt --kubelet-client-certificate=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.crt --kubelet-client-key=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.key --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname --profiling=false --proxy-client-cert-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.crt --proxy-client-key-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.key --requestheader-allowed-names=system:auth-proxy --requestheader-client-ca-file=/var/lib/rancher/k3s/server/tls/request-header-ca.crt --requestheader-extra-headers-prefix=X-Remote-Extra- --requestheader-group-headers=X-Remote-Group --requestheader-username-headers=X-Remote-User --secure-port=6444 --service-account-issuer=https://kubernetes.default.svc.cluster.local --service-account-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-account-lookup=true --service-account-signing-key-file=/var/lib/rancher/k3s/server/tls/service.current.key --service-cluster-ip-range=10.43.0.0/16 --service-node-port-range=30000-32767 --storage-backend=etcd3 --tls-cert-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.crt --tls-cipher-suites=TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305 --tls-private-key-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.key"
 ```
 </details>
 
-### 4.2.4 Verify that the --read-only-port argument is set to 0 (Manual)
+### 4.2.4 --read-only-portの引数が0に設定されていることを確認する（手動）
 
-**Result:** PASS
+**結果:** 合格
 
-**Audit:**
+**監査:**
 ```bash
 journalctl -D /var/log/journal -u k3s -u k3s-agent | grep 'Running kubelet' | tail -n1 | grep 'read-only-port' 
 ```
 
-**Expected Result:** '--read-only-port' is equal to '0' OR '--read-only-port' is not present
+**期待される結果:** '--read-only-port'が'0'に等しい、または'--read-only-port'が存在しない
 
 <details>
-<summary><b>Returned Value:</b></summary>
+<summary><b>返された値:</b></summary>
 
 ```console
 Apr 22 20:12:21 server-0 k3s[2397]: time="2024-04-22T20:12:21Z" level=info msg="Running kubelet --address=0.0.0.0 --allowed-unsafe-sysctls=net.ipv4.ip_forward,net.ipv6.conf.all.forwarding --anonymous-auth=false --authentication-token-webhook=true --authorization-mode=Webhook --cgroup-driver=systemd --client-ca-file=/var/lib/rancher/k3s/agent/client-ca.crt --cloud-provider=external --cluster-dns=10.43.0.10 --cluster-domain=cluster.local --container-runtime-endpoint=unix:///run/k3s/containerd/containerd.sock --containerd=/run/k3s/containerd/containerd.sock --event-qps=0 --eviction-hard=imagefs.available<5%,nodefs.available<5% --eviction-minimum-reclaim=imagefs.available=10%,nodefs.available=10% --fail-swap-on=false --feature-gates=CloudDualStackNodeIPs=true --healthz-bind-address=127.0.0.1 --hostname-override=server-0 --kubeconfig=/var/lib/rancher/k3s/agent/kubelet.kubeconfig --make-iptables-util-chains=true --node-ip=10.10.10.100 --node-labels= --pod-infra-container-image=rancher/mirrored-pause:3.6 --pod-manifest-path=/var/lib/rancher/k3s/agent/pod-manifests --protect-kernel-defaults=true --read-only-port=0 --resolv-conf=/run/systemd/resolve/resolv.conf --serialize-image-pulls=false --streaming-connection-idle-timeout=5m --tls-cert-file=/var/lib/rancher/k3s/agent/serving-kubelet.crt --tls-private-key-file=/var/lib/rancher/k3s/agent/serving-kubelet.key"
 ```
 </details>
 
-### 4.2.5 Ensure that the --streaming-connection-idle-timeout argument is not set to 0 (Manual)
+### 4.2.5 --streaming-connection-idle-timeout 引数が0に設定されていないことを確認する（手動）
 
-**Result:** PASS
+**結果:** 合格
 
-**Audit:**
+**監査:**
 ```bash
 journalctl -D /var/log/journal -u k3s -u k3s-agent | grep 'Running kubelet' | tail -n1 | grep 'streaming-connection-idle-timeout'
 ```
 
-**Expected Result:** '--streaming-connection-idle-timeout' is not equal to '0' OR '--streaming-connection-idle-timeout' is not present
+**期待される結果:** '--streaming-connection-idle-timeout' が '0' に等しくない、または '--streaming-connection-idle-timeout' が存在しない
 
 <details>
-<summary><b>Returned Value:</b></summary>
+<summary><b>返された値:</b></summary>
 
 ```console
 Apr 22 20:12:21 server-0 k3s[2397]: time="2024-04-22T20:12:21Z" level=info msg="Running kubelet --address=0.0.0.0 --allowed-unsafe-sysctls=net.ipv4.ip_forward,net.ipv6.conf.all.forwarding --anonymous-auth=false --authentication-token-webhook=true --authorization-mode=Webhook --cgroup-driver=systemd --client-ca-file=/var/lib/rancher/k3s/agent/client-ca.crt --cloud-provider=external --cluster-dns=10.43.0.10 --cluster-domain=cluster.local --container-runtime-endpoint=unix:///run/k3s/containerd/containerd.sock --containerd=/run/k3s/containerd/containerd.sock --event-qps=0 --eviction-hard=imagefs.available<5%,nodefs.available<5% --eviction-minimum-reclaim=imagefs.available=10%,nodefs.available=10% --fail-swap-on=false --feature-gates=CloudDualStackNodeIPs=true --healthz-bind-address=127.0.0.1 --hostname-override=server-0 --kubeconfig=/var/lib/rancher/k3s/agent/kubelet.kubeconfig --make-iptables-util-chains=true --node-ip=10.10.10.100 --node-labels= --pod-infra-container-image=rancher/mirrored-pause:3.6 --pod-manifest-path=/var/lib/rancher/k3s/agent/pod-manifests --protect-kernel-defaults=true --read-only-port=0 --resolv-conf=/run/systemd/resolve/resolv.conf --serialize-image-pulls=false --streaming-connection-idle-timeout=5m --tls-cert-file=/var/lib/rancher/k3s/agent/serving-kubelet.crt --tls-private-key-file=/var/lib/rancher/k3s/agent/serving-kubelet.key"
 ```
 </details>
 
-### 4.2.6 Ensure that the --make-iptables-util-chains argument is set to true (Automated)
+### 4.2.6 --make-iptables-util-chains 引数が true に設定されていることを確認する（自動化）
 
-**Result:** PASS
+**結果:** 合格
 
-**Audit:**
+**監査:**
 ```bash
 journalctl -D /var/log/journal -u k3s -u k3s-agent | grep 'Running kubelet' | tail -n1 | grep 'make-iptables-util-chains'
 ```
 
-**Expected Result:** '--make-iptables-util-chains' is equal to 'true' OR '--make-iptables-util-chains' is not present
+**期待される結果:** '--make-iptables-util-chains' が 'true' に等しい、または '--make-iptables-util-chains' が存在しない
 
 <details>
-<summary><b>Returned Value:</b></summary>
+<summary><b>返された値:</b></summary>
 
 ```console
 Apr 22 20:12:21 server-0 k3s[2397]: time="2024-04-22T20:12:21Z" level=info msg="Running kubelet --address=0.0.0.0 --allowed-unsafe-sysctls=net.ipv4.ip_forward,net.ipv6.conf.all.forwarding --anonymous-auth=false --authentication-token-webhook=true --authorization-mode=Webhook --cgroup-driver=systemd --client-ca-file=/var/lib/rancher/k3s/agent/client-ca.crt --cloud-provider=external --cluster-dns=10.43.0.10 --cluster-domain=cluster.local --container-runtime-endpoint=unix:///run/k3s/containerd/containerd.sock --containerd=/run/k3s/containerd/containerd.sock --event-qps=0 --eviction-hard=imagefs.available<5%,nodefs.available<5% --eviction-minimum-reclaim=imagefs.available=10%,nodefs.available=10% --fail-swap-on=false --feature-gates=CloudDualStackNodeIPs=true --healthz-bind-address=127.0.0.1 --hostname-override=server-0 --kubeconfig=/var/lib/rancher/k3s/agent/kubelet.kubeconfig --make-iptables-util-chains=true --node-ip=10.10.10.100 --node-labels= --pod-infra-container-image=rancher/mirrored-pause:3.6 --pod-manifest-path=/var/lib/rancher/k3s/agent/pod-manifests --protect-kernel-defaults=true --read-only-port=0 --resolv-conf=/run/systemd/resolve/resolv.conf --serialize-image-pulls=false --streaming-connection-idle-timeout=5m --tls-cert-file=/var/lib/rancher/k3s/agent/serving-kubelet.crt --tls-private-key-file=/var/lib/rancher/k3s/agent/serving-kubelet.key"
 ```
 </details>
 
-### 4.2.7 Ensure that the --hostname-override argument is not set (Manual)
+### 4.2.7 --hostname-override 引数が設定されていないことを確認する（手動）
 
-**Result:** Not Applicable
+**結果:** 適用外
 
-**Remediation:**
-Edit the kubelet service file /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
-on each worker node and remove the --hostname-override argument from the
-KUBELET_SYSTEM_PODS_ARGS variable.
-Based on your system, restart the kubelet service. For example,
+**改善策:**
+各ワーカーノードの kubelet サービスファイル /etc/systemd/system/kubelet.service.d/10-kubeadm.conf を編集し、
+KUBELET_SYSTEM_PODS_ARGS 変数から --hostname-override 引数を削除してください。
+システムに応じて、kubelet サービスを再起動します。例えば、
 systemctl daemon-reload
 systemctl restart kubelet.service
-Not Applicable.
+適用外。
 
-### 4.2.8 Ensure that the eventRecordQPS argument is set to a level which ensures appropriate event capture (Manual)
+### 4.2.8 適切なイベントキャプチャを確保するレベルに eventRecordQPS 引数が設定されていることを確認する（手動）
 
-**Result:** PASS
+**結果:** 合格
 
-**Audit:**
+**監査:**
 ```bash
 /bin/ps -fC containerd
 ```
 
-**Expected Result:** 'eventRecordQPS' is present OR 'eventRecordQPS' is not present
+**期待される結果:** 'eventRecordQPS' が存在する、または 'eventRecordQPS' が存在しない
 
 <details>
-<summary><b>Returned Value:</b></summary>
+<summary><b>返された値:</b></summary>
 
 ```console
 apiVersion: v1
@@ -1456,37 +1451,33 @@ users:
 ```
 </details>
 
-### 4.2.9 Ensure that the --tls-cert-file and --tls-private-key-file arguments are set as appropriate (Manual)
+### 4.2.9 --tls-cert-fileと--tls-private-key-file引数が適切に設定されていることを確認する（手動）
 
-**Result:** Not Applicable
+**結果:** 該当なし
 
-**Remediation:**
-If using a Kubelet config file, edit the file to set `tlsCertFile` to the location
-of the certificate file to use to identify this Kubelet, and `tlsPrivateKeyFile`
-to the location of the corresponding private key file.
-If using command line arguments, edit the kubelet service file
-/etc/systemd/system/kubelet.service.d/10-kubeadm.conf on each worker node and
-set the below parameters in KUBELET_CERTIFICATE_ARGS variable.
+**修正方法:**
+Kubelet設定ファイルを使用している場合、ファイルを編集して`tlsCertFile`をこのKubeletを識別するために使用する証明書ファイルの場所に、`tlsPrivateKeyFile`を対応する秘密鍵ファイルの場所に設定します。
+コマンドライン引数を使用している場合、各ワーカーノードの/etc/systemd/system/kubelet.service.d/10-kubeadm.confにあるkubeletサービスファイルを編集し、KUBELET_CERTIFICATE_ARGS変数に以下のパラメータを設定します。
 --tls-cert-file=&lt;path/to/tls-certificate-file&gt;
 --tls-private-key-file=&lt;path/to/tls-key-file&gt;
-Based on your system, restart the kubelet service. For example,
+システムに応じて、kubeletサービスを再起動します。例えば、
 systemctl daemon-reload
 systemctl restart kubelet.service
-Permissive - When generating serving certificates, functionality could break in conjunction with hostname overrides which are required for certain cloud providers.
+許容 - サービス証明書を生成する際、特定のクラウドプロバイダーに必要なホスト名オーバーライドと併用すると機能が破壊される可能性があります。
 
-### 4.2.10 Ensure that the --rotate-certificates argument is not set to false (Manual)
+### 4.2.10 --rotate-certificates引数がfalseに設定されていないことを確認する（手動）
 
-**Result:** PASS
+**結果:** 合格
 
-**Audit:**
+**監査:**
 ```bash
 /bin/ps -fC containerd
 ```
 
-**Expected Result:** 'rotateCertificates' is present OR 'rotateCertificates' is not present
+**期待される結果:** 'rotateCertificates'が存在する または 'rotateCertificates'が存在しない
 
 <details>
-<summary><b>Returned Value:</b></summary>
+<summary><b>返された値：</b></summary>
 
 ```console
 apiVersion: v1
@@ -1512,19 +1503,19 @@ users:
 ```
 </details>
 
-### 4.2.11 Verify that the RotateKubeletServerCertificate argument is set to true (Manual)
+### 4.2.11 RotateKubeletServerCertificate 引数が true に設定されていることを確認する（手動）
 
-**Result:** PASS
+**結果:** 合格
 
-**Audit:**
+**監査:**
 ```bash
 /bin/ps -fC containerd
 ```
 
-**Expected Result:** 'featureGates.RotateKubeletServerCertificate' is present OR 'featureGates.RotateKubeletServerCertificate' is not present
+**期待される結果:** 'featureGates.RotateKubeletServerCertificate' が存在する、または 'featureGates.RotateKubeletServerCertificate' が存在しない
 
 <details>
-<summary><b>Returned Value:</b></summary>
+<summary><b>返された値:</b></summary>
 
 ```console
 apiVersion: v1
@@ -1550,35 +1541,33 @@ users:
 ```
 </details>
 
-### 4.2.12 Ensure that the Kubelet only makes use of Strong Cryptographic Ciphers (Manual)
+### 4.2.12 Kubeletが強力な暗号化暗号のみを使用することを確認する（手動）
 
-**Result:** WARN
+**結果:** 警告
 
-**Remediation:**
-If using a Kubelet config file, edit the file to set `TLSCipherSuites` to
+**修正方法:**
+Kubelet設定ファイルを使用している場合、ファイルを編集して`TLSCipherSuites`を
 TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_128_GCM_SHA256
-or to a subset of these values.
-If using executable arguments, edit the kubelet service file
-/etc/systemd/system/kubelet.service.d/10-kubeadm.conf on each worker node and
-set the --tls-cipher-suites parameter as follows, or to a subset of these values.
+または、これらの値のサブセットに設定します。
+実行可能引数を使用している場合、各ワーカーノードの/etc/systemd/system/kubelet.service.d/10-kubeadm.confにあるkubeletサービスファイルを編集し、
+--tls-cipher-suites パラメータを以下のように、または、これらの値のサブセットに設定します。
 --tls-cipher-suites=TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_128_GCM_SHA256
-Based on your system, restart the kubelet service. For example:
+システムに応じて、kubeletサービスを再起動します。例：
 systemctl daemon-reload
 systemctl restart kubelet.service
 
-### 4.2.13 Ensure that a limit is set on pod PIDs (Manual)
+### 4.2.13 ポッドのPIDに制限が設定されていることを確認する（手動）
 
-**Result:** WARN
+**Result:** 警告
 
 **Remediation:**
-```
 このパラメータの適切なレベルを決定し、--pod-max-pids コマンドラインパラメータまたは PodPidsLimit 設定ファイル設定を介して設定します。
 
 ## 5.1 RBAC とサービスアカウント
 
 ### 5.1.1 クラスター管理者ロールが必要な場合にのみ使用されていることを確認する (手動)
 
-**結果:** WARN
+**結果:** 警告
 
 **修正方法:**
 クラスター管理者ロールへのすべてのクラスター役割バインディングを特定します。それらが使用されているかどうか、またはこのロールが必要かどうか、またはより少ない特権のロールを使用できるかどうかを確認します。可能な場合は、最初にユーザーを低特権のロールにバインドし、その後クラスター管理者ロールへのクラスター役割バインディングを削除します：
@@ -1586,21 +1575,21 @@ kubectl delete clusterrolebinding [name]
 
 ### 5.1.2 シークレットへのアクセスを最小限に抑える (手動)
 
-**結果:** WARN
+**結果:** 警告
 
 **修正方法:**
 可能な場合は、クラスター内のシークレットオブジェクトへの get、list、および watch アクセスを削除します。
 
 ### 5.1.3 ロールおよびクラスター役割でのワイルドカードの使用を最小限に抑える (手動)
 
-**結果:** WARN
+**結果:** 警告
 
 **修正方法:**
 可能な場合は、クラスター役割およびロールでのワイルドカードの使用を特定のオブジェクトまたはアクションに置き換えます。
 
 ### 5.1.4 ポッドの作成アクセスを最小限に抑える (手動)
 
-**結果:** WARN
+**結果:** 警告
 
 **修正方法:**
 可能な場合は、クラスター内のポッドオブジェクトへの作成アクセスを削除します。
