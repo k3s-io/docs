@@ -58,7 +58,7 @@ K3s를 배포하는 데 문제가 있는 경우 다음과 같이 하세요:
 
 1. [알려진 문제](./known-issues.md) 페이지를 확인하세요.
 
-2. [추가 OS 준비사항](./advanced.md#additional-os-preparations)을 모두 해결했는지 확인합니다. `k3s check-config`를 실행하고 통과했는지 확인합니다.
+2. [추가 OS 준비사항](./advanced.md#추가-os-준비-사항)을 모두 해결했는지 확인합니다. `k3s check-config`를 실행하고 통과했는지 확인합니다.
 
 3. K3s [이슈](https://github.com/k3s-io/k3s/issues) 및 [토론](https://github.com/k3s-io/k3s/discussions)에서 문제와 일치하는 항목을 검색합니다.
 

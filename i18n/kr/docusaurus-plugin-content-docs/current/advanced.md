@@ -314,7 +314,7 @@ firewall-cmd --permanent --zone=trusted --add-source=10.43.0.0/16 #services
 firewall-cmd --reload
 ```
 
-설정에 따라 추가 포트를 열어야 할 수도 있습니다. 자세한 내용은 [인바운드 규칙](./installation/requirements.md#inbound-rules-for-k3s-server-nodes)을 참조하세요. 파드 또는 서비스에 대한 기본 CIDR을 변경하는 경우, 그에 따라 방화벽 규칙을 업데이트해야 합니다.
+설정에 따라 추가 포트를 열어야 할 수도 있습니다. 자세한 내용은 [인바운드 규칙](./installation/requirements.md#inbound-rules-for-k3s-nodes)을 참조하세요. 파드 또는 서비스에 대한 기본 CIDR을 변경하는 경우, 그에 따라 방화벽 규칙을 업데이트해야 합니다.
 
 활성화된 경우, nm-cloud-setup을 비활성화하고 노드를 재부팅해야 합니다:
 
@@ -339,11 +339,11 @@ ufw allow from 10.42.0.0/16 to any #pods
 ufw allow from 10.43.0.0/16 to any #services
 ```
 
-설정에 따라 추가 포트를 열어야 할 수도 있습니다. 자세한 내용은 [인바운드 규칙](./installation/requirements.md#inbound-rules-for-k3s-server-nodes)을 참조한다. 파드 또는 서비스에 대한 기본 CIDR을 변경하는 경우, 그에 따라 방화벽 규칙을 업데이트해야 합니다.
+설정에 따라 추가 포트를 열어야 할 수도 있습니다. 자세한 내용은 [인바운드 규칙](./installation/requirements.md#inbound-rules-for-k3s-nodes)을 참조한다. 파드 또는 서비스에 대한 기본 CIDR을 변경하는 경우, 그에 따라 방화벽 규칙을 업데이트해야 합니다.
 
 ### Raspberry Pi
 
-라즈베리파이 OS는 데비안 기반이며, 오래된 iptables 버전으로 인해 문제가 발생할 수 있습니다. [해결 방법](#old-iptables-versions)을 참조하세요.
+라즈베리파이 OS는 데비안 기반이며, 오래된 iptables 버전으로 인해 문제가 발생할 수 있습니다. [해결 방법](#이전-iptables-버전)을 참조하세요.
 
 표준 라즈베리파이 OS 설치는 `cgroups`가 활성화된 상태에서 시작되지 않습니다. **K3S**는 systemd 서비스를 시작하기 위해 `cgroups`가 필요합니다. `cgroups`는 `/boot/cmdline.txt`에 `cgroup_memory=1 cgroup_enable=memory`를 추가하여 활성화할 수 있습니다.
 

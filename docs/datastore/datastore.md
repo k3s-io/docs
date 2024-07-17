@@ -44,7 +44,7 @@ As a best practice we recommend setting these parameters as environment variable
 ### Datastore Endpoint Format and Functionality
 As mentioned, the format of the value passed to the `datastore-endpoint` parameter is dependent upon the datastore backend. The following details this format and functionality for each supported external datastore.
 
-<Tabs>
+<Tabs queryString="ext-db">
 <TabItem value="PostgreSQL">
 
 

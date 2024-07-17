@@ -24,7 +24,7 @@ When K3s is restored from backup, the old data directory will be moved to `${dat
 
 To restore the cluster from backup:
 
-<Tabs>
+<Tabs queryString="etcdsnap">
 <TabItem value="Single Server">
 
 Run K3s with the `--cluster-reset` option, with the `--cluster-reset-restore-path` also given:

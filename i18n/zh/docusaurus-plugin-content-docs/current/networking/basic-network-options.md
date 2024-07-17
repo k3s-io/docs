@@ -117,7 +117,7 @@ K3s agents and servers maintain websocket tunnels between nodes that are used to
 This allows agents to operate without exposing the kubelet and container runtime streaming ports to incoming connections, and for the control-plane to connect to cluster services when operating with the agent disabled.
 This functionality is equivalent to the [Konnectivity](https://kubernetes.io/docs/tasks/extend-kubernetes/setup-konnectivity/) service commonly used on other Kubernetes distributions, and is managed via the apiserver's egress selector configuration.
 
-The default mode is `agent`. `pod` or `cluster` modes are recommended when running [agentless servers](../advanced.md#running-agentless-servers-experimental), in order to provide the apiserver with access to cluster service endpoints in the absence of flannel and kube-proxy.
+The default mode is `agent`. `pod` or `cluster` modes are recommended when running [agentless servers](../advanced.md#运行无-agent-的-server实验性), in order to provide the apiserver with access to cluster service endpoints in the absence of flannel and kube-proxy.
 
 The egress selector mode may be configured on servers via the `--egress-selector-mode` flag, and offers four modes:
 * `disabled`: The apiserver does not use agent tunnels to communicate with kubelets or cluster endpoints.

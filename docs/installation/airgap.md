@@ -93,7 +93,7 @@ See the [SELinux](../advanced.md#selinux-support) section for more information.
 
 You can install K3s on one or more servers as described below.
 
-<Tabs>
+<Tabs queryString="airgap-cluster">
 <TabItem value="Single Server Configuration" default>
 
 To install K3s on a single server, simply do the following on the server node:

@@ -47,7 +47,7 @@ We recommend that users migrate to the new backend as soon as possible. The migr
 
 Start K3s with `--flannel-backend=none` and install your CNI of choice. Most CNI plugins come with their own network policy engine, so it is recommended to set `--disable-network-policy` as well to avoid conflicts. Some important information to take into consideration:
 
-<Tabs>
+<Tabs queryString="cni">
 <TabItem value="Canal" default>
 
 Visit the [Canal Docs](https://docs.tigera.io/calico/latest/getting-started/kubernetes/flannel/install-for-flannel#installing-calico-for-policy-and-flannel-aka-canal-for-networking) website. Follow the steps to install Canal. Modify the Canal YAML so that IP forwarding is allowed in the `container_settings` section, for example:
