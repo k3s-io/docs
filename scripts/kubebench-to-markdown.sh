@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # To generate the expected json report, run the following command:
-# kube-bench --benchmark=k3s-cis-1.7 --json > k3s-cis-1.7.json
+# kube-bench run --benchmark=k3s-cis-1.7 --json > k3s-cis-1.7.json
 
 # Then pass the json file to this script:
-# ./kubebench-to-markdown.sh k3s-cis-1.7.json
+# ./kubebench-to-markdown.sh k3s-cis-1.7.json > cis-1.7.md
 
 
 # Remove 3.X checks, as k3s doesn't do them
@@ -46,6 +46,27 @@ echo "$clean" | jq -c '.Controls[].tests[].results[]' | while read -r result; do
     echo "### $id $title"
     echo
 
+    # fix html special characters and misspellings
+    remediation=${remediation//<file>/&lt;file&gt;}
+    remediation=$(perl -pe 's/(--kube.*?=)<(.*?)>/\1&lt;\2&gt;/g' <<< "$remediation")
+    remediation=${remediation/capabilites/capabilities}
+    remediation=${remediation/applicaions/applications}
+    
+    # encase kube-XXX-args yaml block in ```
+    if [[ "$remediation" =~ (kube-.*-arg:.*) ]]; then
+        remediation=$(perl -pe 'BEGIN{undef $/} s/^kube-.*-arg:(\n  -\s.*)+/```\n$&\n```/mg' <<< "$remediation")
+    fi
+    if [[ "$remediation" =~ (kubelet-arg:.*) ]]; then
+        remediation=$(perl -pe 'BEGIN{undef $/} s/^kubelet-arg:(\n  -\s.*)+/```\n$&\n```/mg' <<< "$remediation")
+    fi
+    # encase chown and chmod commands in `
+    if [[ "$remediation" =~ (chown.*) ]]; then
+        remediation=$(perl -pe 's/(chown.*)/`$1`/g' <<< "$remediation")
+    fi
+    if [[ "$remediation" =~ (chmod.*) ]]; then
+        remediation=$(perl -pe 's/(chmod.*)/`$1`/g' <<< "$remediation")
+    fi
+
     case $status in 
         PASS | FAIL)
             # Remove curly braces from expected result, conflicts with html embedding
@@ -68,13 +89,15 @@ echo "$clean" | jq -c '.Controls[].tests[].results[]' | while read -r result; do
             echo "\`\`\`"
             echo "</details>"
             echo
+            echo "<details>"
+            echo "<summary><b>Remediation:</b></summary>"
+            echo
+            echo "$remediation"
+            echo "</details>"
+            echo
             ;;
         WARN)
             # fix html special characters and misspellings
-            remediation=${remediation//</&lt;}
-            remediation=${remediation//>/&gt;}
-            remediation=${remediation/capabilites/capabilities}
-            remediation=${remediation/applicaions/applications}
             echo "**Result:** $status"
             echo 
             echo "**Remediation:**"
@@ -82,13 +105,23 @@ echo "$clean" | jq -c '.Controls[].tests[].results[]' | while read -r result; do
             echo
             ;;
         INFO)
-            remediation=${remediation//</&lt;}
-            remediation=${remediation//>/&gt;}
-            echo "**Result:** Not Applicable"
-            echo 
-            echo "**Remediation:**"
-            echo "$remediation"
-            echo
+            # if remediation starts with "Not Applicable." We know its a ignored check,
+            # The remediation is actually the rationale for ignoring the check
+            if [[ $remediation == "Not Applicable."* ]]; then
+                remediation=${remediation//Not Applicable./}
+                echo "**Result:** Not Applicable"
+                echo
+                echo "**Rationale:**"
+                echo "$remediation"
+                echo
+                continue
+            else
+                echo "**Result:** $status"
+                echo 
+                echo "**Remediation:**"
+                echo "$remediation"
+                echo
+            fi
             ;;
     esac
 done
