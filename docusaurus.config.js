@@ -30,7 +30,7 @@ module.exports = {
   ],
   i18n: {
     defaultLocale: "en",
-    locales: ["en", "zh", "kr"],
+    locales: ["en", "zh", "kr", "ja"],
     localeConfigs: {
       en: {
         label: "English",
@@ -41,6 +41,9 @@ module.exports = {
       kr: {
         label: "한국어",
       },
+      ja: {
+        label: "日本語"
+      }
     },
   },
   themeConfig: {
