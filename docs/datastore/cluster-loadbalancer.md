@@ -76,6 +76,11 @@ backend k3s-backend
 3) Add the following to `/etc/keepalived/keepalived.conf` on lb-1 and lb-2:
 
 ```
+global_defs {
+  enable_script_security
+  script_user root
+}
+
 vrrp_script chk_haproxy {
     script 'killall -0 haproxy' # faster than pidof
     interval 2
