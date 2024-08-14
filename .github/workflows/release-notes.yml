@@ -10,6 +10,7 @@ permissions:
   pull-requests: write
 jobs:
   collect-all:
+    if: github.repository == 'k3s-io/docs'
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
