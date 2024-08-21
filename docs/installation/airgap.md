@@ -33,7 +33,7 @@ This method requires you to manually deploy the necessary images to each node, a
 #### Prepare the Images Directory and Airgap Image Tarball
 
 1. Obtain the images archive for your architecture from the [releases](https://github.com/k3s-io/k3s/releases) page for the version of K3s you will be running.
-2. Download the imagess archive to the agent's images directory, for example:
+2. Download the images archive to the agent's images directory, for example:
   ```bash
   sudo mkdir -p /var/lib/rancher/k3s/agent/images/
   sudo curl -L -o /var/lib/rancher/k3s/agent/images/k3s-airgap-images-amd64.tar.zst "https://github.com/k3s-io/k3s/releases/download/v1.29.1-rc2%2Bk3s1/k3s-airgap-images-amd64.tar.zst"
