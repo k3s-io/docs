@@ -74,7 +74,35 @@ or provide that information in a file and use the parameter:
 --vpn-auth-file=$PATH_TO_FILE
 ```
 
-Optionally, if you have your own Tailscale server (e.g. headscale), you can connect to it by appending `,controlServerURL=$URL` to the vpn-auth parameters
+Optionally, if you have your own Tailscale server (e.g. headscale), you can connect to it by appending `,controlServerURL=$URL` to the vpn-auth parameters.
+
+Next, you can proceed to create the server using the following command: 
+
+```bash
+k3s server --token <token> --vpn-auth="name=tailscale,joinKey=<joinKey>" --node-external-ip=<TailscaleIPOfServerNode>
+```
+
+After executing this command, access the Tailscale admin console to approve the Tailscale node and subnet (if not already approved through autoApprovers). 
+
+Once the server is set up, connect the agents using:
+
+```bash
+k3s agent --token <token> --vpn-auth="name=tailscale,joinKey=<joinKey>" --server https://<TailscaleIPOfServerNode>:6443 --node-external-ip=<TailscaleIPOfAgentNode>
+```
+
+Again, approve the Tailscale node and subnet as you did for the server.
+
+If you have ACLs activated in Tailscale, you need to add an "accept" rule to allow pods to communicate with each other. Assuming the auth key you created automatically tags the Tailscale nodes with the tag `testing-k3s`, the rule should look like this:
+
+```yaml
+"acls": [
+    {
+        "action": "accept",
+        "src":    ["tag:testing-k3s", "10.42.0.0/16"],
+        "dst":    ["tag:testing-k3s:*", "10.42.0.0/16:*"],
+    },
+],
+```
 
 :::warning
 
