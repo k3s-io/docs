@@ -111,12 +111,7 @@ kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.6.0/depl
 
 Longhorn will be installed in the namespace `longhorn-system`.
 
-Apply the yaml to create the PVC and pod:
-
-```bash
-kubectl create -f pvc.yaml
-kubectl create -f pod.yaml
-```
+Create a persistent volume claim and a pod to utilize it:
 
 ### pvc.yaml
 
@@ -156,6 +151,13 @@ spec:
   - name: volv
     persistentVolumeClaim:
       claimName: longhorn-volv-pvc
+```
+
+Apply the yaml to create the PVC and pod:
+
+```bash
+kubectl create -f pvc.yaml
+kubectl create -f pod.yaml
 ```
 
 Confirm the PV and PVC are created:
