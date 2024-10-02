@@ -520,7 +520,7 @@ CIS 要件 1.2.22 から 1.2.25 は、API サーバーの監査ログの設定�
 sudo mkdir -p -m 700 /var/lib/rancher/k3s/server/logs
 ```
 
-リクエストメタデータをログに記録するための初期監査ポリシーを以下に示します。このポリシーは `/var/lib/rancher/k3s/server` ディレクトリに `audit.yaml` という名前のファイルに書き込む必要があります。API サーバーのポリシー設定に関する詳細情報は、Kubernetes の[ドキュメント](https://kubernetes.io/docs/tasks/debug-application-cluster/audit/)に記載されています。
+リクエストメタデータをログに記録するための初期監査ポリシーを以下に示します。このポリシーは `/var/lib/rancher/k3s/server` ディレクトリに `audit.yaml` という名前のファイルに書き込む必要があります。API サーバーのポリシー設定に関する詳細情報は、Kubernetes の[ドキュメント](https://kubernetes.io/docs/tasks/debug/debug-cluster/audit/)に記載されています。
 
 ```yaml
 apiVersion: audit.k8s.io/v1

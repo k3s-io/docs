@@ -10,7 +10,7 @@ K3sをエアギャップ環境でインストールするには、2つの方法�
 
 これらの手順は、エアギャップ環境でノードを既に作成し、コンテナランタイムとしてバンドルされたcontainerdを使用し、環境内にOCI準拠のプライベートレジストリが利用可能であることを前提としています。
 
-まだプライベートDockerレジストリを設定していない場合は、[公式レジストリドキュメント](https://docs.docker.com/registry/deploying/#run-an-externally-accessible-registry)を参照してください。
+まだプライベートDockerレジストリを設定していない場合は、[公式レジストリドキュメント](https://distribution.github.io/distribution/about/deploying/#run-an-externally-accessible-registry)を参照してください。
 
 #### レジストリYAMLの作成とイメージのプッシュ
 
