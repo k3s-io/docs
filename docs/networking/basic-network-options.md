@@ -159,6 +159,8 @@ To enable dual-stack in K3s, you must provide valid dual-stack `cluster-cidr` an
 
 Note that you may configure any valid `cluster-cidr` and `service-cidr` values, but the above masks are recommended. If you change the `cluster-cidr` mask, you should also change the `node-cidr-mask-size-ipv4` and `node-cidr-mask-size-ipv6` values to match the planned pods per node and total node count. The largest supported `service-cidr` mask is /12 for IPv4, and /112 for IPv6. Remember to allow ipv6 traffic if you are deploying in a public cloud.
 
+When using IPv6 addresses that are not publicly routed, for example in the ULA range, you might want to add the `--flannel-ipv6-masq` option to enable IPv6 NAT, as per default pods use their pod IPv6 address for outgoing traffic.
+
 If you are using a custom CNI plugin, i.e. a CNI plugin other than Flannel, the additional configuration may be required. Please consult your plugin's dual-stack documentation and verify if network policies can be enabled.
 
 :::warning Known Issue
@@ -180,6 +182,9 @@ Single-stack IPv6 clusters (clusters without IPv4) are supported on K3s using th
 ```bash
 --cluster-cidr=2001:cafe:42::/56 --service-cidr=2001:cafe:43::/112
 ```
+
+When using IPv6 addresses that are not publicly routed, for example in the ULA range, you might want to add the `--flannel-ipv6-masq` option to enable IPv6 NAT, as per default pods use their pod IPv6 address for outgoing traffic.
+
 ## Nodes Without a Hostname
 
 Some cloud providers, such as Linode, will create machines with "localhost" as the hostname and others may not have a hostname set at all. This can cause problems with domain name resolution. You can run K3s with the `--node-name` flag or `K3S_NODE_NAME` environment variable and this will pass the node name to resolve this issue.
