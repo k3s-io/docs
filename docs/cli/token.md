@@ -126,7 +126,7 @@ Flag | Description
 
 Generate a randomly-generated bootstrap token.
 
-You don't have to use this command in order to generate a token. You can do so yourself as long as it is in the format "[a-z0-9]{6}.[a-z0-9]{16}", where the first portion is the token ID, and the second portion is the secret.
+You don't have to use this command in order to generate a token. You can do so yourself as long as it is in the format `[a-z0-9]{6}.[a-z0-9]{16}`, where the first portion is the token ID, and the second portion is the secret.
 
 Flag | Description
 ---- | ----
