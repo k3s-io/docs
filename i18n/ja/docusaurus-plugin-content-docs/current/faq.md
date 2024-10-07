@@ -50,7 +50,7 @@ K3sの参加トークンの管理に関する詳細は、[`k3s token`コマン�
 
 ### 異なるバージョンのK3sの互換性はどの程度ですか？
 
-一般的に、[Kubernetesのバージョンスキューポリシー](https://kubernetes.io/docs/setup/release/version-skew-policy/)が適用されます。
+一般的に、[Kubernetesのバージョンスキューポリシー](https://kubernetes.io/releases/version-skew-policy/)が適用されます。
 
 簡単に言えば、サーバーはエージェントより新しいバージョンであることができますが、エージェントはサーバーより新しいバージョンであってはなりません。
 

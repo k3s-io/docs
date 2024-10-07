@@ -78,6 +78,6 @@ Tailscale統合を有効にしてK3sをデプロイするには、各ノード�
 
 :::warning
 
-同じTailscaleネットワークを使用して複数のK3sクラスターを実行する予定がある場合、IPの競合を避けるために適切な[ACL](https://tailscale.com/kb/1018/acls/)を作成するか、各クラスターに異なるpodCIDRサブネットを使用してください。
+同じTailscaleネットワークを使用して複数のK3sクラスターを実行する予定がある場合、IPの競合を避けるために適切な[ACL](https://tailscale.com/kb/1018/acls)を作成するか、各クラスターに異なるpodCIDRサブネットを使用してください。
 
 :::

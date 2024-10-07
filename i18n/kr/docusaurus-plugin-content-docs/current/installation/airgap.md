@@ -12,7 +12,7 @@ These steps assume you have already created nodes in your air-gap environment,
 are using the bundled containerd as the container runtime,
 and have a OCI-compliant private registry available in your environment.
 
-If you have not yet set up a private Docker registry, refer to the [official Registry documentation](https://docs.docker.com/registry/deploying/#run-an-externally-accessible-registry).
+If you have not yet set up a private Docker registry, refer to the [official Registry documentation](https://distribution.github.io/distribution/about/deploying/#run-an-externally-accessible-registry).
 
 #### Create the Registry YAML and Push Images
 

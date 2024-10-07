@@ -261,6 +261,6 @@ Optionally, if you have your own Tailscale server (e.g. headscale), you can conn
 
 :::warning
 
-If you plan on running several K3s clusters using the same tailscale network, please create appropriate [ACLs](https://tailscale.com/kb/1018/acls/) to avoid IP conflicts or use different podCIDR subnets for each cluster.
+If you plan on running several K3s clusters using the same tailscale network, please create appropriate [ACLs](https://tailscale.com/kb/1018/acls) to avoid IP conflicts or use different podCIDR subnets for each cluster.
 
 :::

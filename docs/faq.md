@@ -52,7 +52,7 @@ For more information on managing K3s join tokens, see the [`k3s token` command d
 
 ### How compatible are different versions of K3s?
 
-In general, the [Kubernetes version skew policy](https://kubernetes.io/docs/setup/release/version-skew-policy/) applies.
+In general, the [Kubernetes version skew policy](https://kubernetes.io/releases/version-skew-policy/) applies.
 
 In short, servers can be newer than agents, but agents cannot be newer than servers.
 

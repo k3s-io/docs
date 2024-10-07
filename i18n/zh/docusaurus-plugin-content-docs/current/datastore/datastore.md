@@ -21,7 +21,7 @@ K3s 支持以下数据存储选项：
    有关在具有多个 Server 的情况下使用外部数据存储，请参阅[高可用外部数据库](ha.md)文档。  
    支持以下外部数据存储：
    * [etcd](https://etcd.io/)（针对版本 3.5.4 进行了认证）
-   * [MySQL](https://www.mysql.com/)（针对版本 5.7 和 8.0 进行了认证）
+   * [MySQL](https://www.mysql.com)（针对版本 5.7 和 8.0 进行了认证）
    * [MariaDB](https://mariadb.org/)（针对版本 10.6.8 进行了认证）
    * [PostgreSQL](https://www.postgresql.org/)（针对版本 10.7、11.5 和 14.2 进行了认证）
 

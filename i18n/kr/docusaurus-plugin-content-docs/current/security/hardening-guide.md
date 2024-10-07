@@ -524,7 +524,7 @@ The log directory, ideally, must be created before starting K3s. A restrictive a
 sudo mkdir -p -m 700 /var/lib/rancher/k3s/server/logs
 ```
 
-A starter audit policy to log request metadata is provided below. The policy should be written to a file named `audit.yaml` in `/var/lib/rancher/k3s/server` directory. Detailed information about policy configuration for the API server can be found in the Kubernetes [documentation](https://kubernetes.io/docs/tasks/debug-application-cluster/audit/).
+A starter audit policy to log request metadata is provided below. The policy should be written to a file named `audit.yaml` in `/var/lib/rancher/k3s/server` directory. Detailed information about policy configuration for the API server can be found in the Kubernetes [documentation](https://kubernetes.io/docs/tasks/debug/debug-cluster/audit/).
 
 ```yaml
 apiVersion: audit.k8s.io/v1

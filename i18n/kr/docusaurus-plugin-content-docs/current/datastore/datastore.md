@@ -21,7 +21,7 @@ K3s는 다음과 같은 데이터스토어 옵션을 지원합니다:
   여러 서버에서 외부 데이터스토어를 사용하는 방법에 대한 자세한 내용은 [고가용성 외부 DB](ha.md) 설명서를 참조하세요.  
   지원되는 외부 데이터스토어는 다음과 같습니다:
   - [etcd](https://etcd.io/) (3.5.4 버전에 대해 검증됨)
-  - [MySQL](https://www.mysql.com/) (5.7 and 8.0 버전에 대해 검증됨)
+  - [MySQL](https://www.mysql.com) (5.7 and 8.0 버전에 대해 검증됨)
   - [MariaDB](https://mariadb.org/) (10.6.8 버전에 대해 검증됨)
   - [PostgreSQL](https://www.postgresql.org/) (10.7, 11.5, and 14.2 버전에 대해 검증됨)
 

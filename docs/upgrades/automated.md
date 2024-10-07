@@ -38,7 +38,7 @@ For more details on the design and architecture of the system-upgrade-controller
 - [k3s-upgrade](https://github.com/k3s-io/k3s-upgrade)
 
 :::tip
-When attempting to upgrade to a new version of K3s, the [Kubernetes version skew policy](https://kubernetes.io/docs/setup/release/version-skew-policy/) applies. Ensure that your plan does not skip intermediate minor versions when upgrading. The system-upgrade-controller itself will not protect against unsupported changes to the Kubernetes version.
+When attempting to upgrade to a new version of K3s, the [Kubernetes version skew policy](https://kubernetes.io/releases/version-skew-policy/) applies. Ensure that your plan does not skip intermediate minor versions when upgrading. The system-upgrade-controller itself will not protect against unsupported changes to the Kubernetes version.
 :::
 
 ### Install the system-upgrade-controller
