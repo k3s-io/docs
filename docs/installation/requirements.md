@@ -115,10 +115,12 @@ For more information on which OSs were tested with Rancher managed K3s clusters,
 
 Hardware requirements scale based on the size of your deployments. Minimum recommendations are outlined here.
 
-| Spec | Minimum | Recommended |
-|------|---------|-------------|
-| CPU  | 1 core      | 2 cores          |
-| RAM  | 512 MB  | 1 GB        |
+|        | Spec | Minimum | Recommended |
+|--------|------|---------|-------------|
+| Server | CPU  | 1 core  | 4 cores     |
+|        | RAM  | 2 GB    | 4 GB        |
+| Agent  | CPU  | 1 core  | 2 cores     |
+|        | RAM  | 512 MB  | 1 GB        |
 
 [Resource Profiling](../reference/resource-profiling.md) captures the results of tests to determine minimum resource requirements for the K3s agent, the K3s server with a workload, and the K3s server with one agent. It also contains analysis about what has the biggest impact on K3s server and agent utilization, and how the cluster datastore can be protected from interference from agents and workloads.
 
