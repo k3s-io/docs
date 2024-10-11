@@ -380,7 +380,7 @@ spec:
     - from:
       - namespaceSelector:
           matchLabels:
-            name: kube-system
+            kubernetes.io/metadata.name: kube-system
 ```
 
 With the applied restrictions, DNS will be blocked unless purposely allowed. Below is a network policy that will allow for traffic to exist for DNS.
