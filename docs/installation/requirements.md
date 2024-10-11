@@ -95,13 +95,17 @@ Additional ports may need to be opened depending on your setup. See [Inbound Rul
 
 Raspberry Pi OS is Debian based, and may suffer from a known iptables bug. See [Known Issues](../known-issues.md#iptables).
 
-Standard Raspberry Pi OS installations do not start with `cgroups` enabled. **K3S** needs `cgroups` to start the systemd service. `cgroups`can be enabled by appending `cgroup_memory=1 cgroup_enable=memory` to `/boot/cmdline.txt`.
+#### Cgroups
+
+Standard Raspberry Pi OS installations do not start with `cgroups` enabled. **K3S** needs `cgroups` to start the systemd service. `cgroups`can be enabled by appending `cgroup_memory=1 cgroup_enable=memory` to `/boot/firmware/cmdline.txt`.\
+**Note:** On Debian 11 and older Pi OS releases the cmdline.txt is located at `/boot/cmdline.txt`.
 
 Example cmdline.txt:
 ```
 console=serial0,115200 console=tty1 root=PARTUUID=58b06195-02 rootfstype=ext4 elevator=deadline fsck.repair=yes rootwait cgroup_memory=1 cgroup_enable=memory
 ```
 
+#### Ubuntu Vxlan Module
 With Ubuntu 21.10 to Ubuntu 23.10, vxlan support on Raspberry Pi was moved into a separate kernel module. This step in not required for Ubuntu 24.04 and later.
 ```bash
 sudo apt install linux-modules-extra-raspi
