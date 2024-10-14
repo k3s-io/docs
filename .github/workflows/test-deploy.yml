@@ -21,7 +21,7 @@ jobs:
       - name: Check internal links
         run: yarn run remark --use remark-validate-links --frail ./docs
       - name: Check external links
-        run: yarn run remark --use remark-lint-no-dead-urls ./docs
+        run: yarn run remark --use remark-lint-no-dead-urls --frail ./docs
       - name: Test build website
         run: yarn build
       
