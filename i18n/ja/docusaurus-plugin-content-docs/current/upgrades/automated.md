@@ -37,7 +37,7 @@ system-upgrade-controllerの設計とアーキテクチャ、またはK3sとの�
 - [k3s-upgrade](https://github.com/k3s-io/k3s-upgrade)
 
 :::tip
-K3sの新しいバージョンにアップグレードする際には、[Kubernetesバージョンスキューポリシー](https://kubernetes.io/docs/setup/release/version-skew-policy/)が適用されます。アップグレード時に中間のマイナーバージョンをスキップしないようにプランを設定してください。system-upgrade-controller自体は、Kubernetesバージョンのサポートされていない変更を防ぎません。
+K3sの新しいバージョンにアップグレードする際には、[Kubernetesバージョンスキューポリシー](https://kubernetes.io/releases/version-skew-policy/)が適用されます。アップグレード時に中間のマイナーバージョンをスキップしないようにプランを設定してください。system-upgrade-controller自体は、Kubernetesバージョンのサポートされていない変更を防ぎません。
 :::
 
 ### system-upgrade-controllerのインストール

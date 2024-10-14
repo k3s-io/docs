@@ -8,7 +8,7 @@ This document is a companion to the [K3s security hardening guide](hardening-gui
 
 This guide is specific to the **v1.25** release line of K3s and the **v1.7.1** release of the CIS Kubernetes Benchmark.
 
-For more information about each control, including detailed descriptions and remediations for failing tests, you can refer to the corresponding section of the CIS Kubernetes Benchmark v1.7.1. You can download the benchmark, after creating a free account, in [Center for Internet Security (CIS)](https://www.cisecurity.org/benchmark/kubernetes/).
+For more information about each control, including detailed descriptions and remediations for failing tests, you can refer to the corresponding section of the CIS Kubernetes Benchmark v1.7.1. You can download the benchmark, after creating a free account, in [Center for Internet Security (CIS)](https://www.cisecurity.org/benchmark/kubernetes).
 
 ### Testing controls methodology
 

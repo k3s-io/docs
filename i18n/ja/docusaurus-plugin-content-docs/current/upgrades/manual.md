@@ -21,7 +21,7 @@ K3sをアップグレードするには、インストールスクリプトを�
 チャンネルの包括的かつ最新のリストについては、[k3sチャンネルサービスAPI](https://update.k3s.io/v1-release/channels)を参照してください。チャンネルの動作に関する技術的な詳細については、[channelserverプロジェクト](https://github.com/rancher/channelserver)を参照してください。
 
 :::tip
-K3sの新しいバージョンにアップグレードする際には、[Kubernetesバージョンスキューポリシー](https://kubernetes.io/docs/setup/release/version-skew-policy/)が適用されます。アップグレード時に中間のマイナーバージョンをスキップしないように計画を立ててください。system-upgrade-controller自体は、Kubernetesバージョンのサポートされていない変更を防ぐことはありません。
+K3sの新しいバージョンにアップグレードする際には、[Kubernetesバージョンスキューポリシー](https://kubernetes.io/releases/version-skew-policy/)が適用されます。アップグレード時に中間のマイナーバージョンをスキップしないように計画を立ててください。system-upgrade-controller自体は、Kubernetesバージョンのサポートされていない変更を防ぐことはありません。
 :::
 
 ### インストールスクリプトを使用してK3sをアップグレードする

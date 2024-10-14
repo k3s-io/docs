@@ -21,7 +21,7 @@ K3s supports the following datastore options:
   See the [High Availability External DB](ha.md) documentation for more information on using external datastores with multiple servers.  
   The following external datastores are supported:
   * [etcd](https://etcd.io/) (certified against version 3.5.4)
-  * [MySQL](https://www.mysql.com/) (certified against versions 5.7 and 8.0)
+  * [MySQL](https://www.mysql.com) (certified against versions 5.7 and 8.0)
   * [MariaDB](https://mariadb.org/) (certified against version 10.6.8)
   * [PostgreSQL](https://www.postgresql.org/) (certified against versions 12.16, 13.12, 14.9 and 15.4)
 

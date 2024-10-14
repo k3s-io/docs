@@ -48,7 +48,7 @@ Kubernetes 使用名为 `klog` 的日志管理框架，该框架对进程中的�
 
 ### 不同版本的 K3s 兼容性如何？
 
-通常，[Kubernetes 版本倾斜策略](https://kubernetes.io/docs/setup/release/version-skew-policy/)适用。
+通常，[Kubernetes 版本倾斜策略](https://kubernetes.io/releases/version-skew-policy/)适用。
 
 简而言之，Server 版本可以比 Agnet 新，但 Agent 不能比 Server 新。
 

@@ -38,7 +38,7 @@ title: "自动升级"
 - [k3s-upgrade](https://github.com/k3s-io/k3s-upgrade)
 
 :::tip
-尝试升级到 K3s 新版本时，[Kubernetes 版本倾斜策略](https://kubernetes.io/docs/setup/release/version-skew-policy/)适用。确保你的计划在升级时不会跳过中间次要版本。system-upgrade-controller 本身不会防止更改到不支持的 Kubernetes 版本。
+尝试升级到 K3s 新版本时，[Kubernetes 版本倾斜策略](https://kubernetes.io/releases/version-skew-policy/)适用。确保你的计划在升级时不会跳过中间次要版本。system-upgrade-controller 本身不会防止更改到不支持的 Kubernetes 版本。
 :::
 
 ### 安装 system-upgrade-controller

@@ -8,7 +8,7 @@ title: CIS 1.7 セルフアセスメントガイド
 
 このガイドは K3s の **v1.25-v1.26** リリースラインおよび CIS Kubernetes ベンチマークの **v1.7.1** リリースに特化しています。
 
-各コントロールに関する詳細な説明やテスト失敗時の修正方法については、CIS Kubernetes ベンチマーク v1.7.1 の該当セクションを参照してください。ベンチマークは、無料アカウントを作成した後に [Center for Internet Security (CIS)](https://www.cisecurity.org/benchmark/kubernetes/) からダウンロードできます。
+各コントロールに関する詳細な説明やテスト失敗時の修正方法については、CIS Kubernetes ベンチマーク v1.7.1 の該当セクションを参照してください。ベンチマークは、無料アカウントを作成した後に [Center for Internet Security (CIS)](https://www.cisecurity.org/benchmark/kubernetes) からダウンロードできます。
 
 ### コントロールテストの方法論
 
