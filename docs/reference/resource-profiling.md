@@ -2,7 +2,10 @@
 title: Resource Profiling
 ---
 
-This section captures the results of tests to determine minimum resource requirements for K3s.
+This section captures the results of tests to determine resource requirements for K3s.
+
+
+## Minimum Resource Requirements for K3s
 
 The results are summarized as follows:
 
@@ -15,26 +18,14 @@ The results are summarized as follows:
 | K3s cluster with a single agent | Pi4B BCM2711, 1.50 GHz | 25% of a core | 1215 M | 1413 M |
 | K3s agent  | Pi4B BCM2711, 1.50 GHz | 10% of a core | 268 M | 268 M |
 
-- [Scope of Resource Testing](#scope-of-resource-testing)
-- [Components Included for Baseline Measurements](#components-included-for-baseline-measurements)
-- [Methodology](#methodology)
-- [Environment](#environment)
-- [Baseline Resource Requirements](#baseline-resource-requirements)
-  - [K3s Server with a Workload](#k3s-server-with-a-workload)
-  - [K3s Cluster with a Single Agent](#k3s-cluster-with-a-single-agent)
-  - [K3s Agent](#k3s-agent)
-- [Analysis](#analysis)
-  - [Primary Resource Utilization Drivers](#primary-resource-utilization-drivers)
-  - [Preventing Agents and Workloads from Interfering with the Cluster Datastore](#preventing-agents-and-workloads-from-interfering-with-the-cluster-datastore)
-
-## Scope of Resource Testing
+### Scope of Resource Testing
 
 The resource tests were intended to address the following problem statements:
 
 - On a single-node cluster, determine the legitimate minimum amount of CPU, memory, and IOPs that should be set aside to run the entire K3s stack server stack, assuming that a real workload will be deployed on the cluster.
 - On an agent (worker) node, determine the legitimate minimum amount of CPU, memory, and IOPs that should be set aside for the Kubernetes and K3s control plane components (the kubelet and k3s agent).
 
-## Components Included for Baseline Measurements
+### Components Included for Baseline Measurements
 
 The tested components are:
 
@@ -46,7 +37,7 @@ These are baseline figures for a stable system using only K3s packaged component
 
 Resource figures including IOPS are for the Kubernetes datastore and control plane only, and do not include overhead for system-level management agents or logging, container image management, or any workload-specific requirements. 
 
-## Methodology
+### Methodology
 
 A standalone instance of Prometheus v2.43.0 was used to collect host CPU, memory, and disk IO statistics using `prometheus-node-exporter` installed via apt.
 
@@ -56,7 +47,7 @@ Additional detailed K3s memory utilization data was collected from `kubectl top 
 
 Utilization figures were based on 95th percentile readings from steady state operation on nodes running the described workloads.
 
-## Environment
+### Environment
 
 | Arch | OS | System | CPU | RAM | Disk | 
 |------|----|--------|--|----|------|
@@ -64,11 +55,11 @@ Utilization figures were based on 95th percentile readings from steady state ope
 | aarch64 | Raspberry Pi OS 11 | Raspberry Pi 4 Model B | BCM2711, 4 Core 1.50 GHz | 8 GB | UHS-III SDXC |
 
 
-## Baseline Resource Requirements
+### Baseline Resource Requirements
 
 This section captures the results of tests to determine minimum resource requirements for basic K3s operation.
 
-### K3s Server with a Workload
+#### K3s Server with a Workload
 
 These are the requirements for a single-node cluster in which the K3s server shares resources with a [simple workload](https://kubernetes.io/docs/tasks/run-application/run-stateless-application-deployment/).
 
@@ -116,7 +107,7 @@ The Memory Requirements are:
 | Embedded etcd | Intel 8375C | 1450 M |
 |               | Pi4B |  1413 M |
 
-### K3s Agent
+#### K3s Agent
 
 The requirements are:
 
@@ -128,11 +119,7 @@ The requirements are:
 
 
 
-## Analysis
-
-This section captures what has the biggest impact on K3s server and agent utilization, and how the cluster datastore can be protected from interference from agents and workloads.
-
-### Primary Resource Utilization Drivers
+### Analysis of Primary Resource Utilization Drivers
 
 K3s server utilization figures are primarily driven by support of the Kubernetes datastore (kine or etcd), API Server, Controller-Manager, and Scheduler control loops, as well as any management tasks necessary to effect changes to the state of the system. Operations that place additional load on the Kubernetes control plane, such as creating/modifying/deleting resources, will cause temporary spikes in utilization. Using operators or apps that make extensive use of the Kubernetes datastore (such as Rancher or other Operator-type applications) will increase the server's resource requirements. Scaling up the cluster by adding additional nodes or creating many cluster resources will increase the server's resource requirements.
 
@@ -147,3 +134,35 @@ This can be best accomplished by placing the server components (/var/lib/rancher
 Workload storage (pod ephemeral storage and volumes) should also be isolated from the datastore.
 
 Failure to meet datastore throughput and latency requirements may result in delayed response from the control plane and/or failure of the control plane to maintain system state.
+
+
+## Server Sizing Requirements for K3s
+
+### Environment
+
+- All agents were t3.medium AWS ec2 instances.
+   - A single agent was a c5.4xlarge instance. This hosted the grafana monitoring stack and prevented it from interfering with the control-plane resources.
+- The Server was a c5 AWS ec2 instance. As the number of agents increased, the server was upgraded to larger c5 instances.
+
+### Methodology
+
+This data was retrieved under specific test conditions. It will vary depending upon environment and workloads. The steps below give an overview of the test that was run to retrieve this. It was last performed on v1.31.0+k3s1. All the machines were provisioned in AWS with standard 20 GiB gp3 volumes. The test was run with the following steps:
+1. Monitor resources on grafana using prometheus data source. 
+2. Deploy workloads in such a way to simulate continuous cluster activity:
+    - A basic workload that scales up and down continuously
+    - A workload that is deleted and recreated in a loop
+    - A constant workload that contains multiple other resources including CRDs.
+3. Join agent nodes in batches of 50-100 at a time.
+4. Stop adding agents when server CPU spikes above 90% utilization on agent joining, or if RAM was above 80% utilization. 
+
+### Observations
+
+- When joining agents, server CPU saw spikes of ~20% over baseline.
+- Typically, the limiting factor was CPU, not RAM. For most of the tests, when the CPU hit 90% utilization, RAM utilization was around 60%.
+
+#### A note on High Availability (HA)
+At the end of each test, two additional servers were joined (forming a basic 3 node HA cluster) to observe what effect this had on the original server resources. The effect was:
+- A noticeable drop in CPU utilization, usually 30-50%.
+- RAM utilization remained the same.
+
+While not tested, with CPU utilization as the limiting factor on a single server, it is expected that the number of agents that can be joined would increase by ~50% with a 3 node HA cluster.

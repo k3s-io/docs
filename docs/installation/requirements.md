@@ -117,24 +117,42 @@ For more information on which OSs were tested with Rancher managed K3s clusters,
 
 ## Hardware
 
-Hardware requirements scale based on the size of your deployments. Minimum recommendations are outlined here.
+Hardware requirements scale based on the size of your deployments. The minimum requirements are:
 
-|        | Spec | Minimum | Recommended |
-|--------|------|---------|-------------|
-| Server | CPU  | 1 core  | 4 cores     |
-|        | RAM  | 2 GB    | 4 GB        |
-| Agent  | CPU  | 1 core  | 2 cores     |
-|        | RAM  | 512 MB  | 1 GB        |
+|  Node  |   CPU   |  RAM   |
+|--------|---------|--------|
+| Server | 2 cores | 2 GB   |
+| Agent  | 1 core  | 512 MB |
 
-[Resource Profiling](../reference/resource-profiling.md) captures the results of tests to determine minimum resource requirements for the K3s agent, the K3s server with a workload, and the K3s server with one agent. It also contains analysis about what has the biggest impact on K3s server and agent utilization, and how the cluster datastore can be protected from interference from agents and workloads.
+[Resource Profiling](../reference/resource-profiling.md) captures the results of tests and analysis to determine minimum resource requirements for the K3s agent, the K3s server with a workload, and the K3s server with one agent.
 
-:::info Raspberry Pi and embedded etcd
-If deploying K3s with embedded etcd on a Raspberry Pi, it is recommended that you use an external SSD. etcd is write intensive, and SD cards cannot handle the IO load.
+### Disks
+
+K3s performance depends on the performance of the database. To ensure optimal speed, we recommend using an SSD when possible. 
+
+If deploying K3s on a Raspberry Pi or other ARM devices, it is recommended that you use an external SSD. etcd is write intensive; SD cards and eMMC cannot handle the IO load.
+
+### Server Sizing Guide
+
+When limited on CPU and RAM on the server (control-plane + etcd) node, there are limitations on the amount of agent nodes that can be joined under standard workload conditions.
+
+| Server CPU | Server RAM | Number of Agents |
+| ---------- | ---------- | ---------------- |
+| 2          | 4 GB       | 0-350            |
+| 4          | 8 GB       | 351-900          |
+| 8          | 16 GB      | 901-1800         |
+| 16+        | 32 GB      | 1800+            |
+
+:::tip High Availability Sizing
+When using a high-availability setup of 3 server nodes, the number of agents can scale roughly ~50% more than the above table. \
+Ex: 3 server with 4 vCPU/8 GB can scale to ~1200 agents.
 :::
 
-#### Disks
+It is recommended to join agent nodes in batches of 50 or less to allow the CPU to free up space, as there is a spike on node join. Remember to modify the default `cluster-cidr` if desiring more than 255 nodes!
 
-K3s performance depends on the performance of the database. To ensure optimal speed, we recommend using an SSD when possible. Disk performance will vary on ARM devices utilizing an SD card or eMMC.
+[Resource Profiling](../reference/resource-profiling.md#server-sizing-requirements-for-k3s) contains more information how these recommendations were found.
+
+
 
 ## Networking
 
