@@ -41,3 +41,13 @@ Environment variables which begin with `K3S_` will be preserved for the systemd 
 Setting `K3S_URL` without explicitly setting an exec command will default the command to "agent".
 
 When running the agent, `K3S_TOKEN` must also be set.
+
+#### Runtimes
+
+After the October 2024 versions, K3s will now use the PATH to find runtimes. However, if k3s is running in systemd it's necessary to add the PATH within the `k3s.service.env`.
+
+An example of what need to be added is:
+
+```bash
+PATH=/home/example:/usr/bin:/usr/sbin
+```
