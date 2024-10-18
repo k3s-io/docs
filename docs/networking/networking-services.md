@@ -58,15 +58,11 @@ Upstream Kubernetes allows Services of type LoadBalancer to be created, but does
 
 The ServiceLB controller watches Kubernetes [Services](https://kubernetes.io/docs/concepts/services-networking/service/) with the `spec.type` field set to `LoadBalancer`.
 
-For each LoadBalancer Service, a [DaemonSet](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/) is created in the `kube-system` namespace. This DaemonSet in turn creates Pods with a `svc-` prefix, on each node. These Pods use iptables to forward traffic from the Pod's NodePort, to the Service's ClusterIP address and port.
+For each LoadBalancer Service, a [DaemonSet](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/) is created in the `kube-system` namespace. This DaemonSet in turn creates ServiceLB Pods with a `svc-` prefix, on each node. These pods leverage hostPort using the service port, hence they will only be deployed on nodes that have that port available. If there aren't any nodes with that port available, the LB will remain Pending. Note that it is possible to expose multiple Services on the same node, as long as they use different ports.
 
-If the ServiceLB Pod runs on a node that has an external IP configured, the node's external IP is populated into the Service's `status.loadBalancer.ingress` address list. Otherwise, the node's internal IP is used.
+When the ServiceLB Pod runs on a node that has an external IP configured, the node's external IP is populated into the Service's `status.loadBalancer.ingress` address list with `ipMode: VIP`. Otherwise, the node's internal IP is used.
 
-If multiple LoadBalancer Services are created, a separate DaemonSet is created for each Service.
-
-It is possible to expose multiple Services on the same node, as long as they use different ports.
-
-If you try to create a LoadBalancer Service that listens on port 80, the ServiceLB will try to find a free host in the cluster for port 80. If no host with that port is available, the LB will remain Pending.
+If the traffic to the external IP is subject to [Network Address Translation (NAT)](https://en.wikipedia.org/wiki/Network_address_translation) - for example in public clouds when using the public IP of the node as external IP - the traffic is routed into the ServiceLB pod via the hostPort. The pod then uses iptables to forward traffic to the Service's ClusterIP address and port. If the traffic is not subject to NAT and instead arrives with destination address matching the LoadBalancer address, traffic is intercepted (normally by kube-proxy iptables chains or ipvs) and forwarded to the Service's ClusterIP address and port.
 
 ### Usage
 
