@@ -280,7 +280,7 @@ K3s エージェントは、kubelet にラベルとテイントを追加する�
 
 > ノードは自分自身の役割ラベルを主張することは許可されていません。ノードの役割は通常、特権またはコントロールプレーンタイプのノードを識別するために使用され、ノードが自分自身をそのプールにラベル付けすることを許可すると、侵害されたノードが高い特権の資格情報にアクセスするワークロード（コントロールプレーンデーモンセットなど）を簡単に引き付けることができます。
 
-詳細については [SIG-Auth KEP 279](https://github.com/kubernetes/enhancements/blob/master/keps/sig-auth/279-limit-node-access/README.md#proposal) を参照してください。
+詳細については [SIG-Auth KEP 279](https://github.com/kubernetes/enhancements/blob/master/keps/sig-auth/279-limit-node-access/README.md) を参照してください。
 
 ノードの登録後にノードラベルとテイントを変更したり、予約済みラベルを追加したりする場合は、`kubectl` を使用する必要があります。テイントの追加方法については公式の Kubernetes ドキュメントを参照してください。[テイント](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) および [ノードラベル](https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/#add-a-label-to-a-node) の詳細を参照してください。
 

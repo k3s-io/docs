@@ -261,7 +261,7 @@ K3s Agent 可以通过 `--node-label` 和 `--node-taint` 选项来配置，它�
 
 > 不允许节点断言自己的角色标签。节点角色通常用于识别节点的特权或 control plane 类型，如果允许节点将自己标记到该池，那么受感染的节点将能吸引可授予更高特权凭证访问权限的工作负载（如 control plane 守护进程）。
 
-有关详细信息，请参阅 [SIG-Auth KEP 279](https://github.com/kubernetes/enhancements/blob/master/keps/sig-auth/279-limit-node-access/README.md#proposal)。
+有关详细信息，请参阅 [SIG-Auth KEP 279](https://github.com/kubernetes/enhancements/blob/master/keps/sig-auth/279-limit-node-access/README.md)。
 
 如果你想在节点注册后更改节点标签和污点，或者添加保留标签，请使用 `kubectl`。关于如何添加[污点](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/)和[节点标签](https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/#add-a-label-to-a-node)的详细信息，请参阅官方 Kubernetes 文档。
 

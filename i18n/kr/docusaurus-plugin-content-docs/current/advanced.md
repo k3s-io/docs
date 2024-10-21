@@ -266,7 +266,7 @@ K3s 에이전트는 `--node-label` 및 `--node-taint` 옵션으로 구성할 수
 
 > 노드는 자체 역할 레이블을 어설트하는 것이 허용되지 않습니다. 노드 역할은 일반적으로 권한 또는 컨트롤 플레인 유형의 노드를 식별하는 데 사용되며, 노드가 해당 풀에 레이블을 지정하도록 허용하면 손상된 노드가 더 높은 권한 자격 증명에 대한 액세스 권한을 부여하는 워크로드(예: 컨트롤 플레인 데몬셋)를 사소하게 끌어들일 수 있습니다.
 
-자세한 내용은 [SIG-Auth KEP 279](https://github.com/kubernetes/enhancements/blob/master/keps/sig-auth/279-limit-node-access/README.md#proposal)를 참조하세요.
+자세한 내용은 [SIG-Auth KEP 279](https://github.com/kubernetes/enhancements/blob/master/keps/sig-auth/279-limit-node-access/README.md)를 참조하세요.
 
 노드 등록 후 노드 레이블과 틴트를 변경하거나 예약 레이블을 추가하려면 `kubectl`을 사용해야 합니다. [taint](https://kubernetes.io/ko/docs/concepts/scheduling-eviction/taint-and-toleration/) 및 [노드 레이블](https://kubernetes.io/ko/docs/tasks/configure-pod-container/assign-pods-nodes/#add-a-label-to-a-node)을 추가하는 방법에 대한 자세한 내용은 쿠버네티스 공식 문서를 참고하세요.
 
