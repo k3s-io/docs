@@ -97,7 +97,7 @@ In order to reduce binary size, K3s removes all "in-tree" (built-in) cloud provi
 - Hosts the ServiceLB LoadBalancer controller.
 - Clears the `node.cloudprovider.kubernetes.io/uninitialized` taint that is present when the cloud-provider is set to `external` 
 
-Before deploying an external CCM, you must start all K3s servers with the `--disable-cloud-controller` flag to disable to embedded CCM. 
+Before deploying an external CCM, you must start all K3s servers with the `--disable-cloud-controller` flag to disable the embedded CCM. 
 
 :::note
 If you disable the built-in CCM and do not deploy and properly configure an external substitute, nodes will remain tainted and unschedulable.
