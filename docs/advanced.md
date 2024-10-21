@@ -135,7 +135,7 @@ The config.Node golang struct is defined [here](https://github.com/k3s-io/k3s/bl
 ### Base template
 
 :::info Version Gate
-Available as of September 2023 releases: v1.24.17+k3s1, v1.25.13+k3s1, v1.26.8+k3s1, v1.27.5+k3s1, v1.28.1+k3s1
+Available as of the September 2023 releases: v1.24.17+k3s1, v1.25.13+k3s1, v1.26.8+k3s1, v1.27.5+k3s1, v1.28.1+k3s1
 :::
 
 You can extend the K3s base template instead of copy-pasting the complete stock template out of the K3s source code. This is useful if you need to build on the existing configuration, and add a few extra lines at the end.
