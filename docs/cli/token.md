@@ -146,7 +146,7 @@ Flag | Description
 #### `k3s token rotate`
 
 :::info Version Gate
-Available as of 2023-10 releases (v1.28.2+k3s1, v1.27.7+k3s1, v1.26.10+k3s1, v1.25.15+k3s1).
+Available as of the October 2023 releases (v1.28.2+k3s1, v1.27.7+k3s1, v1.26.10+k3s1, v1.25.15+k3s1).
 :::
 
 Rotate original server token with a new bootstrap token. After running this command, all servers and any agents that originally joined with the old token must be restarted with the new token.
