@@ -41,3 +41,24 @@ Environment variables which begin with `K3S_` will be preserved for the systemd 
 Setting `K3S_URL` without explicitly setting an exec command will default the command to "agent".
 
 When running the agent, `K3S_TOKEN` must also be set.
+
+:::info Version Gate
+Available as of October 2024 releases: v1.28.15+k3s1, v1.29.10+k3s1, v1.30.6+k3s1, v1.31.2+k3s1.
+:::
+
+K3s will now use `PATH` to find alternative container runtimes, in addition to checking the default paths used by the container runtime packages. In order to use this feature, you must modify the K3s service's PATH environment variable to add the directories containing the container runtime binaries.
+
+It's recommended that you modify one of this two environment files:
+
+- /etc/default/k3s # or k3s-agent
+- /etc/sysconfig/k3s # or k3s-agent
+
+This example will add the `PATH` in `/etc/default/k3s`:
+
+```bash
+echo PATH=$PATH >> /etc/default/k3s
+```
+
+:::warning
+`PATH` changes should be done with care to avoid placing untrusted binaries in the path of services that run as root.
+:::
