@@ -34,58 +34,59 @@ The following options must be set to the same value on all servers in the cluste
 
 ### Database
 
-| Flag                                  | Environment Variable     | Default                            | Description                                                                   |
-|---------------------------------------|--------------------------|------------------------------------|-------------------------------------------------------------------------------|
-| `--datastore-endpoint` value          | `K3S_DATASTORE_ENDPOINT` |                                    | Specify etcd, Mysql, Postgres, or Sqlite data source name                     |
-| `--datastore-cafile` value            | `K3S_DATASTORE_CAFILE`   |                                    | TLS Certificate Authority file used to secure datastore backend communication |
-| `--datastore-certfile` value          | `K3S_DATASTORE_CERTFILE` |                                    | TLS certification file used to secure datastore backend communication         |
-| `--datastore-keyfile` value           | `K3S_DATASTORE_KEYFILE`  |                                    | TLS key file used to secure datastore backend communication                   |
-| `--etcd-expose-metrics`               |                          | false                              | Expose etcd metrics to client interface                                       |
-| `--etcd-disable-snapshots`            |                          | false                              | Disable automatic etcd snapshots                                              |
+| Flag                                  | Environment Variable     | Default                                | Description                                                                   |
+|---------------------------------------|--------------------------|----------------------------------------|-------------------------------------------------------------------------------|
+| `--datastore-endpoint` value          | `K3S_DATASTORE_ENDPOINT` |                                        | Specify etcd, Mysql, Postgres, or Sqlite data source name                     |
+| `--datastore-cafile` value            | `K3S_DATASTORE_CAFILE`   |                                        | TLS Certificate Authority file used to secure datastore backend communication |
+| `--datastore-certfile` value          | `K3S_DATASTORE_CERTFILE` |                                        | TLS certification file used to secure datastore backend communication         |
+| `--datastore-keyfile` value           | `K3S_DATASTORE_KEYFILE`  |                                        | TLS key file used to secure datastore backend communication                   |
+| `--etcd-expose-metrics`               |                          | false                                  | Expose etcd metrics to client interface                                       |
+| `--etcd-disable-snapshots`            |                          | false                                  | Disable automatic etcd snapshots                                              |
 | `--etcd-snapshot-name` value          |                          | "etcd-snapshot-&lt;unix-timestamp&gt;" | Set the base name of etcd snapshots.                                          |
-| `--etcd-snapshot-schedule-cron` value |                          | "0 */12 \* \* \*"                  | Snapshot interval time in cron spec. eg. every 5 hours '0 */5 _ \* _'         |
-| `--etcd-snapshot-retention` value     |                          | 5                                  | Number of snapshots to retain                                                 |
-| `--etcd-snapshot-dir` value           |                          | $\{data-dir\}/db/snapshots         | Directory to save db snapshots                                                |
-| `--etcd-s3`                           |                          |                                    | Enable backup to S3                                                           |
-| `--etcd-s3-endpoint` value            |                          | "s3.amazonaws.com"                 | S3 endpoint url                                                               |
-| `--etcd-s3-endpoint-ca` value         |                          |                                    | S3 custom CA cert to connect to S3 endpoint                                   |
-| `--etcd-s3-skip-ssl-verify`           |                          |                                    | Disables S3 SSL certificate validation                                        |
-| `--etcd-s3-access-key` value          | `AWS_ACCESS_KEY_ID`      |                                    | S3 access key                                                                 |
-| `--etcd-s3-secret-key` value          | `AWS_SECRET_ACCESS_KEY`  |                                    | S3 secret key                                                                 |
-| `--etcd-s3-bucket` value              |                          |                                    | S3 bucket name                                                                |
-| `--etcd-s3-region` value              |                          | "us-east-1"                        | S3 region / bucket location (optional)                                        |
-| `--etcd-s3-folder` value              |                          |                                    | S3 folder                                                                     |
-| `--etcd-s3-insecure`                  |                          |                                    | Disables S3 over HTTPS                                                        |
-| `--etcd-s3-timeout` value             |                          | 5m0s                               | S3 timeout (default: 5m0s)                                                    |
+| `--etcd-snapshot-schedule-cron` value |                          | "0 */12 \* \* \*"                      | Snapshot interval time in cron spec. eg. every 5 hours '0 */5 _ \* _'         |
+| `--etcd-snapshot-retention` value     |                          | 5                                      | Number of snapshots to retain                                                 |
+| `--etcd-snapshot-dir` value           |                          | $\{data-dir\}/db/snapshots             | Directory to save db snapshots                                                |
+| `--etcd-s3`                           |                          |                                        | Enable backup to S3                                                           |
+| `--etcd-s3-endpoint` value            |                          | "s3.amazonaws.com"                     | S3 endpoint url                                                               |
+| `--etcd-s3-endpoint-ca` value         |                          |                                        | S3 custom CA cert to connect to S3 endpoint                                   |
+| `--etcd-s3-skip-ssl-verify`           |                          |                                        | Disables S3 SSL certificate validation                                        |
+| `--etcd-s3-access-key` value          | `AWS_ACCESS_KEY_ID`      |                                        | S3 access key                                                                 |
+| `--etcd-s3-secret-key` value          | `AWS_SECRET_ACCESS_KEY`  |                                        | S3 secret key                                                                 |
+| `--etcd-s3-bucket` value              |                          |                                        | S3 bucket name                                                                |
+| `--etcd-s3-region` value              |                          | "us-east-1"                            | S3 region / bucket location (optional)                                        |
+| `--etcd-s3-folder` value              |                          |                                        | S3 folder                                                                     |
+| `--etcd-s3-insecure`                  |                          |                                        | Disables S3 over HTTPS                                                        |
+| `--etcd-s3-timeout` value             |                          | 5m0s                                   | S3 timeout (default: 5m0s)                                                    |
 
 
 
 
 ### Cluster Options
 
-| Flag                      | Environment Variable | Description                                               |
-| ------------------------- | -------------------- | --------------------------------------------------------- |
-| `--token` value, `-t` value | `K3S_TOKEN`          | Shared secret used to join a server or agent to a cluster |
-| `--token-file` value      | `K3S_TOKEN_FILE`     | File containing the cluster-secret/token                  |
-| `--agent-token` value        |`K3S_AGENT_TOKEN` |           Shared secret used to join agents to the cluster, but not servers
-| `--agent-token-file` value   |`K3S_AGENT_TOKEN_FILE` |           File containing the agent secret
-| `--server` value             | `K3S_URL` | Server to connect to, used to join a cluster
-| `--cluster-init`             | `K3S_CLUSTER_INIT` |           Initialize a new cluster using embedded Etcd
-| `--cluster-reset`            |  `K3S_CLUSTER_RESET` |           Forget all peers and become sole member of a new cluster
+| Flag                        | Environment Variable   | Description                                                       |
+|-----------------------------|------------------------|-------------------------------------------------------------------|
+| `--token` value, `-t` value | `K3S_TOKEN`            | Shared secret used to join a server or agent to a cluster         |
+| `--token-file` value        | `K3S_TOKEN_FILE`       | File containing the cluster-secret/token                          |
+| `--agent-token` value       | `K3S_AGENT_TOKEN`      | Shared secret used to join agents to the cluster, but not servers |
+| `--agent-token-file` value  | `K3S_AGENT_TOKEN_FILE` | File containing the agent secret                                  |
+| `--server` value            | `K3S_URL`              | Server to connect to, used to join a cluster                      |
+| `--cluster-init`            | `K3S_CLUSTER_INIT`     | Initialize a new cluster using embedded Etcd                      |
+| `--cluster-reset`           | `K3S_CLUSTER_RESET`    | Forget all peers and become sole member of a new cluster          |
 
 ### Admin Kubeconfig Options
 
-| Flag | Environment Variable | Description |
-|------|----------------------|-------------|
-|  `--write-kubeconfig value, -o` value  | `K3S_KUBECONFIG_OUTPUT` | Write kubeconfig for admin client to this file |
-|  `--write-kubeconfig-mode` value       | `K3S_KUBECONFIG_MODE`   | Write kubeconfig with this [mode.](https://en.wikipedia.org/wiki/Chmod) The kubeconfig file is owned by root, and written with a default mode of 600. Changing the mode to 644 will allow it to be read by other unprivileged users on the host. |
+| Flag                                 | Environment Variable    | Description                                                                                                                                                                                                                                      |
+|--------------------------------------|-------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `--write-kubeconfig value, -o` value | `K3S_KUBECONFIG_OUTPUT` | Write kubeconfig for admin client to this file                                                                                                                                                                                                   |
+| `--write-kubeconfig-mode` value      | `K3S_KUBECONFIG_MODE`   | Write kubeconfig with this [mode.](https://en.wikipedia.org/wiki/Chmod) The kubeconfig file is owned by root, and written with a default mode of 600. Changing the mode to 644 will allow it to be read by other unprivileged users on the host. |
+
 
 ## Advanced Options
 
 ### Logging
 
 | Flag                    | Default | Description                                                                       |
-| ----------------------- | ------- | --------------------------------------------------------------------------------- |
+|-------------------------|---------|-----------------------------------------------------------------------------------|
 | `--debug`               | N/A     | Turn on debug logs                                                                |
 | `-v` value              | 0       | Number for the log level verbosity                                                |
 | `--vmodule` value       | N/A     | Comma-separated list of FILE_PATTERN=LOG_LEVEL settings for file-filtered logging |
@@ -94,13 +95,13 @@ The following options must be set to the same value on all servers in the cluste
 
 ### Listeners
 
-| Flag                        | Default                  | Description                                                                                  |
-| --------------------------- | ------------------------ | -------------------------------------------------------------------------------------------- |
-| `--bind-address` value      | 0.0.0.0                  | k3s bind address                                                                             |
-| `--https-listen-port` value | 6443                     | HTTPS listen port                                                                            |
+| Flag                        | Default                  | Description                                                                                                                                                                         |
+|-----------------------------|--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `--bind-address` value      | 0.0.0.0                  | k3s bind address                                                                                                                                                                    |
+| `--https-listen-port` value | 6443                     | HTTPS listen port                                                                                                                                                                   |
 | `--advertise-address` value | node-external-ip/node-ip | IPv4/IPv6 address that apiserver advertises for its service endpoint<br/>Note that the primary `service-cidr` IP range must be of the same address family as the advertised address |
-| `--advertise-port` value    | listen-port/0            | Port that apiserver uses to advertise to members of the cluster                              |
-| `--tls-san` value           | N/A                      | Add additional hostnames or IPv4/IPv6 addresses as Subject Alternative Names on the TLS cert |
+| `--advertise-port` value    | listen-port/0            | Port that apiserver uses to advertise to members of the cluster                                                                                                                     |
+| `--tls-san` value           | N/A                      | Add additional hostnames or IPv4/IPv6 addresses as Subject Alternative Names on the TLS cert                                                                                        |
 
 ### Data
 
@@ -111,77 +112,77 @@ The following options must be set to the same value on all servers in the cluste
 ### Secrets Encryption
 
 | Flag                   | Default | Description                      |
-| ---------------------- | ------- | -------------------------------- |
+|------------------------|---------|----------------------------------|
 | `--secrets-encryption` | false   | Enable Secret encryption at rest |
 
 
 ### Networking
 
-| Flag                              | Default         | Description                                                                                |
-| --------------------------------- | --------------- | ------------------------------------------------------------------------------------------ |
-| `--cluster-cidr` value            | "10.42.0.0/16"  | IPv4/IPv6 network CIDRs to use for pod IPs                                                 |
-| `--service-cidr` value            | "10.43.0.0/16"  | IPv4/IPv6 network CIDRs to use for service IPs                                             |
-| `--service-node-port-range` value | "30000-32767"   | Port range to reserve for services with NodePort visibility                                |
-| `--cluster-dns` value             | "10.43.0.10"    | IPv4 Cluster IP for coredns service. Should be in your service-cidr range                  |
-| `--cluster-domain` value          | "cluster.local" | Cluster Domain                                                                             |
-| `--flannel-backend` value         | "vxlan"         | One of 'none', 'vxlan', 'ipsec'(deprecated), 'host-gw', 'wireguard-native', or 'wireguard'(deprecated) |
-| `--flannel-ipv6-masq`             | "N/A"           | Enable IPv6 masquerading for pod                                                           |
-| `--flannel-external-ip`           | "N/A"           | Use node external IP addresses for Flannel traffic                                         |
-| `--servicelb-namespace` value     | "kube-system"   | Namespace of the pods for the servicelb component                                          |
+| Flag                              | Default         | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+|-----------------------------------|-----------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `--cluster-cidr` value            | "10.42.0.0/16"  | IPv4/IPv6 network CIDRs to use for pod IPs                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| `--service-cidr` value            | "10.43.0.0/16"  | IPv4/IPv6 network CIDRs to use for service IPs                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| `--service-node-port-range` value | "30000-32767"   | Port range to reserve for services with NodePort visibility                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `--cluster-dns` value             | "10.43.0.10"    | IPv4 Cluster IP for coredns service. Should be in your service-cidr range                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| `--cluster-domain` value          | "cluster.local" | Cluster Domain                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| `--flannel-backend` value         | "vxlan"         | One of 'none', 'vxlan', 'ipsec'(deprecated), 'host-gw', 'wireguard-native', or 'wireguard'(deprecated)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| `--flannel-ipv6-masq`             | "N/A"           | Enable IPv6 masquerading for pod                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| `--flannel-external-ip`           | "N/A"           | Use node external IP addresses for Flannel traffic                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| `--servicelb-namespace` value     | "kube-system"   | Namespace of the pods for the servicelb component                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | `--egress-selector-mode` value    | "agent"         | Must be one of the following: <ul><li>disabled: The apiserver does not use agent tunnels to communicate with nodes. Requires that servers run agents, and have direct connectivity to the kubelet on agents, or the apiserver will not be able to function access service endpoints or perform kubectl exec and kubectl logs.</li><li>agent: The apiserver uses agent tunnels to communicate with nodes. Nodes allow the tunnel connection from loopback addresses. Requires that servers also run agents, or the apiserver will not be able to access service endpoints. The historical default for k3s.</li><li> pod: The apiserver uses agent tunnels to communicate with nodes and service endpoints, routing endpoint connections to the correct agent by watching Nodes. Nodes allow the tunnel connection from loopback addresses, or a CIDR assigned to their node.</li><li>  cluster: The apiserver uses agent tunnels to communicate with nodes and service endpoints, routing endpoint connections to the correct agent by watching Endpoints. Nodes allow the tunnel connection from loopback addresses, or the configured cluster CIDR range.</li></ul> |
 
 
 ### Storage Class
 
 | Flag                                 | Description                                                    |
-| ------------------------------------ | -------------------------------------------------------------- |
+|--------------------------------------|----------------------------------------------------------------|
 | `--default-local-storage-path` value | Default local storage path for local provisioner storage class |
 
 ### Kubernetes Components
 
-| Flag                         | Description                                                                                                                                   |
-| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Flag                         | Description                                                                                         |
+|------------------------------|-----------------------------------------------------------------------------------------------------|
 | `--disable` value            | See "[Using the `--disable` flag](../installation/packaged-components.md#using-the---disable-flag)" |
-| `--disable-scheduler`        | Disable Kubernetes default scheduler              |
-| `--disable-cloud-controller` | Disable k3s default cloud controller manager      |
-| `--disable-kube-proxy`       | Disable running kube-proxy                        |
-| `--disable-network-policy`   | Disable k3s default network policy controller     |
-| `--disable-helm-controller` | Disable Helm controller |
+| `--disable-scheduler`        | Disable Kubernetes default scheduler                                                                |
+| `--disable-cloud-controller` | Disable k3s default cloud controller manager                                                        |
+| `--disable-kube-proxy`       | Disable running kube-proxy                                                                          |
+| `--disable-network-policy`   | Disable k3s default network policy controller                                                       |
+| `--disable-helm-controller`  | Disable Helm controller                                                                             |
 
 
 ### Customized Flags for Kubernetes Processes
 
 | Flag                                        | Description                                               |
-| ------------------------------------------- | --------------------------------------------------------- |
+|---------------------------------------------|-----------------------------------------------------------|
 | `--etcd-arg` value                          | Customized flag for etcd process                          |
 | `--kube-apiserver-arg` value                | Customized flag for kube-apiserver process                |
 | `--kube-scheduler-arg` value                | Customized flag for kube-scheduler process                |
 | `--kube-controller-manager-arg` value       | Customized flag for kube-controller-manager process       |
 | `--kube-cloud-controller-manager-arg` value | Customized flag for kube-cloud-controller-manager process |
-| `--kubelet-arg` value    | Customized flag for kubelet process    |
-| `--kube-proxy-arg` value | Customized flag for kube-proxy process |
+| `--kubelet-arg` value                       | Customized flag for kubelet process                       |
+| `--kube-proxy-arg` value                    | Customized flag for kube-proxy process                    |
 
 ### Experimental Options
 
-| Flag                   | Description                              |
-| ---------------------- | ---------------------------------------- |
-| `--rootless`           | Run rootless                             |
-| `--enable-pprof`       | Enable pprof endpoint on supervisor port |
-| `--docker`             | Use cri-dockerd instead of containerd    |
-| `--prefer-bundled-bin` | Prefer bundled userspace binaries over host binaries |
+| Flag                   | Description                                                                                             |
+|------------------------|---------------------------------------------------------------------------------------------------------|
+| `--rootless`           | Run rootless                                                                                            |
+| `--enable-pprof`       | Enable pprof endpoint on supervisor port                                                                |
+| `--docker`             | Use cri-dockerd instead of containerd                                                                   |
+| `--prefer-bundled-bin` | Prefer bundled userspace binaries over host binaries                                                    |
 | `--disable-agent`      | See "[Running Agentless Servers (Experimental)](../advanced.md#running-agentless-servers-experimental)" |
-| `--embedded-registry`  | See "[Embedded Registry Mirror](../installation/registry-mirror.md)" |
+| `--embedded-registry`  | See "[Embedded Registry Mirror](../installation/registry-mirror.md)"                                    |
 
 
 ### Deprecated Options
 
-| Flag                                    | Environment Variable | Description                                                                                                 |
-| --------------------------------------- | -------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `--no-flannel`                          | N/A                  | Use `--flannel-backend=none`                                                                                  |
-| `--no-deploy` value                     | N/A                  | Use `--disable` |
-| `--cluster-secret` value                | `K3S_CLUSTER_SECRET` | Use `--token`                                                                                                 |
-| `--flannel-backend` wireguard           | N/A                  | Use `--flannel-backend=wireguard-native`                                                                      |
-| `--flannel-backend` value=option1=value | N/A                  | Use `--flannel-conf` to specify the flannel config file with the backend config                               |
+| Flag                                    | Environment Variable | Description                                                                     |
+|-----------------------------------------|----------------------|---------------------------------------------------------------------------------|
+| `--no-flannel`                          | N/A                  | Use `--flannel-backend=none`                                                    |
+| `--no-deploy` value                     | N/A                  | Use `--disable`                                                                 |
+| `--cluster-secret` value                | `K3S_CLUSTER_SECRET` | Use `--token`                                                                   |
+| `--flannel-backend` wireguard           | N/A                  | Use `--flannel-backend=wireguard-native`                                        |
+| `--flannel-backend` value=option1=value | N/A                  | Use `--flannel-conf` to specify the flannel config file with the backend config |
 
 
 ## K3s Server CLI Help
