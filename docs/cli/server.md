@@ -79,7 +79,7 @@ The following options must be set to the same value on all servers in the cluste
 |--------------------------------------|-------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `--write-kubeconfig value, -o` value | `K3S_KUBECONFIG_OUTPUT` | Write kubeconfig for admin client to this file                                                                                                                                                                                                   |
 | `--write-kubeconfig-mode` value      | `K3S_KUBECONFIG_MODE`   | Write kubeconfig with this [mode.](https://en.wikipedia.org/wiki/Chmod) The kubeconfig file is owned by root, and written with a default mode of 600. Changing the mode to 644 will allow it to be read by other unprivileged users on the host. |
-
+| `--write-kubeconfig-group` value     | `K3S_KUBECONFIG_GROUP`  | Write kubeconfig group. Combining with `--write-kubeconfig-mode`, it will allow your k3s administrators accessing the kubeconfig file but keeping the file owned by root.                                                                                                                                                                                                                          |
 
 ## Advanced Options
 
