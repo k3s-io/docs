@@ -15,6 +15,7 @@ please ensure you also create the `registries.yaml` file on each server as well.
 
 Containerd has an implicit "default endpoint" for all registries.
 The default endpoint is always tried as a last resort, even if there are other endpoints listed for that registry in `registries.yaml`.
+Rewrites are not applied to pulls against the default endpoint.
 For example, when pulling `registry.example.com:5000/rancher/mirrored-pause:3.6`, containerd will use a default endpoint of `https://registry.example.com:5000/v2`.
 * The default endpoint for `docker.io` is `https://index.docker.io/v2`.  
 * The default endpoint for all other registries is `https://<REGISTRY>/v2`, where `<REGISTRY>` is the registry hostname and optional port.  
@@ -89,12 +90,13 @@ Then pulling `docker.io/rancher/mirrored-pause:3.6` will transparently pull the 
 
 #### Rewrites
 
-Each mirror can have a set of rewrites. Rewrites can change the name of an image based on regular expressions.
+Each mirror can have a set of rewrites, which use regular expressions to match and transform the name of an image when it is pulled from a mirror.
 This is useful if the organization/project structure in the private registry is different than the registry it is mirroring.
+Rewrites match and transform only the image name, NOT the tag.
 
 For example, the following configuration would transparently pull the image `docker.io/rancher/mirrored-pause:3.6` as `registry.example.com:5000/mirrorproject/rancher-images/mirrored-pause:3.6`:
 
-```
+```yaml
 mirrors:
   docker.io:
     endpoint:
@@ -103,8 +105,29 @@ mirrors:
       "^rancher/(.*)": "mirrorproject/rancher-images/$1"
 ```
 
-When using redirects and rewrites, images will still be stored under the original name.
-For example, `crictl image ls` will show `docker.io/rancher/mirrored-pause:3.6` as available on the node, even though the image was pulled from the mirrored registry with a different name.
+:::info Version Gate
+Rewrites are no longer applied to the [Default Endpoint](#default-endpoint-fallback) as of the January 2024 releases: v1.26.13+k3s1, v1.27.10+k3s1, v1.28.6+k3s1, v1.29.1+k3s1  
+Prior to these releases, rewrites were also applied to the default endpoint, which would prevent K3s from pulling from the upstream registry if the image could not be pulled from a mirror endpoint, and the image was not available under the modified name in the upstream.
+::::
+
+If you want to apply rewrites when pulling directly from a registry - when it is not being used as a mirror for a different upstream registry - you must provide a mirror endpoint that does not match the default endpoint.
+Mirror endpoints in `registries.yaml` that match the default endpoint are ignored; the default endpoint is always tried last with no rewrites, if fallback has not been disabled.
+
+For example, if you have a registry at `https://registry.example.com/`, and want to apply rewrites when explicitly pulling `registry.example.com/rancher/mirrored-pause:3.6`, you can add a mirror endpoint with the port listed.
+Because the mirror endpoint does not match the default endpoint - **`"https://registry.example.com:443/v2" != "https://registry.example.com/v2"`** - the endpoint is accepted as a mirror and rewrites are applied, despite it being effectively the same as the default.
+
+```yaml
+mirrors:
+ registry.example.com
+   endpoint:
+     - "https://registry.example.com:443"
+   rewrites:
+     "^rancher/(.*)": "mirrorproject/rancher-images/$1"
+```
+
+
+Note that when using mirrors and rewrites, images will still be stored under the original name.
+For example, `crictl image ls` will show `docker.io/rancher/mirrored-pause:3.6` as available on the node, even if the image was pulled from a mirror with a different name.
 
 ### Configs
 
