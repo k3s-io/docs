@@ -201,7 +201,7 @@ Hardware requirements are based on the size of your K3s cluster. For production 
 
 The following are the minimum CPU and memory requirements for nodes in a high-availability K3s server:
 
-| Deployment Size |   Nodes   | VCPUS |  RAM  |
+| Deployment Size |   Nodes   | vCPUs |  RAM  |
 |:---------------:|:---------:|:-----:|:-----:|
 |      Small      |  Up to 10 |   2   |  4 GB |
 |      Medium     | Up to 100 |   4   |  8 GB |
@@ -223,7 +223,7 @@ K3s supports different databases including MySQL, PostgreSQL, MariaDB, and etcd.
 
 The following is a sizing guide for the database resources you need to run large clusters:
 
-| Deployment Size |   Nodes   | VCPUS |  RAM  |
+| Deployment Size |   Nodes   | vCPUs |  RAM  |
 |:---------------:|:---------:|:-----:|:-----:|
 |      Small      |  Up to 10 |   1   |  2 GB |
 |      Medium     | Up to 100 |   2   |  8 GB |
