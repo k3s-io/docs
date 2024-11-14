@@ -68,6 +68,10 @@ If the traffic to the external IP is subject to [Network Address Translation (NA
 
 Create a [Service of type LoadBalancer](https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer) in K3s.
 
+:::warning Known Issue
+If external traffic reaches the node using a NAT (e.g. in public clouds) and you require `externalTrafficPolicy=local` for purposes such as client source IP preservation, please do not define the k3s config `node-external-ip` for any of the nodes, as that will not work correctly
+:::
+
 ### Controlling ServiceLB Node Selection
 
 Adding the `svccontroller.k3s.cattle.io/enablelb=true` label to one or more nodes switches the ServiceLB controller into allow-list mode, where only nodes with the label are eligible to host LoadBalancer pods. Nodes that remain unlabeled will be excluded from use by ServiceLB.
