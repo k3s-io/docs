@@ -4,7 +4,7 @@ title: token
 
 # k3s token
 
-K3s uses tokens to secure the node join process. Tokens authenticate the cluster to the joining node, and the node to the cluster.
+K3s uses tokens to secure the node join process and to encrypt confidential information that is persisted to the datastore. Tokens authenticate the cluster to the joining node, and the node to the cluster.
 
 ## Token Format
 
@@ -51,9 +51,9 @@ Bootstrap | `n/a`           | `n/a`
 
 If no token is provided when starting the first server in the cluster, one is created with a random password. The server token is always written to `/var/lib/rancher/k3s/server/token`, in secure format.
 
-The server token can be used to join both server and agent nodes to the cluster. It cannot be changed once the cluster has been created, and anyone with access to the server token essentially has full administrator access to the cluster. This token should be guarded carefully.
+The server token can be used to join both server and agent nodes to the cluster. Anyone with access to the server token essentially has full administrator access to the cluster. This token should be guarded carefully.
 
-The server token is also used as the [PBKDF2](https://en.wikipedia.org/wiki/PBKDF2) passphrase for the key used to encrypt confidential information that is persisted to the datastore, such as the secrets-encryption configuration, wireguard keys, and private keys for cluster CA certificates and service-account tokens. For this reason, the token must be backed up alongside the cluster datastore itself.
+The server token is also used as the [PBKDF2](https://en.wikipedia.org/wiki/PBKDF2) passphrase to encrypt confidential information that is persisted to the datastore known as bootstrap data. Bootstrap data is essential to set up new server nodes or restore from a snapshot. For this reason, the token must be backed up alongside the cluster datastore itself.
 
 :::warning
 Unless custom CA certificates are in use, only the short (password-only) token format can be used when starting the first server in the cluster. This is because the cluster CA hash cannot be known until after the server has generated the self-signed cluster CA certificates.
@@ -70,11 +70,7 @@ The agent token is written to `/var/lib/rancher/k3s/server/agent-token`, in secu
 
 ### Bootstrap
 
-:::info Version Gate
-Support for the `k3s token` command and the ability to join nodes with bootstrap tokens is available starting with the 2023-02 releases (v1.26.2+k3s1, v1.25.7+k3s1, v1.24.11+k3s1, v1.23.17+k3s1).
-:::
-
-K3s supports dynamically generated, automatically expiring agent bootstrap tokens. Bootstrap tokens can only be used to join agents.
+K3s supports dynamically generated, automatically expiring agent [bootstrap tokens](https://kubernetes.io/docs/reference/access-authn-authz/bootstrap-tokens/).
 
 ## k3s token
 
@@ -149,7 +145,7 @@ Flag | Description
 Available as of the October 2023 releases (v1.28.2+k3s1, v1.27.7+k3s1, v1.26.10+k3s1, v1.25.15+k3s1).
 :::
 
-Rotate original server token with a new bootstrap token. After running this command, all servers and any agents that originally joined with the old token must be restarted with the new token.
+Rotate original server token with a new server token. After running this command, all servers and any agents that originally joined with the old token must be restarted with the new token.
 
 If you do not specify a new token, one will be generated for you.
 
@@ -161,3 +157,6 @@ If you do not specify a new token, one will be generated for you.
 `--token` value      | Existing token used to join a server or agent to a cluster [$K3S_TOKEN]                   
 `--new-token` value  | New token that replaces existing token   
 
+:::warning
+Snapshots taken before the rotation will require the old server token when restoring the cluster
+:::
