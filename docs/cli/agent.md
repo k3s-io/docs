@@ -27,6 +27,12 @@ Options are documented on this page as CLI flags, but can also be passed as conf
 | `--token-file` value       | `K3S_TOKEN_FILE`     | Token file to use for authentication |
 | `--server value, -s` value | `K3S_URL`            | Server to connect to                 |
 
+### Listener
+
+| Flag |  Default | Description |
+| --- |  --- | --- |
+| `--bind-address` | 0.0.0.0 | k3s bind address  |
+
 ### Data
 
 | Flag                         | Default                | Description          |
@@ -49,7 +55,9 @@ Options are documented on this page as CLI flags, but can also be passed as conf
 
 | Flag                                 | Default                            | Description                                                        |
 | ------------------------------------ | ---------------------------------- | ------------------------------------------------------------------ |
-| `--container-runtime-endpoint` value | N/A                                | Disable embedded containerd and use the CRI socket at the given path; when used with --docker this sets the cri-docker socket path |
+| `--container-runtime-endpoint` | N/A | Disable embedded containerd and use the CRI socket at the given path; when used with --docker this sets the docker socket path |
+| `--default-runtime` | N/A | Set the default runtime in containerd |
+| `--image-service-endpoint` | N/A | Disable embedded containerd image service and use remote image service socket at the given path. If not specified, defaults to --container-runtime-endpoint. |
 | `--pause-image` value                | "docker.io/rancher/pause:3.1"      | Customized pause image for containerd or docker sandbox            |
 | `--private-registry` value           | "/etc/rancher/k3s/registries.yaml" | Private registry configuration file                                |
 
@@ -59,6 +67,8 @@ Options are documented on this page as CLI flags, but can also be passed as conf
 | --------------------------- | -------------------- | ----------------------------------------- |
 | `--node-ip value, -i` value | N/A                  | IP address to advertise for node          |
 | `--node-external-ip` value  | N/A                  | External IP address to advertise for node |
+| `--node-internal-dns` | N/A | internal DNS addresses to advertise for node |
+| `--node-external-dns` | N/A | external DNS addresses to advertise for node |
 | `--resolv-conf` value       | `K3S_RESOLV_CONF`    | Kubelet resolv.conf file                  |
 | `--flannel-iface` value     | N/A                  | Override default flannel interface        |
 | `--flannel-conf` value      | N/A                  | Override default flannel config file      |
@@ -77,8 +87,11 @@ Options are documented on this page as CLI flags, but can also be passed as conf
 | ------------ | ------------------------------------- |
 | `--rootless` | Run rootless                          |
 | `--docker`   | Use cri-dockerd instead of containerd |
+| `--enable-pprof` | Enable pprof endpoint on supervisor port |
 | `--prefer-bundled-bin` | Prefer bundled userspace binaries over host binaries |
 | `--disable-default-registry-endpoint` | See "[Default Endpoint Fallback](../installation/private-registry.md#default-endpoint-fallback)"
+| `--vpn-auth` | See "[Integration with the Tailscale VPN provider](../networking/distributed-multicloud.md#integration-with-the-tailscale-vpn-provider-experimental)"  |
+| `--vpn-auth-file` | See "[Integration with the Tailscale VPN provider](../networking/distributed-multicloud.md#integration-with-the-tailscale-vpn-provider-experimental)" |
 
 ### Deprecated
 
@@ -122,7 +135,7 @@ OPTIONS:
    --token value, -t value                    (cluster) Token to use for authentication [$K3S_TOKEN]
    --token-file value                         (cluster) Token file to use for authentication [$K3S_TOKEN_FILE]
    --server value, -s value                   (cluster) Server to connect to [$K3S_URL]
-   --data-dir value, -d value                 (agent/data) Folder to hold state (default: "/var/lib/rancher/k3s")
+   --data-dir value, -d value                 (agent/data) Folder to hold state (default: "/var/lib/rancher/k3s") [$K3S_DATA_DIR]
    --node-name value                          (agent/node) Node name [$K3S_NODE_NAME]
    --with-node-id                             (agent/node) Append id to node name
    --node-label value                         (agent/node) Registering and starting kubelet with set of labels
@@ -133,18 +146,29 @@ OPTIONS:
    --lb-server-port value                     (agent/node) Local port for supervisor client load-balancer. If the supervisor and apiserver are not colocated an additional port 1 less than this port will also be used for the apiserver client load-balancer. (default: 6444) [$K3S_LB_SERVER_PORT]
    --protect-kernel-defaults                  (agent/node) Kernel tuning behavior. If set, error if kernel tunables are different than kubelet defaults.
    --container-runtime-endpoint value         (agent/runtime) Disable embedded containerd and use the CRI socket at the given path; when used with --docker this sets the docker socket path
+   --default-runtime value                    (agent/runtime) Set the default runtime in containerd
+   --image-service-endpoint value             (agent/runtime) Disable embedded containerd image service and use remote image service socket at the given path. If not specified, defaults to --container-runtime-endpoint.
    --pause-image value                        (agent/runtime) Customized pause image for containerd or docker sandbox (default: "rancher/mirrored-pause:3.6")
    --snapshotter value                        (agent/runtime) Override default containerd snapshotter (default: "overlayfs")
    --private-registry value                   (agent/runtime) Private registry configuration file (default: "/etc/rancher/k3s/registries.yaml")
+   --disable-default-registry-endpoint        (agent/containerd) Disables containerd fallback default registry endpoint when a mirror is configured for that registry
+   --nonroot-devices                          (agent/containerd) Allows non-root pods to access devices by setting device_ownership_from_security_context=true in the containerd CRI config
    --node-ip value, -i value                  (agent/networking) IPv4/IPv6 addresses to advertise for node
+   --bind-address value                       (listener) k3s bind address (default: 0.0.0.0)
    --node-external-ip value                   (agent/networking) IPv4/IPv6 external IP addresses to advertise for node
+   --node-internal-dns value                  (agent/networking) internal DNS addresses to advertise for node
+   --node-external-dns value                  (agent/networking) external DNS addresses to advertise for node
    --resolv-conf value                        (agent/networking) Kubelet resolv.conf file [$K3S_RESOLV_CONF]
    --flannel-iface value                      (agent/networking) Override default flannel interface
    --flannel-conf value                       (agent/networking) Override default flannel config file
    --flannel-cni-conf value                   (agent/networking) Override default flannel cni config file
    --kubelet-arg value                        (agent/flags) Customized flag for kubelet process
    --kube-proxy-arg value                     (agent/flags) Customized flag for kube-proxy process
+   --enable-pprof                             (experimental) Enable pprof endpoint on supervisor port
    --rootless                                 (experimental) Run rootless
    --prefer-bundled-bin                       (experimental) Prefer bundled userspace binaries over host binaries
    --docker                                   (agent/runtime) (experimental) Use cri-dockerd instead of containerd
+   --vpn-auth value                           (agent/networking) (experimental) Credentials for the VPN provider. It must include the provider name and join key in the format name=<vpn-provider>,joinKey=<key>[,controlServerURL=<url>][,extraArgs=<args>] [$K3S_VPN_AUTH]
+   --vpn-auth-file value                      (agent/networking) (experimental) File containing credentials for the VPN provider. It must include the provider name and join key in the format name=<vpn-provider>,joinKey=<key>[,controlServerURL=<url>][,extraArgs=<args>] [$K3S_VPN_AUTH_FILE]
+   --disable-apiserver-lb                     (agent/networking) (experimental) Disable the agent client-side load-balancer and connect directly to the configured server address
 ```
