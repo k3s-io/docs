@@ -34,7 +34,7 @@ jobs:
         run: codespell
       - name: Get current month and year
         id: date
-        run: echo "month_year=$(date +'%B %Y')" >> $GITHUB_ENV
+        run: echo "month_year=$(date +'%B %Y')" >> $GITHUB_OUTPUT
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
