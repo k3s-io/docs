@@ -3,11 +3,10 @@ title: "Embedded Registry Mirror"
 ---
 
 :::info Version Gate
-The Embedded Registry Mirror is available as an experimental feature as of January 2024 releases: v1.26.13+k3s1, v1.27.10+k3s1, v1.28.6+k3s1, v1.29.1+k3s1
+The Embedded Registry Mirror is available as an experimental feature as of January 2024 releases: v1.26.13+k3s1, v1.27.10+k3s1, v1.28.6+k3s1, v1.29.1+k3s1 and GA as of December 2024 releases: v1.29.12+k3s1, v1.30.8+k3s1, v1.31.4+k3s1
 :::
 
-K3s embeds [Spegel](https://github.com/spegel-org/spegel), a stateless distributed OCI registry mirror that allows peer-to-peer sharing of container images between nodes in a Kubernetes cluster.
-The distributed registry mirror is disabled by default.
+K3s embeds [Spegel](https://github.com/spegel-org/spegel), a stateless distributed OCI registry mirror that allows peer-to-peer sharing of container images between nodes in a Kubernetes cluster. The distributed registry mirror is disabled by default. For K3s to leverage it, you must enable both the [Distributed OCI Registry Mirror](#enabling-the-distributed-oci-registry-mirror) and the [Registry mirroring](#enabling-registry-mirroring) as explained in the following subsections.
 
 ## Enabling The Distributed OCI Registry Mirror
 
