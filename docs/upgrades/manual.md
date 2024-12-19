@@ -69,5 +69,4 @@ To upgrade K3s manually, you can download the desired version of the K3s binary 
 
 1. Download the desired version of the K3s binary from [releases](https://github.com/k3s-io/k3s/releases)
 2. Copy the downloaded binary to `/usr/local/bin/k3s` (or your desired location)
-3. Stop the old k3s binary
-4. Launch the new k3s binary
+3. Restart the k3s or k3s-agent service or restart the k3s process (binary)
