@@ -1,0 +1,64 @@
+
+.navbar__icon {
+  font-family: poppins,sans-serif;
+  font-size: 16px;
+  display: flex;
+}
+
+.navbar__icon:before {
+  content: "";
+  display: inline-flex;
+  height: 20px;
+  width: 35px;
+  margin-right: 4px;
+  padding-bottom: 7px;
+  background-color: var(--ifm-navbar-link-color);
+}
+.navbar__icon:hover:before {
+  background-color: var(--ifm-link-color);
+}
+
+.navbar__github{
+  font-size: 16px;
+}
+
+.navbar__github:before {
+  mask:  url(/static/img/icon-github.png) no-repeat 100% 100%;
+  mask-size: cover;
+  height: 19px;
+  width: 22px;
+  padding-right: 1px;
+  padding-bottom: 4px;
+}
+
+
+.navbar__blog:before {
+  mask:  url(/static/img/icon-notebook.png) no-repeat 100% 100%;
+  mask-size: cover;
+  height: 19px;
+  width: 22px;
+  padding-right: 1px;
+  padding-bottom: 4px;
+}
+
+/* Used on mobile for icon only links */
+.header__link:before {
+  content: '';
+  width: 24px;
+  height: 24px;
+  display: flex;
+  background-color: var(--ifm-navbar-link-color);
+}
+.header__link:hover:before {
+  background-color: var(--ifm-link-color);
+}
+
+.header__github:before {
+  mask:  url(/static/img/icon-github.png) no-repeat 100% 100%;
+  mask-size: cover;
+}
+
+.header__blog:before {
+  mask:  url(/static/img/icon-notebook.png) no-repeat 100% 100%;
+  mask-size: cover;
+}
