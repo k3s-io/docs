@@ -32,6 +32,8 @@ jobs:
           pip install codespell
       - name: Run codespell
         run: codespell
+      - name: Update Browserlist
+        run: npx update-browserslist-db@latest
       - name: Get current month and year
         id: date
         run: echo "month_year=$(date +'%B %Y')" >> $GITHUB_OUTPUT
