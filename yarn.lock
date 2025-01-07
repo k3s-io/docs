@@ -1944,7 +1944,7 @@
     tslib "^2.6.0"
     utility-types "^3.10.0"
 
-"@docusaurus/theme-common@3.7.0", "@docusaurus/theme-common@^3.6.1":
+"@docusaurus/theme-common@3.7.0", "@docusaurus/theme-common@^3.7.0":
   version "3.7.0"
   resolved "https://registry.yarnpkg.com/@docusaurus/theme-common/-/theme-common-3.7.0.tgz#18bf5c6b149a701f4bd865715ee8b595aa40b354"
   integrity sha512-8eJ5X0y+gWDsURZnBfH0WabdNm8XMCXHv8ENy/3Z/oQKwaB/EHt5lP9VsTDTf36lKEp0V6DjzjFyFIB+CetL0A==
