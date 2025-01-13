@@ -5,7 +5,7 @@ function gen_md_link()
     echo "${release_link}"
 }
 
-MINORS=${MINORS:-"v1.28 v1.29 v1.30 v1.31"}
+MINORS=${MINORS:-"v1.29 v1.30 v1.31 v1.32"}
 
 for minor in $MINORS; do
     product=k3s
