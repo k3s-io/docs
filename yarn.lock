@@ -1997,18 +1997,10 @@
     tslib "^2.6.0"
     utility-types "^3.10.0"
 
-"@docusaurus/theme-translations@3.7.0":
+"@docusaurus/theme-translations@3.7.0", "@docusaurus/theme-translations@^2 || ^3":
   version "3.7.0"
   resolved "https://registry.yarnpkg.com/@docusaurus/theme-translations/-/theme-translations-3.7.0.tgz#0891aedc7c7040afcb3a1b34051d3a69096d0d25"
   integrity sha512-Ewq3bEraWDmienM6eaNK7fx+/lHMtGDHQyd1O+4+3EsDxxUmrzPkV7Ct3nBWTuE0MsoZr3yNwQVKjllzCMuU3g==
-  dependencies:
-    fs-extra "^11.1.1"
-    tslib "^2.6.0"
-
-"@docusaurus/theme-translations@^2 || ^3":
-  version "3.6.3"
-  resolved "https://registry.yarnpkg.com/@docusaurus/theme-translations/-/theme-translations-3.6.3.tgz#6e473835ea016ce4acd7d2997f411811db8c4f6b"
-  integrity sha512-Gb0regclToVlngSIIwUCtBMQBq48qVUaN1XQNKW4XwlsgUyk0vP01LULdqbem7czSwIeBAFXFoORJ0RPX7ht/w==
   dependencies:
     fs-extra "^11.1.1"
     tslib "^2.6.0"
@@ -2106,10 +2098,10 @@
     cssesc "^3.0.0"
     immediate "^3.2.3"
 
-"@easyops-cn/docusaurus-search-local@^0.46.1":
-  version "0.46.1"
-  resolved "https://registry.yarnpkg.com/@easyops-cn/docusaurus-search-local/-/docusaurus-search-local-0.46.1.tgz#7fac1a14417de680b5af7088814192a153d7334d"
-  integrity sha512-kgenn5+pctVlJg8s1FOAm9KuZLRZvkBTMMGJvTTcvNTmnFIHVVYzYfA2Eg+yVefzsC8/cSZGKKJ0kLf8I+mQyw==
+"@easyops-cn/docusaurus-search-local@^0.47.0":
+  version "0.47.0"
+  resolved "https://registry.yarnpkg.com/@easyops-cn/docusaurus-search-local/-/docusaurus-search-local-0.47.0.tgz#ee344bc80b668de86b7c3a7b12a830a4b58d9f1c"
+  integrity sha512-nzOeVWR2T34Czdjby85VHP0a2AmfE/El56MoXDs3UDOOTCtba+2FVxYDcNMohoGFvfesX6fGsZ3vZuYT4aSqXw==
   dependencies:
     "@docusaurus/plugin-content-docs" "^2 || ^3"
     "@docusaurus/theme-translations" "^2 || ^3"
@@ -2119,7 +2111,7 @@
     "@easyops-cn/autocomplete.js" "^0.38.1"
     "@node-rs/jieba" "^1.6.0"
     cheerio "^1.0.0"
-    clsx "^1.1.1"
+    clsx "^2.1.1"
     comlink "^4.4.2"
     debug "^4.2.0"
     fs-extra "^10.0.0"
@@ -4135,11 +4127,6 @@ clone-regexp@^3.0.0:
   integrity sha512-ujdnoq2Kxb8s3ItNBtnYeXdm07FcU0u8ARAT1lQ2YdMwQC+cdiXX8KoqMVuglztILivceTtp4ivqGSmEmhBUJw==
   dependencies:
     is-regexp "^3.0.0"
-
-clsx@^1.1.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/clsx/-/clsx-1.2.1.tgz#0ddc4a20a549b59c93a4116bb26f5294ca17dc12"
-  integrity sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==
 
 clsx@^2.0.0, clsx@^2.1.1:
   version "2.1.1"
