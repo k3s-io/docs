@@ -1,0 +1,10 @@
+{
+  "logo.alt": {
+    "message": "logo",
+    "description": "O texto alternativo do logotipo na barra de navegação"
+  },
+  "item.label.GitHub": {
+    "message": "GitHub",
+    "description": "Item da barra de navegação com o rótulo GitHub"
+  }
+}

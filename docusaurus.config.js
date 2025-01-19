@@ -30,7 +30,7 @@ module.exports = {
   ],
   i18n: {
     defaultLocale: "en",
-    locales: ["en", "zh", "kr", "ja"],
+    locales: ["en", "zh", "kr", "ja", "pt-BR"],
     localeConfigs: {
       en: {
         label: "English",
@@ -43,6 +43,9 @@ module.exports = {
       },
       ja: {
         label: "日本語"
+      },
+      "pt-BR": {
+        label: "Portguês - Brasil"
       }
     },
   },
@@ -65,7 +68,7 @@ module.exports = {
         srcDark: 'img/k3s-logo-dark.svg',
       },
       items: [
-        { 
+        {
           type: 'search',
           position: 'right',
         },
@@ -90,7 +93,7 @@ module.exports = {
       style: 'dark',
       links: [],
       copyright: `Copyright © ${new Date().getFullYear()} K3s Project Authors. All rights reserved. <br>The Linux Foundation has registered trademarks
-      and uses trademarks. For a list of trademarks of The Linux Foundation, 
+      and uses trademarks. For a list of trademarks of The Linux Foundation,
       please see our <a href="https://www.linuxfoundation.org/trademark-usage"> Trademark Usage</a> page.`,
     },
   },
@@ -130,5 +133,5 @@ module.exports = {
         ],
       },
     ],
-  ], 
+  ],
 };

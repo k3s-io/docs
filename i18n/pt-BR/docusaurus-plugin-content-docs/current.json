@@ -1,0 +1,38 @@
+{
+  "version.label": {
+    "message": "Próxima",
+    "description": "O campo para a versão atual"
+  },
+  "sidebar.mySidebar.category.Installation": {
+    "message": "Instalação",
+    "description": "O campo para a categoria Instalação na barra lateral mySidebar"
+  },
+  "sidebar.mySidebar.category.Cluster Datastore": {
+    "message": "Datastore do Cluster",
+    "description": "O campo para a categoria Datastore do Cluster na barra lateral mySidebar"
+  },
+  "sidebar.mySidebar.category.Upgrades": {
+    "message": "Atualizações",
+    "description": "O campo para a categoria Atualizações na barra lateral mySidebar"
+  },
+  "sidebar.mySidebar.category.Security": {
+    "message": "Segurança",
+    "description": "O campo para a categoria Segurança na barra lateral mySidebar"
+  },
+  "sidebar.mySidebar.category.CLI Tools": {
+    "message": "Ferramentas CLI",
+    "description": "O campo para a categoria Ferramentas CLI na barra lateral mySidebar"
+  },
+  "sidebar.mySidebar.category.Networking": {
+    "message": "Rede",
+    "description": "O campo para a categoria Rede na barra lateral mySidebar"
+  },
+  "sidebar.mySidebar.category.Reference": {
+    "message": "Referência",
+    "description": "O campo para a categoria Referência na barra lateral mySidebar"
+  },
+  "sidebar.mySidebar.category.Release Notes": {
+    "message": "Notas de Lançamento",
+    "description": "O campo para a categoria Notas de Lançamento na barra lateral mySidebar"
+  }
+}
