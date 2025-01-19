@@ -22,7 +22,7 @@ Por exemplo, ao puxar `registry.example.com:5000/rancher/mirrored-pause:3.6`, o 
 Para ser reconhecido como um registro, o primeiro componente do nome da imagem deve conter pelo menos um ponto ou dois-pontos.
 Por razões históricas, imagens sem um registro especificado em seus nomes são implicitamente identificadas como provenientes de `docker.io`.
 
-:::info Gate de Versão
+:::info Nota de Versão
 A opção `--disable-default-registry-endpoint` está disponível como um recurso experimental a partir das versões de janeiro de 2024: v1.26.13+k3s1, v1.27.10+k3s1, v1.28.6+k3s1, v1.29.1+k3s1.
 :::
 
@@ -101,7 +101,7 @@ mirrors:
       "^rancher/(.*)": "mirrorproject/rancher-images/$1"
 ```
 
-:::info Gate de Versão
+:::info Nota de Versão
 Reescritas não são mais aplicadas ao [Endpoint Padrão](#default-endpoint-fallback) a partir das versões de janeiro de 2024: v1.26.13+k3s1, v1.27.10+k3s1, v1.28.6+k3s1, v1.29.1+k3s1.
 Antes dessas versões, as reescritas também eram aplicadas ao endpoint padrão, o que impedia o K3s de puxar do registro upstream caso a imagem não pudesse ser puxada de um endpoint espelho e não estivesse disponível sob o nome modificado no upstream.
 :::
@@ -150,7 +150,7 @@ Abaixo estão exemplos básicos de uso de registros privados em diferentes modos
 
 ### Suporte a Curingas
 
-:::info Gate de Versão
+:::info Nota de Versão
 O suporte a curingas está disponível a partir das versões de março de 2024: v1.26.15+k3s1, v1.27.12+k3s1, v1.28.8+k3s1, v1.29.3+k3s1
 :::
 
