@@ -236,7 +236,7 @@ See https://rootlesscontaine.rs/ to learn more about Rootless Kubernetes.
 
 * **Multi-node/multi-process cluster**
 
-  Multi-node rootless clusters, or multiple rootless k3s processes on the same node, are not currently supported. See [#6488](https://github.com/k3s-io/k3s/issues/6488#issuecomment-1314998091) for more details.
+  Multi-node rootless clusters, or multiple rootless k3s processes on the same node, are not currently supported. See [#6488](https://github.com/k3s-io/k3s/issues/6488) for more details.
 
 ### Starting Rootless Servers
 * Enable cgroup v2 delegation, see https://rootlesscontaine.rs/getting-started/common/cgroup2/ .
