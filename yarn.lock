@@ -9599,10 +9599,10 @@ remark-lint-no-dead-urls@^2.0.1:
     vfile "^6.0.0"
     vfile-message "^4.0.0"
 
-remark-lint@^10.0.0:
-  version "10.0.0"
-  resolved "https://registry.yarnpkg.com/remark-lint/-/remark-lint-10.0.0.tgz#161b24a18223a68ec2ed8d77e46015b5a0bd8bb5"
-  integrity sha512-E8yHHDOJ8b+qI0G49BRu24pe8t0fNNBWv8ENQJpCGNrVeTeyBIGEbaUe1yuF7OG8faA6PVpcN/pqWjzW9fcBWQ==
+remark-lint@^10.0.1:
+  version "10.0.1"
+  resolved "https://registry.yarnpkg.com/remark-lint/-/remark-lint-10.0.1.tgz#56d64e28a6373f10a4508e644c9d5a8056f9c9ca"
+  integrity sha512-1+PYGFziOg4pH7DDf1uMd4AR3YuO2EMnds/SdIWMPGT7CAfDRSnAmpxPsJD0Ds3IKpn97h3d5KPGf1WFOg6hXQ==
   dependencies:
     "@types/mdast" "^4.0.0"
     remark-message-control "^8.0.0"
