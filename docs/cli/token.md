@@ -74,11 +74,13 @@ K3s supports dynamically generated, automatically expiring agent [bootstrap toke
 
 ## k3s token
 
-K3s bootstrap tokens use the same generation and validation code as `kubeadm token` bootstrap tokens, and the `k3s token` CLI is similar.
+The k3s token CLI tool handles:
+* The life cycle of bootstrap tokens, using the same generation and validation code as `kubeadm token` bootstrap tokens. Note that both CLIs are similar.
+* The rotation of the server token
 
 ```
 NAME:
-   k3s token - Manage bootstrap tokens
+   k3s token - Manage tokens
 
 USAGE:
    k3s token command [command options] [arguments...]
@@ -88,7 +90,7 @@ COMMANDS:
    delete    Delete bootstrap tokens on the server
    generate  Generate and print a bootstrap token, but do not create it on the server
    list      List bootstrap tokens on the server
-   rotate    Rotate original server token with a new bootstrap token
+   rotate    Rotate original server token with a new server token
 
 OPTIONS:
    --help, -h  show help
