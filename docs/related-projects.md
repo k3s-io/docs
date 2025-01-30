@@ -22,4 +22,4 @@ Another provisioning tool, [autok3s](https://github.com/cnrancher/autok3s), prov
 
 ## hetzner-k3s
 
-For users who deploy on Hetzner Cloud, take a look at [hetzner-k3s](https://github.com/vitobotta/hetzner-k3s). This CLI tool, writing in Crystal, handles the additional steps required to set up a K3s cluster on Hetzner Cloud.
+For users who deploy on Hetzner Cloud, take a look at [hetzner-k3s](https://github.com/vitobotta/hetzner-k3s). This CLI tool, written in Crystal, handles the additional steps required to set up a K3s cluster on Hetzner Cloud.
