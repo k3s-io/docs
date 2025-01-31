@@ -47,7 +47,6 @@ module.exports = {
         'security/hardening-guide',
         'security/self-assessment-1.8',
         'security/self-assessment-1.7',
-        'security/self-assessment-1.24',
       ],
     },
     {
