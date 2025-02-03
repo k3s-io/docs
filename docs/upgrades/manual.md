@@ -42,6 +42,10 @@ Running the install script will:
 2. Update the systemd unit or openrc init script to reflect the args passed to the install script
 3. Restart the k3s service
 
+:::note
+This script does not drain the node before restarting k3s. This is generally safe in Kubernetes (pods continue running and networking stays configured the same way it was), but you might consider draining first if you have pods that can't tolerate a short API server outage.
+:::
+
 For example, to upgrade to the current stable release:
 
 ```sh
@@ -70,3 +74,7 @@ To upgrade K3s manually, you can download the desired version of the K3s binary 
 1. Download the desired version of the K3s binary from [releases](https://github.com/k3s-io/k3s/releases)
 2. Copy the downloaded binary to `/usr/local/bin/k3s` (or your desired location)
 3. Restart the k3s or k3s-agent service or restart the k3s process (binary)
+
+:::note
+It is generally safe to do this in Kubernetes without needing to drain the node (pods continue running and networking stays configured the same way it was), but you might consider draining first if you have pods that can't tolerate a short API server outage.
+:::
