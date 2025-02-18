@@ -1,0 +1,28 @@
+name: Update Browserslist
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: '0 6 3 * *' # Every 3rd day of Month at 6:00 AM
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  browserlist:
+    if: github.repository == 'k3s-io/docs'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Update Browserlist
+        run: npx update-browserslist-db@latest
+      - name: Get current month and year
+        id: date
+        run: echo "month_year=$(date +'%B %Y')" >> $GITHUB_OUTPUT
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: update release-notes/k3s-*.md
+          title: Update Browsers List DB ${{ steps.date.outputs.month_year }}
+          body: Automated npx update-browserslist-db@latest
+          branch: update-browserslist-db
+          signoff: true
