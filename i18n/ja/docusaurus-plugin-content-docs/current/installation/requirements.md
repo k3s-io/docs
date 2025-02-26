@@ -18,7 +18,6 @@ K3sは以下のアーキテクチャで利用可能です:
 - x86_64
 - armhf
 - arm64/aarch64
-- s390x
 
 :::warning ARM64 ページサイズ
 
