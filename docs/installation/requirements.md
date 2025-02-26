@@ -18,7 +18,6 @@ K3s is available for the following architectures:
 - x86_64
 - armhf
 - arm64/aarch64
-- s390x
 
 :::warning ARM64 Page Size
 
