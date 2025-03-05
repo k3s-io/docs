@@ -23,7 +23,7 @@ module.exports = {
         docsRouteBasePath: "/",
         hashed: true,
         highlightSearchTermsOnTargetPage: true,
-        indexBlog: false,
+        indexBlog: true,
         ignoreFiles: [/release-notes\/.*/],
       }),
     ],
@@ -74,10 +74,16 @@ module.exports = {
           position: "right",
         },
         {
+          to: 'blog', 
+          label: 'Blog', 
+          position: 'right',
+          className: 'navbar__icon navbar__blog',
+        },
+        {
           to: 'https://github.com/k3s-io/k3s/',
           label: 'GitHub',
           position: 'right',
-          className: 'navbar__github btn',
+          className: 'navbar__icon navbar__github',
         },
       ],
     },
@@ -105,7 +111,12 @@ module.exports = {
           showLastUpdateTime: true,
           editUrl: 'https://github.com/k3s-io/docs/edit/main/',
         },
-        blog: false, // Optional: disable the blog plugin
+        blog: {
+          blogTitle: 'k3s blog',
+          showReadingTime: false,
+          blogSidebarTitle: 'All our posts',
+          blogSidebarCount: 'ALL',
+        },
         // ...
         theme: {
           customCss: [require.resolve("./src/css/custom.css")],
