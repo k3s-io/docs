@@ -25,10 +25,16 @@ export default function NavbarMobileSidebarHeader() {
     <div className="navbar-sidebar__brand">
       <NavbarLogo />
       <a
+        href="blog"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="margin-right--md header__link header__blog"
+      />
+      <a
         href="https://github.com/k3s-io/k3s"
         target="_blank"
         rel="noopener noreferrer"
-        className="margin-right--md header-github-link"
+        className="margin-right--md header__link header__github"
       />
       <NavbarColorModeToggle className="margin-right--md" />
       <CloseButton />
