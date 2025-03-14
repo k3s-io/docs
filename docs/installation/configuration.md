@@ -85,7 +85,9 @@ Available as of [v1.19.1+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.19.
 
 In addition to configuring K3s with environment variables and CLI arguments, K3s can also use a config file.
 
-By default, values present in a YAML file located at `/etc/rancher/k3s/config.yaml` will be used on install.
+By default, configuration is loaded from `/etc/rancher/k3s/config.yaml`, and drop-in files are loaded from `/etc/rancher/k3s/config.yaml.d/*.yaml` in alphabetical order.
+This path is configurable via the `--config` CLI flag or `K3S_CONFIG_FILE` env var.
+When overriding the default config file name, the drop-in directory path is also modified.
 
 An example of a basic `server` config file is below:
 
@@ -114,16 +116,9 @@ In general, CLI arguments map to their respective YAML key, with repeatable CLI 
 
 It is also possible to use both a configuration file and CLI arguments. In these situations, values will be loaded from both sources, but CLI arguments will take precedence. For repeatable arguments such as `--node-label`, the CLI arguments will overwrite all values in the list.
 
-Finally, the location of the config file can be changed either through the CLI argument `--config FILE, -c FILE`, or the environment variable `$K3S_CONFIG_FILE`.
-
 ### Multiple Config Files
-:::info Version Gate
-Available as of [v1.21.0+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.21.0%2Bk3s1)
-:::
 
-Multiple configuration files are supported. By default, configuration files are read from `/etc/rancher/k3s/config.yaml` and `/etc/rancher/k3s/config.yaml.d/*.yaml` in alphabetical order. 
-
-By default, the last value found for a given key will be used. A `+` can be appended to the key to append the value to the existing string or slice, instead of replacing it. All occurrences of this key in subsequent files will also require a `+` to prevent overwriting the accumulated value.
+If present in multiple files, the last value found for a given key will be used. A `+` can be appended to the key to append the value to the existing string or slice, instead of replacing it. All occurrences of this key in subsequent files will also require a `+` to prevent overwriting the accumulated value.
 
 An example of multiple config files is below:
 
