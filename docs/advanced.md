@@ -467,5 +467,4 @@ tcpdump -ni nflog:100
 ```
 While more readily available, tcpdump will not show the name of the network policy that blocked the packet. Use wireshark's tshark command instead to display the full NFLOG packet header, including the `nflog.prefix` field that contains the policy name.
 
-Currently logging does not working correctly when `podSelector: {}` in network policy.
-Reference [#8008](https://github.com/k3s-io/k3s/issues/8008)
+Network Policy logging of dropped packets does not support [policies with an empty `podSelector`](https://github.com/k3s-io/k3s/issues/8008). If you rely on logging dropped packets for diagnostic or audit purposes, ensure that your policies include a pod selector that matches the affected pods.
