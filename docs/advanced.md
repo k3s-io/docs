@@ -450,13 +450,6 @@ helm install --create-namespace -n cattle-logging-system rancher-logging --set a
 
 ## Additional Network Policy Logging
 
-:::warning
-
-Currently not working when `podSelector: {}` in network policy.
-Reference [#8008](https://github.com/k3s-io/k3s/issues/8008)
-
-:::
-
 Packets dropped by network policies can be logged. The packet is sent to the iptables NFLOG action, which shows the packet details, including the network policy that blocked it.
 
 If there is a lot of traffic, the number of log messages could be very high. To control the log rate on a per-policy basis, set the `limit` and `limit-burst` iptables parameters by adding the following annotations to the network policy in question:
@@ -473,3 +466,6 @@ Packets sent to the NFLOG netlink socket can also be read by using command-line 
 tcpdump -ni nflog:100
 ```
 While more readily available, tcpdump will not show the name of the network policy that blocked the packet. Use wireshark's tshark command instead to display the full NFLOG packet header, including the `nflog.prefix` field that contains the policy name.
+
+Currently logging does not working correctly when `podSelector: {}` in network policy.
+Reference [#8008](https://github.com/k3s-io/k3s/issues/8008)
