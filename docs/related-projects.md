@@ -23,3 +23,8 @@ Another provisioning tool, [autok3s](https://github.com/cnrancher/autok3s), prov
 ## hetzner-k3s
 
 For users who deploy on Hetzner Cloud, take a look at [hetzner-k3s](https://github.com/vitobotta/hetzner-k3s). This CLI tool, written in Crystal, handles the additional steps required to set up a K3s cluster on Hetzner Cloud.
+
+
+## k3m
+
+For users looking to manage K3s clusters using Canonical's [multipass](https://multipass.run/), [k3m](https://github.com/eznix86/k3m) is a CLI tool that simplifies the creation and management of K3s clusters in multipass' VMs.
