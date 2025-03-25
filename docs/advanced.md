@@ -4,26 +4,6 @@ title: "Advanced Options / Configuration"
 
 This section contains advanced information describing the different ways you can run and manage K3s, as well as steps necessary to prepare the host OS for K3s use.
 
-## Certificate Management
-
-### Certificate Authority Certificates
-
-K3s generates self-signed Certificate Authority (CA) Certificates during startup of the first server node. These CA certificates are valid for 10 years, and are not automatically renewed.
-
-For information on using custom CA certificates, or renewing the self-signed CA certificates, see the [`k3s certificate rotate-ca` command documentation](./cli/certificate.md#certificate-authority-ca-certificates).
-
-### Client and Server certificates
-
-K3s client and server certificates are valid for 365 days from their date of issuance. Any certificates that are expired, or within 90 days of expiring, are automatically renewed every time K3s starts.
-
-For information on manually rotating client and server certificates, see the [`k3s certificate rotate` command documentation](./cli/certificate.md#client-and-server-certificates).
-
-## Token Management
-
-By default, K3s uses a single static token for both servers and agents. This token cannot be changed once the cluster has been created.
-It is possible to enable a second static token that can only be used to join agents, or to create temporary `kubeadm` style join tokens that expire automatically.
-For more information, see the [`k3s token` command documentation](./cli/token.md).
-
 ## Configuring an HTTP proxy
 
 If you are running K3s in an environment, which only has external connectivity through an HTTP proxy, you can configure your proxy settings on the K3s systemd service. These proxy settings will then be used in K3s and passed down to the embedded containerd and kubelet.
