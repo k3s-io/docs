@@ -8,6 +8,34 @@ title: certificate
 
 K3s client and server certificates are valid for 365 days from their date of issuance. Any certificates that are expired, or within 90 days of expiring, are automatically renewed every time K3s starts.
 
+:::info CERTIFICATE EXPIRATION WARNING
+When a certificate is within 90 days of expiring a Kubernetes Warning event with reason: `CertificateExpirationWarning` is created
+:::
+
+
+### Checking expiration dates
+
+To check the node certificates and their expiration date use the `k3s certificate check --output table`:
+
+```bash
+CERTIFICATE                SUBJECT                                            STATUS  EXPIRES
+-----------                -------                                            ------  -------
+client-kube-proxy.crt      CN=system:kube-proxy                               OK      2026-04-02T12:51:38Z
+client-kube-proxy.crt      CN=k3s-client-ca@1743598281                        OK      2035-03-31T12:51:21Z
+client-kubelet.crt         CN=system:node:vm1,O=system:nodes                  OK      2026-04-02T12:51:38Z
+client-kubelet.crt         CN=k3s-client-ca@1743598281                        OK      2035-03-31T12:51:21Z
+serving-kubelet.crt        CN=vm1                                             OK      2026-04-02T12:51:38Z
+serving-kubelet.crt        CN=k3s-server-ca@1743598281                        OK      2035-03-31T12:51:21Z
+client-k3s-controller.crt  CN=system:k3s-controller                           OK      2026-04-02T12:51:38Z
+client-k3s-controller.crt  CN=k3s-client-ca@1743598281                        OK      2035-03-31T12:51:21Z
+```
+
+:::info SAME CERTIFICATE TWICE
+Each certificate file (CERTIFICATE column) contains two certificates, including the certificate itself and its issuing Certificate Authority (CA)
+:::
+
+In case of unexpected output, please use `--debug` flag to get more information or configure the correct data directory with `--data-dir` flag.
+
 ### Rotating Client and Server Certificates
 
 To rotate client and server certificates manually, use the `k3s certificate rotate` subcommand:
