@@ -20,9 +20,9 @@ For information on manually rotating client and server certificates, see the [`k
 
 ## Token Management
 
-By default, K3s uses a single static token for both servers and agents. This token cannot be changed once the cluster has been created.
-It is possible to enable a second static token that can only be used to join agents, or to create temporary `kubeadm` style join tokens that expire automatically.
-For more information, see the [`k3s token` command documentation](./cli/token.md).
+By default, K3s uses a single static token for both servers and agents. With care, this token can be rotated once the cluster has been created.
+It is also possible to enable a second static token that can only be used to join agents, or to create temporary `kubeadm` style join tokens that expire automatically.
+For more information, see the [`k3s token` command documentation](./cli/token.md#k3s-token-1).
 
 ## Configuring an HTTP proxy
 
