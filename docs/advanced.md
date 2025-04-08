@@ -26,7 +26,7 @@ For more information, see the [`k3s token` command documentation](./cli/token.md
 
 ## Configuring an HTTP proxy
 
-If you are running K3s in an environment, which only has external connectivity through an HTTP proxy, you can configure your proxy settings on the K3s systemd service. These proxy settings will then be used in K3s and passed down to the embedded containerd and kubelet.
+If you are running K3s in an environment, which only has external connectivity through an HTTP proxy, you can configure your proxy settings on the K3s systemd service. These proxy settings will then be used in K3s and passed down to the embedded containerd and kubelet. Note that proxy configuration and other environment variables from the host are NOT passed into Pods.
 
 The K3s installation script will automatically take the `HTTP_PROXY`, `HTTPS_PROXY` and `NO_PROXY`, as well as the `CONTAINERD_HTTP_PROXY`, `CONTAINERD_HTTPS_PROXY` and `CONTAINERD_NO_PROXY` variables from the current shell, if they are present, and write them to the environment file of your systemd service, usually:
 
