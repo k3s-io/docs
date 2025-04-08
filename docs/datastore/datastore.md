@@ -29,6 +29,10 @@ K3s supports the following datastore options:
 K3s requires prepared statements support from the DB. This means that connection poolers such as [PgBouncer](https://www.pgbouncer.org/faq.html#how-to-use-prepared-statements-with-transaction-pooling) may require additional configuration to work with K3s.
 :::
 
+:::warning Multimaster Setups
+Galera Clusters for MySQL or MariaDB are actually not supported. For more details see [here](https://github.com/k3s-io/k3s/issues/10619#issuecomment-2261503309), why such setups won't work as expected.
+:::
+
 ### External Datastore Configuration Parameters
 If you wish to use an external datastore such as PostgreSQL, MySQL, or etcd you must set the `datastore-endpoint` parameter so that K3s knows how to connect to it. You may also specify parameters to configure the authentication and encryption of the connection. The below table summarizes these parameters, which can be passed as either CLI flags or environment variables.
 
