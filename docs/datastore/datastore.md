@@ -30,7 +30,7 @@ K3s requires prepared statements support from the DB. This means that connection
 :::
 
 :::warning Multimaster Setups
-Galera Clusters for MySQL or MariaDB are actually not supported. For more details see [here](https://github.com/k3s-io/k3s/issues/10619#issuecomment-2261503309), why such setups won't work as expected.
+Multi-master databases that set `auto_increment_increment` or `auto_increment_offset` greater than 1 are not supported. Kine expects that the revision will start at 0 and always move forward by exactly 1 when a key is successfully inserted. This affects products such as Galera for MySQL/MariaDB. 
 :::
 
 ### External Datastore Configuration Parameters
