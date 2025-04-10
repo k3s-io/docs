@@ -29,6 +29,10 @@ K3s supports the following datastore options:
 K3s requires prepared statements support from the DB. This means that connection poolers such as [PgBouncer](https://www.pgbouncer.org/faq.html#how-to-use-prepared-statements-with-transaction-pooling) may require additional configuration to work with K3s.
 :::
 
+:::warning Multimaster Setups
+Multi-master databases that set `auto_increment_increment` or `auto_increment_offset` greater than 1 are not supported. Kine expects that the revision will start at 0 and always move forward by exactly 1 when a key is successfully inserted. This affects products such as Galera for MySQL/MariaDB. 
+:::
+
 ### External Datastore Configuration Parameters
 If you wish to use an external datastore such as PostgreSQL, MySQL, or etcd you must set the `datastore-endpoint` parameter so that K3s knows how to connect to it. You may also specify parameters to configure the authentication and encryption of the connection. The below table summarizes these parameters, which can be passed as either CLI flags or environment variables.
 
