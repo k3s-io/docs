@@ -20,13 +20,13 @@ For information on manually rotating client and server certificates, see the [`k
 
 ## Token Management
 
-By default, K3s uses a single static token for both servers and agents. This token cannot be changed once the cluster has been created.
-It is possible to enable a second static token that can only be used to join agents, or to create temporary `kubeadm` style join tokens that expire automatically.
-For more information, see the [`k3s token` command documentation](./cli/token.md).
+By default, K3s uses a single static token for both servers and agents. With care, this token can be rotated once the cluster has been created.
+It is also possible to enable a second static token that can only be used to join agents, or to create temporary `kubeadm` style join tokens that expire automatically.
+For more information, see the [`k3s token` command documentation](./cli/token.md#k3s-token-1).
 
 ## Configuring an HTTP proxy
 
-If you are running K3s in an environment, which only has external connectivity through an HTTP proxy, you can configure your proxy settings on the K3s systemd service. These proxy settings will then be used in K3s and passed down to the embedded containerd and kubelet.
+If you are running K3s in an environment, which only has external connectivity through an HTTP proxy, you can configure your proxy settings on the K3s systemd service. These proxy settings will then be used in K3s and passed down to the embedded containerd and kubelet. Note that proxy configuration and other environment variables from the host are NOT passed into Pods.
 
 The K3s installation script will automatically take the `HTTP_PROXY`, `HTTPS_PROXY` and `NO_PROXY`, as well as the `CONTAINERD_HTTP_PROXY`, `CONTAINERD_HTTPS_PROXY` and `CONTAINERD_NO_PROXY` variables from the current shell, if they are present, and write them to the environment file of your systemd service, usually:
 
@@ -125,32 +125,45 @@ sudo etcdctl version \
 
 ## Configuring containerd
 
-K3s will generate config.toml for containerd in `/var/lib/rancher/k3s/agent/etc/containerd/config.toml`.
+:::info Version Gate
+K3s includes containerd 2.0 as of the February 2025 releases: v1.31.6+k3s1 and v1.32.2+k3s1.  
+Be aware that containerd 2.0 prefers config version 3, while containerd 1.7 prefers config version 2.
+:::
 
-For advanced customization for this file you can create another file called `config.toml.tmpl` in the same directory, and it will be used instead.
+K3s will generate a configuration file for containerd at `/var/lib/rancher/k3s/agent/etc/containerd/config.toml`, using values specific to the current cluster and node configuration.
 
-The `config.toml.tmpl` will be treated as a Go template file, and the `config.Node` structure is being passed to the template. See [this folder](https://github.com/k3s-io/k3s/blob/master/pkg/agent/templates) for Linux and Windows examples on how to use the structure to customize the configuration file.
-The config.Node golang struct is defined [here](https://github.com/k3s-io/k3s/blob/master/pkg/daemons/config/types.go#L37)
+For advanced customization, you can create a containerd config template in the same directory:
+* For containerd 2.0, place a version 3 configuration template in `config-v3.toml.tmpl`  
+  See the [containerd 2.0 documentation](https://github.com/containerd/containerd/blob/release/2.0/docs/cri/config.md) for more information.
+* For containerd 1.7 and earlier, place a version 2 configuration template in `config.toml.tmpl`  
+  See the [containerd 1.7 documentation](https://github.com/containerd/containerd/blob/release/1.7/docs/cri/config.md) for more information.
+
+Containerd 2.0 is backwards compatible with prior config versions, and k3s will continue to render legacy version 2 configuration from `config.toml.tmpl` if `config-v3.toml.tmpl` is not found.
+
+The template file is rendered into the containerd config using the [`text/template`](https://pkg.go.dev/text/template) library.
+See `ContainerdConfigTemplateV3` and `ContainerdConfigTemplate` in [`templates.go`](https://github.com/k3s-io/k3s/blob/master/pkg/agent/templates/templates.go) for the default template content.
+The template is executed with a [`ContainerdConfig`](https://github.com/k3s-io/k3s/blob/master/pkg/agent/templates/templates.go#L22-L33) struct as its dot value (data argument).
 
 ### Base template
 
-:::info Version Gate
-Available as of the September 2023 releases: v1.24.17+k3s1, v1.25.13+k3s1, v1.26.8+k3s1, v1.27.5+k3s1, v1.28.1+k3s1
-:::
-
-You can extend the K3s base template instead of copy-pasting the complete stock template out of the K3s source code. This is useful if you need to build on the existing configuration, and add a few extra lines at the end.
+You can extend the K3s base template instead of copy-pasting the complete stock template out of the K3s source code. This is useful if you only need to build on the existing configuration by adding a few extra lines before or after the defaults.
 
 ```toml
-#/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl
+#/var/lib/rancher/k3s/agent/etc/containerd/config-v3.toml.tmpl
 
 {{ template "base" . }}
 
-[plugins."io.containerd.grpc.v1.cri".containerd.runtimes."custom"]
+[plugins.'io.containerd.cri.v1.runtime'.containerd.runtimes.'custom']
   runtime_type = "io.containerd.runc.v2"
-[plugins."io.containerd.grpc.v1.cri".containerd.runtimes."custom".options]
+[plugins.'io.containerd.cri.v1.runtime'.containerd.runtimes.'custom'.options]
   BinaryName = "/usr/bin/custom-container-runtime"
-
+  SystemdCgroup = true
 ```
+
+:::warning
+For best results, do NOT simply copy a prerendered `config.toml` into the template and make your desired changes. Use the base template, or provide a full template based on the k3s defaults linked above.
+:::
+
 ## Alternative Container Runtime Support
 
 K3s will automatically detect alternative container runtimes if they are present when K3s starts. Supported container runtimes are:
@@ -169,11 +182,6 @@ NVIDIA GPUs require installation of the NVIDIA Container Runtime in order to sch
     `grep nvidia /var/lib/rancher/k3s/agent/etc/containerd/config.toml`
 
 If these steps are followed properly, K3s will automatically add NVIDIA runtimes to the containerd configuration, depending on what runtime executables are found.
-
-:::info Version Gate
-The `--default-runtime` flag and built-in RuntimeClass resources are available as of the December 2023 releases: v1.29.0+k3s1, v1.28.5+k3s1, v1.27.9+k3s1, v1.26.12+k3s1  
-Prior to these releases, you must deploy your own RuntimeClass resources for any runtimes you want to reference in Pod specs.
-:::
 
 K3s includes Kubernetes RuntimeClass definitions for all supported alternative runtimes. You can select one of these to replace `runc` as the default runtime on a node by setting the `--default-runtime` value via the k3s CLI or config file.
 
@@ -343,12 +351,6 @@ sudo docker cp k3s-server-1:/etc/rancher/k3s/k3s.yaml ~/.kube/config
 </Tabs>
 
 ## SELinux Support
-
-:::info Version Gate
-
-Available as of v1.19.4+k3s1
-
-:::
 
 If you are installing K3s on a system where SELinux is enabled by default (such as CentOS), you must ensure the proper SELinux policies have been installed. 
 
