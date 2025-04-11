@@ -43,6 +43,16 @@ We recommend that users migrate to the new backend as soon as possible. The migr
 1. Update the K3s config on all server nodes. If using config files, the `/etc/rancher/k3s/config.yaml` should include `flannel-backend: wireguard-native` instead of `flannel-backend: wireguard` or `flannel-backend: ipsec`. If you are configuring K3s via CLI flags in the systemd unit, the equivalent flags should be changed.
 2. Reboot all nodes, starting with the servers.
 
+### Flannel Agent Options
+
+* These options are available for each agent and are specific to the Flannel instance running on that node
+
+| CLI Flag                    | Description                               |
+|-----------------------------|-------------------------------------------|
+| `--flannel-iface` value     | Override default flannel interface        |
+| `--flannel-conf` value      | Override default flannel config file      |
+| `--flannel-cni-conf` value  | Override default flannel cni config file  |
+
 ## Custom CNI
 
 Start K3s with `--flannel-backend=none` and install your CNI of choice. Most CNI plugins come with their own network policy engine, so it is recommended to set `--disable-network-policy` as well to avoid conflicts. Some important information to take into consideration:
