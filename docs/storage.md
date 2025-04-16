@@ -6,27 +6,10 @@ When deploying an application that needs to retain data, you’ll need to create
 
 A persistent volume (PV) is a piece of storage in the Kubernetes cluster, while a persistent volume claim (PVC) is a request for storage. For details on how PVs and PVCs work, refer to the official Kubernetes documentation on [storage.](https://kubernetes.io/docs/concepts/storage/volumes/)
 
+K3s, as a compliant Kubernetes distribution, uses the [Container Storage Interface (CSI)](https://github.com/container-storage-interface/spec/blob/master/spec.md) and [Cloud Provider Interface (CPI)](https://kubernetes.io/docs/tasks/administer-cluster/running-cloud-controller/) to manage persistent storage.
+
 This page describes how to set up persistent storage with a local storage provider, or with [Longhorn.](#setting-up-longhorn)
 
-## What's different about K3s storage?
-
-K3s removes several optional volume plugins and all built-in (sometimes referred to as "in-tree") cloud providers. We do this in order to achieve a smaller binary size and to avoid dependence on third-party cloud or data center technologies and services, which may not be available in many K3s use cases. We are able to do this because their removal affects neither core Kubernetes functionality nor conformance.
-
-The following volume plugins have been removed from K3s:
-
-* cephfs
-* fc
-* flocker
-* git_repo
-* glusterfs
-* portworx
-* quobyte
-* rbd
-* storageos
-
-Both components have out-of-tree alternatives that can be used with K3s: The Kubernetes [Container Storage Interface (CSI)](https://github.com/container-storage-interface/spec/blob/master/spec.md) and [Cloud Provider Interface (CPI)](https://kubernetes.io/docs/tasks/administer-cluster/running-cloud-controller/).
-
-Kubernetes maintainers are actively migrating in-tree volume plugins to CSI drivers. For more information on this migration, please refer [here](https://kubernetes.io/blog/2021/12/10/storage-in-tree-to-csi-migration-status-update/).
 
 ## Setting up the Local Storage Provider
 K3s comes with Rancher's Local Path Provisioner and this enables the ability to create persistent volume claims out of the box using local storage on the respective node. Below we cover a simple example. For more information please reference the official documentation [here](https://github.com/rancher/local-path-provisioner/blob/master/README.md#usage).
@@ -106,7 +89,7 @@ Below we cover a simple example. For more information, refer to the [official do
 Apply the longhorn.yaml to install Longhorn:
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.6.0/deploy/longhorn.yaml
+kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.8.1/deploy/longhorn.yaml
 ```
 
 Longhorn will be installed in the namespace `longhorn-system`.
