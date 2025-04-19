@@ -67,7 +67,7 @@ curl -fsSL https://tailscale.com/install.sh | sh
 
 To deploy K3s with Tailscale integration enabled, you must add the following parameter on each of your nodes:
 ```bash
---vpn-auth="name=tailscale,joinKey=$AUTH-KEY
+--vpn-auth="name=tailscale,joinKey=$AUTH-KEY"
 ```
 or provide that information in a file and use the parameter:
 ```bash
