@@ -28,6 +28,7 @@ The following options must be set to the same value on all servers in the cluste
 * `--flannel-external-ip`
 * `--flannel-ipv6-masq`
 * `--secrets-encryption`
+* `--secrets-encryption-provider`
 * `--service-cidr`
 
 ## Commonly Used Options
@@ -117,6 +118,7 @@ The following options must be set to the same value on all servers in the cluste
 | Flag                   | Default | Description                      |
 |------------------------|---------|----------------------------------|
 | `--secrets-encryption` | false   | Enable Secret encryption at rest |
+| `--secrets-encryption-provider` | aescbc | Encryption provider to use |
 
 
 ### Networking
