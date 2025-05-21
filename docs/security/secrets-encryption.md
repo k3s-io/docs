@@ -17,7 +17,26 @@ Use `curl -sfL https://get.k3s.io | sh -s - server --secrets-encryption` if inst
 
 :::
 
-Example of the encryption config file:
+
+## Choosing Encryption Provider
+
+:::info Version Gate
+Available as of the April 2025 releases: v1.30.12+k3s1, v1.31.8+k3s1, v1.32.4+k3s1, v1.33.0+k3s1
+:::
+
+Using the `--secrets-encryption-provider` flag, you can choose which encryption provider to use. The default is `aescbc`. 
+
+K3s supports the following encryption providers:
+- `aescbc`: AES-CBC with PKCS#7 padding
+- `secretbox`: XSalsa20 and Poly1305
+
+
+## Generated encryption config file
+
+When you start the server with `--secrets-encryption`, K3s will generate an encryption config file at `/var/lib/rancher/k3s/server/cred/encryption-config.json`.
+
+Below is an example of the generated encryption config file with the default `aescbc` provider:
+
 ```json
 {
   "kind": "EncryptionConfiguration",
