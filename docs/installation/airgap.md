@@ -37,9 +37,26 @@ This method requires you to manually deploy the necessary images to each node, a
 2. Download the images archive to the agent's images directory, for example:
   ```bash
   sudo mkdir -p /var/lib/rancher/k3s/agent/images/
-  sudo curl -L -o /var/lib/rancher/k3s/agent/images/k3s-airgap-images-amd64.tar.zst "https://github.com/k3s-io/k3s/releases/download/v1.29.1-rc2%2Bk3s1/k3s-airgap-images-amd64.tar.zst"
+  sudo curl -L -o /var/lib/rancher/k3s/agent/images/k3s-airgap-images-amd64.tar.zst "https://github.com/k3s-io/k3s/releases/download/v1.33.1%2Bk3s1/k3s-airgap-images-amd64.tar.zst"
   ```
 3. Proceed to the [Install K3s](#install-k3s) section below.
+
+#### Only import if Airgap Image Tarball is new
+
+All images are imported every time k3s starts. This is done to ensure that all the images are available every time, even if some images are removed or pruned since last startup. However, this delays startup as the kubelet is not started until after all images have been imported.
+
+To alleviate this delay, starting with 1.33.1, 1.32.5, 1.31.9 and 1.30.13, there is an option to only import tarballs that have changed since they were last imported, even across restarts.
+
+To enable this feature, create a `.cache.json` file in the directory where the tarballs were downloaded:
+```bash
+touch /var/lib/rancher/k3s/agent/images/.cache.json
+```
+That file will get populated with information of the tarballs next time K3s restarts. Following restarts will not import the images, as long as the tarballs remain the same.
+
+:::warning
+When this feature is enabled, it will not be possible to ensure that all images are available every time k3s starts. If an image was removed or pruned since last startup, the user will need to manually remove the `.cache.json` file
+:::
+
 
 ### Embedded Registry Mirror
 
