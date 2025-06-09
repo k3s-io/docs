@@ -6,32 +6,42 @@ title: certificate
 
 ## Client and Server Certificates
 
-K3s client and server certificates are valid for 365 days from their date of issuance. Any certificates that are expired, or within 90 days of expiring, are automatically renewed every time K3s starts.
+K3s client and server certificates are valid for 365 days from their date of issuance. Any certificates that are expired or within 120 days to expire are automatically renewed every time K3s starts. This renewal extends the lifetime of the existing certs. If you require new certificates and keys, use the [k3s CLI](#rotating-client-and-server-certificates)
 
 :::info CERTIFICATE EXPIRATION WARNING
-When a certificate is within 90 days of expiring a Kubernetes Warning event with reason: `CertificateExpirationWarning` is created
+When a certificate is within 120 days of expiring a Kubernetes Warning event with reason: `CertificateExpirationWarning` is created
+:::
+
+:::info Version Gate
+Output format is configurable as of the January 2025 releases: v1.32.0+k3s1, v1.31.5+k3s1, v1.30.9+k3s1, v1.30.13+k3s1
+
+Prior to the May 2025 releases: v1.33.1+k3s1, v1.32.5+k3s1, v1.31.9+k3s1, v1.30.13+k3s1, alerts and rotation were triggered at 90 days, instead of 120 days. 
 :::
 
 
 ### Checking expiration dates
 
+:::info Version Gate
+A new format with more information is available as of the May 2025 releases: v1.33.1+k3s1, v1.32.5+k3s1, v1.31.9+k3s1, v1.29.13+k3s1
+:::
+
 To check the node certificates and their expiration date use the `k3s certificate check --output table`:
 
 ```bash
-CERTIFICATE                SUBJECT                                            STATUS  EXPIRES
------------                -------                                            ------  -------
-client-kube-proxy.crt      CN=system:kube-proxy                               OK      2026-04-02T12:51:38Z
-client-kube-proxy.crt      CN=k3s-client-ca@1743598281                        OK      2035-03-31T12:51:21Z
-client-kubelet.crt         CN=system:node:vm1,O=system:nodes                  OK      2026-04-02T12:51:38Z
-client-kubelet.crt         CN=k3s-client-ca@1743598281                        OK      2035-03-31T12:51:21Z
-serving-kubelet.crt        CN=vm1                                             OK      2026-04-02T12:51:38Z
-serving-kubelet.crt        CN=k3s-server-ca@1743598281                        OK      2035-03-31T12:51:21Z
-client-k3s-controller.crt  CN=system:k3s-controller                           OK      2026-04-02T12:51:38Z
-client-k3s-controller.crt  CN=k3s-client-ca@1743598281                        OK      2035-03-31T12:51:21Z
+FILENAME                    SUBJECT                     USAGES       EXPIRES                  RESIDUAL TIME   STATUS
+--------                    -------                     ------       -------                  -------------   ------
+client-kube-proxy.crt       system:kube-proxy           ClientAuth   Jun 09, 2026 10:17 UTC   1 year          OK
+client-kube-proxy.crt       k3s-client-ca@1749464211    CertSign     Jun 07, 2035 10:16 UTC   10 years        OK
+client-kubelet.crt          system:node:ip-10-11-0-14   ClientAuth   Jun 09, 2026 10:17 UTC   1 year          OK
+client-kubelet.crt          k3s-client-ca@1749464211    CertSign     Jun 07, 2035 10:16 UTC   10 years        OK
+serving-kubelet.crt         ip-10-11-0-14               ServerAuth   Jun 09, 2026 10:17 UTC   1 year          OK
+serving-kubelet.crt         k3s-server-ca@1749464211    CertSign     Jun 07, 2035 10:16 UTC   10 years        OK
+client-k3s-controller.crt   system:k3s-controller       ClientAuth   Jun 09, 2026 10:17 UTC   1 year          OK
+client-k3s-controller.crt   k3s-client-ca@1749464211    CertSign     Jun 07, 2035 10:16 UTC   10 years        OK
 ```
 
 :::info SAME CERTIFICATE TWICE
-Each certificate file (CERTIFICATE column) contains two certificates, including the certificate itself and its issuing Certificate Authority (CA)
+Each certificate file (FILENAME column) contains at least two certificates - the leaf (or end entity) client/server certificate, any intermediate Certificate Authority certificates, and the root Certificate Authority certificate.
 :::
 
 In case of unexpected output, please use `--debug` flag to get more information or configure the correct data directory with `--data-dir` flag.
