@@ -37,9 +37,32 @@ This method requires you to manually deploy the necessary images to each node, a
 2. Download the images archive to the agent's images directory, for example:
   ```bash
   sudo mkdir -p /var/lib/rancher/k3s/agent/images/
-  sudo curl -L -o /var/lib/rancher/k3s/agent/images/k3s-airgap-images-amd64.tar.zst "https://github.com/k3s-io/k3s/releases/download/v1.29.1-rc2%2Bk3s1/k3s-airgap-images-amd64.tar.zst"
+  sudo curl -L -o /var/lib/rancher/k3s/agent/images/k3s-airgap-images-amd64.tar.zst "https://github.com/k3s-io/k3s/releases/download/v1.33.1%2Bk3s1/k3s-airgap-images-amd64.tar.zst"
   ```
 3. Proceed to the [Install K3s](#install-k3s) section below.
+
+#### Enable Conditional Image Imports
+
+:::info Version Gate
+Conditional Image imports is available as of the May 2025 releases:
+v1.33.1+k3s1, v1.32.5+k3s1, v1.31.9+k3s1, v1.30.13+k3s1,
+:::
+
+Image archives are imported every time k3s starts. This is done to ensure that all the images are consistently available, even if some images have been removed or pruned since last startup. However, this delays startup as the kubelet is not started until after all archives have been processed. To alleviate this delay there is an option to only import tarballs that have changed since they were last imported, even across restarts.
+
+To enable this feature, create a `.cache.json` file in the images directory:
+```bash
+touch /var/lib/rancher/k3s/agent/images/.cache.json
+```
+The cache file will store archive metadata as files are processed. Subsequent restarts of K3s will not import the images, as long as the size and modification time of the archive remains the same.
+
+:::warning
+When this feature is enabled, it will not be possible to ensure that all images are available every time k3s starts. If an image was removed or pruned since last startup, take manual action to reimport the image. Either:
+* Manually import the archive with `ctr image import`.
+* Use `touch` to modify the timestamp of the archive containing the image.
+* Clear the contents of the `.cache.json` file, and restart k3s.
+:::
+
 
 ### Embedded Registry Mirror
 
