@@ -441,7 +441,7 @@ spec:
 
 ## Additional Logging Sources
 
-[Rancher logging](https://rancher.com/docs/rancher/v2.6/en/logging/helm-chart-options/) for K3s can be installed without using Rancher. The following instructions should be executed to do so:
+[Rancher logging](https://ranchermanager.docs.rancher.com/integrations-in-rancher/logging/logging-helm-chart-options) for K3s can be installed without using Rancher. The following instructions should be executed to do so:
 
 ```bash
 helm repo add rancher-charts https://charts.rancher.io
