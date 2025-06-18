@@ -5,9 +5,10 @@ title: "Air-Gap Install"
 K3s can be installed in an air-gapped environment with two different methods. You can either deploy images via the [k3s-airgap-images tarball release artifact](#manually-deploy-images-method) or by using a [private registry](#private-registry-method). It is also possible to use the [embedded registry mirror](#embedded-registry-mirror) as long as there is at least one cluster member that has access to the required images.
 
 
-## Load Images
+## 1. Load Images
 
-### Private Registry Method
+<Tabs queryString="airgap-load-images">
+<TabItem value="Private Registry Method">
 
 These steps assume you have already created nodes in your air-gap environment,
 are using the bundled containerd as the container runtime,
@@ -23,7 +24,8 @@ If you have not yet set up a private Docker registry, refer to the [official Reg
 4. Follow the [Private Registry Configuration](private-registry.md) guide to create and configure the `registries.yaml` file.
 5. Proceed to the [Install K3s](#install-k3s) section below.
 
-### Manually Deploy Images Method
+</TabItem>
+<TabItem value="Manually Deploy Images">
 
 These steps assume you have already created nodes in your air-gap environment,
 are using the bundled containerd as the container runtime,
@@ -64,7 +66,8 @@ When this feature is enabled, it will not be possible to ensure that all images 
 :::
 
 
-### Embedded Registry Mirror
+</TabItem>
+<TabItem value="Embedded Registry Mirror">
 
 K3s includes an embedded distributed OCI-compliant registry mirror.
 When enabled and properly configured, images available in the containerd image store on any node
@@ -73,7 +76,10 @@ can be pulled by other cluster members without access to an external image regis
 The mirrored images may be sourced from an upstream registry, registry mirror, or airgap image tarball.
 For more information on enabling the embedded distributed registry mirror, see the [Embedded Registry Mirror](./registry-mirror.md) documentation.
 
-## Install K3s
+</TabItem>
+</Tabs>
+
+## 2. Install K3s
 
 ### Prerequisites
 
@@ -109,11 +115,11 @@ sudo yum install ./k3s-selinux-1.4-1.el8.noarch.rpm
 
 See the [SELinux](../advanced.md#selinux-support) section for more information.
 
-### Installing K3s in an Air-Gapped Environment
+### Running Install Script
 
 You can install K3s on one or more servers as described below.
 
-<Tabs queryString="airgap-cluster">
+<Tabs queryString="airgap-install">
 <TabItem value="Single Server Configuration" default>
 
 To install K3s on a single server, simply do the following on the server node:
@@ -127,10 +133,6 @@ To add additional agents, do the following on each agent node:
 ```bash
 INSTALL_K3S_SKIP_DOWNLOAD=true K3S_URL=https://<SERVER_IP>:6443 K3S_TOKEN=<YOUR_TOKEN> ./install.sh
 ```
-
-:::note
-The token from the server is typically found at `/var/lib/rancher/k3s/server/token`.
-:::
 
 </TabItem>
 <TabItem value="High Availability Configuration" default>
@@ -160,9 +162,10 @@ K3S_DATASTORE_ENDPOINT='mysql://username:password@tcp(hostname:3306)/database-na
 K3s's `--resolv-conf` flag is passed through to the kubelet, which may help with configuring pod DNS resolution in air-gap networks where the host does not have upstream nameservers configured.
 :::
 
-## Upgrading
+## 3. Upgrading
 
-### Install Script Method
+<Tabs queryString="airgap-upgrade">
+<TabItem value="Manual Upgrade">
 
 Upgrading an air-gap environment can be accomplished in the following manner:
 
@@ -172,18 +175,21 @@ node. Delete the old tar file.
 with the same environment variables.
 3. Restart the K3s service (if not restarted automatically by installer).
 
-
-### Automated Upgrades Method
+</TabItem>
+<TabItem value="Automated Upgrade">
 
 K3s supports [automated upgrades](../upgrades/automated.md). To enable this in air-gapped environments, you must ensure the required images are available in your private registry.
 
 You will need the version of rancher/k3s-upgrade that corresponds to the version of K3s you intend to upgrade to. Note, the image tag replaces the `+` in the K3s release with a `-` because Docker images do not support `+`.
 
-You will also need the versions of system-upgrade-controller and kubectl that are specified in the system-upgrade-controller manifest YAML that you will deploy. Check for the latest release of the system-upgrade-controller [here](https://github.com/rancher/system-upgrade-controller/releases/latest) and download the system-upgrade-controller.yaml to determine the versions you need to push to your private registry. For example, in release v0.4.0 of the system-upgrade-controller, these images are specified in the manifest YAML:
+You will also need the versions of system-upgrade-controller and kubectl that are specified in the system-upgrade-controller manifest YAML that you will deploy. Check for the latest release of the system-upgrade-controller [here](https://github.com/rancher/system-upgrade-controller/releases/latest) and download the system-upgrade-controller.yaml to determine the versions you need to push to your private registry. For example, in release v0.15.2 of the system-upgrade-controller, these images are specified in the manifest YAML:
 
 ```
-rancher/system-upgrade-controller:v0.4.0
-rancher/kubectl:v0.17.0
+rancher/system-upgrade-controller:v0.15.2
+rancher/kubectl:v1.30.3
 ```
 
 Once you have added the necessary rancher/k3s-upgrade, rancher/system-upgrade-controller, and rancher/kubectl images to your private registry, follow the [automated upgrades](../upgrades/automated.md) guide.
+
+</TabItem>
+</Tabs>
