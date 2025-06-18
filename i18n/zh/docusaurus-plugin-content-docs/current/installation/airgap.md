@@ -2,7 +2,8 @@
 title: "Air-Gap Install"
 ---
 
-You can install K3s in an air-gapped environment using two different methods. An air-gapped environment is any environment that is not directly connected to the Internet. You can either deploy a private registry and mirror docker.io, or you can manually deploy images such as for small clusters.
+K3s can be installed in an air-gapped environment with two different methods. You can either deploy images via the [k3s-airgap-images tarball release artifact](#manually-deploy-images-method) or by using a [private registry](#private-registry-method). It is also possible to use the [embedded registry mirror](#embedded-registry-mirror) as long as there is at least one cluster member that has access to the required images.
+
 
 ## Load Images
 
@@ -19,7 +20,7 @@ If you have not yet set up a private Docker registry, refer to the [official Reg
 1. Obtain the images archive for your architecture from the [releases](https://github.com/k3s-io/k3s/releases) page for the version of K3s you will be running.
 2. Use `docker image load k3s-airgap-images-amd64.tar.zst` to import images from the tar file into docker.
 3. Use `docker tag` and `docker push` to retag and push the loaded images to your private registry.
-4. Follow the [Private Registry Configuration](private-registry.md) guide to create and configure the `registries.yaml` file.
+4. Follow the [Private Registry Configuration](./images/private-registry.md) guide to create and configure the `registries.yaml` file.
 5. Proceed to the [Install K3s](#install-k3s) section below.
 
 ### Manually Deploy Images Method
@@ -36,22 +37,41 @@ This method requires you to manually deploy the necessary images to each node, a
 2. Download the images archive to the agent's images directory, for example:
   ```bash
   sudo mkdir -p /var/lib/rancher/k3s/agent/images/
-  sudo curl -L -O /var/lib/rancher/k3s/agent/images/k3s-airgap-images-amd64.tar.zst https://github.com/k3s-io/k3s/releases/download/v1.29.1-rc2%2Bk3s1/k3s-airgap-images-amd64.tar.zst
+  sudo curl -L -o /var/lib/rancher/k3s/agent/images/k3s-airgap-images-amd64.tar.zst "https://github.com/k3s-io/k3s/releases/download/v1.33.1%2Bk3s1/k3s-airgap-images-amd64.tar.zst"
   ```
 3. Proceed to the [Install K3s](#install-k3s) section below.
 
-### Embedded Registry Mirror
+#### Enable Conditional Image Imports
 
 :::info Version Gate
-The Embedded Registry Mirror is available as an experimental feature as of January 2024 releases: v1.26.13+k3s1, v1.27.10+k3s1, v1.28.6+k3s1, v1.29.1+k3s1
+Conditional Image imports is available as of the May 2025 releases:
+v1.33.1+k3s1, v1.32.5+k3s1, v1.31.9+k3s1, v1.30.13+k3s1,
 :::
+
+Image archives are imported every time k3s starts. This is done to ensure that all the images are consistently available, even if some images have been removed or pruned since last startup. However, this delays startup as the kubelet is not started until after all archives have been processed. To alleviate this delay there is an option to only import tarballs that have changed since they were last imported, even across restarts.
+
+To enable this feature, create a `.cache.json` file in the images directory:
+```bash
+touch /var/lib/rancher/k3s/agent/images/.cache.json
+```
+The cache file will store archive metadata as files are processed. Subsequent restarts of K3s will not import the images, as long as the size and modification time of the archive remains the same.
+
+:::warning
+When this feature is enabled, it will not be possible to ensure that all images are available every time k3s starts. If an image was removed or pruned since last startup, take manual action to reimport the image. Either:
+* Manually import the archive with `ctr image import`.
+* Use `touch` to modify the timestamp of the archive containing the image.
+* Clear the contents of the `.cache.json` file, and restart k3s.
+:::
+
+
+### Embedded Registry Mirror
 
 K3s includes an embedded distributed OCI-compliant registry mirror.
 When enabled and properly configured, images available in the containerd image store on any node
 can be pulled by other cluster members without access to an external image registry.
 
 The mirrored images may be sourced from an upstream registry, registry mirror, or airgap image tarball.
-For more information on enabling the embedded distributed registry mirror, see the [Embedded Registry Mirror](./registry-mirror.md) documentation.
+For more information on enabling the embedded distributed registry mirror, see the [Embedded Registry Mirror](./images/registry-mirror.md) documentation.
 
 ## Install K3s
 
@@ -93,7 +113,7 @@ See the [SELinux](../advanced.md#selinux-support) section for more information.
 
 You can install K3s on one or more servers as described below.
 
-<Tabs>
+<Tabs queryString="airgap-cluster">
 <TabItem value="Single Server Configuration" default>
 
 To install K3s on a single server, simply do the following on the server node:

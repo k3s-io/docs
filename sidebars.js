@@ -9,8 +9,16 @@ module.exports = {
       items:[
         'installation/requirements',
         'installation/configuration',
-        'installation/private-registry',
-        'installation/registry-mirror',
+        {
+          type: 'category',
+          label: 'Import Images Options',
+	  link: { type: 'doc', id: 'installation/images/images',},
+          items: [
+	    'installation/images/import-images',
+	    'installation/images/private-registry',
+	    'installation/images/registry-mirror',
+          ],
+        },
         'installation/airgap',
         'installation/server-roles',
         'installation/packaged-components',

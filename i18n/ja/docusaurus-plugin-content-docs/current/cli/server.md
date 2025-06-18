@@ -167,7 +167,7 @@ title: server
 | `--docker`             | containerdの代わりにcri-dockerdを使用    |
 | `--prefer-bundled-bin` | ホストバイナリよりもバンドルされたユーザースペースバイナリを優先 |
 | `--disable-agent`      | "[エージェントレスサーバーの実行（実験的）](../advanced.md#running-agentless-servers-experimental)" を参照 |
-| `--embedded-registry`  | "[埋め込みレジストリミラー](../installation/registry-mirror.md)" を参照 |
+| `--embedded-registry`  | "[埋め込みレジストリミラー](../installation/images/registry-mirror.md)" を参照 |
 
 
 ### 非推奨オプション

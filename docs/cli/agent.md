@@ -89,7 +89,7 @@ Options are documented on this page as CLI flags, but can also be passed as conf
 | `--docker`   | Use cri-dockerd instead of containerd |
 | `--enable-pprof` | Enable pprof endpoint on supervisor port |
 | `--prefer-bundled-bin` | Prefer bundled userspace binaries over host binaries |
-| `--disable-default-registry-endpoint` | See "[Default Endpoint Fallback](../installation/private-registry.md#default-endpoint-fallback)"
+| `--disable-default-registry-endpoint` | See "[Default Endpoint Fallback](../installation/images/private-registry.md#default-endpoint-fallback)"
 | `--vpn-auth` | See "[Integration with the Tailscale VPN provider](../networking/distributed-multicloud.md#integration-with-the-tailscale-vpn-provider-experimental)"  |
 | `--vpn-auth-file` | See "[Integration with the Tailscale VPN provider](../networking/distributed-multicloud.md#integration-with-the-tailscale-vpn-provider-experimental)" |
 
