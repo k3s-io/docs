@@ -176,7 +176,7 @@ The following options must be set to the same value on all servers in the cluste
 | `--docker`             | Use cri-dockerd instead of containerd                                                                   |
 | `--prefer-bundled-bin` | Prefer bundled userspace binaries over host binaries                                                    |
 | `--disable-agent`      | See "[Running Agentless Servers](../advanced.md#running-agentless-servers-experimental)" |
-| `--embedded-registry`  | See "[Embedded Registry Mirror](../installation/registry-mirror.md)"                                    |
+| `--embedded-registry`  | See "[Embedded Registry Mirror](../installation/images/registry-mirror.md)"                                    |
 | `--vpn-auth` | See "[Integration with the Tailscale VPN provider](../networking/distributed-multicloud.md#integration-with-the-tailscale-vpn-provider-experimental)"  |
 | `--vpn-auth-file` | See "[Integration with the Tailscale VPN provider](../networking/distributed-multicloud.md#integration-with-the-tailscale-vpn-provider-experimental)" |
 

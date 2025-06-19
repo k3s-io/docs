@@ -78,7 +78,7 @@ title: エージェント
 | `--rootless` | ルートレスで実行                          |
 | `--docker`   | containerdの代わりにcri-dockerdを使用 |
 | `--prefer-bundled-bin` | ホストバイナリよりもバンドルされたユーザースペースバイナリを優先 |
-| `--disable-default-registry-endpoint` | "[デフォルトエンドポイントフォールバック](../installation/private-registry.md#default-endpoint-fallback)"を参照 |
+| `--disable-default-registry-endpoint` | "[デフォルトエンドポイントフォールバック](../installation/images/private-registry.md#default-endpoint-fallback)"を参照 |
 
 ### 廃止予定
 

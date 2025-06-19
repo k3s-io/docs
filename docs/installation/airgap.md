@@ -20,7 +20,7 @@ If you have not yet set up a private Docker registry, refer to the [official Reg
 1. Obtain the images archive for your architecture from the [releases](https://github.com/k3s-io/k3s/releases) page for the version of K3s you will be running.
 2. Use `docker image load k3s-airgap-images-amd64.tar.zst` to import images from the tar file into docker.
 3. Use `docker tag` and `docker push` to retag and push the loaded images to your private registry.
-4. Follow the [Private Registry Configuration](private-registry.md) guide to create and configure the `registries.yaml` file.
+4. Follow the [Private Registry Configuration](./images/private-registry.md) guide to create and configure the `registries.yaml` file.
 5. Proceed to the [Install K3s](#install-k3s) section below.
 
 ### Manually Deploy Images Method
@@ -71,7 +71,7 @@ When enabled and properly configured, images available in the containerd image s
 can be pulled by other cluster members without access to an external image registry.
 
 The mirrored images may be sourced from an upstream registry, registry mirror, or airgap image tarball.
-For more information on enabling the embedded distributed registry mirror, see the [Embedded Registry Mirror](./registry-mirror.md) documentation.
+For more information on enabling the embedded distributed registry mirror, see the [Embedded Registry Mirror](./images/registry-mirror.md) documentation.
 
 ## Install K3s
 
