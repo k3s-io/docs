@@ -2,10 +2,11 @@
 title: "Air-Gap Install"
 ---
 
-K3s can be installed in an air-gapped environment with two different methods. You can either deploy images via the [k3s-airgap-images tarball release artifact](#manually-deploy-images-method) or by using a [private registry](#private-registry-method). It is also possible to use the [embedded registry mirror](#embedded-registry-mirror) as long as there is at least one cluster member that has access to the required images.
-
+This guide walks you through installing K3s in an air-gapped environment using a three-step process.
 
 ## 1. Load Images
+
+Each image loading method has different requirements and is suited for different air-gapped scenarios. Choose the method that best fits your infrastructure and security requirements.
 
 <Tabs queryString="airgap-load-images">
 <TabItem value="Private Registry Method">
@@ -22,7 +23,7 @@ If you have not yet set up a private Docker registry, refer to the [official Reg
 2. Use `docker image load k3s-airgap-images-amd64.tar.zst` to import images from the tar file into docker.
 3. Use `docker tag` and `docker push` to retag and push the loaded images to your private registry.
 4. Follow the [Private Registry Configuration](private-registry.md) guide to create and configure the `registries.yaml` file.
-5. Proceed to the [Install K3s](#install-k3s) section below.
+5. Proceed to the [Install K3s](#2-install-k3s) section below.
 
 </TabItem>
 <TabItem value="Manually Deploy Images">
@@ -41,7 +42,7 @@ This method requires you to manually deploy the necessary images to each node, a
   sudo mkdir -p /var/lib/rancher/k3s/agent/images/
   sudo curl -L -o /var/lib/rancher/k3s/agent/images/k3s-airgap-images-amd64.tar.zst "https://github.com/k3s-io/k3s/releases/download/v1.33.1%2Bk3s1/k3s-airgap-images-amd64.tar.zst"
   ```
-3. Proceed to the [Install K3s](#install-k3s) section below.
+3. Proceed to the [Install K3s](#2-install-k3s) section below.
 
 #### Enable Conditional Image Imports
 
@@ -83,7 +84,7 @@ For more information on enabling the embedded distributed registry mirror, see t
 
 ### Prerequisites
 
-Before installing K3s, complete the [Private Registry Method](#private-registry-method) or the [Manually Deploy Images Method](#manually-deploy-images-method) above to prepopulate the images that K3s needs to install.
+Before installing K3s, choose one of the [Load Images](#1-load-images) options above to prepopulate the images that K3s needs to install.
 
 #### Binaries
 - Download the K3s binary from the [releases](https://github.com/k3s-io/k3s/releases) page, matching the same version used to get the airgap images. Place the binary in `/usr/local/bin` on each air-gapped node and ensure it is executable.
