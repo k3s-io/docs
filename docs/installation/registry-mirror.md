@@ -16,7 +16,8 @@ This option enables the embedded mirror for use on all nodes in the cluster.
 When enabled at a cluster level, all nodes will host a local OCI registry on port 6443,
 and publish a list of available images via a peer to peer network on port 5001.
 Any image available in the containerd image store on any node, can be pulled by other cluster members without access to an external registry.
-Images imported via [air-gap image tar files](./airgap.md#manually-deploy-images-method) are pinned in containerd to
+<!-- Note: Not a regular markdown header because it exists inside a Tabs structure, access it via queryString-->
+Images imported via [air-gap image tar files](./airgap.md?airgap-load-images=Manually+Deploy+Images) are pinned in containerd to
 ensure that they remain available and are not pruned by Kubelet garbage collection.
 
 The peer to peer port can changed from 5001 by setting the `K3S_P2P_PORT` environment variable for the K3s service. The port must be set to the same value on all nodes.
