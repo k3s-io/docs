@@ -103,16 +103,19 @@ When running the K3s script with the `INSTALL_K3S_SKIP_DOWNLOAD` environment var
 
 #### SELinux RPM
 
-If you intend to deploy K3s with SELinux enabled, you will need also install the appropriate k3s-selinux RPM on all nodes. The latest version of the RPM can be found [here](https://github.com/k3s-io/k3s-selinux/releases/latest). For example, on CentOS 8:
+If running on an air-gapped node with SELinux enabled, you must manually install the k3s-selinux RPM before installing K3s. This RPM includes the necessary SELinux policies for K3s to run properly. The latest version of the RPM can be found [here](https://github.com/k3s-io/k3s-selinux/releases/latest). For example, on CentOS 8:
 
 ```bash
-On internet accessible machine:
-curl -LO https://github.com/k3s-io/k3s-selinux/releases/download/v1.4.stable.1/k3s-selinux-1.4-1.el8.noarch.rpm
+# On internet accessible machine:
+curl -LO https://github.com/k3s-io/k3s-selinux/releases/download/v1.6.stable.1/k3s-selinux-1.6-1.el8.noarch.rpm
 
 # Transfer RPM to air-gapped machine
-On air-gapped machine:
-sudo yum install ./k3s-selinux-1.4-1.el8.noarch.rpm
+sudo yum install ./k3s-selinux-1.6-1.el8.noarch.rpm
 ```
+The k3s-selinux RPM installation requires the following dependencies to be available in the OS:  
+    * container-selinux
+    * policycoreutils
+    * selinux-policy
 
 See the [SELinux](../advanced.md#selinux-support) section for more information.
 
