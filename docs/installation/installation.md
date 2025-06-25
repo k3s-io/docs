@@ -6,9 +6,9 @@ This section contains instructions for installing K3s in various environments. P
 
 [Configuration Options](configuration.md) provides guidance on the options available to you when installing K3s.
 
-[Private Registry Configuration](private-registry.md) covers use of `registries.yaml` to configure container image registry mirrors.
+[Private Registry Configuration](private-registry.md) covers use of `registries.yaml` to configure container image registry authentication and mirroring.
 
-[Embedded Mirror](registry-mirror.md) shows how to enable the embedded distributed image registry mirror.
+[Embedded Registry Mirror](registry-mirror.md) shows how to enable the embedded distributed image registry mirror, for peer-to-peer sharing of images between nodes.
 
 [Air-Gap Install](airgap.md) details how to set up K3s in environments that do not have direct access to the Internet.
 

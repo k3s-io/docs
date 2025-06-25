@@ -2,8 +2,7 @@
 title: "Import images"
 ---
 
-There are two ways to get images onto your nodes so that Pods can utilize them: pulling them on-demand or pre-importing them.
-
+Container images are cached locally on each node by the containerd image store. Images can be pulled from the registry as needed by pods, preloaded via image pull, or imported from an image tarball.
 
 ## On-demand image pulling
 
@@ -22,7 +21,7 @@ K3s includes two mechanisms to pre-import images into the containerd image store
 <Tabs groupId = "import images" queryString>
 <TabItem value="Online image importing" default>
 
-Users can trigger the pulling of images into the containerd image store by adding a `.txt` file containing the image paths to the `/var/lib/rancher/k3s/agent/images` directory while K3s is running. A K3s controller will detect this file and trigger the image pull from an upstream (default) or [private registry](installation/private-registry.md).
+Users can trigger a pull of images into the containerd image store by placing a text file containing the image names, one per line, in the `/var/lib/rancher/k3s/agent/images` directory. The text file can be placed before K3s is started, or created/modified while K3s is running. K3s will sequentially pull the images via the CRI API, optionally using the [registries.yaml](installation/private-registry.md) configuration.
 
 For example:
 
@@ -45,7 +44,7 @@ Use `sudo k3s ctr images list` to query the containerd image store.
 </TabItem>
 <TabItem value="Offline image importing">
 
-Users can import images offline to containerd by adding image tarballs in the directory `/var/lib/rancher/k3s/agent/images` while K3s is running. A K3s controller will detect the image tarball, extract the images and store them in the containerd image store.
+Users can import images directly into the containerd image store by placing image tarballs in the `/var/lib/rancher/k3s/agent/images` directory. The tarball can be placed before K3s is started, or created/modified while K3s is running. K3s will decompress the image tarball if necessary, extract the images, and load them into the containerd image store.
 
 For example:
 
@@ -58,9 +57,7 @@ After a few seconds, the images included in the image tarball will be available 
 
 Use `sudo k3s ctr images list` to query the containerd image store.
 
-:::warning
-When using the offline image importing for Airgap, tarballs should be present before K3s starts. Please follow the [airgap install documentation](installation/airgap.md) for detailed information
-:::
+This is the method used in Airgap. Please follow the [Airgap install documentation](installation/airgap.md) for detailed information.
 
 </TabItem>
 </Tabs>
@@ -69,6 +66,6 @@ When using the offline image importing for Airgap, tarballs should be present be
 
 K3s supports two alternatives for image registries:
 
-* [Private Registry Configuration](installation/private-registry.md) covers use of `registries.yaml` to configure container image registry mirrors.
+* [Private Registry Configuration](installation/private-registry.md) covers use of `registries.yaml` to configure container image registry authentication and mirroring.
 
-* [Embedded Registry Mirror](installation/registry-mirror.md) shows how to enable the embedded distributed image registry mirror.
+* [Embedded Registry Mirror](installation/registry-mirror.md) shows how to enable the embedded distributed image registry mirror, for peer-to-peer sharing of images between nodes.
