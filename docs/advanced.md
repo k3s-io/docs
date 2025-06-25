@@ -361,12 +361,12 @@ The [install script](./installation/configuration.md#configuration-with-install-
 
 </TabItem>
 
-<TabItem value="Manual Installation" default>
+<TabItem value="Manual Installation">
 
 The necessary policies can be installed with the following commands:
 ```bash
 yum install -y container-selinux selinux-policy-base
-yum install -y https://rpm.rancher.io/k3s/latest/common/centos/7/noarch/k3s-selinux-1.4-1.el7.noarch.rpm
+yum install -y https://rpm.rancher.io/k3s/latest/common/centos/9/noarch/k3s-selinux-1.6-1.el9.noarch.rpm
 ```
 
 To force the install script to log a warning rather than fail, you can set the following environment variable: `INSTALL_K3S_SELINUX_WARN=true`.
@@ -375,7 +375,7 @@ To force the install script to log a warning rather than fail, you can set the f
 
 ### Enabling SELinux Enforcement
 
-To leverage SELinux, specify the `--selinux` flag when starting K3s servers and agents.
+To leverage SELinux, specify the `--selinux` flag when starting K3s servers and agents or setting the K3S_SELINUX=true environment variable.
   
 This option can also be specified in the K3s [configuration file](./installation/configuration.md#configuration-file).
 
