@@ -14,7 +14,7 @@ Kubernetes, by default, automatically pulls images when a Pod requires them if t
 The pre-importing of images while K3s is running feature is available as of January 2025 releases: v1.32.0+k3s1, v1.31.5+k3s1, v1.30.9+k3s1, v1.29.13+k3s1. Before that, K3s pre-imported the images only when booting.
 :::
 
-Pre-importing images onto the node is essential if you configure Kubernetes' `imagePullPolicy` as `Never`, for example, for security reasons. Another reason to do this is to reduce the time it takes for your K3s nodes to spin up.
+Pre-importing images onto the node is essential if you configure Kubernetes' `imagePullPolicy` as `Never`. You might do this for security reasons or to reduce the time it takes for your K3s nodes to spin up.
 
 K3s includes two mechanisms to pre-import images into the containerd image store:
 
