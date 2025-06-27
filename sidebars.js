@@ -36,6 +36,7 @@ module.exports = {
         'upgrades/killall',
         'upgrades/manual',
         'upgrades/automated',
+        'upgrades/roll-back',
       ],
     },
     {
