@@ -22,6 +22,8 @@ jobs:
         run: yarn run remark --use remark-validate-links --frail ./docs
       - name: Check external links
         run: yarn run remark --use remark-lint-no-dead-urls --frail ./docs
+      - name: Check Markdown formatting
+        run: ./scripts/linter.sh
       - name: Test build website
         run: yarn build
       

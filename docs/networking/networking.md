@@ -1,5 +1,5 @@
 ---
-title: "Networking"
+title: Networking
 ---
 
 This section contains instructions for configuring networking in K3s.

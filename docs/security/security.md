@@ -1,5 +1,5 @@
 ---
-title: "Security"
+title: Security
 ---
 
 This section describes the methodology and means of securing a K3s cluster. It's broken into 2 sections. These guides assume k3s is running with embedded etcd.

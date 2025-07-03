@@ -1,5 +1,5 @@
 ---
-title: "K3s initialization deep dive"
+title: K3s initialization deep dive
 description: Explain k3s initialization steps
 authors: manuelbuil # Fill out your info in the authors.yml file
 hide_table_of_contents: true

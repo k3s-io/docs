@@ -1,6 +1,6 @@
 ---
 slug: /
-title: "K3s - Lightweight Kubernetes"
+title: K3s - Lightweight Kubernetes
 ---
 
 Lightweight Kubernetes. Easy to install, half the memory, all in a binary of less than 100 MB.

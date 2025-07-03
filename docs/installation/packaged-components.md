@@ -1,5 +1,5 @@
 ---
-title: "Managing Packaged Components"
+title: Managing Packaged Components
 ---
 
 ## Auto-Deploying Manifests (AddOns)

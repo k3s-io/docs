@@ -1,5 +1,5 @@
 ---
-title: "High Availability Embedded etcd"
+title: High Availability Embedded etcd
 ---
 
 :::warning

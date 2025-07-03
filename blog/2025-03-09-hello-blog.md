@@ -1,5 +1,5 @@
 ---
-title: "Hello Blog"
+title: Hello Blog
 description: This is the first blog post on k3s.io
 authors: dereknola # Fill out your info in the authors.yml file
 # tags: ["example-tag"]

@@ -1,5 +1,5 @@
 ---
-title: "Related Projects"
+title: Related Projects
 ---
 
 Projects implementing the K3s distribution are welcome additions to help expand the community. These projects help to:

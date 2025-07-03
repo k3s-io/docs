@@ -1,5 +1,5 @@
 ---
-title: "Multus and IPAM plugins"
+title: Multus and IPAM plugins
 ---
 
 [Multus CNI](https://github.com/k8snetworkplumbingwg/multus-cni) is a CNI plugin that enables attaching multiple network interfaces to pods. Multus does not replace CNI plugins, instead it acts as a CNI plugin multiplexer. Multus is useful in certain use cases, especially when pods are network intensive and require extra network interfaces that support dataplane acceleration techniques such as SR-IOV.
@@ -24,7 +24,7 @@ An IP Address Manager (IPAM) plugin is required to assign IP addresses on the ex
 
 The helm deployment examples below will deploy a DaemonSet to create Multus pods to install the required CNI binaries in `/var/lib/rancher/k3s/data/cni/` and Multus CNI config in `/var/lib/rancher/k3s/agent/etc/cni/net.d`.
 
-<Tabs groupId = "MultusIPAMplugins">
+<Tabs groupId="MultusIPAMplugins">
 <TabItem value="host-local" default>
 The host-local IPAM plugin allocates ip addresses out of a set of address ranges. It stores the state locally on the host filesystem, hence ensuring uniqueness of IP addresses on a single host. Therefore, we don't recommend it for multi-node clusters. This IPAM plugin does not require any extra deployment. For more information: https://www.cni.dev/plugins/current/ipam/host-local/.
 
