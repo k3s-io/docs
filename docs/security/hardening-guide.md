@@ -1,5 +1,5 @@
 ---
-title: "CIS Hardening Guide"
+title: CIS Hardening Guide
 ---
 
 This document provides prescriptive guidance for hardening a production installation of K3s. It outlines the configurations and controls required to address Kubernetes benchmark controls from the Center for Internet Security (CIS).

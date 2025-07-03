@@ -1,5 +1,5 @@
 ---
-title: "Upgrades"
+title: Upgrades
 ---
 
 ### Upgrading your K3s cluster

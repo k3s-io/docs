@@ -1,5 +1,5 @@
 ---
-title: "Air-Gap Install"
+title: Air-Gap Install
 ---
 
 This guide walks you through installing K3s in an air-gapped environment using a three-step process.

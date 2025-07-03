@@ -1,5 +1,5 @@
 ---
-title: "Embedded Registry Mirror"
+title: Embedded Registry Mirror
 ---
 
 :::info Version Gate

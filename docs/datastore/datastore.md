@@ -1,5 +1,5 @@
 ---
-title: "Cluster Datastore"
+title: Cluster Datastore
 ---
 
 

@@ -1,5 +1,5 @@
 ---
-title: "Import images"
+title: Import Images
 ---
 
 Container images are cached locally on each node by the containerd image store. Images can be pulled from the registry as needed by pods, preloaded via image pull, or imported from an image tarball.
@@ -18,7 +18,7 @@ Pre-importing images onto the node is essential if you configure Kubernetes' `im
 
 K3s includes two mechanisms to pre-import images into the containerd image store:
 
-<Tabs groupId = "import images" queryString>
+<Tabs groupId="import-images" queryString>
 <TabItem value="Online image importing" default>
 
 Users can trigger a pull of images into the containerd image store by placing a text file containing the image names, one per line, in the `/var/lib/rancher/k3s/agent/images` directory. The text file can be placed before K3s is started, or created/modified while K3s is running. K3s will sequentially pull the images via the CRI API, optionally using the [registries.yaml](installation/private-registry.md) configuration.
