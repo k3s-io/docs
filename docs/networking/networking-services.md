@@ -24,15 +24,19 @@ By default, ServiceLB will use all nodes in the cluster to host the Traefik Load
 
 To restrict the nodes used by Traefik, and by extension the node IPs advertised in the Ingress Status, you can follow the instructions in the [Controlling ServiceLB Node Selection](#controlling-servicelb-node-selection) section below to limit what nodes ServiceLB runs on, or by adding some nodes to a LoadBalancer pool and restricting the Traefik Service to that pool by setting matching labels in the Traefik HelmChartConfig.
 
-Traefik is deployed by default when starting the server. For more information see [Managing Packaged Components](../installation/packaged-components.md). The default config file is found in `/var/lib/rancher/k3s/server/manifests/traefik.yaml`.
-
-The `traefik.yaml` file should not be edited manually, as K3s will replace the file with defaults at startup. Instead, you should customize Traefik by creating an additional `HelmChartConfig` manifest in `/var/lib/rancher/k3s/server/manifests`. For more details and an example see [Customizing Packaged Components with HelmChartConfig](../helm.md#customizing-packaged-components-with-helmchartconfig). For more information on the possible configuration values, refer to the official [Traefik Helm Configuration Parameters.](https://github.com/traefik/traefik-helm-chart/tree/master/traefik).
+Traefik is deployed by default when starting the server. The default chart values can be found in `/var/lib/rancher/k3s/server/manifests/traefik.yaml`, but this file should not be edited manually, as K3s will replace the file with defaults at startup. 
+Instead, you should customize Traefik by creating an additional `HelmChartConfig` manifest in `/var/lib/rancher/k3s/server/manifests`.
+For more details and an example see [Customizing Packaged Components with HelmChartConfig](../helm.md#customizing-packaged-components-with-helmchartconfig).
+For more information on the possible configuration values, refer to `values.yaml` of the [Traefik Helm Chart](https://github.com/k3s-io/k3s-charts/tree/main/charts/traefik) included with your version of K3s.
 
 To remove Traefik from your cluster, start all servers with the `--disable=traefik` flag.
+For more information, see [Managing Packaged Components](../installation/packaged-components.md).
 
-K3s includes Traefik v2. K3s versions 1.21 through 1.30 install Traefik v2, unless an existing installation of Traefik v1 is found, in which case Traefik is not upgraded to v2. K3s versions 1.20 and earlier include Traefik v1. For more information on the specific version of Traefik included with K3s, consult the Release Notes for your version.
-
-To migrate from an older Traefik v1 instance please refer to the [Traefik documentation](https://doc.traefik.io/traefik/migration/v1-to-v2/) and [migration tool](https://github.com/traefik/traefik-migration-tool).
+For details on the specific version of Traefik included with K3s, consult the Release Notes for your version.
+* K3s versions starting with **1.32** include Traefik v3. Existing installations of Traefik v2 will be automatically upgraded to v3 when K3s is upgraded.
+  Traefik v3 should be compatible with configuration from v2; consult the upstream [v2 to v3 migration](https://doc.traefik.io/traefik/migration/v2-to-v3/) docs for more information.
+* K3s versions **1.21** through **1.31** included Traefik v2, unless an existing installation of Traefik v1 was found, in which case Traefik was not upgraded to v2.
+* K3s versions **1.20** and **earlier** included Traefik v1.
 
 ## Network Policy Controller
 
