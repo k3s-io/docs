@@ -171,6 +171,12 @@ K3s will automatically detect alternative container runtimes if they are present
 crun, lunatic, nvidia, nvidia-cdi, nvidia-experimental, slight, spin, wasmedge, wasmer, wasmtime, wws
 ```
 
+K3s uses the service's `PATH` environment variable to search for container runtime executables.
+If an installed container runtime is not detected by K3s, ensure it is present in a system path, which generally includes:  
+`/usr/local/sbin /usr/local/bin /usr/sbin /usr/bin /sbin /bin`
+
+### NVIDIA Container Runtime
+
 NVIDIA GPUs require installation of the NVIDIA Container Runtime in order to schedule and run accelerated workloads in Pods. To use NVIDIA GPUs with K3s, perform the following steps:
 
 1. Install the nvidia-container package repository on the node by following the instructions at:  
