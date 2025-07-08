@@ -20,7 +20,7 @@ for minor in $MINORS; do
         body=$(gh release view "${patch}" -R "k3s-io/${product}" --json body -q '.body')
         # Extract from each release notes the component table, building a single table with all the components
         if [ -z "${previous}" ]; then
-            title="---\nhide_table_of_contents: true\nsidebar_position: 0\n---\n\n# ${minor}.X\n"
+            title="---\nhide_table_of_contents: true\nsidebar_position: 0\ntitle: ${minor}.X\n---\n\n"
             echo -e "${title}" >> $k3s_table
             upgrade_link="[Urgent Upgrade Notes](https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-${minor:1}.md#urgent-upgrade-notes)"
             upgrade_warning=":::warning Upgrade Notice\nBefore upgrading from earlier releases, be sure to read the Kubernetes ${upgrade_link}.\n:::\n"
