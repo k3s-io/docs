@@ -2,15 +2,11 @@
 title: Quick-Start Guide
 ---
 
-This guide will help you quickly launch a cluster with default options. The [installation section](./installation/installation.md) covers in greater detail how K3s can be set up.
+This guide will help you quickly launch a cluster with default options. Make sure your nodes meet the [requirements](./installation/requirements.md) before proceeding.
 
-Make sure your nodes meet the [requirements](./installation/requirements.md) before proceeding.
-
-For information on how K3s components work together, refer to the [architecture section.](./architecture.md)
-
-:::info
-New to Kubernetes? The official Kubernetes docs already have some great tutorials outlining the basics [here](https://kubernetes.io/docs/tutorials/kubernetes-basics/).
-:::
+* Consult the [Installation](./installation/installation.md) page for greater detail on installing and configuring K3s.
+* For information on how K3s components work together, refer to the [Architecture](./architecture.md) page.
+* If you are new to Kubernetes, the [official Kubernetes docs](https://kubernetes.io/docs/tutorials/kubernetes-basics/) have great tutorials covering basics that all cluster administrators should be familiar with.
 
 ## Install Script
 
@@ -40,4 +36,4 @@ Setting the `K3S_URL` parameter causes the installer to configure K3s as an agen
 Each machine must have a unique hostname. If your machines do not have unique hostnames, pass the `K3S_NODE_NAME` environment variable and provide a value with a valid and unique hostname for each node.
 :::
 
-If interested in having more server nodes, see [High Availability Embedded etcd](./datastore/ha-embedded.md) and [High Availability External DB](./datastore/ha.md) pages for more information.
+If you are interested in having more server nodes, see the [High Availability Embedded etcd](./datastore/ha-embedded.md) and [High Availability External DB](./datastore/ha.md) pages for more information.
