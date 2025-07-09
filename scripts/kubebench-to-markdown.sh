@@ -84,7 +84,7 @@ echo "$clean" | jq -c '.Controls[].tests[].results[]' | while read -r result; do
             echo "<details>"
             echo "<summary><b>Returned Value:</b></summary>"
             echo
-            echo "\`\`\`console"
+            echo "\`\`\`log"
             echo "$actual_value"
             echo "\`\`\`"
             echo "</details>"
