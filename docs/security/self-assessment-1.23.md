@@ -201,13 +201,13 @@ fi
 
 **Expected Result**:
 
-```console
+```log
 '700' is equal to '700'
 ```
 
 **Returned Value**:
 
-```console
+```log
 700
 ```
 
@@ -248,13 +248,13 @@ For example, chown root:root /etc/kubernetes/admin.conf
 
 **Expected Result**:
 
-```console
+```log
 'root:root' is equal to 'root:root'
 ```
 
 **Returned Value**:
 
-```console
+```log
 root:root
 ```
 
@@ -276,13 +276,13 @@ chmod 644 scheduler
 
 **Expected Result**:
 
-```console
+```log
 permissions has permissions 644, expected 644 or more restrictive
 ```
 
 **Returned Value**:
 
-```console
+```log
 permissions=644
 ```
 
@@ -303,13 +303,13 @@ For example, `chown root:root scheduler`
 
 **Expected Result**:
 
-```console
+```log
 'root:root' is present
 ```
 
 **Returned Value**:
 
-```console
+```log
 root:root
 ```
 
@@ -331,13 +331,13 @@ chmod 644 controllermanager
 
 **Expected Result**:
 
-```console
+```log
 permissions has permissions 644, expected 644 or more restrictive
 ```
 
 **Returned Value**:
 
-```console
+```log
 permissions=644
 ```
 
@@ -359,13 +359,13 @@ stat -c %U:%G /var/lib/rancher/k3s/server/tls
 
 **Expected Result**:
 
-```console
+```log
 'root:root' is equal to 'root:root'
 ```
 
 **Returned Value**:
 
-```console
+```log
 root:root
 ```
 
@@ -387,13 +387,13 @@ find /var/lib/rancher/k3s/server/tls | xargs stat -c %U:%G
 
 **Expected Result**:
 
-```console
+```log
 'root:root' is present
 ```
 
 **Returned Value**:
 
-```console
+```log
 root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root root:root
 ```
 
@@ -464,13 +464,13 @@ on the control plane node and remove the `--token-auth-file=<filename>` paramete
 
 **Expected Result**:
 
-```console
+```log
 '--token-auth-file' is not present
 ```
 
 **Returned Value**:
 
-```console
+```log
 root 1616 1600 6 13:26 ? 00:01:28 containerd -c /var/lib/rancher/k3s/agent/etc/containerd/config.toml -a /run/k3s/containerd/containerd.sock --state /run/k3s/containerd --root /var/lib/rancher/k3s/agent/containerd root 2318 1 0 13:27 ? 00:00:00 /var/lib/rancher/k3s/data/577968fa3d58539cc4265245941b7be688833e6bf5ad7869fa2afe02f15f1cd2/bin/containerd-shim-runc-v2 -namespace k8s.io -id b41ec3297be4625c2406ad8b7b4f8b91cddd60850c420050c4c3273f809b3e7e -address /run/k3s/containerd/containerd.sock root 2341 1 0 13:27 ? 00:00:00 /var/lib/rancher/k3s/data/577968fa3d58539cc4265245941b7be688833e6bf5ad7869fa2afe02f15f1cd2/bin/containerd-shim-runc-v2 -namespace k8s.io -id e7999a65ae0a4e9969f32317ec48ae4f7071b62f92e5236696737973be77c2e1 -address /run/k3s/containerd/containerd.sock root 3199 1 0 13:27 ? 00:00:00 /var/lib/rancher/k3s/data/577968fa3d58539cc4265245941b7be688833e6bf5ad7869fa2afe02f15f1cd2/bin/containerd-shim-runc-v2 -namespace k8s.io -id 90c4e63d6ee29d40a48c2fdaf2738c2472cba1139dde8a550466c452184f8528 -address /run/k3s/containerd/containerd.sock root 3923 1 0 13:27 ? 00:00:00 /var/lib/rancher/k3s/data/577968fa3d58539cc4265245941b7be688833e6bf5ad7869fa2afe02f15f1cd2/bin/containerd-shim-runc-v2 -namespace k8s.io -id be5f4b9bd1ed9239362b7000b47f353acb8bc8ca52a9c9145cba0e902ec1c4b9 -address /run/k3s/containerd/containerd.sock root 4559 1 0 13:28 ? 00:00:00 /var/lib/rancher/k3s/data/577968fa3d58539cc4265245941b7be688833e6bf5ad7869fa2afe02f15f1cd2/bin/containerd-shim-runc-v2 -namespace k8s.io -id 04cd40ea6b6078797f177c902c89412c70e523ad2a687a62829bf1d16ff0e19c -address /run/k3s/containerd/containerd.sock root 4647 1 0 13:28 ? 00:00:00 /var/lib/rancher/k3s/data/577968fa3d58539cc4265245941b7be688833e6bf5ad7869fa2afe02f15f1cd2/bin/containerd-shim-runc-v2 -namespace k8s.io -id 48f37a480315b6adce2d2a5c5d67a85412dd0ba7a2e82816434e0deb9fa75de9 -address /run/k3s/containerd/containerd.sock root 6610 1 0 13:47 ? 00:00:00 /var/lib/rancher/k3s/data/577968fa3d58539cc4265245941b7be688833e6bf5ad7869fa2afe02f15f1cd2/bin/containerd-shim-runc-v2 -namespace k8s.io -id 1cf71c22f568468055e517ab363437c0e54e45274c64024d337cc5bcce66341d -address /run/k3s/containerd/containerd.sock
 ```
 
@@ -492,13 +492,13 @@ from enabled admission plugins.
 
 **Expected Result**:
 
-```console
+```log
 '--enable-admission-plugins' is present OR '--enable-admission-plugins' is not present
 ```
 
 **Returned Value**:
 
-```console
+```log
 root 1616 1600 6 13:26 ? 00:01:28 containerd -c /var/lib/rancher/k3s/agent/etc/containerd/config.toml -a /run/k3s/containerd/containerd.sock --state /run/k3s/containerd --root /var/lib/rancher/k3s/agent/containerd root 2318 1 0 13:27 ? 00:00:00 /var/lib/rancher/k3s/data/577968fa3d58539cc4265245941b7be688833e6bf5ad7869fa2afe02f15f1cd2/bin/containerd-shim-runc-v2 -namespace k8s.io -id b41ec3297be4625c2406ad8b7b4f8b91cddd60850c420050c4c3273f809b3e7e -address /run/k3s/containerd/containerd.sock root 2341 1 0 13:27 ? 00:00:00 /var/lib/rancher/k3s/data/577968fa3d58539cc4265245941b7be688833e6bf5ad7869fa2afe02f15f1cd2/bin/containerd-shim-runc-v2 -namespace k8s.io -id e7999a65ae0a4e9969f32317ec48ae4f7071b62f92e5236696737973be77c2e1 -address /run/k3s/containerd/containerd.sock root 3199 1 0 13:27 ? 00:00:00 /var/lib/rancher/k3s/data/577968fa3d58539cc4265245941b7be688833e6bf5ad7869fa2afe02f15f1cd2/bin/containerd-shim-runc-v2 -namespace k8s.io -id 90c4e63d6ee29d40a48c2fdaf2738c2472cba1139dde8a550466c452184f8528 -address /run/k3s/containerd/containerd.sock root 3923 1 0 13:27 ? 00:00:00 /var/lib/rancher/k3s/data/577968fa3d58539cc4265245941b7be688833e6bf5ad7869fa2afe02f15f1cd2/bin/containerd-shim-runc-v2 -namespace k8s.io -id be5f4b9bd1ed9239362b7000b47f353acb8bc8ca52a9c9145cba0e902ec1c4b9 -address /run/k3s/containerd/containerd.sock root 4559 1 0 13:28 ? 00:00:00 /var/lib/rancher/k3s/data/577968fa3d58539cc4265245941b7be688833e6bf5ad7869fa2afe02f15f1cd2/bin/containerd-shim-runc-v2 -namespace k8s.io -id 04cd40ea6b6078797f177c902c89412c70e523ad2a687a62829bf1d16ff0e19c -address /run/k3s/containerd/containerd.sock root 4647 1 0 13:28 ? 00:00:00 /var/lib/rancher/k3s/data/577968fa3d58539cc4265245941b7be688833e6bf5ad7869fa2afe02f15f1cd2/bin/containerd-shim-runc-v2 -namespace k8s.io -id 48f37a480315b6adce2d2a5c5d67a85412dd0ba7a2e82816434e0deb9fa75de9 -address /run/k3s/containerd/containerd.sock root 6610 1 0 13:47 ? 00:00:00 /var/lib/rancher/k3s/data/577968fa3d58539cc4265245941b7be688833e6bf5ad7869fa2afe02f15f1cd2/bin/containerd-shim-runc-v2 -namespace k8s.io -id 1cf71c22f568468055e517ab363437c0e54e45274c64024d337cc5bcce66341d -address /run/k3s/containerd/containerd.sock
 ```
 
@@ -534,13 +534,13 @@ journalctl -D /var/log/journal -u k3s | grep 'Running kube-apiserver' | tail -n1
 
 **Expected Result**:
 
-```console
+```log
 '--kubelet-client-certificate' is present AND '--kubelet-client-key' is present
 ```
 
 **Returned Value**:
 
-```console
+```log
 Sep 13 13:26:40 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:26:40Z" level=info msg="Running kube-apiserver --advertise-address=172.31.0.140 --advertise-port=6443 --allow-privileged=true --anonymous-auth=false --api-audiences=https://kubernetes.default.svc.cluster.local,k3s --authorization-mode=Node,RBAC --bind-address=127.0.0.1 --cert-dir=/var/lib/rancher/k3s/server/tls/temporary-certs --client-ca-file=/var/lib/rancher/k3s/server/tls/client-ca.crt --egress-selector-config-file=/var/lib/rancher/k3s/server/etc/egress-selector-config.yaml --enable-admission-plugins=NodeRestriction --enable-aggregator-routing=true --etcd-cafile=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt --etcd-certfile=/var/lib/rancher/k3s/server/tls/etcd/client.crt --etcd-keyfile=/var/lib/rancher/k3s/server/tls/etcd/client.key --etcd-servers=https://127.0.0.1:2379 --feature-gates=JobTrackingWithFinalizers=true --kubelet-certificate-authority=/var/lib/rancher/k3s/server/tls/server-ca.crt --kubelet-client-certificate=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.crt --kubelet-client-key=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.key --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname --profiling=false --proxy-client-cert-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.crt --proxy-client-key-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.key --requestheader-allowed-names=system:auth-proxy --requestheader-client-ca-file=/var/lib/rancher/k3s/server/tls/request-header-ca.crt --requestheader-extra-headers-prefix=X-Remote-Extra- --requestheader-group-headers=X-Remote-Group --requestheader-username-headers=X-Remote-User --secure-port=6444 --service-account-issuer=https://kubernetes.default.svc.cluster.local --service-account-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-account-signing-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-cluster-ip-range=10.43.0.0/16 --service-node-port-range=30000-32767 --storage-backend=etcd3 --tls-cert-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.crt --tls-private-key-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.key"
 ```
 
@@ -564,13 +564,13 @@ journalctl -D /var/log/journal -u k3s | grep 'Running kube-apiserver' | tail -n1
 
 **Expected Result**:
 
-```console
+```log
 '--kubelet-certificate-authority' is present
 ```
 
 **Returned Value**:
 
-```console
+```log
 Sep 13 13:26:40 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:26:40Z" level=info msg="Running kube-apiserver --advertise-address=172.31.0.140 --advertise-port=6443 --allow-privileged=true --anonymous-auth=false --api-audiences=https://kubernetes.default.svc.cluster.local,k3s --authorization-mode=Node,RBAC --bind-address=127.0.0.1 --cert-dir=/var/lib/rancher/k3s/server/tls/temporary-certs --client-ca-file=/var/lib/rancher/k3s/server/tls/client-ca.crt --egress-selector-config-file=/var/lib/rancher/k3s/server/etc/egress-selector-config.yaml --enable-admission-plugins=NodeRestriction --enable-aggregator-routing=true --etcd-cafile=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt --etcd-certfile=/var/lib/rancher/k3s/server/tls/etcd/client.crt --etcd-keyfile=/var/lib/rancher/k3s/server/tls/etcd/client.key --etcd-servers=https://127.0.0.1:2379 --feature-gates=JobTrackingWithFinalizers=true --kubelet-certificate-authority=/var/lib/rancher/k3s/server/tls/server-ca.crt --kubelet-client-certificate=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.crt --kubelet-client-key=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.key --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname --profiling=false --proxy-client-cert-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.crt --proxy-client-key-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.key --requestheader-allowed-names=system:auth-proxy --requestheader-client-ca-file=/var/lib/rancher/k3s/server/tls/request-header-ca.crt --requestheader-extra-headers-prefix=X-Remote-Extra- --requestheader-group-headers=X-Remote-Group --requestheader-username-headers=X-Remote-User --secure-port=6444 --service-account-issuer=https://kubernetes.default.svc.cluster.local --service-account-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-account-signing-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-cluster-ip-range=10.43.0.0/16 --service-node-port-range=30000-32767 --storage-backend=etcd3 --tls-cert-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.crt --tls-private-key-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.key"
 ```
 
@@ -593,13 +593,13 @@ journalctl -D /var/log/journal -u k3s | grep 'Running kube-apiserver' | tail -n1
 
 **Expected Result**:
 
-```console
+```log
 '--authorization-mode' does not have 'AlwaysAllow'
 ```
 
 **Returned Value**:
 
-```console
+```log
 Sep 13 13:26:40 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:26:40Z" level=info msg="Running kube-apiserver --advertise-address=172.31.0.140 --advertise-port=6443 --allow-privileged=true --anonymous-auth=false --api-audiences=https://kubernetes.default.svc.cluster.local,k3s --authorization-mode=Node,RBAC --bind-address=127.0.0.1 --cert-dir=/var/lib/rancher/k3s/server/tls/temporary-certs --client-ca-file=/var/lib/rancher/k3s/server/tls/client-ca.crt --egress-selector-config-file=/var/lib/rancher/k3s/server/etc/egress-selector-config.yaml --enable-admission-plugins=NodeRestriction --enable-aggregator-routing=true --etcd-cafile=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt --etcd-certfile=/var/lib/rancher/k3s/server/tls/etcd/client.crt --etcd-keyfile=/var/lib/rancher/k3s/server/tls/etcd/client.key --etcd-servers=https://127.0.0.1:2379 --feature-gates=JobTrackingWithFinalizers=true --kubelet-certificate-authority=/var/lib/rancher/k3s/server/tls/server-ca.crt --kubelet-client-certificate=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.crt --kubelet-client-key=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.key --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname --profiling=false --proxy-client-cert-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.crt --proxy-client-key-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.key --requestheader-allowed-names=system:auth-proxy --requestheader-client-ca-file=/var/lib/rancher/k3s/server/tls/request-header-ca.crt --requestheader-extra-headers-prefix=X-Remote-Extra- --requestheader-group-headers=X-Remote-Group --requestheader-username-headers=X-Remote-User --secure-port=6444 --service-account-issuer=https://kubernetes.default.svc.cluster.local --service-account-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-account-signing-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-cluster-ip-range=10.43.0.0/16 --service-node-port-range=30000-32767 --storage-backend=etcd3 --tls-cert-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.crt --tls-private-key-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.key"
 ```
 
@@ -621,13 +621,13 @@ journalctl -D /var/log/journal -u k3s | grep 'Running kube-apiserver' | tail -n1
 
 **Expected Result**:
 
-```console
+```log
 '--authorization-mode' has 'Node'
 ```
 
 **Returned Value**:
 
-```console
+```log
 Sep 13 13:26:40 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:26:40Z" level=info msg="Running kube-apiserver --advertise-address=172.31.0.140 --advertise-port=6443 --allow-privileged=true --anonymous-auth=false --api-audiences=https://kubernetes.default.svc.cluster.local,k3s --authorization-mode=Node,RBAC --bind-address=127.0.0.1 --cert-dir=/var/lib/rancher/k3s/server/tls/temporary-certs --client-ca-file=/var/lib/rancher/k3s/server/tls/client-ca.crt --egress-selector-config-file=/var/lib/rancher/k3s/server/etc/egress-selector-config.yaml --enable-admission-plugins=NodeRestriction --enable-aggregator-routing=true --etcd-cafile=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt --etcd-certfile=/var/lib/rancher/k3s/server/tls/etcd/client.crt --etcd-keyfile=/var/lib/rancher/k3s/server/tls/etcd/client.key --etcd-servers=https://127.0.0.1:2379 --feature-gates=JobTrackingWithFinalizers=true --kubelet-certificate-authority=/var/lib/rancher/k3s/server/tls/server-ca.crt --kubelet-client-certificate=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.crt --kubelet-client-key=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.key --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname --profiling=false --proxy-client-cert-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.crt --proxy-client-key-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.key --requestheader-allowed-names=system:auth-proxy --requestheader-client-ca-file=/var/lib/rancher/k3s/server/tls/request-header-ca.crt --requestheader-extra-headers-prefix=X-Remote-Extra- --requestheader-group-headers=X-Remote-Group --requestheader-username-headers=X-Remote-User --secure-port=6444 --service-account-issuer=https://kubernetes.default.svc.cluster.local --service-account-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-account-signing-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-cluster-ip-range=10.43.0.0/16 --service-node-port-range=30000-32767 --storage-backend=etcd3 --tls-cert-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.crt --tls-private-key-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.key"
 ```
 
@@ -649,13 +649,13 @@ journalctl -D /var/log/journal -u k3s | grep 'Running kube-apiserver' | tail -n1
 
 **Expected Result**:
 
-```console
+```log
 '--authorization-mode' has 'RBAC'
 ```
 
 **Returned Value**:
 
-```console
+```log
 Sep 13 13:26:40 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:26:40Z" level=info msg="Running kube-apiserver --advertise-address=172.31.0.140 --advertise-port=6443 --allow-privileged=true --anonymous-auth=false --api-audiences=https://kubernetes.default.svc.cluster.local,k3s --authorization-mode=Node,RBAC --bind-address=127.0.0.1 --cert-dir=/var/lib/rancher/k3s/server/tls/temporary-certs --client-ca-file=/var/lib/rancher/k3s/server/tls/client-ca.crt --egress-selector-config-file=/var/lib/rancher/k3s/server/etc/egress-selector-config.yaml --enable-admission-plugins=NodeRestriction --enable-aggregator-routing=true --etcd-cafile=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt --etcd-certfile=/var/lib/rancher/k3s/server/tls/etcd/client.crt --etcd-keyfile=/var/lib/rancher/k3s/server/tls/etcd/client.key --etcd-servers=https://127.0.0.1:2379 --feature-gates=JobTrackingWithFinalizers=true --kubelet-certificate-authority=/var/lib/rancher/k3s/server/tls/server-ca.crt --kubelet-client-certificate=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.crt --kubelet-client-key=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.key --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname --profiling=false --proxy-client-cert-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.crt --proxy-client-key-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.key --requestheader-allowed-names=system:auth-proxy --requestheader-client-ca-file=/var/lib/rancher/k3s/server/tls/request-header-ca.crt --requestheader-extra-headers-prefix=X-Remote-Extra- --requestheader-group-headers=X-Remote-Group --requestheader-username-headers=X-Remote-User --secure-port=6444 --service-account-issuer=https://kubernetes.default.svc.cluster.local --service-account-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-account-signing-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-cluster-ip-range=10.43.0.0/16 --service-node-port-range=30000-32767 --storage-backend=etcd3 --tls-cert-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.crt --tls-private-key-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.key"
 ```
 
@@ -681,13 +681,13 @@ journalctl -D /var/log/journal -u k3s | grep 'Running kube-apiserver' | tail -n1
 
 **Expected Result**:
 
-```console
+```log
 '--enable-admission-plugins' has 'EventRateLimit'
 ```
 
 **Returned Value**:
 
-```console
+```log
 Sep 13 13:26:40 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:26:40Z" level=info msg="Running kube-apiserver --advertise-address=172.31.0.140 --advertise-port=6443 --allow-privileged=true --anonymous-auth=false --api-audiences=https://kubernetes.default.svc.cluster.local,k3s --authorization-mode=Node,RBAC --bind-address=127.0.0.1 --cert-dir=/var/lib/rancher/k3s/server/tls/temporary-certs --client-ca-file=/var/lib/rancher/k3s/server/tls/client-ca.crt --egress-selector-config-file=/var/lib/rancher/k3s/server/etc/egress-selector-config.yaml --enable-admission-plugins=NodeRestriction --enable-aggregator-routing=true --etcd-cafile=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt --etcd-certfile=/var/lib/rancher/k3s/server/tls/etcd/client.crt --etcd-keyfile=/var/lib/rancher/k3s/server/tls/etcd/client.key --etcd-servers=https://127.0.0.1:2379 --feature-gates=JobTrackingWithFinalizers=true --kubelet-certificate-authority=/var/lib/rancher/k3s/server/tls/server-ca.crt --kubelet-client-certificate=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.crt --kubelet-client-key=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.key --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname --profiling=false --proxy-client-cert-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.crt --proxy-client-key-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.key --requestheader-allowed-names=system:auth-proxy --requestheader-client-ca-file=/var/lib/rancher/k3s/server/tls/request-header-ca.crt --requestheader-extra-headers-prefix=X-Remote-Extra- --requestheader-group-headers=X-Remote-Group --requestheader-username-headers=X-Remote-User --secure-port=6444 --service-account-issuer=https://kubernetes.default.svc.cluster.local --service-account-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-account-signing-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-cluster-ip-range=10.43.0.0/16 --service-node-port-range=30000-32767 --storage-backend=etcd3 --tls-cert-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.crt --tls-private-key-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.key"
 ```
 
@@ -709,13 +709,13 @@ journalctl -D /var/log/journal -u k3s | grep 'Running kube-apiserver' | tail -n1
 
 **Expected Result**:
 
-```console
+```log
 '--enable-admission-plugins' does not have 'AlwaysAdmit' OR '--enable-admission-plugins' is not present
 ```
 
 **Returned Value**:
 
-```console
+```log
 Sep 13 13:26:40 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:26:40Z" level=info msg="Running kube-apiserver --advertise-address=172.31.0.140 --advertise-port=6443 --allow-privileged=true --anonymous-auth=false --api-audiences=https://kubernetes.default.svc.cluster.local,k3s --authorization-mode=Node,RBAC --bind-address=127.0.0.1 --cert-dir=/var/lib/rancher/k3s/server/tls/temporary-certs --client-ca-file=/var/lib/rancher/k3s/server/tls/client-ca.crt --egress-selector-config-file=/var/lib/rancher/k3s/server/etc/egress-selector-config.yaml --enable-admission-plugins=NodeRestriction --enable-aggregator-routing=true --etcd-cafile=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt --etcd-certfile=/var/lib/rancher/k3s/server/tls/etcd/client.crt --etcd-keyfile=/var/lib/rancher/k3s/server/tls/etcd/client.key --etcd-servers=https://127.0.0.1:2379 --feature-gates=JobTrackingWithFinalizers=true --kubelet-certificate-authority=/var/lib/rancher/k3s/server/tls/server-ca.crt --kubelet-client-certificate=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.crt --kubelet-client-key=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.key --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname --profiling=false --proxy-client-cert-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.crt --proxy-client-key-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.key --requestheader-allowed-names=system:auth-proxy --requestheader-client-ca-file=/var/lib/rancher/k3s/server/tls/request-header-ca.crt --requestheader-extra-headers-prefix=X-Remote-Extra- --requestheader-group-headers=X-Remote-Group --requestheader-username-headers=X-Remote-User --secure-port=6444 --service-account-issuer=https://kubernetes.default.svc.cluster.local --service-account-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-account-signing-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-cluster-ip-range=10.43.0.0/16 --service-node-port-range=30000-32767 --storage-backend=etcd3 --tls-cert-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.crt --tls-private-key-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.key"
 ```
 
@@ -738,13 +738,13 @@ AlwaysPullImages.
 
 **Expected Result**:
 
-```console
+```log
 '--enable-admission-plugins' is present
 ```
 
 **Returned Value**:
 
-```console
+```log
 root 1616 1600 6 13:26 ? 00:01:28 containerd -c /var/lib/rancher/k3s/agent/etc/containerd/config.toml -a /run/k3s/containerd/containerd.sock --state /run/k3s/containerd --root /var/lib/rancher/k3s/agent/containerd root 2318 1 0 13:27 ? 00:00:00 /var/lib/rancher/k3s/data/577968fa3d58539cc4265245941b7be688833e6bf5ad7869fa2afe02f15f1cd2/bin/containerd-shim-runc-v2 -namespace k8s.io -id b41ec3297be4625c2406ad8b7b4f8b91cddd60850c420050c4c3273f809b3e7e -address /run/k3s/containerd/containerd.sock root 2341 1 0 13:27 ? 00:00:00 /var/lib/rancher/k3s/data/577968fa3d58539cc4265245941b7be688833e6bf5ad7869fa2afe02f15f1cd2/bin/containerd-shim-runc-v2 -namespace k8s.io -id e7999a65ae0a4e9969f32317ec48ae4f7071b62f92e5236696737973be77c2e1 -address /run/k3s/containerd/containerd.sock root 3199 1 0 13:27 ? 00:00:00 /var/lib/rancher/k3s/data/577968fa3d58539cc4265245941b7be688833e6bf5ad7869fa2afe02f15f1cd2/bin/containerd-shim-runc-v2 -namespace k8s.io -id 90c4e63d6ee29d40a48c2fdaf2738c2472cba1139dde8a550466c452184f8528 -address /run/k3s/containerd/containerd.sock root 3923 1 0 13:27 ? 00:00:00 /var/lib/rancher/k3s/data/577968fa3d58539cc4265245941b7be688833e6bf5ad7869fa2afe02f15f1cd2/bin/containerd-shim-runc-v2 -namespace k8s.io -id be5f4b9bd1ed9239362b7000b47f353acb8bc8ca52a9c9145cba0e902ec1c4b9 -address /run/k3s/containerd/containerd.sock root 4559 1 0 13:28 ? 00:00:00 /var/lib/rancher/k3s/data/577968fa3d58539cc4265245941b7be688833e6bf5ad7869fa2afe02f15f1cd2/bin/containerd-shim-runc-v2 -namespace k8s.io -id 04cd40ea6b6078797f177c902c89412c70e523ad2a687a62829bf1d16ff0e19c -address /run/k3s/containerd/containerd.sock root 4647 1 0 13:28 ? 00:00:00 /var/lib/rancher/k3s/data/577968fa3d58539cc4265245941b7be688833e6bf5ad7869fa2afe02f15f1cd2/bin/containerd-shim-runc-v2 -namespace k8s.io -id 48f37a480315b6adce2d2a5c5d67a85412dd0ba7a2e82816434e0deb9fa75de9 -address /run/k3s/containerd/containerd.sock root 6610 1 0 13:47 ? 00:00:00 /var/lib/rancher/k3s/data/577968fa3d58539cc4265245941b7be688833e6bf5ad7869fa2afe02f15f1cd2/bin/containerd-shim-runc-v2 -namespace k8s.io -id 1cf71c22f568468055e517ab363437c0e54e45274c64024d337cc5bcce66341d -address /run/k3s/containerd/containerd.sock
 ```
 
@@ -767,13 +767,13 @@ journalctl -D /var/log/journal -u k3s | grep 'Running kube-apiserver' | tail -n1
 
 **Expected Result**:
 
-```console
+```log
 '--enable-admission-plugins' has 'SecurityContextDeny' OR '--enable-admission-plugins' has 'PodSecurityPolicy'
 ```
 
 **Returned Value**:
 
-```console
+```log
 Sep 13 13:26:40 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:26:40Z" level=info msg="Running kube-apiserver --advertise-address=172.31.0.140 --advertise-port=6443 --allow-privileged=true --anonymous-auth=false --api-audiences=https://kubernetes.default.svc.cluster.local,k3s --authorization-mode=Node,RBAC --bind-address=127.0.0.1 --cert-dir=/var/lib/rancher/k3s/server/tls/temporary-certs --client-ca-file=/var/lib/rancher/k3s/server/tls/client-ca.crt --egress-selector-config-file=/var/lib/rancher/k3s/server/etc/egress-selector-config.yaml --enable-admission-plugins=NodeRestriction --enable-aggregator-routing=true --etcd-cafile=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt --etcd-certfile=/var/lib/rancher/k3s/server/tls/etcd/client.crt --etcd-keyfile=/var/lib/rancher/k3s/server/tls/etcd/client.key --etcd-servers=https://127.0.0.1:2379 --feature-gates=JobTrackingWithFinalizers=true --kubelet-certificate-authority=/var/lib/rancher/k3s/server/tls/server-ca.crt --kubelet-client-certificate=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.crt --kubelet-client-key=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.key --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname --profiling=false --proxy-client-cert-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.crt --proxy-client-key-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.key --requestheader-allowed-names=system:auth-proxy --requestheader-client-ca-file=/var/lib/rancher/k3s/server/tls/request-header-ca.crt --requestheader-extra-headers-prefix=X-Remote-Extra- --requestheader-group-headers=X-Remote-Group --requestheader-username-headers=X-Remote-User --secure-port=6444 --service-account-issuer=https://kubernetes.default.svc.cluster.local --service-account-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-account-signing-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-cluster-ip-range=10.43.0.0/16 --service-node-port-range=30000-32767 --storage-backend=etcd3 --tls-cert-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.crt --tls-private-key-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.key"
 ```
 
@@ -796,13 +796,13 @@ journalctl -D /var/log/journal -u k3s | grep 'Running kube-apiserver' | tail -n1
 
 **Expected Result**:
 
-```console
+```log
 '--disable-admission-plugins' is present OR '--disable-admission-plugins' is not present
 ```
 
 **Returned Value**:
 
-```console
+```log
 Sep 13 13:26:40 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:26:40Z" level=info msg="Running kube-apiserver --advertise-address=172.31.0.140 --advertise-port=6443 --allow-privileged=true --anonymous-auth=false --api-audiences=https://kubernetes.default.svc.cluster.local,k3s --authorization-mode=Node,RBAC --bind-address=127.0.0.1 --cert-dir=/var/lib/rancher/k3s/server/tls/temporary-certs --client-ca-file=/var/lib/rancher/k3s/server/tls/client-ca.crt --egress-selector-config-file=/var/lib/rancher/k3s/server/etc/egress-selector-config.yaml --enable-admission-plugins=NodeRestriction --enable-aggregator-routing=true --etcd-cafile=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt --etcd-certfile=/var/lib/rancher/k3s/server/tls/etcd/client.crt --etcd-keyfile=/var/lib/rancher/k3s/server/tls/etcd/client.key --etcd-servers=https://127.0.0.1:2379 --feature-gates=JobTrackingWithFinalizers=true --kubelet-certificate-authority=/var/lib/rancher/k3s/server/tls/server-ca.crt --kubelet-client-certificate=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.crt --kubelet-client-key=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.key --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname --profiling=false --proxy-client-cert-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.crt --proxy-client-key-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.key --requestheader-allowed-names=system:auth-proxy --requestheader-client-ca-file=/var/lib/rancher/k3s/server/tls/request-header-ca.crt --requestheader-extra-headers-prefix=X-Remote-Extra- --requestheader-group-headers=X-Remote-Group --requestheader-username-headers=X-Remote-User --secure-port=6444 --service-account-issuer=https://kubernetes.default.svc.cluster.local --service-account-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-account-signing-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-cluster-ip-range=10.43.0.0/16 --service-node-port-range=30000-32767 --storage-backend=etcd3 --tls-cert-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.crt --tls-private-key-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.key"
 ```
 
@@ -824,13 +824,13 @@ journalctl -D /var/log/journal -u k3s | grep 'Running kube-apiserver' | tail -n1
 
 **Expected Result**:
 
-```console
+```log
 '--disable-admission-plugins' is present OR '--disable-admission-plugins' is not present
 ```
 
 **Returned Value**:
 
-```console
+```log
 Sep 13 13:26:40 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:26:40Z" level=info msg="Running kube-apiserver --advertise-address=172.31.0.140 --advertise-port=6443 --allow-privileged=true --anonymous-auth=false --api-audiences=https://kubernetes.default.svc.cluster.local,k3s --authorization-mode=Node,RBAC --bind-address=127.0.0.1 --cert-dir=/var/lib/rancher/k3s/server/tls/temporary-certs --client-ca-file=/var/lib/rancher/k3s/server/tls/client-ca.crt --egress-selector-config-file=/var/lib/rancher/k3s/server/etc/egress-selector-config.yaml --enable-admission-plugins=NodeRestriction --enable-aggregator-routing=true --etcd-cafile=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt --etcd-certfile=/var/lib/rancher/k3s/server/tls/etcd/client.crt --etcd-keyfile=/var/lib/rancher/k3s/server/tls/etcd/client.key --etcd-servers=https://127.0.0.1:2379 --feature-gates=JobTrackingWithFinalizers=true --kubelet-certificate-authority=/var/lib/rancher/k3s/server/tls/server-ca.crt --kubelet-client-certificate=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.crt --kubelet-client-key=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.key --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname --profiling=false --proxy-client-cert-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.crt --proxy-client-key-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.key --requestheader-allowed-names=system:auth-proxy --requestheader-client-ca-file=/var/lib/rancher/k3s/server/tls/request-header-ca.crt --requestheader-extra-headers-prefix=X-Remote-Extra- --requestheader-group-headers=X-Remote-Group --requestheader-username-headers=X-Remote-User --secure-port=6444 --service-account-issuer=https://kubernetes.default.svc.cluster.local --service-account-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-account-signing-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-cluster-ip-range=10.43.0.0/16 --service-node-port-range=30000-32767 --storage-backend=etcd3 --tls-cert-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.crt --tls-private-key-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.key"
 ```
 
@@ -854,13 +854,13 @@ journalctl -D /var/log/journal -u k3s | grep 'Running kube-apiserver' | tail -n1
 
 **Expected Result**:
 
-```console
+```log
 '--enable-admission-plugins' has 'NodeRestriction'
 ```
 
 **Returned Value**:
 
-```console
+```log
 Sep 13 13:26:40 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:26:40Z" level=info msg="Running kube-apiserver --advertise-address=172.31.0.140 --advertise-port=6443 --allow-privileged=true --anonymous-auth=false --api-audiences=https://kubernetes.default.svc.cluster.local,k3s --authorization-mode=Node,RBAC --bind-address=127.0.0.1 --cert-dir=/var/lib/rancher/k3s/server/tls/temporary-certs --client-ca-file=/var/lib/rancher/k3s/server/tls/client-ca.crt --egress-selector-config-file=/var/lib/rancher/k3s/server/etc/egress-selector-config.yaml --enable-admission-plugins=NodeRestriction --enable-aggregator-routing=true --etcd-cafile=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt --etcd-certfile=/var/lib/rancher/k3s/server/tls/etcd/client.crt --etcd-keyfile=/var/lib/rancher/k3s/server/tls/etcd/client.key --etcd-servers=https://127.0.0.1:2379 --feature-gates=JobTrackingWithFinalizers=true --kubelet-certificate-authority=/var/lib/rancher/k3s/server/tls/server-ca.crt --kubelet-client-certificate=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.crt --kubelet-client-key=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.key --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname --profiling=false --proxy-client-cert-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.crt --proxy-client-key-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.key --requestheader-allowed-names=system:auth-proxy --requestheader-client-ca-file=/var/lib/rancher/k3s/server/tls/request-header-ca.crt --requestheader-extra-headers-prefix=X-Remote-Extra- --requestheader-group-headers=X-Remote-Group --requestheader-username-headers=X-Remote-User --secure-port=6444 --service-account-issuer=https://kubernetes.default.svc.cluster.local --service-account-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-account-signing-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-cluster-ip-range=10.43.0.0/16 --service-node-port-range=30000-32767 --storage-backend=etcd3 --tls-cert-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.crt --tls-private-key-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.key"
 ```
 
@@ -882,13 +882,13 @@ journalctl -D /var/log/journal -u k3s | grep 'Running kube-apiserver' | tail -n1
 
 **Expected Result**:
 
-```console
+```log
 '--secure-port' is greater than 0 OR '--secure-port' is not present
 ```
 
 **Returned Value**:
 
-```console
+```log
 Sep 13 13:26:40 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:26:40Z" level=info msg="Running kube-apiserver --advertise-address=172.31.0.140 --advertise-port=6443 --allow-privileged=true --anonymous-auth=false --api-audiences=https://kubernetes.default.svc.cluster.local,k3s --authorization-mode=Node,RBAC --bind-address=127.0.0.1 --cert-dir=/var/lib/rancher/k3s/server/tls/temporary-certs --client-ca-file=/var/lib/rancher/k3s/server/tls/client-ca.crt --egress-selector-config-file=/var/lib/rancher/k3s/server/etc/egress-selector-config.yaml --enable-admission-plugins=NodeRestriction --enable-aggregator-routing=true --etcd-cafile=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt --etcd-certfile=/var/lib/rancher/k3s/server/tls/etcd/client.crt --etcd-keyfile=/var/lib/rancher/k3s/server/tls/etcd/client.key --etcd-servers=https://127.0.0.1:2379 --feature-gates=JobTrackingWithFinalizers=true --kubelet-certificate-authority=/var/lib/rancher/k3s/server/tls/server-ca.crt --kubelet-client-certificate=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.crt --kubelet-client-key=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.key --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname --profiling=false --proxy-client-cert-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.crt --proxy-client-key-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.key --requestheader-allowed-names=system:auth-proxy --requestheader-client-ca-file=/var/lib/rancher/k3s/server/tls/request-header-ca.crt --requestheader-extra-headers-prefix=X-Remote-Extra- --requestheader-group-headers=X-Remote-Group --requestheader-username-headers=X-Remote-User --secure-port=6444 --service-account-issuer=https://kubernetes.default.svc.cluster.local --service-account-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-account-signing-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-cluster-ip-range=10.43.0.0/16 --service-node-port-range=30000-32767 --storage-backend=etcd3 --tls-cert-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.crt --tls-private-key-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.key"
 ```
 
@@ -910,13 +910,13 @@ journalctl -D /var/log/journal -u k3s | grep 'Running kube-apiserver' | tail -n1
 
 **Expected Result**:
 
-```console
+```log
 '--profiling' is equal to 'false'
 ```
 
 **Returned Value**:
 
-```console
+```log
 Sep 13 13:26:40 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:26:40Z" level=info msg="Running kube-apiserver --advertise-address=172.31.0.140 --advertise-port=6443 --allow-privileged=true --anonymous-auth=false --api-audiences=https://kubernetes.default.svc.cluster.local,k3s --authorization-mode=Node,RBAC --bind-address=127.0.0.1 --cert-dir=/var/lib/rancher/k3s/server/tls/temporary-certs --client-ca-file=/var/lib/rancher/k3s/server/tls/client-ca.crt --egress-selector-config-file=/var/lib/rancher/k3s/server/etc/egress-selector-config.yaml --enable-admission-plugins=NodeRestriction --enable-aggregator-routing=true --etcd-cafile=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt --etcd-certfile=/var/lib/rancher/k3s/server/tls/etcd/client.crt --etcd-keyfile=/var/lib/rancher/k3s/server/tls/etcd/client.key --etcd-servers=https://127.0.0.1:2379 --feature-gates=JobTrackingWithFinalizers=true --kubelet-certificate-authority=/var/lib/rancher/k3s/server/tls/server-ca.crt --kubelet-client-certificate=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.crt --kubelet-client-key=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.key --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname --profiling=false --proxy-client-cert-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.crt --proxy-client-key-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.key --requestheader-allowed-names=system:auth-proxy --requestheader-client-ca-file=/var/lib/rancher/k3s/server/tls/request-header-ca.crt --requestheader-extra-headers-prefix=X-Remote-Extra- --requestheader-group-headers=X-Remote-Group --requestheader-username-headers=X-Remote-User --secure-port=6444 --service-account-issuer=https://kubernetes.default.svc.cluster.local --service-account-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-account-signing-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-cluster-ip-range=10.43.0.0/16 --service-node-port-range=30000-32767 --storage-backend=etcd3 --tls-cert-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.crt --tls-private-key-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.key"
 ```
 
@@ -983,13 +983,13 @@ journalctl -D /var/log/journal -u k3s | grep 'Running kube-apiserver' | tail -n1
 
 **Expected Result**:
 
-```console
+```log
 '--service-account-lookup' is not present OR '--service-account-lookup' is present
 ```
 
 **Returned Value**:
 
-```console
+```log
 Sep 13 13:26:40 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:26:40Z" level=info msg="Running kube-apiserver --advertise-address=172.31.0.140 --advertise-port=6443 --allow-privileged=true --anonymous-auth=false --api-audiences=https://kubernetes.default.svc.cluster.local,k3s --authorization-mode=Node,RBAC --bind-address=127.0.0.1 --cert-dir=/var/lib/rancher/k3s/server/tls/temporary-certs --client-ca-file=/var/lib/rancher/k3s/server/tls/client-ca.crt --egress-selector-config-file=/var/lib/rancher/k3s/server/etc/egress-selector-config.yaml --enable-admission-plugins=NodeRestriction --enable-aggregator-routing=true --etcd-cafile=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt --etcd-certfile=/var/lib/rancher/k3s/server/tls/etcd/client.crt --etcd-keyfile=/var/lib/rancher/k3s/server/tls/etcd/client.key --etcd-servers=https://127.0.0.1:2379 --feature-gates=JobTrackingWithFinalizers=true --kubelet-certificate-authority=/var/lib/rancher/k3s/server/tls/server-ca.crt --kubelet-client-certificate=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.crt --kubelet-client-key=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.key --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname --profiling=false --proxy-client-cert-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.crt --proxy-client-key-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.key --requestheader-allowed-names=system:auth-proxy --requestheader-client-ca-file=/var/lib/rancher/k3s/server/tls/request-header-ca.crt --requestheader-extra-headers-prefix=X-Remote-Extra- --requestheader-group-headers=X-Remote-Group --requestheader-username-headers=X-Remote-User --secure-port=6444 --service-account-issuer=https://kubernetes.default.svc.cluster.local --service-account-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-account-signing-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-cluster-ip-range=10.43.0.0/16 --service-node-port-range=30000-32767 --storage-backend=etcd3 --tls-cert-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.crt --tls-private-key-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.key"
 ```
 
@@ -1088,13 +1088,13 @@ fi
 
 **Expected Result**:
 
-```console
+```log
 '--etcd-certfile' is present AND '--etcd-keyfile' is present
 ```
 
 **Returned Value**:
 
-```console
+```log
 --etcd-certfile AND --etcd-keyfile
 ```
 
@@ -1120,13 +1120,13 @@ journalctl -D /var/log/journal -u k3s | grep -A1 'Running kube-apiserver' | tail
 
 **Expected Result**:
 
-```console
+```log
 '--tls-cert-file' is present AND '--tls-private-key-file' is present
 ```
 
 **Returned Value**:
 
-```console
+```log
 Sep 13 13:26:40 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:26:40Z" level=info msg="Running kube-apiserver --advertise-address=172.31.0.140 --advertise-port=6443 --allow-privileged=true --anonymous-auth=false --api-audiences=https://kubernetes.default.svc.cluster.local,k3s --authorization-mode=Node,RBAC --bind-address=127.0.0.1 --cert-dir=/var/lib/rancher/k3s/server/tls/temporary-certs --client-ca-file=/var/lib/rancher/k3s/server/tls/client-ca.crt --egress-selector-config-file=/var/lib/rancher/k3s/server/etc/egress-selector-config.yaml --enable-admission-plugins=NodeRestriction --enable-aggregator-routing=true --etcd-cafile=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt --etcd-certfile=/var/lib/rancher/k3s/server/tls/etcd/client.crt --etcd-keyfile=/var/lib/rancher/k3s/server/tls/etcd/client.key --etcd-servers=https://127.0.0.1:2379 --feature-gates=JobTrackingWithFinalizers=true --kubelet-certificate-authority=/var/lib/rancher/k3s/server/tls/server-ca.crt --kubelet-client-certificate=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.crt --kubelet-client-key=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.key --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname --profiling=false --proxy-client-cert-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.crt --proxy-client-key-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.key --requestheader-allowed-names=system:auth-proxy --requestheader-client-ca-file=/var/lib/rancher/k3s/server/tls/request-header-ca.crt --requestheader-extra-headers-prefix=X-Remote-Extra- --requestheader-group-headers=X-Remote-Group --requestheader-username-headers=X-Remote-User --secure-port=6444 --service-account-issuer=https://kubernetes.default.svc.cluster.local --service-account-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-account-signing-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-cluster-ip-range=10.43.0.0/16 --service-node-port-range=30000-32767 --storage-backend=etcd3 --tls-cert-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.crt --tls-private-key-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.key" Sep 13 13:26:40 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:26:40Z" level=info msg="Running kube-scheduler --authentication-kubeconfig=/var/lib/rancher/k3s/server/cred/scheduler.kubeconfig --authorization-kubeconfig=/var/lib/rancher/k3s/server/cred/scheduler.kubeconfig --bind-address=127.0.0.1 --cert-dir=/var/lib/rancher/k3s/server/tls/kube-scheduler --kubeconfig=/var/lib/rancher/k3s/server/cred/scheduler.kubeconfig --profiling=false --secure-port=10259"
 ```
 
@@ -1149,13 +1149,13 @@ journalctl -D /var/log/journal -u k3s | grep 'Running kube-apiserver' | tail -n1
 
 **Expected Result**:
 
-```console
+```log
 '--client-ca-file' is present
 ```
 
 **Returned Value**:
 
-```console
+```log
 Sep 13 13:26:40 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:26:40Z" level=info msg="Running kube-apiserver --advertise-address=172.31.0.140 --advertise-port=6443 --allow-privileged=true --anonymous-auth=false --api-audiences=https://kubernetes.default.svc.cluster.local,k3s --authorization-mode=Node,RBAC --bind-address=127.0.0.1 --cert-dir=/var/lib/rancher/k3s/server/tls/temporary-certs --client-ca-file=/var/lib/rancher/k3s/server/tls/client-ca.crt --egress-selector-config-file=/var/lib/rancher/k3s/server/etc/egress-selector-config.yaml --enable-admission-plugins=NodeRestriction --enable-aggregator-routing=true --etcd-cafile=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt --etcd-certfile=/var/lib/rancher/k3s/server/tls/etcd/client.crt --etcd-keyfile=/var/lib/rancher/k3s/server/tls/etcd/client.key --etcd-servers=https://127.0.0.1:2379 --feature-gates=JobTrackingWithFinalizers=true --kubelet-certificate-authority=/var/lib/rancher/k3s/server/tls/server-ca.crt --kubelet-client-certificate=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.crt --kubelet-client-key=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.key --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname --profiling=false --proxy-client-cert-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.crt --proxy-client-key-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.key --requestheader-allowed-names=system:auth-proxy --requestheader-client-ca-file=/var/lib/rancher/k3s/server/tls/request-header-ca.crt --requestheader-extra-headers-prefix=X-Remote-Extra- --requestheader-group-headers=X-Remote-Group --requestheader-username-headers=X-Remote-User --secure-port=6444 --service-account-issuer=https://kubernetes.default.svc.cluster.local --service-account-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-account-signing-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-cluster-ip-range=10.43.0.0/16 --service-node-port-range=30000-32767 --storage-backend=etcd3 --tls-cert-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.crt --tls-private-key-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.key"
 ```
 
@@ -1178,13 +1178,13 @@ journalctl -D /var/log/journal -u k3s | grep 'Running kube-apiserver' | tail -n1
 
 **Expected Result**:
 
-```console
+```log
 '--etcd-cafile' is present
 ```
 
 **Returned Value**:
 
-```console
+```log
 Sep 13 13:26:40 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:26:40Z" level=info msg="Running kube-apiserver --advertise-address=172.31.0.140 --advertise-port=6443 --allow-privileged=true --anonymous-auth=false --api-audiences=https://kubernetes.default.svc.cluster.local,k3s --authorization-mode=Node,RBAC --bind-address=127.0.0.1 --cert-dir=/var/lib/rancher/k3s/server/tls/temporary-certs --client-ca-file=/var/lib/rancher/k3s/server/tls/client-ca.crt --egress-selector-config-file=/var/lib/rancher/k3s/server/etc/egress-selector-config.yaml --enable-admission-plugins=NodeRestriction --enable-aggregator-routing=true --etcd-cafile=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt --etcd-certfile=/var/lib/rancher/k3s/server/tls/etcd/client.crt --etcd-keyfile=/var/lib/rancher/k3s/server/tls/etcd/client.key --etcd-servers=https://127.0.0.1:2379 --feature-gates=JobTrackingWithFinalizers=true --kubelet-certificate-authority=/var/lib/rancher/k3s/server/tls/server-ca.crt --kubelet-client-certificate=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.crt --kubelet-client-key=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.key --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname --profiling=false --proxy-client-cert-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.crt --proxy-client-key-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.key --requestheader-allowed-names=system:auth-proxy --requestheader-client-ca-file=/var/lib/rancher/k3s/server/tls/request-header-ca.crt --requestheader-extra-headers-prefix=X-Remote-Extra- --requestheader-group-headers=X-Remote-Group --requestheader-username-headers=X-Remote-User --secure-port=6444 --service-account-issuer=https://kubernetes.default.svc.cluster.local --service-account-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-account-signing-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-cluster-ip-range=10.43.0.0/16 --service-node-port-range=30000-32767 --storage-backend=etcd3 --tls-cert-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.crt --tls-private-key-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.key"
 ```
 
@@ -1278,13 +1278,13 @@ journalctl -D /var/log/journal -u k3s | grep 'Running kube-controller-manager' |
 
 **Expected Result**:
 
-```console
+```log
 '--profiling' is equal to 'false'
 ```
 
 **Returned Value**:
 
-```console
+```log
 Sep 13 13:26:40 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:26:40Z" level=info msg="Running kube-controller-manager --allocate-node-cidrs=true --authentication-kubeconfig=/var/lib/rancher/k3s/server/cred/controller.kubeconfig --authorization-kubeconfig=/var/lib/rancher/k3s/server/cred/controller.kubeconfig --bind-address=127.0.0.1 --cert-dir=/var/lib/rancher/k3s/server/tls/kube-controller-manager --cluster-cidr=10.42.0.0/16 --cluster-signing-kube-apiserver-client-cert-file=/var/lib/rancher/k3s/server/tls/client-ca.crt --cluster-signing-kube-apiserver-client-key-file=/var/lib/rancher/k3s/server/tls/client-ca.key --cluster-signing-kubelet-client-cert-file=/var/lib/rancher/k3s/server/tls/client-ca.crt --cluster-signing-kubelet-client-key-file=/var/lib/rancher/k3s/server/tls/client-ca.key --cluster-signing-kubelet-serving-cert-file=/var/lib/rancher/k3s/server/tls/server-ca.crt --cluster-signing-kubelet-serving-key-file=/var/lib/rancher/k3s/server/tls/server-ca.key --cluster-signing-legacy-unknown-cert-file=/var/lib/rancher/k3s/server/tls/server-ca.crt --cluster-signing-legacy-unknown-key-file=/var/lib/rancher/k3s/server/tls/server-ca.key --configure-cloud-routes=false --controllers=*,-service,-route,-cloud-node-lifecycle --feature-gates=JobTrackingWithFinalizers=true --kubeconfig=/var/lib/rancher/k3s/server/cred/controller.kubeconfig --profiling=false --root-ca-file=/var/lib/rancher/k3s/server/tls/server-ca.crt --secure-port=10257 --service-account-private-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-cluster-ip-range=10.43.0.0/16 --use-service-account-credentials=true"
 ```
 
@@ -1306,13 +1306,13 @@ journalctl -D /var/log/journal -u k3s | grep 'Running kube-controller-manager' |
 
 **Expected Result**:
 
-```console
+```log
 '--use-service-account-credentials' is not equal to 'false'
 ```
 
 **Returned Value**:
 
-```console
+```log
 Sep 13 13:26:40 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:26:40Z" level=info msg="Running kube-controller-manager --allocate-node-cidrs=true --authentication-kubeconfig=/var/lib/rancher/k3s/server/cred/controller.kubeconfig --authorization-kubeconfig=/var/lib/rancher/k3s/server/cred/controller.kubeconfig --bind-address=127.0.0.1 --cert-dir=/var/lib/rancher/k3s/server/tls/kube-controller-manager --cluster-cidr=10.42.0.0/16 --cluster-signing-kube-apiserver-client-cert-file=/var/lib/rancher/k3s/server/tls/client-ca.crt --cluster-signing-kube-apiserver-client-key-file=/var/lib/rancher/k3s/server/tls/client-ca.key --cluster-signing-kubelet-client-cert-file=/var/lib/rancher/k3s/server/tls/client-ca.crt --cluster-signing-kubelet-client-key-file=/var/lib/rancher/k3s/server/tls/client-ca.key --cluster-signing-kubelet-serving-cert-file=/var/lib/rancher/k3s/server/tls/server-ca.crt --cluster-signing-kubelet-serving-key-file=/var/lib/rancher/k3s/server/tls/server-ca.key --cluster-signing-legacy-unknown-cert-file=/var/lib/rancher/k3s/server/tls/server-ca.crt --cluster-signing-legacy-unknown-key-file=/var/lib/rancher/k3s/server/tls/server-ca.key --configure-cloud-routes=false --controllers=*,-service,-route,-cloud-node-lifecycle --feature-gates=JobTrackingWithFinalizers=true --kubeconfig=/var/lib/rancher/k3s/server/cred/controller.kubeconfig --profiling=false --root-ca-file=/var/lib/rancher/k3s/server/tls/server-ca.crt --secure-port=10257 --service-account-private-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-cluster-ip-range=10.43.0.0/16 --use-service-account-credentials=true"
 ```
 
@@ -1335,13 +1335,13 @@ journalctl -D /var/log/journal -u k3s | grep 'Running kube-controller-manager' |
 
 **Expected Result**:
 
-```console
+```log
 '--service-account-private-key-file' is present
 ```
 
 **Returned Value**:
 
-```console
+```log
 Sep 13 13:26:40 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:26:40Z" level=info msg="Running kube-controller-manager --allocate-node-cidrs=true --authentication-kubeconfig=/var/lib/rancher/k3s/server/cred/controller.kubeconfig --authorization-kubeconfig=/var/lib/rancher/k3s/server/cred/controller.kubeconfig --bind-address=127.0.0.1 --cert-dir=/var/lib/rancher/k3s/server/tls/kube-controller-manager --cluster-cidr=10.42.0.0/16 --cluster-signing-kube-apiserver-client-cert-file=/var/lib/rancher/k3s/server/tls/client-ca.crt --cluster-signing-kube-apiserver-client-key-file=/var/lib/rancher/k3s/server/tls/client-ca.key --cluster-signing-kubelet-client-cert-file=/var/lib/rancher/k3s/server/tls/client-ca.crt --cluster-signing-kubelet-client-key-file=/var/lib/rancher/k3s/server/tls/client-ca.key --cluster-signing-kubelet-serving-cert-file=/var/lib/rancher/k3s/server/tls/server-ca.crt --cluster-signing-kubelet-serving-key-file=/var/lib/rancher/k3s/server/tls/server-ca.key --cluster-signing-legacy-unknown-cert-file=/var/lib/rancher/k3s/server/tls/server-ca.crt --cluster-signing-legacy-unknown-key-file=/var/lib/rancher/k3s/server/tls/server-ca.key --configure-cloud-routes=false --controllers=*,-service,-route,-cloud-node-lifecycle --feature-gates=JobTrackingWithFinalizers=true --kubeconfig=/var/lib/rancher/k3s/server/cred/controller.kubeconfig --profiling=false --root-ca-file=/var/lib/rancher/k3s/server/tls/server-ca.crt --secure-port=10257 --service-account-private-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-cluster-ip-range=10.43.0.0/16 --use-service-account-credentials=true"
 ```
 
@@ -1363,13 +1363,13 @@ journalctl -D /var/log/journal -u k3s | grep 'Running kube-controller-manager' |
 
 **Expected Result**:
 
-```console
+```log
 '--root-ca-file' is present
 ```
 
 **Returned Value**:
 
-```console
+```log
 Sep 13 13:26:40 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:26:40Z" level=info msg="Running kube-controller-manager --allocate-node-cidrs=true --authentication-kubeconfig=/var/lib/rancher/k3s/server/cred/controller.kubeconfig --authorization-kubeconfig=/var/lib/rancher/k3s/server/cred/controller.kubeconfig --bind-address=127.0.0.1 --cert-dir=/var/lib/rancher/k3s/server/tls/kube-controller-manager --cluster-cidr=10.42.0.0/16 --cluster-signing-kube-apiserver-client-cert-file=/var/lib/rancher/k3s/server/tls/client-ca.crt --cluster-signing-kube-apiserver-client-key-file=/var/lib/rancher/k3s/server/tls/client-ca.key --cluster-signing-kubelet-client-cert-file=/var/lib/rancher/k3s/server/tls/client-ca.crt --cluster-signing-kubelet-client-key-file=/var/lib/rancher/k3s/server/tls/client-ca.key --cluster-signing-kubelet-serving-cert-file=/var/lib/rancher/k3s/server/tls/server-ca.crt --cluster-signing-kubelet-serving-key-file=/var/lib/rancher/k3s/server/tls/server-ca.key --cluster-signing-legacy-unknown-cert-file=/var/lib/rancher/k3s/server/tls/server-ca.crt --cluster-signing-legacy-unknown-key-file=/var/lib/rancher/k3s/server/tls/server-ca.key --configure-cloud-routes=false --controllers=*,-service,-route,-cloud-node-lifecycle --feature-gates=JobTrackingWithFinalizers=true --kubeconfig=/var/lib/rancher/k3s/server/cred/controller.kubeconfig --profiling=false --root-ca-file=/var/lib/rancher/k3s/server/tls/server-ca.crt --secure-port=10257 --service-account-private-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-cluster-ip-range=10.43.0.0/16 --use-service-account-credentials=true"
 ```
 
@@ -1400,13 +1400,13 @@ on the control plane node and ensure the correct value for the --bind-address pa
 
 **Expected Result**:
 
-```console
+```log
 '--bind-address' is present OR '--bind-address' is not present
 ```
 
 **Returned Value**:
 
-```console
+```log
 root 1616 1600 6 13:26 ? 00:01:28 containerd -c /var/lib/rancher/k3s/agent/etc/containerd/config.toml -a /run/k3s/containerd/containerd.sock --state /run/k3s/containerd --root /var/lib/rancher/k3s/agent/containerd root 2318 1 0 13:27 ? 00:00:00 /var/lib/rancher/k3s/data/577968fa3d58539cc4265245941b7be688833e6bf5ad7869fa2afe02f15f1cd2/bin/containerd-shim-runc-v2 -namespace k8s.io -id b41ec3297be4625c2406ad8b7b4f8b91cddd60850c420050c4c3273f809b3e7e -address /run/k3s/containerd/containerd.sock root 2341 1 0 13:27 ? 00:00:00 /var/lib/rancher/k3s/data/577968fa3d58539cc4265245941b7be688833e6bf5ad7869fa2afe02f15f1cd2/bin/containerd-shim-runc-v2 -namespace k8s.io -id e7999a65ae0a4e9969f32317ec48ae4f7071b62f92e5236696737973be77c2e1 -address /run/k3s/containerd/containerd.sock root 3199 1 0 13:27 ? 00:00:00 /var/lib/rancher/k3s/data/577968fa3d58539cc4265245941b7be688833e6bf5ad7869fa2afe02f15f1cd2/bin/containerd-shim-runc-v2 -namespace k8s.io -id 90c4e63d6ee29d40a48c2fdaf2738c2472cba1139dde8a550466c452184f8528 -address /run/k3s/containerd/containerd.sock root 3923 1 0 13:27 ? 00:00:00 /var/lib/rancher/k3s/data/577968fa3d58539cc4265245941b7be688833e6bf5ad7869fa2afe02f15f1cd2/bin/containerd-shim-runc-v2 -namespace k8s.io -id be5f4b9bd1ed9239362b7000b47f353acb8bc8ca52a9c9145cba0e902ec1c4b9 -address /run/k3s/containerd/containerd.sock root 4559 1 0 13:28 ? 00:00:00 /var/lib/rancher/k3s/data/577968fa3d58539cc4265245941b7be688833e6bf5ad7869fa2afe02f15f1cd2/bin/containerd-shim-runc-v2 -namespace k8s.io -id 04cd40ea6b6078797f177c902c89412c70e523ad2a687a62829bf1d16ff0e19c -address /run/k3s/containerd/containerd.sock root 4647 1 0 13:28 ? 00:00:00 /var/lib/rancher/k3s/data/577968fa3d58539cc4265245941b7be688833e6bf5ad7869fa2afe02f15f1cd2/bin/containerd-shim-runc-v2 -namespace k8s.io -id 48f37a480315b6adce2d2a5c5d67a85412dd0ba7a2e82816434e0deb9fa75de9 -address /run/k3s/containerd/containerd.sock root 6610 1 0 13:47 ? 00:00:00 /var/lib/rancher/k3s/data/577968fa3d58539cc4265245941b7be688833e6bf5ad7869fa2afe02f15f1cd2/bin/containerd-shim-runc-v2 -namespace k8s.io -id 1cf71c22f568468055e517ab363437c0e54e45274c64024d337cc5bcce66341d -address /run/k3s/containerd/containerd.sock
 ```
 
@@ -1429,13 +1429,13 @@ journalctl -D /var/log/journal -u k3s | grep 'Running kube-scheduler' | tail -n1
 
 **Expected Result**:
 
-```console
+```log
 '--profiling' is equal to 'false'
 ```
 
 **Returned Value**:
 
-```console
+```log
 Sep 13 13:26:40 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:26:40Z" level=info msg="Running kube-scheduler --authentication-kubeconfig=/var/lib/rancher/k3s/server/cred/scheduler.kubeconfig --authorization-kubeconfig=/var/lib/rancher/k3s/server/cred/scheduler.kubeconfig --bind-address=127.0.0.1 --cert-dir=/var/lib/rancher/k3s/server/tls/kube-scheduler --kubeconfig=/var/lib/rancher/k3s/server/cred/scheduler.kubeconfig --profiling=false --secure-port=10259"
 ```
 
@@ -1456,13 +1456,13 @@ journalctl -D /var/log/journal -u k3s | grep 'Running kube-scheduler' | tail -n1
 
 **Expected Result**:
 
-```console
+```log
 '--bind-address' is equal to '127.0.0.1' OR '--bind-address' is not present
 ```
 
 **Returned Value**:
 
-```console
+```log
 Sep 13 13:26:40 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:26:40Z" level=info msg="Running kube-scheduler --authentication-kubeconfig=/var/lib/rancher/k3s/server/cred/scheduler.kubeconfig --authorization-kubeconfig=/var/lib/rancher/k3s/server/cred/scheduler.kubeconfig --bind-address=127.0.0.1 --cert-dir=/var/lib/rancher/k3s/server/tls/kube-scheduler --kubeconfig=/var/lib/rancher/k3s/server/cred/scheduler.kubeconfig --profiling=false --secure-port=10259"
 ```
 
@@ -1552,13 +1552,13 @@ fi
 
 **Expected Result**:
 
-```console
+```log
 'cert-file' is present AND 'key-file' is present
 ```
 
 **Returned Value**:
 
-```console
+```log
 cert-file AND key-file cert-file: /var/lib/rancher/k3s/server/tls/etcd/server-client.crt key-file: /var/lib/rancher/k3s/server/tls/etcd/server-client.key cert-file AND key-file
 ```
 
@@ -1643,13 +1643,13 @@ fi
 
 **Expected Result**:
 
-```console
+```log
 '--client-cert-auth' is present OR 'client-cert-auth' is equal to 'true'
 ```
 
 **Returned Value**:
 
-```console
+```log
 --client-cert-auth=true client-cert-auth: true --client-cert-auth=true
 ```
 
@@ -1734,13 +1734,13 @@ fi
 
 **Expected Result**:
 
-```console
+```log
 'ETCD_AUTO_TLS' is not present OR 'ETCD_AUTO_TLS' is present
 ```
 
 **Returned Value**:
 
-```console
+```log
 error: process ID list syntax error Usage: ps [options] Try 'ps --help <simple|list|output|threads|misc|all>' or 'ps --help <s|l|o|t|m|a>' for additional help text. For more details see ps(1). cat: /proc//environ: No such file or directory error: process ID list syntax error Usage: ps [options] Try 'ps --help <simple|list|output|threads|misc|all>' or 'ps --help <s|l|o|t|m|a>' for additional help text. For more details see ps(1). cat: /proc//environ: No such file or directory error: process ID list syntax error Usage: ps [options] Try 'ps --help <simple|list|output|threads|misc|all>' or 'ps --help <s|l|o|t|m|a>' for additional help text. For more details see ps(1). cat: /proc//environ: No such file or directory
 ```
 
@@ -1830,13 +1830,13 @@ fi
 
 **Expected Result**:
 
-```console
+```log
 'cert-file' is present AND 'key-file' is present
 ```
 
 **Returned Value**:
 
-```console
+```log
 peer-cert-file AND peer-key-file cert-file: /var/lib/rancher/k3s/server/tls/etcd/peer-server-client.crt key-file: /var/lib/rancher/k3s/server/tls/etcd/peer-server-client.key peer-cert-file AND peer-key-file
 ```
 
@@ -1921,13 +1921,13 @@ fi
 
 **Expected Result**:
 
-```console
+```log
 '--client-cert-auth' is present OR 'client-cert-auth' is equal to 'true'
 ```
 
 **Returned Value**:
 
-```console
+```log
 --client-cert-auth=true client-cert-auth: true --client-cert-auth=true
 ```
 
@@ -2012,13 +2012,13 @@ fi
 
 **Expected Result**:
 
-```console
+```log
 '--peer-auto-tls' is not present OR '--peer-auto-tls' is equal to 'false'
 ```
 
 **Returned Value**:
 
-```console
+```log
 --peer-auto-tls=false error: process ID list syntax error Usage: ps [options] Try 'ps --help <simple|list|output|threads|misc|all>' or 'ps --help <s|l|o|t|m|a>' for additional help text. For more details see ps(1). cat: /proc//environ: No such file or directory --peer-auto-tls=false
 ```
 
@@ -2106,13 +2106,13 @@ fi
 
 **Expected Result**:
 
-```console
+```log
 'trusted-ca-file' is present
 ```
 
 **Returned Value**:
 
-```console
+```log
 --trusted-ca-file trusted-ca-file: /var/lib/rancher/k3s/server/tls/etcd/server-ca.crt trusted-ca-file: /var/lib/rancher/k3s/server/tls/etcd/peer-ca.crt --trusted-ca-file
 ```
 
@@ -2195,13 +2195,13 @@ stat -c %a /var/lib/rancher/k3s/agent/kubeproxy.kubeconfig
 
 **Expected Result**:
 
-```console
+```log
 'permissions' is present OR '/var/lib/rancher/k3s/agent/kubeproxy.kubeconfig' is not present
 ```
 
 **Returned Value**:
 
-```console
+```log
 644 644
 ```
 
@@ -2222,13 +2222,13 @@ For example, chown root:root /var/lib/rancher/k3s/agent/kubeproxy.kubeconfig
 
 **Expected Result**:
 
-```console
+```log
 'root:root' is present OR '/var/lib/rancher/k3s/agent/kubeproxy.kubeconfig' is not present
 ```
 
 **Returned Value**:
 
-```console
+```log
 root:root root:root
 ```
 
@@ -2250,13 +2250,13 @@ stat -c %a /var/lib/rancher/k3s/agent/kubelet.kubeconfig
 
 **Expected Result**:
 
-```console
+```log
 '644' is equal to '644'
 ```
 
 **Returned Value**:
 
-```console
+```log
 644 644
 ```
 
@@ -2278,13 +2278,13 @@ stat -c %U:%G /var/lib/rancher/k3s/agent/kubelet.kubeconfig
 
 **Expected Result**:
 
-```console
+```log
 'root:root' is equal to 'root:root'
 ```
 
 **Returned Value**:
 
-```console
+```log
 root:root root:root
 ```
 
@@ -2305,13 +2305,13 @@ stat -c %a /var/lib/rancher/k3s/server/tls/server-ca.crt
 
 **Expected Result**:
 
-```console
+```log
 '644' is present OR '640' is present OR '600' is equal to '600' OR '444' is present OR '440' is present OR '400' is present OR '000' is present
 ```
 
 **Returned Value**:
 
-```console
+```log
 644 600
 ```
 
@@ -2332,13 +2332,13 @@ stat -c %U:%G /var/lib/rancher/k3s/server/tls/client-ca.crt
 
 **Expected Result**:
 
-```console
+```log
 'root:root' is equal to 'root:root'
 ```
 
 **Returned Value**:
 
-```console
+```log
 root:root root:root
 ```
 
@@ -2385,13 +2385,13 @@ systemctl restart kubelet.service
 
 **Expected Result**:
 
-```console
+```log
 '--anonymous-auth' is equal to 'false'
 ```
 
 **Returned Value**:
 
-```console
+```log
 --anonymous-auth=false Sep 13 13:26:40 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:26:40Z" level=info msg="Running kube-apiserver --advertise-address=172.31.0.140 --advertise-port=6443 --allow-privileged=true --anonymous-auth=false --api-audiences=https://kubernetes.default.svc.cluster.local,k3s --authorization-mode=Node,RBAC --bind-address=127.0.0.1 --cert-dir=/var/lib/rancher/k3s/server/tls/temporary-certs --client-ca-file=/var/lib/rancher/k3s/server/tls/client-ca.crt --egress-selector-config-file=/var/lib/rancher/k3s/server/etc/egress-selector-config.yaml --enable-admission-plugins=NodeRestriction --enable-aggregator-routing=true --etcd-cafile=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt --etcd-certfile=/var/lib/rancher/k3s/server/tls/etcd/client.crt --etcd-keyfile=/var/lib/rancher/k3s/server/tls/etcd/client.key --etcd-servers=https://127.0.0.1:2379 --feature-gates=JobTrackingWithFinalizers=true --kubelet-certificate-authority=/var/lib/rancher/k3s/server/tls/server-ca.crt --kubelet-client-certificate=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.crt --kubelet-client-key=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.key --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname --profiling=false --proxy-client-cert-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.crt --proxy-client-key-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.key --requestheader-allowed-names=system:auth-proxy --requestheader-client-ca-file=/var/lib/rancher/k3s/server/tls/request-header-ca.crt --requestheader-extra-headers-prefix=X-Remote-Extra- --requestheader-group-headers=X-Remote-Group --requestheader-username-headers=X-Remote-User --secure-port=6444 --service-account-issuer=https://kubernetes.default.svc.cluster.local --service-account-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-account-signing-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-cluster-ip-range=10.43.0.0/16 --service-node-port-range=30000-32767 --storage-backend=etcd3 --tls-cert-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.crt --tls-private-key-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.key"
 ```
 
@@ -2418,13 +2418,13 @@ systemctl restart kubelet.service
 
 **Expected Result**:
 
-```console
+```log
 '--authorization-mode' does not have 'AlwaysAllow'
 ```
 
 **Returned Value**:
 
-```console
+```log
 --authorization-mode=Webhook Sep 13 13:26:40 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:26:40Z" level=info msg="Running kube-apiserver --advertise-address=172.31.0.140 --advertise-port=6443 --allow-privileged=true --anonymous-auth=false --api-audiences=https://kubernetes.default.svc.cluster.local,k3s --authorization-mode=Node,RBAC --bind-address=127.0.0.1 --cert-dir=/var/lib/rancher/k3s/server/tls/temporary-certs --client-ca-file=/var/lib/rancher/k3s/server/tls/client-ca.crt --egress-selector-config-file=/var/lib/rancher/k3s/server/etc/egress-selector-config.yaml --enable-admission-plugins=NodeRestriction --enable-aggregator-routing=true --etcd-cafile=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt --etcd-certfile=/var/lib/rancher/k3s/server/tls/etcd/client.crt --etcd-keyfile=/var/lib/rancher/k3s/server/tls/etcd/client.key --etcd-servers=https://127.0.0.1:2379 --feature-gates=JobTrackingWithFinalizers=true --kubelet-certificate-authority=/var/lib/rancher/k3s/server/tls/server-ca.crt --kubelet-client-certificate=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.crt --kubelet-client-key=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.key --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname --profiling=false --proxy-client-cert-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.crt --proxy-client-key-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.key --requestheader-allowed-names=system:auth-proxy --requestheader-client-ca-file=/var/lib/rancher/k3s/server/tls/request-header-ca.crt --requestheader-extra-headers-prefix=X-Remote-Extra- --requestheader-group-headers=X-Remote-Group --requestheader-username-headers=X-Remote-User --secure-port=6444 --service-account-issuer=https://kubernetes.default.svc.cluster.local --service-account-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-account-signing-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-cluster-ip-range=10.43.0.0/16 --service-node-port-range=30000-32767 --storage-backend=etcd3 --tls-cert-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.crt --tls-private-key-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.key"
 ```
 
@@ -2452,13 +2452,13 @@ systemctl restart kubelet.service
 
 **Expected Result**:
 
-```console
+```log
 '--client-ca-file' is present
 ```
 
 **Returned Value**:
 
-```console
+```log
 --client-ca-file=/var/lib/rancher/k3s/server/tls/request-header-ca.crt Sep 13 13:26:40 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:26:40Z" level=info msg="Running kube-apiserver --advertise-address=172.31.0.140 --advertise-port=6443 --allow-privileged=true --anonymous-auth=false --api-audiences=https://kubernetes.default.svc.cluster.local,k3s --authorization-mode=Node,RBAC --bind-address=127.0.0.1 --cert-dir=/var/lib/rancher/k3s/server/tls/temporary-certs --client-ca-file=/var/lib/rancher/k3s/server/tls/client-ca.crt --egress-selector-config-file=/var/lib/rancher/k3s/server/etc/egress-selector-config.yaml --enable-admission-plugins=NodeRestriction --enable-aggregator-routing=true --etcd-cafile=/var/lib/rancher/k3s/server/tls/etcd/server-ca.crt --etcd-certfile=/var/lib/rancher/k3s/server/tls/etcd/client.crt --etcd-keyfile=/var/lib/rancher/k3s/server/tls/etcd/client.key --etcd-servers=https://127.0.0.1:2379 --feature-gates=JobTrackingWithFinalizers=true --kubelet-certificate-authority=/var/lib/rancher/k3s/server/tls/server-ca.crt --kubelet-client-certificate=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.crt --kubelet-client-key=/var/lib/rancher/k3s/server/tls/client-kube-apiserver.key --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname --profiling=false --proxy-client-cert-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.crt --proxy-client-key-file=/var/lib/rancher/k3s/server/tls/client-auth-proxy.key --requestheader-allowed-names=system:auth-proxy --requestheader-client-ca-file=/var/lib/rancher/k3s/server/tls/request-header-ca.crt --requestheader-extra-headers-prefix=X-Remote-Extra- --requestheader-group-headers=X-Remote-Group --requestheader-username-headers=X-Remote-User --secure-port=6444 --service-account-issuer=https://kubernetes.default.svc.cluster.local --service-account-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-account-signing-key-file=/var/lib/rancher/k3s/server/tls/service.key --service-cluster-ip-range=10.43.0.0/16 --service-node-port-range=30000-32767 --storage-backend=etcd3 --tls-cert-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.crt --tls-private-key-file=/var/lib/rancher/k3s/server/tls/serving-kube-apiserver.key"
 ```
 
@@ -2485,13 +2485,13 @@ journalctl -D /var/log/journal -u k3s | grep 'Running kubelet' | tail -n1 | grep
 
 **Expected Result**:
 
-```console
+```log
 '--read-only-port' is equal to '0' OR '--read-only-port' is not present
 ```
 
 **Returned Value**:
 
-```console
+```log
 Sep 13 13:26:50 k3s-123-cis-pool2-98604672-hr9p5 k3s[1592]: time="2022-09-13T13:26:50Z" level=info msg="Running kubelet --address=0.0.0.0 --anonymous-auth=false --authentication-token-webhook=true --authorization-mode=Webhook --cgroup-driver=systemd --client-ca-file=/var/lib/rancher/k3s/agent/client-ca.crt --cloud-provider=external --cluster-dns=10.43.0.10 --cluster-domain=cluster.local --container-runtime-endpoint=unix:///run/k3s/containerd/containerd.sock --containerd=/run/k3s/containerd/containerd.sock --eviction-hard=imagefs.available<5%,nodefs.available<5% --eviction-minimum-reclaim=imagefs.available=10%,nodefs.available=10% --fail-swap-on=false --healthz-bind-address=127.0.0.1 --hostname-override=k3s-123-cis-pool2-98604672-hr9p5 --kubeconfig=/var/lib/rancher/k3s/agent/kubelet.kubeconfig --node-labels=rke.cattle.io/machine=00c4e7a0-5497-4367-a70c-0b836757eae8 --pod-infra-container-image=rancher/mirrored-pause:3.6 --pod-manifest-path=/var/lib/rancher/k3s/agent/pod-manifests --read-only-port=0 --resolv-conf=/run/systemd/resolve/resolv.conf --serialize-image-pulls=false --tls-cert-file=/var/lib/rancher/k3s/agent/serving-kubelet.crt --tls-private-key-file=/var/lib/rancher/k3s/agent/serving-kubelet.key" Sep 13 13:26:44 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:26:44Z" level=info msg="Running kubelet --address=0.0.0.0 --anonymous-auth=false --authentication-token-webhook=true --authorization-mode=Webhook --cgroup-driver=systemd --client-ca-file=/var/lib/rancher/k3s/agent/client-ca.crt --cloud-provider=external --cluster-dns=10.43.0.10 --cluster-domain=cluster.local --container-runtime-endpoint=unix:///run/k3s/containerd/containerd.sock --containerd=/run/k3s/containerd/containerd.sock --eviction-hard=imagefs.available<5%,nodefs.available<5% --eviction-minimum-reclaim=imagefs.available=10%,nodefs.available=10% --fail-swap-on=false --healthz-bind-address=127.0.0.1 --hostname-override=k3s-123-cis-pool3-b403f678-bzdg5 --kubeconfig=/var/lib/rancher/k3s/agent/kubelet.kubeconfig --node-labels=rke.cattle.io/machine=109d596c-89f5-4c10-8c7f-6b82a38edd8f --pod-infra-container-image=rancher/mirrored-pause:3.6 --pod-manifest-path=/var/lib/rancher/k3s/agent/pod-manifests --read-only-port=0 --resolv-conf=/run/systemd/resolve/resolv.conf --serialize-image-pulls=false --tls-cert-file=/var/lib/rancher/k3s/agent/serving-kubelet.crt --tls-private-key-file=/var/lib/rancher/k3s/agent/serving-kubelet.key"
 ```
 
@@ -2608,13 +2608,13 @@ journalctl -D /var/log/journal -u k3s | grep 'Running kubelet' | tail -n1
 
 **Expected Result**:
 
-```console
+```log
 '--tls-cert-file' is present AND '--tls-private-key-file' is present
 ```
 
 **Returned Value**:
 
-```console
+```log
 Sep 13 13:26:50 k3s-123-cis-pool2-98604672-hr9p5 k3s[1592]: time="2022-09-13T13:26:50Z" level=info msg="Running kubelet --address=0.0.0.0 --anonymous-auth=false --authentication-token-webhook=true --authorization-mode=Webhook --cgroup-driver=systemd --client-ca-file=/var/lib/rancher/k3s/agent/client-ca.crt --cloud-provider=external --cluster-dns=10.43.0.10 --cluster-domain=cluster.local --container-runtime-endpoint=unix:///run/k3s/containerd/containerd.sock --containerd=/run/k3s/containerd/containerd.sock --eviction-hard=imagefs.available<5%,nodefs.available<5% --eviction-minimum-reclaim=imagefs.available=10%,nodefs.available=10% --fail-swap-on=false --healthz-bind-address=127.0.0.1 --hostname-override=k3s-123-cis-pool2-98604672-hr9p5 --kubeconfig=/var/lib/rancher/k3s/agent/kubelet.kubeconfig --node-labels=rke.cattle.io/machine=00c4e7a0-5497-4367-a70c-0b836757eae8 --pod-infra-container-image=rancher/mirrored-pause:3.6 --pod-manifest-path=/var/lib/rancher/k3s/agent/pod-manifests --read-only-port=0 --resolv-conf=/run/systemd/resolve/resolv.conf --serialize-image-pulls=false --tls-cert-file=/var/lib/rancher/k3s/agent/serving-kubelet.crt --tls-private-key-file=/var/lib/rancher/k3s/agent/serving-kubelet.key" Sep 13 13:26:44 k3s-123-cis-pool3-b403f678-bzdg5 k3s[1600]: time="2022-09-13T13:26:44Z" level=info msg="Running kubelet --address=0.0.0.0 --anonymous-auth=false --authentication-token-webhook=true --authorization-mode=Webhook --cgroup-driver=systemd --client-ca-file=/var/lib/rancher/k3s/agent/client-ca.crt --cloud-provider=external --cluster-dns=10.43.0.10 --cluster-domain=cluster.local --container-runtime-endpoint=unix:///run/k3s/containerd/containerd.sock --containerd=/run/k3s/containerd/containerd.sock --eviction-hard=imagefs.available<5%,nodefs.available<5% --eviction-minimum-reclaim=imagefs.available=10%,nodefs.available=10% --fail-swap-on=false --healthz-bind-address=127.0.0.1 --hostname-override=k3s-123-cis-pool3-b403f678-bzdg5 --kubeconfig=/var/lib/rancher/k3s/agent/kubelet.kubeconfig --node-labels=rke.cattle.io/machine=109d596c-89f5-4c10-8c7f-6b82a38edd8f --pod-infra-container-image=rancher/mirrored-pause:3.6 --pod-manifest-path=/var/lib/rancher/k3s/agent/pod-manifests --read-only-port=0 --resolv-conf=/run/systemd/resolve/resolv.conf --serialize-image-pulls=false --tls-cert-file=/var/lib/rancher/k3s/agent/serving-kubelet.crt --tls-private-key-file=/var/lib/rancher/k3s/agent/serving-kubelet.key"
 ```
 

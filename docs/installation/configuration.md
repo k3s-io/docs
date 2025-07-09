@@ -43,8 +43,8 @@ If you want your configuration to be independent from the install script, you sh
 
 ## Configuration with binary
 
-As stated, the installation script is primarily concerned with configuring K3s to run as a service.  
-If you choose to not use the script, you can run K3s simply by downloading the binary from our [release page](https://github.com/k3s-io/k3s/releases/latest), placing it on your path, and executing it. This is not particularly useful for permanent installations, but may be useful when performing quick tests that do not merit managing K3s as a system service.
+The installation script is primarily concerned with configuring K3s to run as a system service.  
+If you choose to not use the install script, you can run K3s simply by downloading the binary from our [GitHub release page](https://github.com/k3s-io/k3s/releases/latest), placing it on your path, and executing it. This is not particularly useful for permanent installations, but may be useful when performing quick tests that do not merit managing K3s as a system service.
 ```bash
 curl -Lo /usr/local/bin/k3s https://github.com/k3s-io/k3s/releases/download/v1.26.5+k3s1/k3s; chmod a+x /usr/local/bin/k3s
 ```
@@ -75,15 +75,15 @@ It is important to match critical flags on your server nodes. For example, if yo
 `failed to validate server configuration: critical configuration value mismatch.`
 See the Server Configuration documentation (linked above) for more information on which flags must be set identically on server nodes.
 :::
+
+## Configuration with container image
+
+The k3s container image ([`docker.io/rancher/k3s`](https://hub.docker.com/r/rancher/k3s)) supports the same configuration methods as the binary available on the GitHub release page.
+
 ## Configuration File
 
-:::info Version Gate
-
-Available as of [v1.19.1+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.19.1%2Bk3s1)
-
-:::
-
 In addition to configuring K3s with environment variables and CLI arguments, K3s can also use a config file.
+The config file is loaded regardless of how k3s is installed or executed.
 
 By default, configuration is loaded from `/etc/rancher/k3s/config.yaml`, and drop-in files are loaded from `/etc/rancher/k3s/config.yaml.d/*.yaml` in alphabetical order.
 This path is configurable via the `--config` CLI flag or `K3S_CONFIG_FILE` env var.
@@ -91,7 +91,7 @@ When overriding the default config file name, the drop-in directory path is also
 
 An example of a basic `server` config file is below:
 
-```yaml
+```yaml title="/etc/rancher/k3s/config.yaml"
 write-kubeconfig-mode: "0644"
 tls-san:
   - "foo.local"
@@ -116,33 +116,32 @@ In general, CLI arguments map to their respective YAML key, with repeatable CLI 
 
 It is also possible to use both a configuration file and CLI arguments. In these situations, values will be loaded from both sources, but CLI arguments will take precedence. For repeatable arguments such as `--node-label`, the CLI arguments will overwrite all values in the list.
 
-### Multiple Config Files
+### Value Merge Behavior
 
 If present in multiple files, the last value found for a given key will be used. A `+` can be appended to the key to append the value to the existing string or slice, instead of replacing it. All occurrences of this key in subsequent files will also require a `+` to prevent overwriting the accumulated value.
 
-An example of multiple config files is below:
+An example of values merged from multiple config files is below:
 
-```yaml
-# config.yaml
+```yaml title="/etc/rancher/k3s/config.yaml"
 token: boop
 node-label:
   - foo=bar
   - bar=baz
+```
 
-
-# config.yaml.d/test1.yaml
+```yaml title="/etc/rancher/k3s/config.yaml.d/test1.yaml"
 write-kubeconfig-mode: 600
 node-taint:
   - alice=bob:NoExecute
+```
 
-# config.yaml.d/test2.yaml
+```yaml title="/etc/rancher/k3s/config.yaml.d/test2.yaml"
 write-kubeconfig-mode: 777
 node-label:
   - other=what
   - foo=three
 node-taint+:
   - charlie=delta:NoSchedule
-
 ```
 
 This results in a final configuration of:
@@ -186,16 +185,22 @@ This results in a server with:
 - The token set to `secret`
 - Debug logging enabled
 
-### Kubelet configuration
+## Kubelet Configuration Files
+
+Kubernetes supports configuring the kubelet via both CLI flags, and configuration files.
+Configuring the kubelet via CLI flags has long been deprecated, but it is still supported, and is the easiest way to set basic options.
+Some advanced kubelet configuration can only be set via a config file.
+For more information, see the Kubernetes documentation for the [kubelet](https://kubernetes.io/docs/reference/command-line-tools-reference/kubelet/) and [setting kubelet parameters via a configuration file](https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/).
 
 :::info Version Gate
-The drop-in directory for kubelet configuration files or the config file (options 1 and 2 below) are only available in v1.32 and above. For lower minors, you should use the kubelet args directly (option number 3 below)
+Support for kubelet drop-in configuration files or the config file (options 1 and 2 below) are only available in v1.32 and above.  
+For older releases, you should use the kubelet args directly (option number 3 below).
 :::
-
-Following on from upstream behavior, kubelet configuration can be changed in different ways with a specific [order of precedence](https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/#kubelet-configuration-merging-order). 
 
 K3s uses a default kubelet configuration which is stored under `/var/lib/rancher/k3s/agent/etc/kubelet.conf.d/00-k3s-defaults.conf`. If you would like to change the default configuration parameters, there are three ways to do so:
 
-1. (Recommended) Drop a config file in `/var/lib/rancher/k3s/agent/etc/kubelet.conf.d/`
+1. Place a drop-in configuration file in `/var/lib/rancher/k3s/agent/etc/kubelet.conf.d/` *(recommended)*
 2. By using the flag `--kubelet-arg=config=$PATHTOFILE`, where `$PATHTOFILE` is the path to a file that includes kubelet config parameters (e.g. `/etc/rancher/k3s/kubelet.conf`) or the flag `--kubelet-arg=config-dir=$PATHTODIR`, where `$PATHTODIR` is the path to a directory which can include files that contain kubelet config parameters (e.g. `/etc/rancher/k3s/kubelet.conf.d`)
 3. By using the flag `--kubelet-arg=$FLAG`, where `$FLAG` is a kubelet configuration parameter (e.g. `image-gc-high-threshold=100`). 
+
+When mixing kubelet CLI flags and configuration file drop-ins, pay attention to the [order of precedence](https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/#kubelet-configuration-merging-order). 

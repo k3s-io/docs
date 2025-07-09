@@ -174,15 +174,15 @@ ETCDSnapshotFiles are available as of the November 2023 releases: v1.28.4+k3s2, 
 Snapshots can be viewed remotely using any Kubernetes client by listing or describing cluster-scoped `ETCDSnapshotFile` resources.
 Unlike the `k3s etcd-snapshot list` command, which only shows snapshots visible to that node, `ETCDSnapshotFile` resources track all snapshots present on cluster members.
 
-```console
-root@k3s-server-1:~# kubectl get etcdsnapshotfile
+```shell-session
+$ kubectl get etcdsnapshotfile
 NAME                                             SNAPSHOTNAME                        NODE           LOCATION                                                                            SIZE      CREATIONTIME
 local-on-demand-k3s-server-1-1730308816-3e9290   on-demand-k3s-server-1-1730308816   k3s-server-1   file:///var/lib/rancher/k3s/server/db/snapshots/on-demand-k3s-server-1-1730308816   2891808   2024-10-30T17:20:16Z
 s3-on-demand-k3s-server-1-1730308816-79b15c      on-demand-k3s-server-1-1730308816   s3             s3://etcd/k3s-test/on-demand-k3s-server-1-1730308816                                2891808   2024-10-30T17:20:16Z
 ```
 
-```console
-root@k3s-server-1:~# kubectl describe etcdsnapshotfile s3-on-demand-k3s-server-1-1730308816-79b15c
+```shell-session
+$ kubectl describe etcdsnapshotfile s3-on-demand-k3s-server-1-1730308816-79b15c
 Name:         s3-on-demand-k3s-server-1-1730308816-79b15c
 Namespace:
 Labels:       etcd.k3s.cattle.io/snapshot-storage-node=s3

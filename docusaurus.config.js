@@ -44,6 +44,9 @@ module.exports = {
     },
   },
   themeConfig: {
+    prism: {
+      additionalLanguages: ['shell-session', 'bash', 'toml', 'docker', 'log'],
+    },
     colorMode: {
       // "light" | "dark"
       defaultMode: "light",

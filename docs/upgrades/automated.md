@@ -146,7 +146,7 @@ Kubernetes does not support downgrades of control-plane components. The k3s-upgr
 
 Here is an example cluster, showing failed upgrade pods and cordoned nodes:
 
-```console
+```shell-session
 ubuntu@user:~$ kubectl get pods -n system-upgrade
 NAME                                                              READY   STATUS    RESTARTS   AGE
 apply-k3s-server-on-ip-172-31-0-16-with-7af95590a5af8e8c3-2cdc6   0/1     Error     0          9m25s
