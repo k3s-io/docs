@@ -148,9 +148,7 @@ The template is executed with a [`ContainerdConfig`](https://github.com/k3s-io/k
 
 You can extend the K3s base template instead of copy-pasting the complete stock template out of the K3s source code. This is useful if you only need to build on the existing configuration by adding a few extra lines before or after the defaults.
 
-```toml
-#/var/lib/rancher/k3s/agent/etc/containerd/config-v3.toml.tmpl
-
+```toml title="/var/lib/rancher/k3s/agent/etc/containerd/config-v3.toml.tmpl"
 {{ template "base" . }}
 
 [plugins.'io.containerd.cri.v1.runtime'.containerd.runtimes.'custom']
