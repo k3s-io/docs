@@ -8,64 +8,18 @@ You can roll back a K3s Kubernetes version after a problematic upgrade, using a 
 - **Potential Data Loss:** The `k3s-killall.sh` script forcefully terminates K3s processes and may result in data loss if applications are not properly shut down.
 - **Version Specifics:** Always verify K3s and component versions before and after the rollback.
 
-## Rollback with External Database
+## Rolling Back a K3s Cluster
 
-This section applies to K3s clusters using an external database (e.g., PostgreSQL, MySQL).
+<Tabs>
+<TabItem value='SQLite' default>
 
-1. If the cluster is running and the Kubernetes API is available, gracefully stop workloads by draining all nodes:
+To roll back a K3s cluster when using a SQLite database, replace the `.db` file with the copy of the `.db` file you made while backing up your database.
 
-    ```bash
-    kubectl drain --ignore-daemonsets --delete-emptydir-data <NODE-ONE-NAME> <NODE-TWO-NAME> <NODE-THREE-NAME> ...
-    ```
+</TabItem>
 
-    :::note
+<TabItem value='Embedded etcd' default>
 
-    This process may disrupt running applications.
-
-    :::
-
-1. On each node, stop the K3s service and all running pod processes:
-
-    ```bash
-    k3s-killall.sh
-    ```
-
-1. Restore a database snapshot taken before upgrading K3s and verify the integrity of the database. For example, if you're using PostgreSQL, run the following command:
-
-    ```bash
-    pg_restore -U <DB-USER> -d <DB-NAME> <BACKUP-FILE>
-    ```
-
-1. On each node, roll back the K3s binary to the previous version.
-
-    - Clusters with Internet Access:
-      - Server nodes:
-
-        ```bash
-        curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=vX.Y.Zk3s1 INSTALL_K3S_EXEC="server" sh -
-        ```
-
-      - Agent nodes:
-
-        ```bash
-        curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=vX.Y.Zk3s1 INSTALL_K3S_EXEC="agent" sh -
-        ```
-
-    - Air-gapped Clusters:
-
-      - Download the artifacts and run the [install script](../installation/airgap.md#install-k3s) locally. Verify the K3s version after install with `k3s --version` and reapply any custom configurations that where used before the upgrade.
-
-1. Start the K3s service on each node:
-
-    ```bash
-    systemctl start k3s
-    ```
-
-1. Verify the K3s service status with `systemctl status k3s`.
-
-## Rollback with Embedded etcd
-
-This section applies to K3s clusters using an embedded etcd.
+To roll back a K3s cluster when using an embedded etcd, follow these steps:
 
 1. If the cluster is running and the Kubernetes API is available, gracefully stop workloads by draining all nodes:
 
@@ -134,6 +88,66 @@ This section applies to K3s clusters using an embedded etcd.
     ```
 
 1. Verify the K3s service status with `systemctl status k3s`.
+
+</TabItem>
+
+<TabItem value='External Database' default>
+
+To roll back a K3s cluster when using an external database (e.g., PostgreSQL, MySQL), follow these steps:
+
+1. If the cluster is running and the Kubernetes API is available, gracefully stop workloads by draining all nodes:
+
+    ```bash
+    kubectl drain --ignore-daemonsets --delete-emptydir-data <NODE-ONE-NAME> <NODE-TWO-NAME> <NODE-THREE-NAME> ...
+    ```
+
+    :::note
+
+    This process may disrupt running applications.
+
+    :::
+
+1. On each node, stop the K3s service and all running pod processes:
+
+    ```bash
+    k3s-killall.sh
+    ```
+
+1. Restore a database snapshot taken before upgrading K3s and verify the integrity of the database. For example, if you're using PostgreSQL, run the following command:
+
+    ```bash
+    pg_restore -U <DB-USER> -d <DB-NAME> <BACKUP-FILE>
+    ```
+
+1. On each node, roll back the K3s binary to the previous version.
+
+    - Clusters with Internet Access:
+      - Server nodes:
+
+        ```bash
+        curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=vX.Y.Zk3s1 INSTALL_K3S_EXEC="server" sh -
+        ```
+
+      - Agent nodes:
+
+        ```bash
+        curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=vX.Y.Zk3s1 INSTALL_K3S_EXEC="agent" sh -
+        ```
+
+    - Air-gapped Clusters:
+
+      - Download the artifacts and run the [install script](../installation/airgap.md#install-k3s) locally. Verify the K3s version after install with `k3s --version` and reapply any custom configurations that where used before the upgrade.
+
+1. Start the K3s service on each node:
+
+    ```bash
+    systemctl start k3s
+    ```
+
+1. Verify the K3s service status with `systemctl status k3s`.
+
+</TabItem>
+</Tabs>
 
 ## Verification
 
