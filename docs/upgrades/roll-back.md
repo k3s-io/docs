@@ -55,7 +55,7 @@ To roll back a K3s cluster when using an embedded etcd, follow these steps:
 
     - Air-gapped Clusters:
 
-      - Download the artifacts and run the [install script](../installation/airgap.md#install-k3s) locally. Add the environment variable `INSTALL_K3S_SKIP_START="true"` when running the install script to prevent K3s from starting.
+      - Download the artifacts and run the [install script](../installation/airgap.md#2-install-k3s) locally. Add the environment variable `INSTALL_K3S_SKIP_START="true"` when running the install script to prevent K3s from starting.
 
 1. On the first server node or the node without a `server:` entry in its [K3s config file](../installation/configuration.md), initiate the cluster restore. Refer to the [Snapshot Restore Steps](../cli/etcd-snapshot.md#snapshot-restore-steps) for more information:
 
@@ -140,7 +140,7 @@ To roll back a K3s cluster when using an external database (e.g., PostgreSQL, My
 
     - Air-gapped Clusters:
 
-      - Download the artifacts and run the [install script](../installation/airgap.md#install-k3s) locally. Verify the K3s version after install with `k3s --version` and reapply any custom configurations that where used before the upgrade.
+      - Download the artifacts and run the [install script](../installation/airgap.md#2-install-k3s) locally. Verify the K3s version after install with `k3s --version` and reapply any custom configurations that where used before the upgrade.
 
 1. Start the K3s service on each node:
 
