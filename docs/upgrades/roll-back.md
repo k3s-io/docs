@@ -1,3 +1,7 @@
+---
+title: Rolling Back K3s
+---
+
 # Rolling Back K3s
 
 You can roll back the K3s Kubernetes version after an upgrade, using a combination of K3s binary downgrade and datastore restoration. Rollback can be performed on clusters of all types, including a single-node SQLite, an external datastore, or an embedded etcd. When rolling back to a previous Kubernetes minor version, you must have a datastore snapshot taken on the Kubernetes minor version you wish to roll back to.
