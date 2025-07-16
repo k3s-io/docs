@@ -2,12 +2,10 @@
 title: Rolling Back K3s
 ---
 
-# Rolling Back K3s
-
 You can roll back the K3s Kubernetes version after an upgrade, using a combination of K3s binary downgrade and datastore restoration. Rollback can be performed on clusters of all types, including a single-node SQLite, an external datastore, or an embedded etcd. When rolling back to a previous Kubernetes minor version, you must have a datastore snapshot taken on the Kubernetes minor version you wish to roll back to.
 
 :::warning
-If you cannot restore the database, you can not roll back to a previous minor version.
+If you cannot restore the database, you cannot roll back to a previous minor version.
 :::
 
 ## Important Considerations
@@ -25,7 +23,7 @@ To roll back a K3s cluster when using a SQLite database, replace the `.db` file 
 
 </TabItem>
 
-<TabItem value='Embedded etcd' default>
+<TabItem value='Embedded etcd'>
 
 To roll back a K3s cluster when using an embedded etcd, follow these steps:
 
@@ -68,7 +66,7 @@ To roll back a K3s cluster when using an embedded etcd, follow these steps:
     ```
 
     :::warning
-    This will overwrite all data in the etcd datastore. Verify the snapshot's integrity before restoring. Be aware that large snapshots can take a long time to restore.
+    This overwrites all data in the etcd datastore. Verify the snapshot's integrity before restoring. Be aware that large snapshots can take a long time to restore.
     :::
 
 1. Start the K3s service on the first server node:
@@ -99,7 +97,7 @@ To roll back a K3s cluster when using an embedded etcd, follow these steps:
 
 </TabItem>
 
-<TabItem value='External Database' default>
+<TabItem value='External Database'>
 
 To roll back a K3s cluster when using an external database (e.g., PostgreSQL, MySQL), follow these steps:
 
@@ -144,7 +142,7 @@ To roll back a K3s cluster when using an external database (e.g., PostgreSQL, My
 
     - Air-gapped Clusters:
 
-      - Download the artifacts and run the [install script](../installation/airgap.md#2-install-k3s) locally. Verify the K3s version after install with `k3s --version` and reapply any custom configurations that where used before the upgrade.
+      - Download the artifacts and run the [install script](../installation/airgap.md#2-install-k3s) locally. Verify the K3s version after install with `k3s --version` and reapply any custom configurations that were used before the upgrade.
 
 1. Start the K3s service on each node:
 
