@@ -49,7 +49,7 @@ spec:
 ```
 
 </TabItem>
-<TabItem value="Whereabouts" default>
+<TabItem value="Whereabouts">
 [Whereabouts](https://github.com/k8snetworkplumbingwg/whereabouts) is an IP Address Management (IPAM) CNI plugin that assigns IP addresses cluster-wide.
 
 To use the Whereabouts IPAM plugin, deploy Multus with the following configuration:
@@ -102,7 +102,7 @@ spec:
 ```
 
 </TabItem>
-<TabItem value="Multus DHCP daemon" default>
+<TabItem value="Multus DHCP daemon">
 The dhcp IPAM plugin can be deployed when there is already a DHCP server running on the network. This daemonset takes care of periodically renewing the DHCP lease. For more information please check the official docs of [DHCP IPAM plugin](https://www.cni.dev/plugins/current/ipam/dhcp/).
 
 To use the DHCP plugin, deploy Multus with the following configuration:
