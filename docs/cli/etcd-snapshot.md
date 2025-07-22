@@ -6,7 +6,7 @@ title: etcd-snapshot
 
 This page describes how to use the `k3s etcd-snapshot` CLI tool to manage etcd snapshots and how to restore from an etcd snapshot.
 
-K3s snapshots are stored in the node file system and optionally be replicated in an S3 compatible object store for disaster recovery scenarios. Moreover, K3s snapshots can be scheduled or taken manually on-demand.  The `k3s etcd-snapshot` CLI tool supports a set of subcommands for working with both your etcd scheduled or on-demand snapshots, as well as local or S3 stored snapshots.
+K3s etcd snapshots are stored on the node file system, and may optionally be uploaded to an S3 compatible object store for disaster recovery scenarios. Snapshots can be both automated on a reoccurring schedule, and taken manually on-demand.  The `k3s etcd-snapshot` CLI tool offers a set of subcommands that can be used to create, delete, and manage snapshots.
 
 | Subcommand | Description |
 | ----------- | --------------- |
@@ -17,14 +17,14 @@ K3s snapshots are stored in the node file system and optionally be replicated in
 
 For additional information on the etcd snapshot subcommands, run `k3s etcd-snapshot --help`.
 
-## Creating snapshots
+## Creating Snapshots
 
 <Tabs groupId="snapshots">
-<TabItem value="Scheduled" default>
+<TabItem value="Scheduled">
 
 Scheduled snapshots are enabled by default, at 00:00 and 12:00 system time, with 5 snapshots retained. Scheduled snapshots have a name that starts with `etcd-snapshot`, followed by the node name and timestamp.
 
-These are the configuration options that we can set for scheduled snapshots:
+The following options control the operation of scheduled snapshots:
 
 | Flag | Description |
 | ----------- | --------------- |
@@ -44,7 +44,7 @@ Scheduled snapshots are saved to the path set by the server's `--etcd-snapshot-d
 
 Snapshots can be saved manually by running the `k3s etcd-snapshot save` command. There is no retention for these on-demand snapshots and the user needs to remove them manually by using `k3s etcd-snapshot delete` or `k3s etcd-snapshot prune` commands. On-demand snapshots have a name that starts with `on-demand`, followed by the node name and timestamp.
 
-These are the configuration options that we can set for on-demand snapshots:
+The following options control the operation of on-demand snapshots:
 
 | Flag | Description |
 | ----------- | --------------- |
@@ -62,7 +62,7 @@ On-demand snapshots are saved to the path set by the server's `--etcd-snapshot-d
 </Tabs>
 
 
-## Deleting snapshots
+## Deleting Snapshots
 
 Scheduled snapshots are deleted automatically when the number of snapshots exceeds the configured retention count (5 by default). The oldest snapshots are removed first. 
 
@@ -105,24 +105,22 @@ K3s supports replicating etcd snapshots to and restoring etcd snapshots from S3-
 
 For example, this is how the creation and deletion of on-demand etcd snapshots in S3 would work:
 
-```bash
-k3s etcd-snapshot save \
-  --s3 \
-  --s3-bucket=<S3-BUCKET-NAME> \
-  --s3-access-key=<S3-ACCESS-KEY> \
-  --s3-secret-key=<S3-SECRET-KEY>
-```
+```shell-session
+$ k3s etcd-snapshot --s3 --s3-bucket=test-bucket --s3-access-key=test --s3-secret-key=secret save
+INFO[0155] Snapshot on-demand-server-0-1753178523 saved. 
+INFO[0155] Snapshot on-demand-server-0-1753178523 saved. 
 
-```bash
-k3s etcd-snapshot delete          \
-  --s3                            \
-  --s3-bucket=<S3-BUCKET-NAME>    \
-  --s3-access-key=<S3-ACCESS-KEY> \
-  --s3-secret-key=<S3-SECRET-KEY> \
-  <SNAPSHOT-NAME>
-```
+$ k3s etcd-snapshot --s3 --s3-bucket=test-bucket --s3-access-key=test --s3-secret-key=secret ls
+Name                              Location                                                                          Size    Created
+on-demand-server-0-1753178523     s3://test-bucket/test-folder/on-demand-server-0-1753178523                        5062688 2025-07-22T10:02:03Z
+on-demand-server-0-1753178523     file:///var/lib/rancher/k3s/server/db/snapshots/on-demand-server-0-1753178523     5062688 2025-07-22T10:02:03Z
 
-As snapshots are replicated in S3, these commands will create and delete two snapshots: one stored in the file system and one in S3.
+$ k3s etcd-snapshot --s3 --s3-bucket=test-bucket --s3-access-key=test --s3-secret-key=secret delete on-demand-server-0-1753178523
+INFO[0000] Snapshot on-demand-server-0-1753178523 deleted.
+
+$ k3s etcd-snapshot --s3 --s3-bucket=test-bucket --s3-access-key=test --s3-secret-key=secret ls
+Name                              Location                                                                          Size    Created
+```
 
 
 ### S3 Configuration Secret Support
