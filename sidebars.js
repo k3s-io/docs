@@ -46,6 +46,7 @@ module.exports = {
       items:[
         'security/secrets-encryption',
         'security/hardening-guide',
+        'security/self-assessment-1.9',
         'security/self-assessment-1.8',
         'security/self-assessment-1.7',
       ],
