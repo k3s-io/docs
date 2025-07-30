@@ -28,7 +28,7 @@ Traefik 在启动服务器时默认部署。有关详细信息，请参阅[管�
 
 K3s 1.20 及更早版本包括了 Traefik v1。除非找到现有的 Traefik v1（在这种情况下，Traefik 不会升级到 v2），否则 K3s 1.21 及更高版本将安装 Traefik v2。有关 K3s 中包含的 Traefik 版本，请参阅版本的发行说明。
 
-要从较旧的 Traefik v1 实例迁移，请参阅 [Traefik 文档](https://doc.traefik.io/traefik/migration/v1-to-v2/)和[迁移工具](https://github.com/traefik/traefik-migration-tool)。
+要从较旧的 Traefik v1 实例迁移，请参阅 [Traefik 文档](https://doc.traefik.io/traefik/migrate/v1-to-v2/)和[迁移工具](https://github.com/traefik/traefik-migration-tool)。
 
 ## 网络策略控制器
 

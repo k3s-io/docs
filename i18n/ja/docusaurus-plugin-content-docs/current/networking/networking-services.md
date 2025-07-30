@@ -32,7 +32,7 @@ Traefikはサーバーの起動時にデフォルトでデプロイされます�
 
 K3sにはTraefik v2が含まれています。K3sバージョン1.21から1.30はTraefik v2をインストールしますが、既存のTraefik v1のインストールが見つかった場合、Traefikはv2にアップグレードされません。K3sバージョン1.20およびそれ以前にはTraefik v1が含まれています。K3sに含まれる特定のTraefikバージョンについては、使用しているバージョンのリリースノートを参照してください。
 
-古いTraefik v1インスタンスからの移行については、[Traefikドキュメント](https://doc.traefik.io/traefik/migration/v1-to-v2/)および[移行ツール](https://github.com/traefik/traefik-migration-tool)を参照してください。
+古いTraefik v1インスタンスからの移行については、[Traefikドキュメント](https://doc.traefik.io/traefik/migrate/v1-to-v2/)および[移行ツール](https://github.com/traefik/traefik-migration-tool)を参照してください。
 
 ## ネットワークポリシーコントローラー
 
