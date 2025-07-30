@@ -47,6 +47,7 @@
   --ifm-color-primary-lightest: #086b9f;
   --ifm-color-secondary: #ffc61c;
   --ifm-color-secondary-light: #ffcd38;
+  --label-color     : #d5d5d5;
   --dark            : #33313b;
   --light           : #F3F3F3;
 }
@@ -62,8 +63,9 @@
   --ifm-color-secondary-dark: #054a6e;
   --ifm-color-secondary: #06527a;
   --ifm-color-secondary-light: #075a86;
+  --label-color      : #434343;
   --light            : #33313b;
-  --dark           : #F3F3F3;
+  --dark             : #F3F3F3;
 }
 
 [data-theme='dark'] .footer--dark {
