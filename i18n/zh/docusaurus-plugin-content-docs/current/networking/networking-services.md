@@ -28,7 +28,7 @@ To remove Traefik from your cluster, start all servers with the `--disable=traef
 
 K3s versions 1.20 and earlier include Traefik v1. K3s versions 1.21 and later install Traefik v2, unless an existing installation of Traefik v1 is found, in which case Traefik is not upgraded to v2. For more information on the specific version of Traefik included with K3s, consult the Release Notes for your version.
 
-To migrate from an older Traefik v1 instance please refer to the [Traefik documentation](https://doc.traefik.io/traefik/migration/v1-to-v2/) and [migration tool](https://github.com/traefik/traefik-migration-tool).
+To migrate from an older Traefik v1 instance please refer to the [Traefik documentation](https://doc.traefik.io/traefik/migrate/v1-to-v2/) and [migration tool](https://github.com/traefik/traefik-migration-tool).
 
 ## Network Policy Controller
 
