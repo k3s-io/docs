@@ -34,7 +34,7 @@ For more information, see [Managing Packaged Components](../installation/package
 
 For details on the specific version of Traefik included with K3s, consult the Release Notes for your version.
 * K3s versions starting with **1.32** include Traefik v3. Existing installations of Traefik v2 will be automatically upgraded to v3 when K3s is upgraded.
-  Traefik v3 should be compatible with configuration from v2; consult the upstream [v2 to v3 migration](https://doc.traefik.io/traefik/migration/v2-to-v3/) docs for more information.
+  Traefik v3 should be compatible with configuration from v2; consult the upstream [v2 to v3 migration](https://doc.traefik.io/traefik/migrate/v2-to-v3/) docs for more information.
 * K3s versions **1.21** through **1.31** included Traefik v2, unless an existing installation of Traefik v1 was found, in which case Traefik was not upgraded to v2.
 * K3s versions **1.20** and **earlier** included Traefik v1.
 

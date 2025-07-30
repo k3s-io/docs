@@ -638,6 +638,24 @@ All the 5.X Controls are related to Kubernetes policy configuration. These contr
 
 Refer to [CIS 1.8 Section 5](self-assessment-1.8.md#51-rbac-and-service-accounts) for more information on how to create and apply these policies.
 
+#### Control 5.1.5
+
+:::note
+Remediation to achieve passing score is only needed for cis-1.9
+:::
+
+<details>
+<summary>Remediation</summary>
+Create explicit service accounts wherever a Kubernetes workload requires specific access to the Kubernetes API server.
+At a minimum, patch the following:
+```bash
+kubectl patch serviceaccount --namespace default default --patch '{"automountServiceAccountToken": false}'
+kubectl patch serviceaccount --namespace kube-node-lease default --patch '{"automountServiceAccountToken": false}'
+kubectl patch serviceaccount --namespace kube-public default --patch '{"automountServiceAccountToken": false}'
+```
+</details>
+
+
 ## Conclusion
 
 If you have followed this guide, your K3s cluster will be configured to comply with the CIS Kubernetes Benchmark. You can review the [CIS 1.8 Self-Assessment Guide](self-assessment-1.8.md) to understand the expectations of each of the benchmark's checks and how you can do the same on your cluster.
