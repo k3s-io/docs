@@ -180,7 +180,7 @@ K3s runs through several steps when restoring a snapshot:
 8. (optional) Agents and control-plane servers can be started normally. 
 8. (optional) Etcd servers can be restarted to rejoin to the cluster after removing old database files.
 
-When restoring a snapshot, you don't need to use the same K3s version that created it; a newer version is acceptable. However, be mindful of the etcd version when changing K3s versions during a restore, as etcd only supports restoring from snapshots taken with the same major.minor version (different patch versions are fine).
+When restoring a snapshot, you don't need to use the same K3s version that created it; a higher minor version is also acceptable.
 
 ### Snapshot Restore Steps
 
@@ -267,9 +267,9 @@ As a safety mechanism, when K3s resets the cluster, it creates an empty file at 
 </TabItem>
 </Tabs>
 
-#### Snapshot Restore in new nodes
+#### Restoring To New Hosts
 
-It is possible to restore the K3s cluster in different nodes. The only caveat is that you must backup the [token server](token.md#server), as it is used to decrypt the bootstrap data inside the snapshot. The process is the same as above but changing step 2 by:
+It is possible to restore an etcd snapshot to a different host than it was taken on. When doing so, you must pass the [server token](token.md#server) that was originally used when taking the snapshot, as it is used to decrypt the bootstrap data inside the snapshot. The process is the same as above but changing step 2 by:
 
 1. Save the token server: `/var/lib/rancher/k3s/server/token` in the new node
 
@@ -283,9 +283,8 @@ k3s server \
 ```
 
 :::warning
-The node where the snapshot was taken will appear as NotReady
+Node resources are also included in the etcd snapshot. If restoring to a new set of nodes, you will need to manually delete any old nodes that are no longer present in the cluster.
 :::
-
 
 
 ## ETCDSnapshotFile Custom Resources
