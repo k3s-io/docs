@@ -79,7 +79,7 @@ cat /etc/cni/net.d/10-canal.conflist
 You should see that IP forwarding is set to true.
 
 </TabItem>
-<TabItem value="Calico" default>
+<TabItem value="Calico">
 
 Follow the [Calico CNI Plugins Guide](https://docs.tigera.io/calico/latest/reference/configure-cni-plugins). Modify the Calico YAML so that IP forwarding is allowed in the `container_settings` section, for example:
 
@@ -101,7 +101,7 @@ You should see that IP forwarding is set to true.
 
 
 </TabItem>
-<TabItem value="Cilium" default>
+<TabItem value="Cilium">
 
 Before running `k3s-killall.sh` or `k3s-uninstall.sh`, you must manually remove `cilium_host`, `cilium_net` and `cilium_vxlan` interfaces. If you fail to do this, you may lose network connectivity to the host when K3s is stopped
 

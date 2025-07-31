@@ -4,47 +4,88 @@ title: etcd-snapshot
 
 # k3s etcd-snapshot
 
-This page documents the management of etcd snapshots using the `k3s etcd-snapshot` CLI, as well as configuration of etcd scheduled snapshots for the `k3s server` process, and use of the `k3s server --cluster-reset` command to reset etcd cluster membership and optionally restore etcd snapshots.
+This page describes how to use the `k3s etcd-snapshot` CLI tool to manage etcd snapshots and how to restore from an etcd snapshot.
+
+K3s etcd snapshots are stored on the node file system, and may optionally be uploaded to an S3 compatible object store for disaster recovery scenarios. Snapshots can be both automated on a reoccurring schedule, and taken manually on-demand.  The `k3s etcd-snapshot` CLI tool offers a set of subcommands that can be used to create, delete, and manage snapshots.
+
+| Subcommand | Description |
+| ----------- | --------------- |
+| delete      |  Delete given snapshot(s) |
+| ls, list, l |  List snapshots |
+| prune       |  Remove snapshots that exceed the configured retention count |
+| save        |  Trigger an on-demand etcd snapshot |
+
+For additional information on the etcd snapshot subcommands, run `k3s etcd-snapshot --help`.
 
 ## Creating Snapshots
 
-Snapshots are saved to the path set by the server's `--etcd-snapshot-dir` value, which defaults to `${data-dir}/server/db/snapshots`. The data-dir value defaults to `/var/lib/rancher/k3s` and can be changed independently by setting the `--data-dir` flag.
+<Tabs groupId="snapshots">
+<TabItem value="Scheduled">
 
-### Scheduled Snapshots
+Scheduled snapshots are enabled by default, at 00:00 and 12:00 system time, with 5 snapshots retained. Scheduled snapshots have a name that starts with `etcd-snapshot`, followed by the node name and timestamp.
 
-Scheduled snapshots are enabled by default, at 00:00 and 12:00 system time, with 5 snapshots retained. To configure the snapshot interval or the number of retained snapshots, refer to the [snapshot configuration options](#snapshot-configuration-options).
-
-Scheduled snapshots have a name that starts with `etcd-snapshot`, followed by the node name and timestamp. The base name can be changed with the `--etcd-snapshot-name` flag in the server configuration.
-
-### On-demand Snapshots
-
-Snapshots can be saved manually by running the `k3s etcd-snapshot save` command.
-
-On-demand snapshots have a name that starts with `on-demand`, followed by the node name and timestamp. The base name can be changed with the `--name` flag when saving the snapshot.
-
-### Snapshot Configuration Options
-
-These flags can be passed to the `k3s server` command to reset the etcd cluster, and optionally restore from a snapshot.
-
-| Flag | Description |
-| ----------- | --------------- |
-| `--cluster-reset`| Forget all peers and become sole member of a new cluster. This can also be set with the environment variable `[$K3S_CLUSTER_RESET]` |
-| `--cluster-reset-restore-path` | Path to snapshot file to be restored |
-
-These flags are valid for both `k3s server` and `k3s etcd-snapshot`, however when passed to `k3s etcd-snapshot` the `--etcd-` prefix can be omitted to avoid redundancy.
-Flags can be passed in with the command line, or in the [configuration file,](../installation/configuration.md#configuration-file ) which may be easier to use.
+The following options control the operation of scheduled snapshots:
 
 | Flag | Description |
 | ----------- | --------------- |
 | `--etcd-disable-snapshots` | Disable scheduled snapshots |
+| `--etcd-snapshot-name` | Sets the base name of etcd scheduled snapshots. (Default: `etcd-snapshot`) |
 | `--etcd-snapshot-compress` | Compress etcd snapshots |
 | `--etcd-snapshot-dir` | Directory to save db snapshots. (Default location: `${data-dir}/db/snapshots`) |
 | `--etcd-snapshot-retention` | Number of snapshots to retain (default: 5) |
 | `--etcd-snapshot-schedule-cron` |  Snapshot interval time in cron spec. eg. every 5 hours `0 */5 * * *` (default: `0 */12 * * *`) |
 
-### S3 Compatible Object Store Support
+The data-dir value defaults to `/var/lib/rancher/k3s` and can be changed independently by setting the `--data-dir` flag.
 
-K3s supports writing etcd snapshots to and restoring etcd snapshots from S3-compatible object stores. S3 support is available for both on-demand and scheduled snapshots.
+Scheduled snapshots are saved to the path set by the server's `--etcd-snapshot-dir` value. If you want them replicated in S3 compatible object stores, refer to [S3 configuration options](https://docs.k3s.io/cli/etcd-snapshot#s3-compatible-object-store-support)
+
+</TabItem>
+<TabItem value="On-demand">
+
+Snapshots can be saved manually by running the `k3s etcd-snapshot save` command. There is no retention for these on-demand snapshots and the user needs to remove them manually by using `k3s etcd-snapshot delete` or `k3s etcd-snapshot prune` commands. On-demand snapshots have a name that starts with `on-demand`, followed by the node name and timestamp.
+
+The following options control the operation of on-demand snapshots:
+
+| Flag | Description |
+| ----------- | --------------- |
+| `--name` | Sets the base name of etcd on-demand snapshots. (Default: `on-demand`) |
+| `--etcd-snapshot-compress` | Compress etcd snapshots |
+| `--etcd-snapshot-dir` | Directory to save db snapshots. (Default location: `${data-dir}/db/snapshots`) |
+
+The data-dir value defaults to `/var/lib/rancher/k3s` and can be changed independently by setting the `--data-dir` flag.
+
+The `--name` flag can only be set when running the `k3s etcd-snapshot save` command. The other two can also be part of the `k3s server` [configuration file](../installation/configuration.md#configuration-file)
+
+On-demand snapshots are saved to the path set by the server's `--etcd-snapshot-dir` value. If you want them replicated in S3 compatible object stores, refer to [S3 configuration options](https://docs.k3s.io/cli/etcd-snapshot#s3-compatible-object-store-support)
+
+</TabItem>
+</Tabs>
+
+
+## Deleting Snapshots
+
+Scheduled snapshots are deleted automatically when the number of snapshots exceeds the configured retention count (5 by default). The oldest snapshots are removed first. 
+
+To manually delete scheduled snapshot(s) or on-demand snapshot(s), you can use the `k3s etcd-snapshot delete` command:
+
+```bash
+k3s etcd-snapshot delete <SNAPSHOT-NAME-1> <SNAPSHOT-NAME-2> ...
+```
+
+The `prune` subcommand removes snapshots that match the name prefix (`on-demand` by default) and exceed the configured retention count. It includes the flag `--snapshot-retention` to set the retention count. For scheduled snapshots, it overrides the default retention policy. On-demand snapshots have no retention policy and hence this flag is required.
+
+Prune "on-demand" snapshots down to a smaller amount:
+```bash
+k3s etcd-snapshot prune --snapshot-retention  <NUM-OF-SNAPSHOTS-TO-RETAIN>
+```
+Prune "scheduled" snapshots down to a smaller amount:
+```bash
+k3s etcd-snapshot prune --name etcd-snapshot --etcd-snapshot-retention <NUM-OF-SNAPSHOTS-TO-RETAIN>
+```
+
+## S3 Compatible Object Store Support
+
+K3s supports replicating etcd snapshots to and restoring etcd snapshots from S3-compatible object stores. S3 support is available for both on-demand and scheduled snapshots.
 
 | Flag | Description |
 | ----------- | --------------- |
@@ -62,28 +103,25 @@ K3s supports writing etcd snapshots to and restoring etcd snapshots from S3-comp
 | `--etcd-s3-timeout` | S3 timeout (default: `5m0s`) |
 | `--etcd-s3-config-secret` | Name of secret in the kube-system namespace used to configure S3, if etcd-s3 is enabled and no other etcd-s3 options are set |
 
-To perform an on-demand etcd snapshot and save it to S3:
+For example, this is how the creation and deletion of on-demand etcd snapshots in S3 would work:
 
-```bash
-k3s etcd-snapshot save \
-  --s3 \
-  --s3-bucket=<S3-BUCKET-NAME> \
-  --s3-access-key=<S3-ACCESS-KEY> \
-  --s3-secret-key=<S3-SECRET-KEY>
+```shell-session
+$ k3s etcd-snapshot --s3 --s3-bucket=test-bucket --s3-access-key=test --s3-secret-key=secret save
+INFO[0155] Snapshot on-demand-server-0-1753178523 saved. 
+INFO[0155] Snapshot on-demand-server-0-1753178523 saved. 
+
+$ k3s etcd-snapshot --s3 --s3-bucket=test-bucket --s3-access-key=test --s3-secret-key=secret ls
+Name                              Location                                                                          Size    Created
+on-demand-server-0-1753178523     s3://test-bucket/test-folder/on-demand-server-0-1753178523                        5062688 2025-07-22T10:02:03Z
+on-demand-server-0-1753178523     file:///var/lib/rancher/k3s/server/db/snapshots/on-demand-server-0-1753178523     5062688 2025-07-22T10:02:03Z
+
+$ k3s etcd-snapshot --s3 --s3-bucket=test-bucket --s3-access-key=test --s3-secret-key=secret delete on-demand-server-0-1753178523
+INFO[0000] Snapshot on-demand-server-0-1753178523 deleted.
+
+$ k3s etcd-snapshot --s3 --s3-bucket=test-bucket --s3-access-key=test --s3-secret-key=secret ls
+Name                              Location                                                                          Size    Created
 ```
 
-To perform an on-demand etcd snapshot restore from S3, first make sure that K3s isn't running. Then run the following commands:
-
-```bash
-k3s server \
-  --cluster-init \
-  --cluster-reset \
-  --etcd-s3 \
-  --cluster-reset-restore-path=<SNAPSHOT-NAME> \
-  --etcd-s3-bucket=<S3-BUCKET-NAME> \
-  --etcd-s3-access-key=<S3-ACCESS-KEY> \
-  --etcd-s3-secret-key=<S3-SECRET-KEY>
-```
 
 ### S3 Configuration Secret Support
 
@@ -129,94 +167,6 @@ stringData:
   etcd-s3-proxy: ""
 ```
 
-## Managing Snapshots
-
-k3s supports a set of subcommands for working with your etcd snapshots.
-
-| Subcommand | Description |
-| ----------- | --------------- |
-| delete      |  Delete given snapshot(s) |
-| ls, list, l |  List snapshots |
-| prune       |  Remove snapshots that exceed the configured retention count |
-| save        |  Trigger an immediate etcd snapshot |
-
-These commands will perform as expected whether the etcd snapshots are stored locally or in an S3 compatible object store.
-
-For additional information on the etcd snapshot subcommands, run `k3s etcd-snapshot --help`.
-
-Delete a snapshot from S3.
-
-```bash
-k3s etcd-snapshot delete          \
-  --s3                            \
-  --s3-bucket=<S3-BUCKET-NAME>    \
-  --s3-access-key=<S3-ACCESS-KEY> \
-  --s3-secret-key=<S3-SECRET-KEY> \
-  <SNAPSHOT-NAME>
-```
-
-Prune local snapshots with the default retention policy (5). The `prune` subcommand takes an additional flag `--snapshot-retention` that allows for overriding the default retention policy.
-
-```bash
-k3s etcd-snapshot prune
-```
-
-```bash
-k3s etcd-snapshot prune --snapshot-retention 10
-```
-
-### ETCDSnapshotFile Custom Resources
-
-:::info Version Gate
-ETCDSnapshotFiles are available as of the November 2023 releases: v1.28.4+k3s2, v1.27.8+k3s2, v1.26.11+k3s2, v1.25.16+k3s4
-:::
-
-Snapshots can be viewed remotely using any Kubernetes client by listing or describing cluster-scoped `ETCDSnapshotFile` resources.
-Unlike the `k3s etcd-snapshot list` command, which only shows snapshots visible to that node, `ETCDSnapshotFile` resources track all snapshots present on cluster members.
-
-```shell-session
-$ kubectl get etcdsnapshotfile
-NAME                                             SNAPSHOTNAME                        NODE           LOCATION                                                                            SIZE      CREATIONTIME
-local-on-demand-k3s-server-1-1730308816-3e9290   on-demand-k3s-server-1-1730308816   k3s-server-1   file:///var/lib/rancher/k3s/server/db/snapshots/on-demand-k3s-server-1-1730308816   2891808   2024-10-30T17:20:16Z
-s3-on-demand-k3s-server-1-1730308816-79b15c      on-demand-k3s-server-1-1730308816   s3             s3://etcd/k3s-test/on-demand-k3s-server-1-1730308816                                2891808   2024-10-30T17:20:16Z
-```
-
-```shell-session
-$ kubectl describe etcdsnapshotfile s3-on-demand-k3s-server-1-1730308816-79b15c
-Name:         s3-on-demand-k3s-server-1-1730308816-79b15c
-Namespace:
-Labels:       etcd.k3s.cattle.io/snapshot-storage-node=s3
-Annotations:  etcd.k3s.cattle.io/snapshot-token-hash: b4b83cda3099
-API Version:  k3s.cattle.io/v1
-Kind:         ETCDSnapshotFile
-Metadata:
-  Creation Timestamp:  2024-10-30T17:20:16Z
-  Finalizers:
-    wrangler.cattle.io/managed-etcd-snapshots-controller
-  Generation:        1
-  Resource Version:  790
-  UID:               bec9a51c-dbbe-4746-922e-a5136bef53fc
-Spec:
-  Location:   s3://etcd/k3s-test/on-demand-k3s-server-1-1730308816
-  Node Name:  s3
-  s3:
-    Bucket:           etcd
-    Endpoint:         s3.example.com
-    Prefix:           k3s-test
-    Region:           us-east-1
-    Skip SSL Verify:  true
-  Snapshot Name:      on-demand-k3s-server-1-1730308816
-Status:
-  Creation Time:  2024-10-30T17:20:16Z
-  Ready To Use:   true
-  Size:           2891808
-Events:
-  Type    Reason               Age   From            Message
-  ----    ------               ----  ----            -------
-  Normal  ETCDSnapshotCreated  113s  k3s-supervisor  Snapshot on-demand-k3s-server-1-1730308816 saved on S3
-```
-
-
 ## Restoring Snapshots
 
 K3s runs through several steps when restoring a snapshot:
@@ -235,7 +185,7 @@ K3s runs through several steps when restoring a snapshot:
 Select the tab below that matches your cluster configuration.
 
 <Tabs queryString="etcdsnap">
-<TabItem value="Single Server">
+<TabItem value="Single Server" default>
 
 1. Stop the K3s service:
     ```bash
@@ -305,3 +255,55 @@ In this example there are 3 servers, `S1`, `S2`, and `S3`. The snapshot is locat
     ```
 </TabItem>
 </Tabs>
+
+
+## ETCDSnapshotFile Custom Resources
+
+:::info Version Gate
+ETCDSnapshotFiles are available as of the November 2023 releases: v1.28.4+k3s2, v1.27.8+k3s2, v1.26.11+k3s2, v1.25.16+k3s4
+:::
+
+Snapshots can be viewed remotely using any Kubernetes client by listing or describing cluster-scoped `ETCDSnapshotFile` resources.
+Unlike the `k3s etcd-snapshot list` command, which only shows snapshots visible to that node, `ETCDSnapshotFile` resources track all snapshots present on cluster members.
+
+```shell-session
+$ kubectl get etcdsnapshotfile
+NAME                                             SNAPSHOTNAME                        NODE           LOCATION                                                                            SIZE      CREATIONTIME
+local-on-demand-k3s-server-1-1730308816-3e9290   on-demand-k3s-server-1-1730308816   k3s-server-1   file:///var/lib/rancher/k3s/server/db/snapshots/on-demand-k3s-server-1-1730308816   2891808   2024-10-30T17:20:16Z
+s3-on-demand-k3s-server-1-1730308816-79b15c      on-demand-k3s-server-1-1730308816   s3             s3://etcd/k3s-test/on-demand-k3s-server-1-1730308816                                2891808   2024-10-30T17:20:16Z
+```
+
+```shell-session
+$ kubectl describe etcdsnapshotfile s3-on-demand-k3s-server-1-1730308816-79b15c
+Name:         s3-on-demand-k3s-server-1-1730308816-79b15c
+Namespace:
+Labels:       etcd.k3s.cattle.io/snapshot-storage-node=s3
+Annotations:  etcd.k3s.cattle.io/snapshot-token-hash: b4b83cda3099
+API Version:  k3s.cattle.io/v1
+Kind:         ETCDSnapshotFile
+Metadata:
+  Creation Timestamp:  2024-10-30T17:20:16Z
+  Finalizers:
+    wrangler.cattle.io/managed-etcd-snapshots-controller
+  Generation:        1
+  Resource Version:  790
+  UID:               bec9a51c-dbbe-4746-922e-a5136bef53fc
+Spec:
+  Location:   s3://etcd/k3s-test/on-demand-k3s-server-1-1730308816
+  Node Name:  s3
+  s3:
+    Bucket:           etcd
+    Endpoint:         s3.example.com
+    Prefix:           k3s-test
+    Region:           us-east-1
+    Skip SSL Verify:  true
+  Snapshot Name:      on-demand-k3s-server-1-1730308816
+Status:
+  Creation Time:  2024-10-30T17:20:16Z
+  Ready To Use:   true
+  Size:           2891808
+Events:
+  Type    Reason               Age   From            Message
+  ----    ------               ----  ----            -------
+  Normal  ETCDSnapshotCreated  113s  k3s-supervisor  Snapshot on-demand-k3s-server-1-1730308816 saved on S3
+```
