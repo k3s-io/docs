@@ -37,7 +37,7 @@ The following options control the operation of scheduled snapshots:
 
 The data-dir value defaults to `/var/lib/rancher/k3s` and can be changed independently by setting the `--data-dir` flag.
 
-Scheduled snapshots are saved to the path set by the server's `--etcd-snapshot-dir` value. If you want them replicated in S3 compatible object stores, refer to [S3 configuration options](https://docs.k3s.io/cli/etcd-snapshot#s3-compatible-object-store-support)
+Scheduled snapshots are saved to the path set by the server's `--etcd-snapshot-dir` value. If you want them replicated in S3 compatible object stores, refer to [S3 configuration options](#s3-compatible-object-store-support)
 
 </TabItem>
 <TabItem value="On-demand">
@@ -56,7 +56,7 @@ The data-dir value defaults to `/var/lib/rancher/k3s` and can be changed indepen
 
 The `--name` flag can only be set when running the `k3s etcd-snapshot save` command. The other two can also be part of the `k3s server` [configuration file](../installation/configuration.md#configuration-file)
 
-On-demand snapshots are saved to the path set by the server's `--etcd-snapshot-dir` value. If you want them replicated in S3 compatible object stores, refer to [S3 configuration options](https://docs.k3s.io/cli/etcd-snapshot#s3-compatible-object-store-support)
+On-demand snapshots are saved to the path set by the server's `--etcd-snapshot-dir` value. If you want them replicated in S3 compatible object stores, refer to [S3 configuration options](#s3-compatible-object-store-support)
 
 </TabItem>
 </Tabs>
@@ -180,6 +180,8 @@ K3s runs through several steps when restoring a snapshot:
 8. (optional) Agents and control-plane servers can be started normally. 
 8. (optional) Etcd servers can be restarted to rejoin to the cluster after removing old database files.
 
+When restoring a snapshot, you don't need to use the same K3s version that created it; a newer version is acceptable. However, be mindful of the etcd version when changing K3s versions during a restore, as etcd only supports restoring from snapshots taken with the same major.minor version (different patch versions are fine).
+
 ### Snapshot Restore Steps
 
 Select the tab below that matches your cluster configuration.
@@ -212,6 +214,10 @@ Select the tab below that matches your cluster configuration.
     ```bash
     systemctl start k3s
     ```
+If an etcd-s3 backup configuration is defined within the K3s config file, the k3s restore will attempt to pull the snapshot file from the configured S3 bucket. In this instance only the snapshot filename should be passed in the argument `--cluster-reset-restore-path`. To restore from a local snapshot file, where an etcd-s3 backup configuration is present, add the argument `--etcd-s3=false` and pass the full path to the local snapshot file in the argument `--cluster-reset-restore-path`.
+
+As a safety mechanism, when K3s resets the cluster, it creates an empty file at `/var/lib/rancher/k3s/server/db/reset-flag` that prevents users from accidentally running multiple cluster resets in succession. This file is deleted when K3s starts normally.
+
 </TabItem>
 <TabItem value="Multiple Servers">
 
@@ -253,8 +259,33 @@ In this example there are 3 servers, `S1`, `S2`, and `S3`. The snapshot is locat
     ```bash
     systemctl start k3s
     ```
+
+If an etcd-s3 backup configuration is defined within the K3s config file, the k3s restore will attempt to pull the snapshot file from the configured S3 bucket. In this instance only the snapshot filename should be passed in the argument `--cluster-reset-restore-path`. To restore from a local snapshot file, where an etcd-s3 backup configuration is present, add the argument `--etcd-s3=false` and pass the full path to the local snapshot file in the argument `--cluster-reset-restore-path`.
+
+As a safety mechanism, when K3s resets the cluster, it creates an empty file at `/var/lib/rancher/k3s/server/db/reset-flag` that prevents users from accidentally running multiple cluster resets in succession. This file is deleted when K3s starts normally.
+
 </TabItem>
 </Tabs>
+
+#### Snapshot Restore in new nodes
+
+It is possible to restore the K3s cluster in different nodes. The only caveat is that you must backup the [token server](token.md#server), as it is used to decrypt the bootstrap data inside the snapshot. The process is the same as above but changing step 2 by:
+
+1. Save the token server: `/var/lib/rancher/k3s/server/token` in the new node
+
+2. Initiate the restore from snapshot on the first server node with the following commands:
+
+```bash
+k3s server \
+  --cluster-reset \
+  --cluster-reset-restore-path=<PATH-TO-SNAPSHOT>
+  --token=<BACKED-UP-TOKEN-VALUE>
+```
+
+:::warning
+The node where the snapshot was taken will appear as NotReady
+:::
+
 
 
 ## ETCDSnapshotFile Custom Resources
