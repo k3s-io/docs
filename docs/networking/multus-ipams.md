@@ -46,6 +46,8 @@ spec:
         confDir: /var/lib/rancher/k3s/agent/etc/cni/net.d
         binDir: /var/lib/rancher/k3s/data/cni/
         kubeconfig: /var/lib/rancher/k3s/agent/etc/cni/net.d/multus.d/multus.kubeconfig
+        # Comment the following line when using rke2-multus < v4.2.202
+        multusAutoconfigDir: /var/lib/rancher/k3s/agent/etc/cni/net.d
 ```
 
 </TabItem>
@@ -70,6 +72,8 @@ spec:
         confDir: /var/lib/rancher/k3s/agent/etc/cni/net.d
         binDir: /var/lib/rancher/k3s/data/cni/
         kubeconfig: /var/lib/rancher/k3s/agent/etc/cni/net.d/multus.d/multus.kubeconfig
+        # Comment the following line when using rke2-multus < v4.2.202
+        multusAutoconfigDir: /var/lib/rancher/k3s/agent/etc/cni/net.d
     rke2-whereabouts:
       fullnameOverride: whereabouts
       enabled: true
@@ -123,6 +127,8 @@ spec:
         confDir: /var/lib/rancher/k3s/agent/etc/cni/net.d
         binDir: /var/lib/rancher/k3s/data/cni/
         kubeconfig: /var/lib/rancher/k3s/agent/etc/cni/net.d/multus.d/multus.kubeconfig
+        # Comment the following line when using rke2-multus < v4.2.202
+        multusAutoconfigDir: /var/lib/rancher/k3s/agent/etc/cni/net.d
     manifests:
       dhcpDaemonSet: true
 ```
