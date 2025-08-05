@@ -271,9 +271,11 @@ As a safety mechanism, when K3s resets the cluster, it creates an empty file at 
 
 It is possible to restore an etcd snapshot to a different host than it was taken on. When doing so, you must pass the [server token](token.md#server) that was originally used when taking the snapshot, as it is used to decrypt the bootstrap data inside the snapshot. The process is the same as above but changing step 2 by:
 
-1. Save the token server: `/var/lib/rancher/k3s/server/token` in the new node
+1. In the node that took the snapshot save the value of: `/var/lib/rancher/k3s/server/token`. This is `<BACKED-UP-TOKEN-VALUE>` in step 3.
 
-2. Initiate the restore from snapshot on the first server node with the following commands:
+2. Copy the snapshot to the new node. The path in the node is `<PATH-TO-SNAPSHOT>` in step 3
+
+3. Initiate the restore from snapshot on the first server node with the following commands:
 
 ```bash
 k3s server \
@@ -281,9 +283,12 @@ k3s server \
   --cluster-reset-restore-path=<PATH-TO-SNAPSHOT>
   --token=<BACKED-UP-TOKEN-VALUE>
 ```
+The token value can also be set in the K3s config file.
+
 
 :::warning
-Node resources are also included in the etcd snapshot. If restoring to a new set of nodes, you will need to manually delete any old nodes that are no longer present in the cluster.
+1. Node resources are also included in the etcd snapshot. If restoring to a new set of nodes, you will need to manually delete any old nodes that are no longer present in the cluster.
+2. If there is a token set in the K3s config file, make sure it is the same as the `<BACKED-UP-TOKEN-VALUE>`, otherwise k3s will fail to start.
 :::
 
 
