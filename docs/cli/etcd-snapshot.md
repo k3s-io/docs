@@ -122,6 +122,16 @@ $ k3s etcd-snapshot --s3 --s3-bucket=test-bucket --s3-access-key=test --s3-secre
 Name                              Location                                                                          Size    Created
 ```
 
+### S3 Retention
+
+:::info Version Gate
+Starting in versions v1.34.0+k3s1, v1.33.4+k3s1, v1.32.8+k3s1, v1.31.12+k3s1, K3s includes a new flag for S3 retention. It has the same default value as the local snapshot retention.
+:::
+
+| Flag | Description |
+| ----------- | --------------- |
+| `--etcd-s3-retention` | Number of snapshots in S3 to retain (default: `5`) |
+
 
 ### S3 Configuration Secret Support
 
