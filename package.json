@@ -53,6 +53,10 @@
       [
         "remark-lint-no-dead-urls",
         {
+          "deadOrAliveOptions":{
+            "maxRetries": 3,
+            "timeout": 5000
+          },
           "skipUrlPatterns": [
             "^https://www\\.mysql\\.com",
             "^https://dev\\.mysql\\.com\\.*",
