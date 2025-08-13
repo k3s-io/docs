@@ -36,11 +36,14 @@ This method requires you to manually deploy the necessary images to each node, a
 
 #### Prepare the Images Directory and Airgap Image Tarball
 
-1. Obtain the images archive for your architecture from the [releases](https://github.com/k3s-io/k3s/releases) page for the version of K3s you will be running.
-2. Download the images archive to the agent's images directory, for example:
+1. On internet accessible machine, download the images archive for your architecture from the [releases](https://github.com/k3s-io/k3s/releases) page for the version of K3s you will be running. For example:
+  ```bash
+  curl -L -o k3s-airgap-images-amd64.tar.zst "https://github.com/k3s-io/k3s/releases/download/v1.33.1%2Bk3s1/k3s-airgap-images-amd64.tar.zst"
+  ```
+2. Transfer the images archive to the airgap nodes. Place them in the agent's image directory, for example:
   ```bash
   sudo mkdir -p /var/lib/rancher/k3s/agent/images/
-  sudo curl -L -o /var/lib/rancher/k3s/agent/images/k3s-airgap-images-amd64.tar.zst "https://github.com/k3s-io/k3s/releases/download/v1.33.1%2Bk3s1/k3s-airgap-images-amd64.tar.zst"
+  cp k3s-airgap-images-amd64.tar.zst /var/lib/rancher/k3s/agent/images/k3s-airgap-images-amd64.tar.zst
   ```
 3. Proceed to the [Install K3s](#2-install-k3s) section below.
 
@@ -86,22 +89,34 @@ For more information on enabling the embedded distributed registry mirror, see t
 
 Before installing K3s, choose one of the [Load Images](#1-load-images) options above to prepopulate the images that K3s needs to install.
 
-#### Binaries
+#### Download binary and script
 - Download the K3s binary from the [releases](https://github.com/k3s-io/k3s/releases) page, matching the same version used to get the airgap images. Place the binary in `/usr/local/bin` on each air-gapped node and ensure it is executable.
+```bash
+sudo curl -Lo /usr/local/bin/k3s https://github.com/k3s-io/k3s/releases/download/v1.33.3%2Bk3s1/k3s
+sudo chmod +x /usr/local/bin//k3s
+```
+
 - Download the K3s install script at [get.k3s.io](https://get.k3s.io). Place the install script anywhere on each air-gapped node, and name it `install.sh`.
+```bash
+curl -Lo install.sh https://get.k3s.io
+chmod +x install.sh
+```
 
-#### Default Network Route
+
+<details>
+<summary>**Set Default Network Route** - required for nodes without a default route</summary>
+
 If your nodes do not have an interface with a default route, a default route must be configured; even a black-hole route via a dummy interface will suffice. K3s requires a default route in order to auto-detect the node's primary IP, and for kube-proxy ClusterIP routing to function properly. To add a dummy route, do the following:
-  ```
-  ip link add dummy0 type dummy
-  ip link set dummy0 up
-  ip addr add 203.0.113.254/31 dev dummy0
-  ip route add default via 203.0.113.255 dev dummy0 metric 1000
-  ```
+```bash
+ip link add dummy0 type dummy
+ip link set dummy0 up
+ip addr add 203.0.113.254/31 dev dummy0
+ip route add default via 203.0.113.255 dev dummy0 metric 1000
+```
+</details>
 
-When running the K3s script with the `INSTALL_K3S_SKIP_DOWNLOAD` environment variable, K3s will use the local version of the script and binary.
-
-#### SELinux RPM
+<details>
+<summary>**Download SELinux RPM** - required for airgapped nodes with SELinux enabled</summary>
 
 If running on an air-gapped node with SELinux enabled, you must manually install the k3s-selinux RPM before installing K3s. This RPM includes the necessary SELinux policies for K3s to run properly. The latest version of the RPM can be found [here](https://github.com/k3s-io/k3s-selinux/releases/latest). For example, on CentOS 8:
 
@@ -118,6 +133,9 @@ The k3s-selinux RPM installation requires the following dependencies to be avail
     * selinux-policy
 
 See the [SELinux](../advanced.md#selinux-support) section for more information.
+
+</details>
+
 
 ### Running Install Script
 
