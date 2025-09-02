@@ -270,6 +270,88 @@ See https://rootlesscontaine.rs/ to learn more about Rootless Kubernetes.
 > **Note:** Don't try to run `k3s server --rootless` on a terminal, as terminal sessions do not allow cgroup v2 delegation.
 > If you really need to try it on a terminal, use `systemd-run --user -p Delegate=yes --tty k3s server --rootless` to wrap it in a systemd scope.
 
+### AppArmor Configuration for Ubuntu 24.04+
+
+On Ubuntu 24.04 and later, you may need to create an AppArmor profile for the k3s binary to run rootless K3s properly.
+
+1. **Find the k3s binary location:**
+
+   ```bash
+   which k3s
+   # Example output: /home/ubuntu/bin/k3s
+   ```
+
+2. **Create an AppArmor profile:**
+
+   Create a profile file in `/etc/apparmor.d/` with a name that corresponds to the binary path. For example, if your k3s binary is located at `/home/ubuntu/bin/k3s`, create the file `/etc/apparmor.d/home.ubuntu.bin.k3s`:
+
+   ```bash
+   sudo vi /etc/apparmor.d/home.ubuntu.bin.k3s
+   ```
+
+   Add the following content to the file:
+
+   ```
+   #include <tunables/global>
+
+   profile k3s /home/ubuntu/bin/k3s {
+     #include <abstractions/base>
+     
+     # Allow access to necessary files and capabilities
+     capability,
+     network,
+     
+     # Allow access to the k3s binary
+     /home/ubuntu/bin/k3s mr,
+     
+     # Allow access to system directories
+     /etc/** r,
+     /proc/** rw,
+     /sys/** rw,
+     /run/** rw,
+     /tmp/** rw,
+     /var/** rw,
+     /usr/** r,
+     /lib/** r,
+     /lib64/** r,
+     
+     # Allow access to user home directory
+     owner /home/**/ rw,
+   }
+   ```
+
+   > **Important:** Ensure the path in the `profile k3s /home/ubuntu/bin/k3s` line matches the actual path to your k3s binary.
+
+3. **Test and enable the AppArmor profile:**
+
+   ```bash
+   # Parse and load the profile
+   sudo apparmor_parser -r /etc/apparmor.d/home.ubuntu.bin.k3s
+
+   # Confirm the profile is loaded (should return a match)
+   sudo apparmor_status | grep k3s
+
+   # Ensure AppArmor starts on reboot
+   sudo systemctl enable apparmor
+   sudo systemctl restart apparmor
+   ```
+
+4. **Install additional required packages:**
+
+   ```bash
+   # Required by rootless k3s to function properly
+   sudo apt-get install -y uidmap fuse-overlayfs
+
+   # Enable IPv4 forwarding
+   sudo sysctl -w net.ipv4.ip_forward=1
+   ```
+
+   To make the IPv4 forwarding persistent across reboots, add the following line to `/etc/sysctl.conf`:
+
+   ```
+   net.ipv4.ip_forward=1
+   ```
+
 ### Advanced Rootless Configuration
 
 Rootless K3s uses [rootlesskit](https://github.com/rootless-containers/rootlesskit) and [slirp4netns](https://github.com/rootless-containers/slirp4netns) to communicate between host and user network namespaces.
