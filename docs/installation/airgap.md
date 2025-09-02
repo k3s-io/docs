@@ -93,7 +93,7 @@ Before installing K3s, choose one of the [Load Images](#1-load-images) options a
 - Download the K3s binary from the [releases](https://github.com/k3s-io/k3s/releases) page, matching the same version used to get the airgap images. Place the binary in `/usr/local/bin` on each air-gapped node and ensure it is executable.
 ```bash
 sudo curl -Lo /usr/local/bin/k3s https://github.com/k3s-io/k3s/releases/download/v1.33.3%2Bk3s1/k3s
-sudo chmod +x /usr/local/bin//k3s
+sudo chmod +x /usr/local/bin/k3s
 ```
 
 - Download the K3s install script at [get.k3s.io](https://get.k3s.io). Place the install script anywhere on each air-gapped node, and name it `install.sh`.
