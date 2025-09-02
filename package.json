@@ -53,7 +53,7 @@
       [
         "remark-lint-no-dead-urls",
         {
-          "deadOrAliveOptions":{
+          "deadOrAliveOptions": {
             "maxRetries": 3,
             "timeout": 5000
           },
@@ -67,5 +67,6 @@
         }
       ]
     ]
-  }
+  },
+  "packageManager": "yarn@4.9.4"
 }
