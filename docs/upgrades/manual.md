@@ -14,9 +14,9 @@ Upgrades performed via the installation script or using our [automated upgrades]
 
 | Channel        |   Description  |
 |----------------|---------|
-| stable         | (Default) Stable is recommended for production environments. These releases have been through a period of community hardening. |
-| latest         | Latest is recommended for trying out the latest features.  These releases have not yet been through a period of community hardening. |
-| v1.26 (example)| There is a release channel tied to each Kubernetes minor version, including versions that are end-of-life. These channels will select the latest patch available, not necessarily a stable release. |
+| stable         | (Default) Stable is recommended for production environments. These releases have been through a period of community testing. |
+| latest         | Latest always points at the highest non-prerelease version available, as determined by semver ordering rules. These releases have not yet been through a period of community testing. |
+| v1.33 (example)| There is a release channel tied to each Kubernetes minor version, including versions that are end-of-life. These channels will select the latest release available for that minor version, not necessarily a stable release. |
 
 For an exhaustive and up-to-date list of channels, you can visit the [k3s channel service API](https://update.k3s.io/v1-release/channels). For more technical details on how channels work, you see the [channelserver project](https://github.com/rancher/channelserver).
 
