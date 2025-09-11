@@ -4,7 +4,7 @@ title: "升级"
 
 ### 升级 K3s 集群
 
-[手动升级](manual.md)描述了手动升级集群的几种方法。它也可以作为通过第三方基础设施即代码工具（如 [Terraform](https://www.terraform.io/)）进行升级的基础。
+[手动升级](manual.md)描述了手动升级集群的几种方法。它也可以作为通过第三方基础设施即代码工具（如 [Terraform](https://developer.hashicorp.com/terraform)）进行升级的基础。
 
 [自动升级](automated.md)描述了如何使用 Rancher 的 [system-upgrade-controller](https://github.com/rancher/system-upgrade-controller) 执行 Kubernetes 原生的自动升级。
 

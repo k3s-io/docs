@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
       - name: Check internal links
-        run: yarn run remark --use remark-validate-links --frail ./docs
+        run: yarn run remark --use remark-validate-links --no-config --frail ./docs
       - name: Check external links
         run: yarn run remark --use remark-lint-no-dead-urls --frail ./docs
       - name: Check Markdown formatting
