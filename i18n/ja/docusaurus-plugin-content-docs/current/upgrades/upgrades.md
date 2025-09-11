@@ -4,7 +4,7 @@ title: "アップグレード"
 
 ### K3s クラスターのアップグレード
 
-[手動アップグレード](manual.md)では、クラスターを手動でアップグレードするためのいくつかの技術について説明しています。また、[Terraform](https://www.terraform.io/)のようなサードパーティのInfrastructure-as-Codeツールを使用してアップグレードするための基礎としても使用できます。
+[手動アップグレード](manual.md)では、クラスターを手動でアップグレードするためのいくつかの技術について説明しています。また、[Terraform](https://developer.hashicorp.com/terraform)のようなサードパーティのInfrastructure-as-Codeツールを使用してアップグレードするための基礎としても使用できます。
 
 [自動アップグレード](automated.md)では、Rancherの[system-upgrade-controller](https://github.com/rancher/system-upgrade-controller)を使用してKubernetesネイティブの自動アップグレードを実行する方法について説明しています。
 
