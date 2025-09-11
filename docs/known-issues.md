@@ -17,7 +17,7 @@ $ kubectl get --raw /api/v1/namespaces?labelSelector=none
 ```
 
 You can update the datastore schema by setting the `KINE_SCHEMA_MIGRATION` environment variable to 1 or higher in the K3s service's env file, and restarting the service.
-This change should be made on all servers within the cluster.
+This change should be made on all servers within the cluster, restart the servers, and removed once the schema migration is complete.
 
 ### Docker Snap
 
