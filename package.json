@@ -60,6 +60,7 @@
           "skipUrlPatterns": [
             "^https://www\\.mysql\\.com",
             "^https://dev\\.mysql\\.com\\.*",
+            "^https://developer\\.hashicorp\\.com\\.*",
             "^https://k3d\\.io\\.*",
             "^https://github\\.com/k3s-io/.*",
             "^https://github\\.com/rancher/.*"
