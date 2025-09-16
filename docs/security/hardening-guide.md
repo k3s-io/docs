@@ -32,6 +32,80 @@ kernel.panic=10
 kernel.panic_on_oops=1
 ```
 
+## Configuration for Kubernetes Components
+
+
+The configuration below should be placed in the [configuration file](../installation/configuration.md#configuration-file), and contains all the necessary remediations to harden the Kubernetes components.
+
+
+<Tabs groupId="pod-sec" queryString>
+<TabItem value="v1.29 and Newer" default>
+
+```yaml
+protect-kernel-defaults: true
+secrets-encryption: true
+kube-apiserver-arg:
+  - "enable-admission-plugins=NodeRestriction,EventRateLimit"
+  - 'admission-control-config-file=/var/lib/rancher/k3s/server/psa.yaml'
+  - 'audit-log-path=/var/lib/rancher/k3s/server/logs/audit.log'
+  - 'audit-policy-file=/var/lib/rancher/k3s/server/audit.yaml'
+  - 'audit-log-maxage=30'
+  - 'audit-log-maxbackup=10'
+  - 'audit-log-maxsize=100'
+  - 'service-account-extend-token-expiration=false'
+kube-controller-manager-arg:
+  - 'terminated-pod-gc-threshold=10'
+kubelet-arg:
+  - 'streaming-connection-idle-timeout=5m'
+  - "tls-cipher-suites=TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305"
+```
+
+</TabItem>
+<TabItem value="v1.25 - v1.28" default>
+
+```yaml
+protect-kernel-defaults: true
+secrets-encryption: true
+kube-apiserver-arg:
+  - "enable-admission-plugins=NodeRestriction,EventRateLimit"
+  - 'admission-control-config-file=/var/lib/rancher/k3s/server/psa.yaml'
+  - 'audit-log-path=/var/lib/rancher/k3s/server/logs/audit.log'
+  - 'audit-policy-file=/var/lib/rancher/k3s/server/audit.yaml'
+  - 'audit-log-maxage=30'
+  - 'audit-log-maxbackup=10'
+  - 'audit-log-maxsize=100'
+kube-controller-manager-arg:
+  - 'terminated-pod-gc-threshold=10'
+kubelet-arg:
+  - 'streaming-connection-idle-timeout=5m'
+  - "tls-cipher-suites=TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305"
+```
+
+</TabItem>
+
+<TabItem value="v1.24 and Older" default>
+
+```yaml
+protect-kernel-defaults: true
+secrets-encryption: true
+kube-apiserver-arg:
+  - 'enable-admission-plugins=NodeRestriction,PodSecurityPolicy,NamespaceLifecycle,ServiceAccount'
+  - 'audit-log-path=/var/lib/rancher/k3s/server/logs/audit.log'
+  - 'audit-policy-file=/var/lib/rancher/k3s/server/audit.yaml'
+  - 'audit-log-maxage=30'
+  - 'audit-log-maxbackup=10'
+  - 'audit-log-maxsize=100'
+kube-controller-manager-arg:
+  - 'terminated-pod-gc-threshold=10'
+kubelet-arg:
+  - 'streaming-connection-idle-timeout=5m'
+  - 'make-iptables-util-chains=true'
+  - "tls-cipher-suites=TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305"
+```
+
+</TabItem>
+</Tabs>
+
 ## Kubernetes Runtime Requirements
 
 The runtime requirements to comply with the CIS Benchmark are centered around pod security (via PSP or PSA), network policies and API Server auditing logs. These are outlined in this section.
@@ -487,6 +561,7 @@ kube-apiserver-arg:
   - 'audit-log-maxage=30'
   - 'audit-log-maxbackup=10'
   - 'audit-log-maxsize=100'
+  - 'service-account-extend-token-expiration=false'
 ```
 </TabItem>
 <TabItem value="cmdline">
@@ -505,58 +580,6 @@ K3s must be restarted to load the new configuration.
 sudo systemctl daemon-reload
 sudo systemctl restart k3s.service
 ```
-
-## Configuration for Kubernetes Components
-
-
-The configuration below should be placed in the [configuration file](../installation/configuration.md#configuration-file), and contains all the necessary remediations to harden the Kubernetes components.
-
-
-<Tabs groupId="pod-sec" queryString>
-<TabItem value="v1.25 and Newer" default>
-
-```yaml
-protect-kernel-defaults: true
-secrets-encryption: true
-kube-apiserver-arg:
-  - "enable-admission-plugins=NodeRestriction,EventRateLimit"
-  - 'admission-control-config-file=/var/lib/rancher/k3s/server/psa.yaml'
-  - 'audit-log-path=/var/lib/rancher/k3s/server/logs/audit.log'
-  - 'audit-policy-file=/var/lib/rancher/k3s/server/audit.yaml'
-  - 'audit-log-maxage=30'
-  - 'audit-log-maxbackup=10'
-  - 'audit-log-maxsize=100'
-kube-controller-manager-arg:
-  - 'terminated-pod-gc-threshold=10'
-kubelet-arg:
-  - 'streaming-connection-idle-timeout=5m'
-  - "tls-cipher-suites=TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305"
-```
-
-</TabItem>
-
-<TabItem value="v1.24 and Older" default>
-
-```yaml
-protect-kernel-defaults: true
-secrets-encryption: true
-kube-apiserver-arg:
-  - 'enable-admission-plugins=NodeRestriction,PodSecurityPolicy,NamespaceLifecycle,ServiceAccount'
-  - 'audit-log-path=/var/lib/rancher/k3s/server/logs/audit.log'
-  - 'audit-policy-file=/var/lib/rancher/k3s/server/audit.yaml'
-  - 'audit-log-maxage=30'
-  - 'audit-log-maxbackup=10'
-  - 'audit-log-maxsize=100'
-kube-controller-manager-arg:
-  - 'terminated-pod-gc-threshold=10'
-kubelet-arg:
-  - 'streaming-connection-idle-timeout=5m'
-  - 'make-iptables-util-chains=true'
-  - "tls-cipher-suites=TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305"
-```
-
-</TabItem>
-</Tabs>
 
 ## Manual Operations
 The following are controls that K3s currently does not pass by with the above configuration applied. These controls require manual intervention to fully comply with the CIS Benchmark.

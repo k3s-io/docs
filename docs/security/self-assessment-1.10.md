@@ -6,7 +6,7 @@ title: CIS 1.10 Self Assessment Guide
 
 This document is a companion to the [K3s security hardening guide](hardening-guide.md). The hardening guide provides prescriptive guidance for hardening a production installation of K3s, and this benchmark guide is meant to help you evaluate the level of security of the hardened cluster against each control in the CIS Kubernetes Benchmark. It is to be used by K3s operators, security teams, auditors, and decision-makers.
 
-This guide is specific to the **v1.28-v1.33** release line of K3s and the **v1.10** release of the CIS Kubernetes Benchmark.
+This guide is specific to the **v1.28-v1.31** release line of K3s and the **v1.10** release of the CIS Kubernetes Benchmark.
 
 For more information about each control, including detailed descriptions and remediations for failing tests, you can refer to the corresponding section of the CIS Kubernetes Benchmark v1.9. You can download the benchmark, after creating a free account, in [Center for Internet Security (CIS)](https://www.cisecurity.org/benchmark/kubernetes).
 
