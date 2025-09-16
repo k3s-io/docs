@@ -52,6 +52,10 @@ echo "$clean" | jq -c '.Controls[].tests[].results[]' | while read -r result; do
     remediation=${remediation/capabilites/capabilities}
     remediation=${remediation/applicaions/applications}
     
+    # encase `kubectl patch` lines in ```
+    if [[ "$remediation" =~ (kubectl patch.*) ]]; then
+        remediation=$(echo "$remediation" | sed -E 's/(^kubectl patch.*)/```bash\n\1\n```/')
+    fi
     # encase kube-XXX-args yaml block in ```
     if [[ "$remediation" =~ (kube-.*-arg:.*) ]]; then
         remediation=$(perl -pe 'BEGIN{undef $/} s/^kube-.*-arg:(\n  -\s.*)+/```\n$&\n```/mg' <<< "$remediation")
