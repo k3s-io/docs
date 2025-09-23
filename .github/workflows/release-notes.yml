@@ -4,7 +4,7 @@ on:
   schedule:
     - cron: '0 6 * * 1' # every Monday at 6:00 AM
 env:
-  MINORS: "v1.30 v1.31 v1.32 v1.33"
+  MINORS: "v1.31 v1.32 v1.33 v1.34"
 permissions:
   contents: write
   pull-requests: write
