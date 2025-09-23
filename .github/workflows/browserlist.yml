@@ -21,7 +21,7 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
-          commit-message: update release-notes/k3s-*.md
+          commit-message: update browserlist db
           title: Update Browsers List DB ${{ steps.date.outputs.month_year }}
           body: Automated npx update-browserslist-db@latest
           branch: update-browserslist-db
