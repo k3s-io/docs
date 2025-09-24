@@ -54,7 +54,7 @@ Kubernetes 需要大量 CA 证书才能正常运行。有关 Kubernetes 如何�
 
 在集群中的第一台 Server 初始启动期间，如果找到了放置在正确位置的 CA 证书和密钥，将不会自动生成 CA 证书。
 
-[K3s 仓库中的 `contrib/util/generate-custom-ca-certs.sh`](https://github.com/k3s-io/k3s/blob/master/contrib/util/generate-custom-ca-certs.sh) 示例脚本用于预先创建证书和密钥。
+[K3s 仓库中的 `contrib/util/generate-custom-ca-certs.sh`](https://github.com/k3s-io/k3s/blob/main/contrib/util/generate-custom-ca-certs.sh) 示例脚本用于预先创建证书和密钥。
 该脚本应在首次启动 K3s 之前运行，能创建一整套由通用根证书和中间 CA 证书签名的叶 CA 证书。
 如果你已有根证书或中间 CA 证书，你可以使用此脚本（或用作起点）创建 CA 证书，从而使用现有机构中的 PKI 来配置 K3s 集群。
 
@@ -131,7 +131,7 @@ mkdir -p /var/lib/rancher/k3s/server/tls
 cp /etc/ssl/certs/root-ca.pem /etc/ssl/certs/intermediate-ca.pem /etc/ssl/private/intermediate-ca.key /var/lib/rancher/k3s/server/tls
 
 # 生成自定义 CA 证书和密钥。
-curl -sL https://github.com/k3s-io/k3s/raw/master/contrib/util/generate-custom-ca-certs.sh | bash -
+curl -sL https://github.com/k3s-io/k3s/raw/main/contrib/util/generate-custom-ca-certs.sh | bash -
 ```
 
 如果命令成功完成，你可以进行 K3s 的首次安装和启动。
@@ -168,7 +168,7 @@ cp /var/lib/rancher/k3s/server/tls/root-ca.* /var/lib/rancher/k3s/server/tls/int
 cp /var/lib/rancher/k3s/server/tls/service.key /opt/k3s/server/tls
 
 # 生成更新的自定义 CA 证书和密钥。
-curl -sL https://github.com/k3s-io/k3s/raw/master/contrib/util/generate-custom-ca-certs.sh | DATA_DIR=/opt/k3s bash -
+curl -sL https://github.com/k3s-io/k3s/raw/main/contrib/util/generate-custom-ca-certs.sh | DATA_DIR=/opt/k3s bash -
 
 # 将更新后的 CA 证书和密钥加载到数据存储中。
 k3s certificate rotate-ca --path=/opt/k3s/server
@@ -270,13 +270,13 @@ graph TD
 
 #### 使用示例脚本
 
-[K3s 仓库中的 `contrib/util/rotate-default-ca-certs.sh`](https://github.com/k3s-io/k3s/blob/master/contrib/util/rotate-default-ca-certs.sh) 示例脚本用于创建由现有 CA 交叉签名的更新 CA 证书和密钥。
+[K3s 仓库中的 `contrib/util/rotate-default-ca-certs.sh`](https://github.com/k3s-io/k3s/blob/main/contrib/util/rotate-default-ca-certs.sh) 示例脚本用于创建由现有 CA 交叉签名的更新 CA 证书和密钥。
 
 要使用示例脚本生成由现有 CA 交叉签名的更新的自签名证书，请运行以下命令：
 ```bash
 # 创建更新的 CA 证书和密钥，由当前 CA 交叉签名。
 # 该脚本将创建一个包含更新证书的新临时目录，并输出新的 Token 值。
-curl -sL https://github.com/k3s-io/k3s/raw/master/contrib/util/rotate-default-ca-certs.sh | bash -
+curl -sL https://github.com/k3s-io/k3s/raw/main/contrib/util/rotate-default-ca-certs.sh | bash -
 
 # 将更新后的证书加载到数据存储中。在脚本的输出中查看更新后的 Token 值。
 k3s certificate rotate-ca --path=/var/lib/rancher/k3s/server/rotate-ca

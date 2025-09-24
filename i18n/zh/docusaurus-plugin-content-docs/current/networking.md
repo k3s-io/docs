@@ -32,7 +32,7 @@ K3s 1.20 及更早版本包括了 Traefik v1。除非找到现有的 Traefik v1�
 
 ## 网络策略控制器
 
-K3s 包含一个嵌入式网络策略控制器。底层实现是 [kube-router](https://github.com/cloudnativelabs/kube-router) 的 netpol 控制器库（没有其他 kube-router 功能），你可以在[此处](https://github.com/k3s-io/k3s/tree/master/pkg/agent/netpol)找到 netpol。
+K3s 包含一个嵌入式网络策略控制器。底层实现是 [kube-router](https://github.com/cloudnativelabs/kube-router) 的 netpol 控制器库（没有其他 kube-router 功能），你可以在[此处](https://github.com/k3s-io/k3s/tree/main/pkg/agent/netpol)找到 netpol。
 
 要禁用它，使用 `--disable-network-policy` 标志来启动每个 server。
 

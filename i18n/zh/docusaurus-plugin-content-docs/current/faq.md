@@ -18,7 +18,7 @@ K3s 是经过 CNCF 认证的 Kubernetes 发行版，可以胜任标准 Kubernete
 
 ### 如何通过源码构建？
 
-请参考 K3s [BUILDING.md](https://github.com/k3s-io/k3s/blob/master/BUILDING.md) 的说明。
+请参考 K3s [BUILDING.md](https://github.com/k3s-io/k3s/blob/main/BUILDING.md) 的说明。
 
 ### K3s 日志在哪里？
 

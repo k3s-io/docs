@@ -22,7 +22,7 @@ For a breakdown on the components that make up a server and agent, see the [Arch
 
 ### How can I build from source?
 
-Please reference the K3s [BUILDING.md](https://github.com/k3s-io/k3s/blob/master/BUILDING.md) with instructions.
+Please reference the K3s [BUILDING.md](https://github.com/k3s-io/k3s/blob/main/BUILDING.md) with instructions.
 
 ### Where are the K3s logs?
 

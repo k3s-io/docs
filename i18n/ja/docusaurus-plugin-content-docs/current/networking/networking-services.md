@@ -36,7 +36,7 @@ K3sにはTraefik v2が含まれています。K3sバージョン1.21から1.30�
 
 ## ネットワークポリシーコントローラー
 
-K3sには埋め込みのネットワークポリシーコントローラーが含まれています。基盤となる実装は[kube-router](https://github.com/cloudnativelabs/kube-router)のnetpolコントローラーライブラリ（他のkube-router機能は含まれていません）であり、[こちら](https://github.com/k3s-io/k3s/tree/master/pkg/agent/netpol)にあります。
+K3sには埋め込みのネットワークポリシーコントローラーが含まれています。基盤となる実装は[kube-router](https://github.com/cloudnativelabs/kube-router)のnetpolコントローラーライブラリ（他のkube-router機能は含まれていません）であり、[こちら](https://github.com/k3s-io/k3s/tree/main/pkg/agent/netpol)にあります。
 
 これを無効にするには、各サーバーを`--disable-network-policy`フラグで起動します。
 

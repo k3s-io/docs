@@ -92,7 +92,7 @@ Support for the `k3s certificate rotate-ca` command and the ability to use CA ce
 
 If CA certificates and keys are found the correct location during initial startup of the first server in the cluster, automatic generation of CA certificates will be bypassed.
 
-An example script to pre-create the appropriate certificates and keys is available [in the K3s repo at `contrib/util/generate-custom-ca-certs.sh`](https://github.com/k3s-io/k3s/blob/master/contrib/util/generate-custom-ca-certs.sh).
+An example script to pre-create the appropriate certificates and keys is available [in the K3s repo at `contrib/util/generate-custom-ca-certs.sh`](https://github.com/k3s-io/k3s/blob/main/contrib/util/generate-custom-ca-certs.sh).
 This script should be run prior to starting K3s for the first time, and will create a full set of leaf CA certificates signed by common Root and Intermediate CA certificates.
 If you have an existing Root or Intermediate CA, this script can be used (or used as a starting point) to create the correct CA certificates to provision a K3s cluster with PKI rooted in an existing authority.
 
@@ -169,7 +169,7 @@ mkdir -p /var/lib/rancher/k3s/server/tls
 cp /etc/ssl/certs/root-ca.pem /etc/ssl/certs/intermediate-ca.pem /etc/ssl/private/intermediate-ca.key /var/lib/rancher/k3s/server/tls
 
 # Generate custom CA certs and keys.
-curl -sL https://github.com/k3s-io/k3s/raw/master/contrib/util/generate-custom-ca-certs.sh | bash -
+curl -sL https://github.com/k3s-io/k3s/raw/main/contrib/util/generate-custom-ca-certs.sh | bash -
 ```
 
 If the command completes successfully, you may install and/or start K3s for the first time.
@@ -206,7 +206,7 @@ cp /var/lib/rancher/k3s/server/tls/root-ca.* /var/lib/rancher/k3s/server/tls/int
 cp /var/lib/rancher/k3s/server/tls/service.key /opt/k3s/server/tls
 
 # Generate updated custom CA certs and keys.
-curl -sL https://github.com/k3s-io/k3s/raw/master/contrib/util/generate-custom-ca-certs.sh | DATA_DIR=/opt/k3s bash -
+curl -sL https://github.com/k3s-io/k3s/raw/main/contrib/util/generate-custom-ca-certs.sh | DATA_DIR=/opt/k3s bash -
 
 # Load the updated CA certs and keys into the datastore.
 k3s certificate rotate-ca --path=/opt/k3s/server
@@ -308,13 +308,13 @@ graph TD
 
 #### Using The Example Script
 
-An example script to create updated CA certificates and keys cross-signed by the existing CAs is available [in the K3s repo at `contrib/util/rotate-default-ca-certs.sh`](https://github.com/k3s-io/k3s/blob/master/contrib/util/rotate-default-ca-certs.sh).
+An example script to create updated CA certificates and keys cross-signed by the existing CAs is available [in the K3s repo at `contrib/util/rotate-default-ca-certs.sh`](https://github.com/k3s-io/k3s/blob/main/contrib/util/rotate-default-ca-certs.sh).
 
 To use the example script to generate updated self-signed certificates that are cross-signed by the existing CAs, run the following commands:
 ```bash
 # Create updated CA certs and keys, cross-signed by the current CAs.
 # This script will create a new temporary directory containing the updated certs, and output the new token values.
-curl -sL https://github.com/k3s-io/k3s/raw/master/contrib/util/rotate-default-ca-certs.sh | bash -
+curl -sL https://github.com/k3s-io/k3s/raw/main/contrib/util/rotate-default-ca-certs.sh | bash -
 
 # Load the updated certs into the datastore; see the script output for the updated token values.
 k3s certificate rotate-ca --path=/var/lib/rancher/k3s/server/rotate-ca
