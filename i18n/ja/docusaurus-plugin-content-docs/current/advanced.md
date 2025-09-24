@@ -129,8 +129,8 @@ K3sは、containerdのconfig.tomlを `/var/lib/rancher/k3s/agent/etc/containerd/
 
 このファイルの高度なカスタマイズを行うには、同じディレクトリに `config.toml.tmpl` という別のファイルを作成し、それが代わりに使用されます。
 
-`config.toml.tmpl` はGoテンプレートファイルとして扱われ、`config.Node` 構造体がテンプレートに渡されます。この構造体を使用して設定ファイルをカスタマイズする方法については、[このフォルダ](https://github.com/k3s-io/k3s/blob/master/pkg/agent/templates)のLinuxおよびWindowsの例を参照してください。
-config.Node golang構造体は[こちら](https://github.com/k3s-io/k3s/blob/master/pkg/daemons/config/types.go#L37)で定義されています。
+`config.toml.tmpl` はGoテンプレートファイルとして扱われ、`config.Node` 構造体がテンプレートに渡されます。この構造体を使用して設定ファイルをカスタマイズする方法については、[このフォルダ](https://github.com/k3s-io/k3s/blob/main/pkg/agent/templates)のLinuxおよびWindowsの例を参照してください。
+config.Node golang構造体は[こちら](https://github.com/k3s-io/k3s/blob/main/pkg/daemons/config/types.go#L37)で定義されています。
 
 ### ベーステンプレート
 
@@ -237,7 +237,7 @@ kubelet をホストしないため、Pod を実行したり、クラスター�
 * cgroup v2 デリゲーションを有効にします。詳細は https://rootlesscontaine.rs/getting-started/common/cgroup2/ を参照してください。
   このステップは必須です。適切な cgroups がデリゲートされていないと、ルートレス kubelet は起動に失敗します。
 
-* [`https://github.com/k3s-io/k3s/blob/<VERSION>/k3s-rootless.service`](https://github.com/k3s-io/k3s/blob/master/k3s-rootless.service) から `k3s-rootless.service` をダウンロードします。
+* [`https://github.com/k3s-io/k3s/blob/<VERSION>/k3s-rootless.service`](https://github.com/k3s-io/k3s/blob/main/k3s-rootless.service) から `k3s-rootless.service` をダウンロードします。
   `k3s-rootless.service` と `k3s` のバージョンが同じであることを確認してください。
 
 * `k3s-rootless.service` を `~/.config/systemd/user/k3s-rootless.service` にインストールします。

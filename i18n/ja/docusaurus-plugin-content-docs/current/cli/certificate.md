@@ -54,7 +54,7 @@ CA証明書とキーをローテーションするには、`k3s certificate rota
 
 クラスターの最初のサーバーの初回起動時に正しい場所にCA証明書とキーが見つかった場合、CA証明書の自動生成はバイパスされます。
 
-適切な証明書とキーを事前に作成するためのサンプルスクリプトは、[K3sリポジトリの`contrib/util/generate-custom-ca-certs.sh`](https://github.com/k3s-io/k3s/blob/master/contrib/util/generate-custom-ca-certs.sh)にあります。
+適切な証明書とキーを事前に作成するためのサンプルスクリプトは、[K3sリポジトリの`contrib/util/generate-custom-ca-certs.sh`](https://github.com/k3s-io/k3s/blob/main/contrib/util/generate-custom-ca-certs.sh)にあります。
 このスクリプトは、K3sを初めて起動する前に実行する必要があり、共通のルートおよび中間CA証明書によって署名された完全なリーフCA証明書セットを作成します。
 既存のルートまたは中間CAがある場合、このスクリプトを使用して（または開始点として使用して）既存の権限にルート化されたPKIを持つK3sクラスターをプロビジョニングするための正しいCA証明書を作成できます。
 
@@ -131,7 +131,7 @@ mkdir -p /var/lib/rancher/k3s/server/tls
 cp /etc/ssl/certs/root-ca.pem /etc/ssl/certs/intermediate-ca.pem /etc/ssl/private/intermediate-ca.key /var/lib/rancher/k3s/server/tls
 
 # カスタムCA証明書とキーを生成
-curl -sL https://github.com/k3s-io/k3s/raw/master/contrib/util/generate-custom-ca-certs.sh | bash -
+curl -sL https://github.com/k3s-io/k3s/raw/main/contrib/util/generate-custom-ca-certs.sh | bash -
 ```
 
 コマンドが正常に完了した場合、K3sを初めてインストールおよび/または起動できます。
@@ -168,7 +168,7 @@ cp /var/lib/rancher/k3s/server/tls/root-ca.* /var/lib/rancher/k3s/server/tls/int
 cp /var/lib/rancher/k3s/server/tls/service.key /opt/k3s/server/tls
 
 # 更新されたカスタムCA証明書とキーを生成
-curl -sL https://github.com/k3s-io/k3s/raw/master/contrib/util/generate-custom-ca-certs.sh | DATA_DIR=/opt/k3s bash -
+curl -sL https://github.com/k3s-io/k3s/raw/main/contrib/util/generate-custom-ca-certs.sh | DATA_DIR=/opt/k3s bash -
 
 # 更新されたCA証明書とキーをデータストアにロード
 k3s certificate rotate-ca --path=/opt/k3s/server
@@ -271,13 +271,13 @@ graph TD
 
 #### サンプルスクリプトの使用
 
-既存のCAによってクロス署名された更新されたCA証明書とキーを作成するためのサンプルスクリプトは、[K3sリポジトリの`contrib/util/rotate-default-ca-certs.sh`](https://github.com/k3s-io/k3s/blob/master/contrib/util/rotate-default-ca-certs.sh)にあります。
+既存のCAによってクロス署名された更新されたCA証明書とキーを作成するためのサンプルスクリプトは、[K3sリポジトリの`contrib/util/rotate-default-ca-certs.sh`](https://github.com/k3s-io/k3s/blob/main/contrib/util/rotate-default-ca-certs.sh)にあります。
 
 既存のCAによってクロス署名された更新された自己署名証明書を生成するためにサンプルスクリプトを使用するには、以下のコマンドを実行します：
 ```bash
 # 現在のCAによってクロス署名された更新されたCA証明書とキーを作成します。
 # このスクリプトは更新された証明書を含む新しい一時ディレクトリを作成し、新しいトークン値を出力します。
-curl -sL https://github.com/k3s-io/k3s/raw/master/contrib/util/rotate-default-ca-certs.sh | bash -
+curl -sL https://github.com/k3s-io/k3s/raw/main/contrib/util/rotate-default-ca-certs.sh | bash -
 
 # 更新された証明書をデータストアにロードします。スクリプトの出力で更新されたトークン値を確認してください。
 k3s certificate rotate-ca --path=/var/lib/rancher/k3s/server/rotate-ca

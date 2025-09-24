@@ -32,7 +32,7 @@ To migrate from an older Traefik v1 instance please refer to the [Traefik docume
 
 ## Network Policy Controller
 
-K3s includes an embedded network policy controller. The underlying implementation is [kube-router's](https://github.com/cloudnativelabs/kube-router) netpol controller library (no other kube-router functionality is present) and can be found [here](https://github.com/k3s-io/k3s/tree/master/pkg/agent/netpol). 
+K3s includes an embedded network policy controller. The underlying implementation is [kube-router's](https://github.com/cloudnativelabs/kube-router) netpol controller library (no other kube-router functionality is present) and can be found [here](https://github.com/k3s-io/k3s/tree/main/pkg/agent/netpol). 
 
 To disable it, start each server with the `--disable-network-policy` flag.
 

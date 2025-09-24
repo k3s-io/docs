@@ -141,8 +141,8 @@ For advanced customization, you can create a containerd config template in the s
 Containerd 2.0 is backwards compatible with prior config versions, and k3s will continue to render legacy version 2 configuration from `config.toml.tmpl` if `config-v3.toml.tmpl` is not found.
 
 The template file is rendered into the containerd config using the [`text/template`](https://pkg.go.dev/text/template) library.
-See `ContainerdConfigTemplateV3` and `ContainerdConfigTemplate` in [`templates.go`](https://github.com/k3s-io/k3s/blob/master/pkg/agent/templates/templates.go) for the default template content.
-The template is executed with a [`ContainerdConfig`](https://github.com/k3s-io/k3s/blob/master/pkg/agent/templates/templates.go#L22-L33) struct as its dot value (data argument).
+See `ContainerdConfigTemplateV3` and `ContainerdConfigTemplate` in [`templates.go`](https://github.com/k3s-io/k3s/blob/main/pkg/agent/templates/templates.go) for the default template content.
+The template is executed with a [`ContainerdConfig`](https://github.com/k3s-io/k3s/blob/main/pkg/agent/templates/templates.go#L22-L33) struct as its dot value (data argument).
 
 ### Base template
 
@@ -254,7 +254,7 @@ See https://rootlesscontaine.rs/ to learn more about Rootless Kubernetes.
 * Enable cgroup v2 delegation, see https://rootlesscontaine.rs/getting-started/common/cgroup2/ .
   This step is required; the rootless kubelet will fail to start without the proper cgroups delegated.
 
-* Download `k3s-rootless.service` from [`https://github.com/k3s-io/k3s/blob/<VERSION>/k3s-rootless.service`](https://github.com/k3s-io/k3s/blob/master/k3s-rootless.service).
+* Download `k3s-rootless.service` from [`https://github.com/k3s-io/k3s/blob/<VERSION>/k3s-rootless.service`](https://github.com/k3s-io/k3s/blob/main/k3s-rootless.service).
   Make sure to use the same version of `k3s-rootless.service` and `k3s`.
 
 * Install `k3s-rootless.service` to `~/.config/systemd/user/k3s-rootless.service`.

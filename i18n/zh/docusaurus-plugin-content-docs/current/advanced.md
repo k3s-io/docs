@@ -132,8 +132,8 @@ K3s 会在 `/var/lib/rancher/k3s/agent/etc/containerd/config.toml` 中为 contai
 
 如果要对这个文件进行高级定制，你可以在同一目录中创建另一个名为 `config.toml.tmpl` 的文件，此文件将会代替默认设置。
 
-`config.toml.tmpl` 是一个 Go 模板文件，并且 `config.Node` 结构会被传递给模板。有关如何使用该结构自定义配置文件的 Linux 和 Windows 示例，请参阅[此文件夹](https://github.com/k3s-io/k3s/blob/master/pkg/agent/templates)。
-config.Node golang 结构定义在[这里](https://github.com/k3s-io/k3s/blob/master/pkg/daemons/config/types.go#L37)。
+`config.toml.tmpl` 是一个 Go 模板文件，并且 `config.Node` 结构会被传递给模板。有关如何使用该结构自定义配置文件的 Linux 和 Windows 示例，请参阅[此文件夹](https://github.com/k3s-io/k3s/blob/main/pkg/agent/templates)。
+config.Node golang 结构定义在[这里](https://github.com/k3s-io/k3s/blob/main/pkg/daemons/config/types.go#L37)。
 
 ## NVIDIA 容器运行时支持
 
@@ -218,7 +218,7 @@ Rootless 模式允许非特权用户运行 K3s Server，这样可以保护主机
 * 启用 cgroup v2 授权，请参阅 https://rootlesscontaine.rs/getting-started/common/cgroup2/。
    此步骤是必需的。如果没有正确的 cgroups 授权，rootless kubelet 将无法启动。
 
-* 从 [`https://github.com/k3s-io/k3s/blob/<VERSION>/k3s-rootless.service`](https://github.com/k3s-io/k3s/blob/master/k3s-rootless.service) 下载 `k3s-rootless.service`。
+* 从 [`https://github.com/k3s-io/k3s/blob/<VERSION>/k3s-rootless.service`](https://github.com/k3s-io/k3s/blob/main/k3s-rootless.service) 下载 `k3s-rootless.service`。
    确保使用了相同版本的 `k3s-rootless.service` 和 `k3s`。
 
 * 将 `k3s-rootless.service` 安装到 `~/.config/systemd/user/k3s-rootless.service`。
