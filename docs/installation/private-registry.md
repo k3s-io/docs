@@ -23,10 +23,6 @@ For example, when pulling `registry.example.com:5000/rancher/mirrored-pause:3.6`
 In order to be recognized as a registry, the first component of the image name must contain at least one period or colon.
 For historical reasons, images without a registry specified in their name are implicitly identified as being from `docker.io`.
 
-:::info Version Gate
-The `--disable-default-registry-endpoint` option is available as an experimental feature as of January 2024 releases: v1.26.13+k3s1, v1.27.10+k3s1, v1.28.6+k3s1, v1.29.1+k3s1
-:::
-
 Nodes may be started with the `--disable-default-registry-endpoint` option.
 When this is set, containerd will not fall back to the default registry endpoint, and will only pull from configured mirror endpoints,
 along with the distributed registry if it is enabled.
