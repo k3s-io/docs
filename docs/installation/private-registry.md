@@ -255,7 +255,7 @@ In order for the registry changes to take effect, you need to restart K3s on eac
 When Kubernetes experiences problems pulling an image, the error displayed by the kubelet may only reflect the terminal error returned
 by the pull attempt made against the default endpoint, making it appear that the configured endpoints are not being used.
 
-Check the containerd log on the node at `/var/lib/rancher/k3s/agent/containerd/containerd.log` for detailed information on the root cause of the failure. In case you have a multi-node set up, you can check which node your image was attempted deployment at by issuing `kubectl get pod -o wide -n NAMESPACE POD` and getting the name of the node. You will have to check the containerd log on _that_ node.
+Check the containerd log on the node at `/var/lib/rancher/k3s/agent/containerd/containerd.log` for detailed information on the root cause of the failure. Note that you must look at the logs on the node where the pod was scheduled. You can check which node your pod was scheduled to by issuing `kubectl get pod -o wide -n NAMESPACE POD` and checking the the NODE column.
 
 ## Adding Images to the Private Registry
 
