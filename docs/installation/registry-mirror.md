@@ -77,7 +77,7 @@ By default, containerd will fall back to the default endpoint when pulling from 
 and only pull images from the configured mirrors and/or the embedded mirror, see the [Default Endpoint Fallback](./private-registry.md#default-endpoint-fallback)
 section of the Private Registry Configuration documentation.
 
-Note that if you are using the `--disable-default-endpoint` option and want to allow pulling directly from a particular registry, while disallowing the rest,
+Note that if you are using the `--disable-default-registry-endpoint` option and want to allow pulling directly from a particular registry, while disallowing the rest,
 you can explicitly provide an endpoint in order to allow the image pull to fall back to the registry itself:
 ```yaml
 mirrors:
