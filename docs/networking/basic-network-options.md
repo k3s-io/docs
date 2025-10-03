@@ -170,6 +170,7 @@ To enable dual-stack in K3s, you must provide valid dual-stack `cluster-cidr` an
 Note that you may configure any valid `cluster-cidr` and `service-cidr` values, but the above masks are recommended. If you change the `cluster-cidr` mask, you should also change the `node-cidr-mask-size-ipv4` and `node-cidr-mask-size-ipv6` values to match the planned pods per node and total node count. The largest supported `service-cidr` mask is /12 for IPv4, and /112 for IPv6. Remember to allow ipv6 traffic if you are deploying in a public cloud.
 
 When using IPv6 addresses that are not publicly routed, for example in the ULA range, you might want to add the `--flannel-ipv6-masq` option to enable IPv6 NAT, as per default pods use their pod IPv6 address for outgoing traffic.
+If, however, publicly routed IPv6 addresses are used you need to ensure that those addresses are routed towards your cluster. Otherwise, pods will not be able to receive responses for packets originating from their IPv6 address. While it is outside the scope of K3s to automatically communicate which addresses are used on which node to outside routing infrastructure, cluster members will forward pod traffic correctly so you can point your routes to any node belonging to the cluster.
 
 If you are using a custom CNI plugin, i.e. a CNI plugin other than Flannel, the additional configuration may be required. Please consult your plugin's dual-stack documentation and verify if network policies can be enabled.
 
