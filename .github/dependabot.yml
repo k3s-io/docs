@@ -13,3 +13,6 @@ updates:
       docusaurous-dependencies:
         patterns:
           - "@docusaurus/*"
+      react-dependencies:
+        patterns:
+          - "react*"
