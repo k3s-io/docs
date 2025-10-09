@@ -4,10 +4,80 @@
         <title>K3s Blog</title>
         <link>https://docs.k3s.io/zh/blog</link>
         <description>K3s Blog</description>
-        <lastBuildDate>Sat, 30 Aug 2025 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Sat, 27 Sep 2025 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>zh</language>
+        <item>
+            <title><![CDATA[Sysbox Runtime With K3s]]></title>
+            <link>https://docs.k3s.io/zh/blog/2025/09/27/k3s-sysbox</link>
+            <guid>https://docs.k3s.io/zh/blog/2025/09/27/k3s-sysbox</guid>
+            <pubDate>Sat, 27 Sep 2025 00:00:00 GMT</pubDate>
+            <description><![CDATA[Integrating sysbox runtime with k3s' containerd]]></description>
+            <content:encoded><![CDATA[<p>The K3s binary bundles all the components needed to run a production-ready, CNCF-conformant Kubernetes cluster including containerd, runc, kubelet, and more. In this post we will discuss how containerd communicates with OCI runtimes and will discuss adding another container runtime (Sysbox) to K3s and how it can be used to run system pods in your environment.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="containerd-and-runc">Containerd and Runc<a href="https://docs.k3s.io/zh/blog/2025/09/27/k3s-sysbox#containerd-and-runc" class="hash-link" aria-label="标题的直接链接" title="标题的直接链接" translate="no">​</a></h2>
+<p>First we need to talk briefly about how containerd works with runc. Containerd is a long running daemon that is responsible for:</p>
+<ul>
+<li><strong>Image Management</strong>: Pulls and stores images from registries.</li>
+<li><strong>Container Management</strong>: Manages the lifecycle of containers (create, start, stop, delete).</li>
+<li><strong>Snapshot Management</strong>: Uses snapshotters to manage the filesystem layers for containers.</li>
+<li><strong>Runtime Management</strong>: Delegates the creation of containers to OCI-compatible runtimes like runc.</li>
+</ul>
+<p>When you create a pod in Kubernetes, kubelet uses the CRI plugin implemented in containerd to request a <strong>pod sandbox</strong> (<code>RunPodSandbox</code>) and then container creation (<code>CreateContainer</code>). Containerd then calls a <code>shim</code> process that acts as a middleman between <code>containerd</code> and the OCI runtime (for example <code>runc</code>). This shim process allows the container to keep running even if the containerd daemon crashes or restarts.</p>
+<p>The shim generates the OCI runtime bundle (<code>config.json</code> and <code>rootfs</code> path) and then executes the runc binary. Runc reads the <code>config.json</code>, sets up the container’s namespaces and cgroups, and then launches the container process.</p>
+<p>Runc is the component that directly interfaces with the Linux kernel — configuring cgroups, namespaces, seccomp, capabilities, and mounts. After runc finishes creating the container, it <strong>exits</strong>, leaving the shim to manage the lifecycle and I/O of the container.</p>
+<!-- -->
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="sysbox-runtime">Sysbox Runtime<a href="https://docs.k3s.io/zh/blog/2025/09/27/k3s-sysbox#sysbox-runtime" class="hash-link" aria-label="标题的直接链接" title="标题的直接链接" translate="no">​</a></h2>
+<p><a href="https://github.com/nestybox/sysbox" target="_blank" rel="noopener noreferrer">Sysbox</a> is an open-source, next-generation container runtime created by Nestybox. Unlike traditional runtimes (such as runc), Sysbox is designed to let you run "system containers". It primarily leverages <strong>Linux user namespaces</strong> and other features to provide containers that behave more like lightweight virtual machines.</p>
+<p>This means you can run workloads like Docker, Systemd, containerd, or even K3s inside your pods — all without requiring privileged mode.</p>
+<p>In short, Sysbox bridges the gap between application containers and virtual machines, enabling use cases like running Kubernetes-in-Kubernetes (K8s-in-K8s), CI/CD pipelines that need full OS-like environments, or development sandboxes with VM-level isolation but container speed.</p>
+<div class="theme-admonition theme-admonition-info admonition_xJq3 alert alert--info"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 14 16"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg></span>信息</div><div class="admonitionContent_BuS1"><p>Currently, Sysbox officially supports <strong>CRI-O</strong> only. CRI-O has native support for Linux user namespaces, which Sysbox relies on. While containerd added user namespace support starting in version v2.0, there was a <a href="https://github.com/nestybox/sysbox/issues/958" target="_blank" rel="noopener noreferrer">bug</a> in sysbox-runc that prevented it from working properly with Sysbox.</p></div></div>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="sysbox-runc-containerd-integration">Sysbox-runc Containerd Integration<a href="https://docs.k3s.io/zh/blog/2025/09/27/k3s-sysbox#sysbox-runc-containerd-integration" class="hash-link" aria-label="标题的直接链接" title="标题的直接链接" translate="no">​</a></h2>
+<p>After investigating this issue, I was able to locate the root cause, as explained in this <a href="https://github.com/nestybox/sysbox-runc/pull/106" target="_blank" rel="noopener noreferrer">PR</a>. Containerd was failing to run a specific subcommand for sysbox-runc called <code>features</code>, which led to the following error:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#bfc7d5;background-color:#292d3e"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#bfc7d5"><span class="token plain">level=debug msg="failed to introspect features of runtime \"sysbox-runc\"" error="failed to unmarshal Features (*anypb.Any): type with url : not found"</span><br></span></code></pre></div></div>
+<p>Because of this, containerd instructed sysbox-runc to run containers <strong>without user namespaces</strong>, causing container creation to fail. The fix for this bug was recently merged in the <code>sysbox-runc</code> repo, enabling containerd to work with sysbox-runc.</p>
+<h1>Running Sysbox-runc With K3S</h1>
+<p>In order to run <code>sysbox-runc</code> with K3s you need to have a running K3s cluster, and then you can proceed to install the latest version of sysbox, However, since the fix for containerd support hasn't yet been integrated to sysbox main repo only in <code>sysbox-runc</code>, we need to build the binaries from source to get the latest updates.</p>
+<ol>
+<li>
+<p>Install docker in your system.</p>
+</li>
+<li>
+<p>Clone the repo and prepare the code</p>
+</li>
+</ol>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#bfc7d5;background-color:#292d3e"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#bfc7d5"><span class="token plain">git clone --recursive https://github.com/nestybox/sysbox.git</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">cd sysbox/sysbox-runc</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">git pull origin main</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">cd ..</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">make IMAGE_BASE_DISTRO=ubuntu IMAGE_BASE_RELEASE=jammy sysbox-static</span><br></span></code></pre></div></div>
+<p>You can then copy the binaries built to <code>/usr/bin</code> or if you are building on the same machine that you will run containerd you can just run:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#bfc7d5;background-color:#292d3e"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#bfc7d5"><span class="token plain">make install</span><br></span></code></pre></div></div>
+<ol start="3">
+<li>Run sysbox binary</li>
+</ol>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#bfc7d5;background-color:#292d3e"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#bfc7d5"><span class="token plain">sysbox</span><br></span></code></pre></div></div>
+<ol start="4">
+<li>Create sysbox runc runtime class</li>
+</ol>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#bfc7d5;background-color:#292d3e"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#bfc7d5"><span class="token plain">apiVersion: node.k8s.io/v1</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">handler: sysbox-runc</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">kind: RuntimeClass</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">metadata:</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  name: sysbox-runc</span><br></span></code></pre></div></div>
+<ol start="5">
+<li>Add sysbox runc to containerd configuration, you can do that by creating <code>/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl</code>:</li>
+</ol>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#bfc7d5;background-color:#292d3e"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#bfc7d5"><span class="token plain">[plugins.'io.containerd.cri.v1.runtime'.containerd.runtimes.sysbox-runc]</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  runtime_type = "io.containerd.runc.v2"</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">[plugins.'io.containerd.cri.v1.runtime'.containerd.runtimes.sysbox-runc.options]</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  SystemdCgroup = false</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  BinaryName="/usr/bin/sysbox-runc"</span><br></span></code></pre></div></div>
+<ol start="6">
+<li>Finally you can create pod running with the runtime class for sysbox-runc and <code>hostUsers: false</code>:</li>
+</ol>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#bfc7d5;background-color:#292d3e"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#bfc7d5"><span class="token plain">apiVersion: v1</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">kind: Pod</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">metadata:</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  name: ubuntu</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">spec:</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  runtimeClassName: sysbox-runc</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  hostUsers: false</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  containers:</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  - name: ubuntu2204</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">    image: ubuntu:22.04</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">    command: ["sleep", "40000000000"]</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  restartPolicy: Never</span><br></span></code></pre></div></div>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="conclusion">Conclusion<a href="https://docs.k3s.io/zh/blog/2025/09/27/k3s-sysbox#conclusion" class="hash-link" aria-label="标题的直接链接" title="标题的直接链接" translate="no">​</a></h2>
+<p>Sysbox brings a powerful capability to Kubernetes: the ability to run system-level workloads inside containers with strong isolation, without requiring privileged mode. When combined with K3s, this opens the door to new use cases such as:</p>
+<ul>
+<li>Running Kubernetes-in-Kubernetes clusters for virtual clusters (<a href="https://github.com/rancher/k3k" target="_blank" rel="noopener noreferrer">k3k</a>).</li>
+<li>Creating secure developer sandboxes that behave like lightweight VMs.</li>
+<li>Running system daemons or nested container engines inside pods.</li>
+</ul>
+<p>While Sysbox is officially supported with CRI-O today, the recent fixes in <code>sysbox-runc</code> allow it to run on containerd as well — making it possible to integrate with K3s. The integration is still evolving, but it shows how the container ecosystem is moving beyond traditional app containers toward more flexible "system containers."</p>
+<p>If you’re experimenting with K3s and want to explore system workloads inside pods, Sysbox provides a compelling way to do so while maintaining Kubernetes-native workflows</p>]]></content:encoded>
+            <category>runc</category>
+            <category>k3s</category>
+            <category>sysbox</category>
+        </item>
         <item>
             <title><![CDATA[Kubernetes v1.34 is out!]]></title>
             <link>https://docs.k3s.io/zh/blog/2025/08/30/K3s-1.34-release</link>
