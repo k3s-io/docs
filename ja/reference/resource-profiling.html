@@ -2,11 +2,11 @@
 <html lang="ja" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-reference/resource-profiling" data-has-hydrated="false">
 <head>
 <meta charset="UTF-8">
-<meta name="generator" content="Docusaurus v3.9.1">
+<meta name="generator" content="Docusaurus v3.9.2">
 <title data-rh="true">リソースプロファイリング | K3s</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://docs.k3s.io/ja/reference/resource-profiling"><meta data-rh="true" property="og:locale" content="ja"><meta data-rh="true" property="og:locale:alternate" content="en"><meta data-rh="true" property="og:locale:alternate" content="zh"><meta data-rh="true" name="docusaurus_locale" content="ja"><meta data-rh="true" name="docsearch:language" content="ja"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="リソースプロファイリング | K3s"><meta data-rh="true" name="description" content="このセクションでは、K3sの最小リソース要件を決定するためのテスト結果を記録します。"><meta data-rh="true" property="og:description" content="このセクションでは、K3sの最小リソース要件を決定するためのテスト結果を記録します。"><link data-rh="true" rel="icon" href="/ja/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://docs.k3s.io/ja/reference/resource-profiling"><link data-rh="true" rel="alternate" href="https://docs.k3s.io/reference/resource-profiling" hreflang="en"><link data-rh="true" rel="alternate" href="https://docs.k3s.io/zh/reference/resource-profiling" hreflang="zh"><link data-rh="true" rel="alternate" href="https://docs.k3s.io/ja/reference/resource-profiling" hreflang="ja"><link data-rh="true" rel="alternate" href="https://docs.k3s.io/reference/resource-profiling" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"リソースプロファイリング","item":"https://docs.k3s.io/ja/reference/resource-profiling"}]}</script><link rel="alternate" type="application/rss+xml" href="/ja/blog/rss.xml" title="K3s RSS Feed">
-<link rel="alternate" type="application/atom+xml" href="/ja/blog/atom.xml" title="K3s Atom Feed"><link rel="stylesheet" href="/ja/assets/css/styles.f55114b7.css">
-<script src="/ja/assets/js/runtime~main.8a35a031.js" defer="defer"></script>
-<script src="/ja/assets/js/main.867a0fdd.js" defer="defer"></script>
+<link rel="alternate" type="application/atom+xml" href="/ja/blog/atom.xml" title="K3s Atom Feed"><link rel="stylesheet" href="/ja/assets/css/styles.a7719de1.css">
+<script src="/ja/assets/js/runtime~main.7c06722a.js" defer="defer"></script>
+<script src="/ja/assets/js/main.a530f87b.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
 <svg style="display: none;"><defs>
@@ -16,76 +16,76 @@
 <p>結果は以下の通りです：</p>
 <table><thead><tr><th>コンポーネント</th><th>プロセッサ</th><th>最小CPU</th><th>Kine/SQLite使用時の最小RAM</th><th>組み込みetcd使用時の最小RAM</th></tr></thead><tbody><tr><td>ワークロードを持つK3sサーバー</td><td>Intel 8375C CPU, 2.90 GHz</td><td>コアの6%</td><td>1596 M</td><td>1606 M</td></tr><tr><td>単一エージェントを持つK3sクラスター</td><td>Intel 8375C CPU, 2.90 GHz</td><td>コアの5%</td><td>1428 M</td><td>1450 M</td></tr><tr><td>K3sエージェント</td><td>Intel 8375C CPU, 2.90 GHz</td><td>コアの3%</td><td>275 M</td><td>275 M</td></tr><tr><td>ワークロードを持つK3sサーバー</td><td>Pi4B BCM2711, 1.50 GHz</td><td>コアの30%</td><td>1588 M</td><td>1613 M</td></tr><tr><td>単一エージェントを持つK3sクラスター</td><td>Pi4B BCM2711, 1.50 GHz</td><td>コアの25%</td><td>1215 M</td><td>1413 M</td></tr><tr><td>K3sエージェント</td><td>Pi4B BCM2711, 1.50 GHz</td><td>コアの10%</td><td>268 M</td><td>268 M</td></tr></tbody></table>
 <ul>
-<li><a href="#%E3%83%AA%E3%82%BD%E3%83%BC%E3%82%B9%E3%83%86%E3%82%B9%E3%83%88%E3%81%AE%E7%AF%84%E5%9B%B2">リソーステストの範囲</a></li>
-<li><a href="#%E3%83%99%E3%83%BC%E3%82%B9%E3%83%A9%E3%82%A4%E3%83%B3%E6%B8%AC%E5%AE%9A%E3%81%AB%E5%90%AB%E3%81%BE%E3%82%8C%E3%82%8B%E3%82%B3%E3%83%B3%E3%83%9D%E3%83%BC%E3%83%8D%E3%83%B3%E3%83%88">ベースライン測定に含まれるコンポーネント</a></li>
-<li><a href="#%E6%96%B9%E6%B3%95%E8%AB%96">方法論</a></li>
-<li><a href="#%E7%92%B0%E5%A2%83">環境</a></li>
-<li><a href="#%E3%83%99%E3%83%BC%E3%82%B9%E3%83%A9%E3%82%A4%E3%83%B3%E3%83%AA%E3%82%BD%E3%83%BC%E3%82%B9%E8%A6%81%E4%BB%B6">ベースラインリソース要件</a>
+<li class=""><a href="#%E3%83%AA%E3%82%BD%E3%83%BC%E3%82%B9%E3%83%86%E3%82%B9%E3%83%88%E3%81%AE%E7%AF%84%E5%9B%B2" class="">リソーステストの範囲</a></li>
+<li class=""><a href="#%E3%83%99%E3%83%BC%E3%82%B9%E3%83%A9%E3%82%A4%E3%83%B3%E6%B8%AC%E5%AE%9A%E3%81%AB%E5%90%AB%E3%81%BE%E3%82%8C%E3%82%8B%E3%82%B3%E3%83%B3%E3%83%9D%E3%83%BC%E3%83%8D%E3%83%B3%E3%83%88" class="">ベースライン測定に含まれるコンポーネント</a></li>
+<li class=""><a href="#%E6%96%B9%E6%B3%95%E8%AB%96" class="">方法論</a></li>
+<li class=""><a href="#%E7%92%B0%E5%A2%83" class="">環境</a></li>
+<li class=""><a href="#%E3%83%99%E3%83%BC%E3%82%B9%E3%83%A9%E3%82%A4%E3%83%B3%E3%83%AA%E3%82%BD%E3%83%BC%E3%82%B9%E8%A6%81%E4%BB%B6" class="">ベースラインリソース要件</a>
 <ul>
-<li><a href="#%E3%83%AF%E3%83%BC%E3%82%AF%E3%83%AD%E3%83%BC%E3%83%89%E3%82%92%E6%8C%81%E3%81%A4K3s%E3%82%B5%E3%83%BC%E3%83%90%E3%83%BC">ワークロードを持つK3sサーバー</a></li>
-<li><a href="#%E5%8D%98%E4%B8%80%E3%82%A8%E3%83%BC%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88%E3%82%92%E6%8C%81%E3%81%A4K3s%E3%82%AF%E3%83%A9%E3%82%B9%E3%82%BF%E3%83%BC">単一エージェントを持つK3sクラスター</a></li>
-<li><a href="#K3s%E3%82%A8%E3%83%BC%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88">K3sエージェント</a></li>
+<li class=""><a href="#%E3%83%AF%E3%83%BC%E3%82%AF%E3%83%AD%E3%83%BC%E3%83%89%E3%82%92%E6%8C%81%E3%81%A4K3s%E3%82%B5%E3%83%BC%E3%83%90%E3%83%BC" class="">ワークロードを持つK3sサーバー</a></li>
+<li class=""><a href="#%E5%8D%98%E4%B8%80%E3%82%A8%E3%83%BC%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88%E3%82%92%E6%8C%81%E3%81%A4K3s%E3%82%AF%E3%83%A9%E3%82%B9%E3%82%BF%E3%83%BC" class="">単一エージェントを持つK3sクラスター</a></li>
+<li class=""><a href="#K3s%E3%82%A8%E3%83%BC%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88" class="">K3sエージェント</a></li>
 </ul>
 </li>
-<li><a href="#%E5%88%86%E6%9E%90">分析</a>
+<li class=""><a href="#%E5%88%86%E6%9E%90" class="">分析</a>
 <ul>
-<li><a href="#%E4%B8%BB%E8%A6%81%E3%81%AA%E3%83%AA%E3%82%BD%E3%83%BC%E3%82%B9%E5%88%A9%E7%94%A8%E3%83%89%E3%83%A9%E3%82%A4%E3%83%90%E3%83%BC">主要なリソース利用ドライバー</a></li>
-<li><a href="#%E3%82%A8%E3%83%BC%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88%E3%81%A8%E3%83%AF%E3%83%BC%E3%82%AF%E3%83%AD%E3%83%BC%E3%83%89%E3%81%8C%E3%82%AF%E3%83%A9%E3%82%B9%E3%82%BF%E3%83%BC%E3%81%AE%E3%83%87%E3%83%BC%E3%82%BF%E3%82%B9%E3%83%88%E3%82%A2%E3%81%AB%E5%B9%B2%E6%B8%89%E3%81%97%E3%81%AA%E3%81%84%E3%82%88%E3%81%86%E3%81%AB%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95">エージェントとワークロードがクラスターのデータストアに干渉しないようにする方法</a></li>
+<li class=""><a href="#%E4%B8%BB%E8%A6%81%E3%81%AA%E3%83%AA%E3%82%BD%E3%83%BC%E3%82%B9%E5%88%A9%E7%94%A8%E3%83%89%E3%83%A9%E3%82%A4%E3%83%90%E3%83%BC" class="">主要なリソース利用ドライバー</a></li>
+<li class=""><a href="#%E3%82%A8%E3%83%BC%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88%E3%81%A8%E3%83%AF%E3%83%BC%E3%82%AF%E3%83%AD%E3%83%BC%E3%83%89%E3%81%8C%E3%82%AF%E3%83%A9%E3%82%B9%E3%82%BF%E3%83%BC%E3%81%AE%E3%83%87%E3%83%BC%E3%82%BF%E3%82%B9%E3%83%88%E3%82%A2%E3%81%AB%E5%B9%B2%E6%B8%89%E3%81%97%E3%81%AA%E3%81%84%E3%82%88%E3%81%86%E3%81%AB%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95" class="">エージェントとワークロードがクラスターのデータストアに干渉しないようにする方法</a></li>
 </ul>
 </li>
 </ul>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="リソーステストの範囲">リソーステストの範囲<a href="#リソーステストの範囲" class="hash-link" aria-label="リソーステストの範囲 への直接リンク" title="リソーステストの範囲 への直接リンク" translate="no">​</a></h2>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="リソーステストの範囲">リソーステストの範囲<a href="#リソーステストの範囲" class="hash-link" aria-label="リソーステストの範囲 への直接リンク" title="リソーステストの範囲 への直接リンク" translate="no">​</a></h2>
 <p>リソーステストは以下の問題文に対処することを目的としています：</p>
 <ul>
-<li>単一ノードクラスターで、実際のワークロードがクラスターにデプロイされることを前提に、K3sスタックサーバースタック全体を実行するために確保すべき正当な最小CPU、メモリ、およびIOPsを決定します。</li>
-<li>エージェント（ワーカー）ノードで、KubernetesおよびK3sコントロールプレーンコンポーネント（kubeletおよびk3sエージェント）のために確保すべき正当な最小CPU、メモリ、およびIOPsを決定します。</li>
+<li class="">単一ノードクラスターで、実際のワークロードがクラスターにデプロイされることを前提に、K3sスタックサーバースタック全体を実行するために確保すべき正当な最小CPU、メモリ、およびIOPsを決定します。</li>
+<li class="">エージェント（ワーカー）ノードで、KubernetesおよびK3sコントロールプレーンコンポーネント（kubeletおよびk3sエージェント）のために確保すべき正当な最小CPU、メモリ、およびIOPsを決定します。</li>
 </ul>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="ベースライン測定に含まれるコンポーネント">ベースライン測定に含まれるコンポーネント<a href="#ベースライン測定に含まれるコンポーネント" class="hash-link" aria-label="ベースライン測定に含まれるコンポーネント への直接リンク" title="ベースライン測定に含まれるコンポーネント への直接リンク" translate="no">​</a></h2>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="ベースライン測定に含まれるコンポーネント">ベースライン測定に含まれるコンポーネント<a href="#ベースライン測定に含まれるコンポーネント" class="hash-link" aria-label="ベースライン測定に含まれるコンポーネント への直接リンク" title="ベースライン測定に含まれるコンポーネント への直接リンク" translate="no">​</a></h2>
 <p>テストされたコンポーネントは以下の通りです：</p>
 <ul>
-<li>すべてのパッケージコンポーネントが有効なK3s v1.26.5</li>
-<li>Prometheus + Grafanaモニタリングスタック</li>
-<li><a href="https://kubernetes.io/docs/tasks/run-application/run-stateless-application-deployment/" target="_blank" rel="noopener noreferrer">KubernetesのNginxデプロイメント例</a></li>
+<li class="">すべてのパッケージコンポーネントが有効なK3s v1.26.5</li>
+<li class="">Prometheus + Grafanaモニタリングスタック</li>
+<li class=""><a href="https://kubernetes.io/docs/tasks/run-application/run-stateless-application-deployment/" target="_blank" rel="noopener noreferrer" class="">KubernetesのNginxデプロイメント例</a></li>
 </ul>
 <p>これらは、K3sパッケージコンポーネント（Traefik Ingress、Klipper lb、local-path storage）のみを使用し、標準のモニタリングスタック（PrometheusとGrafana）およびGuestbook例アプリを実行する安定したシステムのベースライン数値です。</p>
 <p>IOPSを含むリソース数値はKubernetesデータストアおよびコントロールプレーンのみのものであり、システムレベルの管理エージェントやログ、コンテナイメージ管理、またはワークロード固有の要件のオーバーヘッドは含まれていません。</p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="方法論">方法論<a href="#方法論" class="hash-link" aria-label="方法論 への直接リンク" title="方法論 への直接リンク" translate="no">​</a></h2>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="方法論">方法論<a href="#方法論" class="hash-link" aria-label="方法論 への直接リンク" title="方法論 への直接リンク" translate="no">​</a></h2>
 <p>Prometheus v2.43.0のスタンドアロンインスタンスを使用して、<code>prometheus-node-exporter</code>をapt経由でインストールし、ホストのCPU、メモリ、およびディスクIO統計を収集しました。</p>
 <p><code>systemd-cgtop</code>を使用して、systemd cgroupレベルのCPUおよびメモリ使用量をスポットチェックしました。<code>system.slice/k3s.service</code>はK3sおよびcontainerdのリソース使用量を追跡し、個々のポッドは<code>kubepods</code>階層下にあります。</p>
 <p>追加の詳細なK3sメモリ使用量データは、サーバーおよびエージェントプロセスのために統合されたメトリクスサーバーを使用して<code>kubectl top node</code>から収集しました。</p>
 <p>使用量数値は、記述されたワークロードを実行しているノードの定常状態操作からの95パーセンタイルの読み取り値に基づいています。</p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="環境">環境<a href="#環境" class="hash-link" aria-label="環境 への直接リンク" title="環境 への直接リンク" translate="no">​</a></h2>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="環境">環境<a href="#環境" class="hash-link" aria-label="環境 への直接リンク" title="環境 への直接リンク" translate="no">​</a></h2>
 <table><thead><tr><th>アーキテクチャ</th><th>OS</th><th>システム</th><th>CPU</th><th>RAM</th><th>ディスク</th></tr></thead><tbody><tr><td>x86_64</td><td>Ubuntu 22.04</td><td>AWS c6id.xlarge</td><td>Intel Xeon Platinum 8375C CPU, 4 Core 2.90 GHz</td><td>8 GB</td><td>NVME SSD</td></tr><tr><td>aarch64</td><td>Raspberry Pi OS 11</td><td>Raspberry Pi 4 Model B</td><td>BCM2711, 4 Core 1.50 GHz</td><td>8 GB</td><td>UHS-III SDXC</td></tr></tbody></table>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="ベースラインリソース要件">ベースラインリソース要件<a href="#ベースラインリソース要件" class="hash-link" aria-label="ベースラインリソース要件 への直接リンク" title="ベースラインリソース要件 への直接リンク" translate="no">​</a></h2>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="ベースラインリソース要件">ベースラインリソース要件<a href="#ベースラインリソース要件" class="hash-link" aria-label="ベースラインリソース要件 への直接リンク" title="ベースラインリソース要件 への直接リンク" translate="no">​</a></h2>
 <p>このセクションでは、基本的なK3s操作のための最小リソース要件を決定するためのテスト結果を記録します。</p>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="ワークロードを持つk3sサーバー">ワークロードを持つK3sサーバー<a href="#ワークロードを持つk3sサーバー" class="hash-link" aria-label="ワークロードを持つK3sサーバー への直接リンク" title="ワークロードを持つK3sサーバー への直接リンク" translate="no">​</a></h3>
-<p>これは、K3sサーバーが<a href="https://kubernetes.io/docs/tasks/run-application/run-stateless-application-deployment/" target="_blank" rel="noopener noreferrer">シンプルなワークロード</a>とリソースを共有する単一ノードクラスターの要件です。</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="ワークロードを持つk3sサーバー">ワークロードを持つK3sサーバー<a href="#ワークロードを持つk3sサーバー" class="hash-link" aria-label="ワークロードを持つK3sサーバー への直接リンク" title="ワークロードを持つK3sサーバー への直接リンク" translate="no">​</a></h3>
+<p>これは、K3sサーバーが<a href="https://kubernetes.io/docs/tasks/run-application/run-stateless-application-deployment/" target="_blank" rel="noopener noreferrer" class="">シンプルなワークロード</a>とリソースを共有する単一ノードクラスターの要件です。</p>
 <p>CPU要件は以下の通りです：</p>
 <table><thead><tr><th>システム</th><th>CPUコア使用率</th></tr></thead><tbody><tr><td>Intel 8375C</td><td>コアの6%</td></tr><tr><td>Pi4B</td><td>コアの30%</td></tr></tbody></table>
 <p>メモリ要件は以下の通りです：</p>
 <table><thead><tr><th>テストされたデータストア</th><th>システム</th><th>メモリ</th></tr></thead><tbody><tr><td>Kine/SQLite</td><td>Intel 8375C</td><td>1596 M</td></tr><tr><td></td><td>Pi4B</td><td>1588 M</td></tr><tr><td>組み込みetcd</td><td>Intel 8375C</td><td>1606 M</td></tr><tr><td></td><td>Pi4B</td><td>1613 M</td></tr></tbody></table>
 <p>ディスク要件は以下の通りです：</p>
 <table><thead><tr><th>テストされたデータストア</th><th>IOPS</th><th>KiB/秒</th><th>レイテンシ</th></tr></thead><tbody><tr><td>Kine/SQLite</td><td>10</td><td>500</td><td>&lt; 10 ms</td></tr><tr><td>組み込みetcd</td><td>50</td><td>250</td><td>&lt; 5 ms</td></tr></tbody></table>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="単一エージェントを持つk3sクラスター">単一エージェントを持つK3sクラスター<a href="#単一エージェントを持つk3sクラスター" class="hash-link" aria-label="単一エージェントを持つK3sクラスター への直接リンク" title="単一エージェントを持つK3sクラスター への直接リンク" translate="no">​</a></h3>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="単一エージェントを持つk3sクラスター">単一エージェントを持つK3sクラスター<a href="#単一エージェントを持つk3sクラスター" class="hash-link" aria-label="単一エージェントを持つK3sクラスター への直接リンク" title="単一エージェントを持つK3sクラスター への直接リンク" translate="no">​</a></h3>
 <p>これは、K3sサーバーノードとK3sエージェントを持つK3sクラスターのベースライン要件ですが、ワークロードはありません。</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="k3sサーバー">K3sサーバー<a href="#k3sサーバー" class="hash-link" aria-label="K3sサーバー への直接リンク" title="K3sサーバー への直接リンク" translate="no">​</a></h4>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="k3sサーバー">K3sサーバー<a href="#k3sサーバー" class="hash-link" aria-label="K3sサーバー への直接リンク" title="K3sサーバー への直接リンク" translate="no">​</a></h4>
 <p>CPU要件は以下の通りです：</p>
 <table><thead><tr><th>システム</th><th>CPUコア使用率</th></tr></thead><tbody><tr><td>Intel 8375C</td><td>コアの5%</td></tr><tr><td>Pi4B</td><td>コアの25%</td></tr></tbody></table>
 <p>メモリ要件は以下の通りです：</p>
 <table><thead><tr><th>テストされたデータストア</th><th>システム</th><th>メモリ</th></tr></thead><tbody><tr><td>Kine/SQLite</td><td>Intel 8375C</td><td>1428 M</td></tr><tr><td></td><td>Pi4B</td><td>1215 M</td></tr><tr><td>組み込みetcd</td><td>Intel 8375C</td><td>1450 M</td></tr><tr><td></td><td>Pi4B</td><td>1413 M</td></tr></tbody></table>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="k3sエージェント">K3sエージェント<a href="#k3sエージェント" class="hash-link" aria-label="K3sエージェント への直接リンク" title="K3sエージェント への直接リンク" translate="no">​</a></h3>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="k3sエージェント">K3sエージェント<a href="#k3sエージェント" class="hash-link" aria-label="K3sエージェント への直接リンク" title="K3sエージェント への直接リンク" translate="no">​</a></h3>
 <p>要件は以下の通りです：</p>
 <table><thead><tr><th>システム</th><th>CPUコア使用率</th><th>RAM</th></tr></thead><tbody><tr><td>Intel 8375C</td><td>コアの3%</td><td>275 M</td></tr><tr><td>Pi4B</td><td>コアの5%</td><td>268 M</td></tr></tbody></table>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="分析">分析<a href="#分析" class="hash-link" aria-label="分析 への直接リンク" title="分析 への直接リンク" translate="no">​</a></h2>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="分析">分析<a href="#分析" class="hash-link" aria-label="分析 への直接リンク" title="分析 への直接リンク" translate="no">​</a></h2>
 <p>このセクションでは、K3sサーバーおよびエージェントの利用に最も大きな影響を与える要因と、エージェントおよびワークロードがクラスターのデータストアに干渉しないようにする方法を記録します。</p>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="主要なリソース利用ドライバー">主要なリソース利用ドライバー<a href="#主要なリソース利用ドライバー" class="hash-link" aria-label="主要なリソース利用ドライバー への直接リンク" title="主要なリソース利用ドライバー への直接リンク" translate="no">​</a></h3>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="主要なリソース利用ドライバー">主要なリソース利用ドライバー<a href="#主要なリソース利用ドライバー" class="hash-link" aria-label="主要なリソース利用ドライバー への直接リンク" title="主要なリソース利用ドライバー への直接リンク" translate="no">​</a></h3>
 <p>K3sサーバーの利用数値は主に、Kubernetesデータストア（kineまたはetcd）、APIサーバー、コントローラーマネージャー、およびスケジューラーのコントロールループのサポートによって駆動されます。また、システムの状態を変更するために必要な管理タスクも含まれます。Kubernetesコントロールプレーンに追加の負荷をかける操作（リソースの作成/変更/削除など）は、一時的な利用のスパイクを引き起こします。Rancherや他のオペレータータイプのアプリケーションなど、Kubernetesデータストアを広範に使用するオペレーターやアプリを使用すると、サーバーのリソース要件が増加します。追加のノードを追加したり、多くのクラスターリソースを作成したりすることで、サーバーのリソース要件が増加します。</p>
 <p>K3sエージェントの利用数値は主に、コンテナライフサイクル管理コントロールループのサポートによって駆動されます。イメージの管理、ストレージのプロビジョニング、コンテナの作成/破棄を含む操作は、一時的な利用のスパイクを引き起こします。特にイメージのプルは、イメージコンテンツをディスクに解凍するため、通常は高いCPUおよびIO負荷がかかります。可能であれば、ワークロードストレージ（ポッドの一時ストレージおよびボリューム）は、エージェントコンポーネント（/var/lib/rancher/k3s/agent）から分離して、リソースの競合が発生しないようにするべきです。</p>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="エージェントとワークロードがクラスターのデータストアに干渉しないようにする方法">エージェントとワークロードがクラスターのデータストアに干渉しないようにする方法<a href="#エージェントとワークロードがクラスターのデータストアに干渉しないようにする方法" class="hash-link" aria-label="エージェントとワークロードがクラスターのデータストアに干渉しないようにする方法 への直接リンク" title="エージェントとワークロードがクラスターのデータストアに干渉しないようにする方法 への直接リンク" translate="no">​</a></h3>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="エージェントとワークロードがクラスターのデータストアに干渉しないようにする方法">エージェントとワークロードがクラスターのデータストアに干渉しないようにする方法<a href="#エージェントとワークロードがクラスターのデータストアに干渉しないようにする方法" class="hash-link" aria-label="エージェントとワークロードがクラスターのデータストアに干渉しないようにする方法 への直接リンク" title="エージェントとワークロードがクラスターのデータストアに干渉しないようにする方法 への直接リンク" translate="no">​</a></h3>
 <p>サーバーがワークロードポッドもホストしている環境で実行する場合、エージェントおよびワークロードのIOPSがデータストアに干渉しないように注意する必要があります。</p>
 <p>これを最も効果的に達成する方法は、サーバーコンポーネント（/var/lib/rancher/k3s/server）をエージェントコンポーネント（/var/lib/rancher/k3s/agent）とは異なるストレージメディアに配置することです。エージェントコンポーネントにはcontainerdイメージストアが含まれます。</p>
 <p>ワークロードストレージ（ポッドの一時ストレージおよびボリューム）もデータストアから分離するべきです。</p>
-<p>データストアのスループットおよびレイテンシ要件を満たさない場合、コントロールプレーンの応答が遅延したり、コントロールプレーンがシステム状態を維持できなくなったりする可能性があります。</p></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col"><a href="https://github.com/k3s-io/docs/edit/main/docs/reference/resource-profiling.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>このページを編集</a></div><div class="col lastUpdated_JAkA"><span class="theme-last-updated"><b><time datetime="2025-10-14T17:01:29.000Z" itemprop="dateModified">2025年10月14日</time></b>に<!-- -->最終更新</span></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="ドキュメントページ"><a class="pagination-nav__link pagination-nav__link--prev" href="/ja/reference/metrics"><div class="pagination-nav__sublabel">前へ</div><div class="pagination-nav__label">Metrics</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/ja/release-notes/v1.30.X"><div class="pagination-nav__sublabel">次へ</div><div class="pagination-nav__label">v1.30.X</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#リソーステストの範囲" class="table-of-contents__link toc-highlight">リソーステストの範囲</a></li><li><a href="#ベースライン測定に含まれるコンポーネント" class="table-of-contents__link toc-highlight">ベースライン測定に含まれるコンポーネント</a></li><li><a href="#方法論" class="table-of-contents__link toc-highlight">方法論</a></li><li><a href="#環境" class="table-of-contents__link toc-highlight">環境</a></li><li><a href="#ベースラインリソース要件" class="table-of-contents__link toc-highlight">ベースラインリソース要件</a><ul><li><a href="#ワークロードを持つk3sサーバー" class="table-of-contents__link toc-highlight">ワークロードを持つK3sサーバー</a></li><li><a href="#単一エージェントを持つk3sクラスター" class="table-of-contents__link toc-highlight">単一エージェントを持つK3sクラスター</a></li><li><a href="#k3sエージェント" class="table-of-contents__link toc-highlight">K3sエージェント</a></li></ul></li><li><a href="#分析" class="table-of-contents__link toc-highlight">分析</a><ul><li><a href="#主要なリソース利用ドライバー" class="table-of-contents__link toc-highlight">主要なリソース利用ドライバー</a></li><li><a href="#エージェントとワークロードがクラスターのデータストアに干渉しないようにする方法" class="table-of-contents__link toc-highlight">エージェントとワークロードがクラスターのデータストアに干渉しないようにする方法</a></li></ul></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2025 K3s Project Authors. All rights reserved. <br>The Linux Foundation has registered trademarks
+<p>データストアのスループットおよびレイテンシ要件を満たさない場合、コントロールプレーンの応答が遅延したり、コントロールプレーンがシステム状態を維持できなくなったりする可能性があります。</p></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href="https://github.com/k3s-io/docs/edit/main/docs/reference/resource-profiling.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>このページを編集</a></div><div class="col lastUpdated_JAkA"><span class="theme-last-updated"><b><time datetime="2025-10-20T19:26:27.000Z" itemprop="dateModified">2025年10月20日</time></b>に<!-- -->最終更新</span></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="ドキュメントページ"><a class="pagination-nav__link pagination-nav__link--prev" href="/ja/reference/metrics"><div class="pagination-nav__sublabel">前へ</div><div class="pagination-nav__label">Metrics</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/ja/release-notes/v1.30.X"><div class="pagination-nav__sublabel">次へ</div><div class="pagination-nav__label">v1.30.X</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#リソーステストの範囲" class="table-of-contents__link toc-highlight">リソーステストの範囲</a></li><li><a href="#ベースライン測定に含まれるコンポーネント" class="table-of-contents__link toc-highlight">ベースライン測定に含まれるコンポーネント</a></li><li><a href="#方法論" class="table-of-contents__link toc-highlight">方法論</a></li><li><a href="#環境" class="table-of-contents__link toc-highlight">環境</a></li><li><a href="#ベースラインリソース要件" class="table-of-contents__link toc-highlight">ベースラインリソース要件</a><ul><li><a href="#ワークロードを持つk3sサーバー" class="table-of-contents__link toc-highlight">ワークロードを持つK3sサーバー</a></li><li><a href="#単一エージェントを持つk3sクラスター" class="table-of-contents__link toc-highlight">単一エージェントを持つK3sクラスター</a></li><li><a href="#k3sエージェント" class="table-of-contents__link toc-highlight">K3sエージェント</a></li></ul></li><li><a href="#分析" class="table-of-contents__link toc-highlight">分析</a><ul><li><a href="#主要なリソース利用ドライバー" class="table-of-contents__link toc-highlight">主要なリソース利用ドライバー</a></li><li><a href="#エージェントとワークロードがクラスターのデータストアに干渉しないようにする方法" class="table-of-contents__link toc-highlight">エージェントとワークロードがクラスターのデータストアに干渉しないようにする方法</a></li></ul></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2025 K3s Project Authors. All rights reserved. <br>The Linux Foundation has registered trademarks
       and uses trademarks. For a list of trademarks of The Linux Foundation, 
       please see our <a href="https://www.linuxfoundation.org/trademark-usage"> Trademark Usage</a> page.</div></div></div></footer></div>
 </body>
