@@ -4,9 +4,9 @@ title: Helm
 
 HelmはKubernetesのためのパッケージ管理ツールです。HelmチャートはKubernetes YAMLマニフェストドキュメントのためのテンプレート構文を提供します。Helmを使用すると、開発者やクラスター管理者は静的なマニフェストを使用する代わりに、チャートとして知られる設定可能なテンプレートを作成できます。独自のチャートカタログを作成する方法については、[https://helm.sh/docs/intro/quickstart/](https://helm.sh/docs/intro/quickstart/)のドキュメントを参照してください。
 
-K3sはHelmをサポートするために特別な設定を必要としません。[クラスターアクセス](./cluster-access.md)のドキュメントに従って、kubeconfigパスを正しく設定していることを確認してください。
+K3sはHelmをサポートするために特別な設定を必要としません。[クラスターアクセス](../cluster-access.md)のドキュメントに従って、kubeconfigパスを正しく設定していることを確認してください。
 
-K3sには、HelmChartカスタムリソース定義（CRD）を使用してHelmチャートのインストール、アップグレード/再構成、およびアンインストールを管理する[Helmコントローラー](https://github.com/k3s-io/helm-controller/)が含まれています。[自動デプロイAddOnマニフェスト](./installation/packaged-components.md)と組み合わせることで、ディスク上に1つのファイルを作成するだけでクラスターにHelmチャートを自動的にインストールできます。
+K3sには、HelmChartカスタムリソース定義（CRD）を使用してHelmチャートのインストール、アップグレード/再構成、およびアンインストールを管理する[Helmコントローラー](https://github.com/k3s-io/helm-controller/)が含まれています。[自動デプロイAddOnマニフェスト](../installation/packaged-components.md)と組み合わせることで、ディスク上に1つのファイルを作成するだけでクラスターにHelmチャートを自動的にインストールできます。
 
 ### Helmコントローラーの使用
 
@@ -142,7 +142,7 @@ spec:
 
 ### Helm v2からの移行
 
-K3sはHelm v2またはHelm v3のいずれかを処理できます。Helm v3に移行したい場合は、Helmの[この](https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/)ブログ投稿でプラグインを使用して成功裏に移行する方法を説明しています。詳細については、公式のHelm 3ドキュメント[こちら](https://helm.sh/docs/)を参照してください。[クラスターアクセス](./cluster-access.md)のセクションに従ってkubeconfigを正しく設定していることを確認してください。
+K3sはHelm v2またはHelm v3のいずれかを処理できます。Helm v3に移行したい場合は、Helmの[この](https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/)ブログ投稿でプラグインを使用して成功裏に移行する方法を説明しています。詳細については、公式のHelm 3ドキュメント[こちら](https://helm.sh/docs/)を参照してください。[クラスターアクセス](../cluster-access.md)のセクションに従ってkubeconfigを正しく設定していることを確認してください。
 
 :::note
 Helm 3はもはやTillerと`helm init`コマンドを必要としません。詳細については公式ドキュメントを参照してください。

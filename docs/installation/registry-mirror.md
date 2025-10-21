@@ -16,7 +16,7 @@ This option enables the embedded mirror for use on all nodes in the cluster.
 When enabled at a cluster level, all nodes will host a local OCI registry on port 6443,
 and publish a list of available images via a peer to peer network on port 5001.
 Any image available in the containerd image store on any node, can be pulled by other cluster members without access to an external registry.
-Images imported via [air-gap image tar files](./airgap.md?airgap-load-images=Manually+Deploy+Images) or [pre-imported](../import-images.md#pre-import-images) are pinned in containerd to ensure that they remain available and are not pruned by Kubelet garbage collection.
+Images imported via [air-gap image tar files](./airgap.md?airgap-load-images=Manually+Deploy+Images) or [pre-imported](../add-ons/import-images.md#pre-import-images) are pinned in containerd to ensure that they remain available and are not pruned by Kubelet garbage collection.
 
 The peer to peer port can changed from 5001 by setting the `K3S_P2P_PORT` environment variable for the K3s service. The port must be set to the same value on all nodes.
 Changing the port is unsupported and not recommended.
@@ -129,7 +129,7 @@ If image integrity is important, you should use image digests instead of tags, a
 ## Sharing Air-gap or Manually Loaded Images
 
 Image sharing is controlled based on the source registry.
-Images loaded directly into containerd via [air-gap tarballs](./airgap.md?airgap-load-images=Manually+Deploy+Images), [pre-imported](../import-images.md#pre-import-images) or loaded directly into containerd's image store using the `ctr` command line tool, will be shared between nodes if they are tagged as being from a registry that is enabled for mirroring.
+Images loaded directly into containerd via [air-gap tarballs](./airgap.md?airgap-load-images=Manually+Deploy+Images), [pre-imported](../add-ons/import-images.md#pre-import-images) or loaded directly into containerd's image store using the `ctr` command line tool, will be shared between nodes if they are tagged as being from a registry that is enabled for mirroring.
 
 Note that the upstream registry that the images appear to come from does not actually have to exist or be reachable.
 For example, you could tag images as being from a fictitious upstream registry, and import those images into containerd's image store.
@@ -140,5 +140,5 @@ You would then be able to pull those images from all cluster members, as long as
 The embedded registry is read-only, and cannot be pushed to directly using `docker push` or other common tools that interact with OCI registries.
 
 Images can be manually made available via the embedded registry by running `ctr -n k8s.io image pull` to pull an image,
-or by loading image archives created by `docker save` via the `ctr -n k8s.io image import` command or the [pre-import feature](../import-images.md#pre-import-images).
+or by loading image archives created by `docker save` via the `ctr -n k8s.io image import` command or the [pre-import feature](../add-ons/import-images.md#pre-import-images).
 Note that the `k8s.io` namespace must be specified when managing images via `ctr` in order for them to be visible to the kubelet.
