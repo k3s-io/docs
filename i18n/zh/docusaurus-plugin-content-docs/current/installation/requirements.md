@@ -1,35 +1,35 @@
 ---
-title: Requirements
+title: 系统需求
 ---
 
-K3s is very lightweight, but has some minimum requirements as outlined below.
+K3s 尽管非常轻量级，但仍如下所示有一些最低要求：
 
-Whether you're configuring K3s to run in a container or as a native Linux service, each node running K3s should meet the following minimum requirements. These requirements are baseline for K3s and its packaged components, and do not include resources consumed by the workload itself.
+无论你是在容器中，还是作为原生 Linux 系统服务而配置使用 K3s，每个节点都应满足以下最低条件。这些条件是 K3s 自身及其组件包的（性能）基线，不含工作负载自身消耗的系统资源。
 
-## Prerequisites
+## 前提
 
-Two nodes cannot have the same hostname.
+同一主机名不可为多个节点使用。
 
 If multiple nodes will have the same hostname, or if hostnames may be reused by an automated provisioning system, use the `--with-node-id` option to append a random suffix for each node, or devise a unique name to pass with `--node-name` or `$K3S_NODE_NAME` for each node you add to the cluster.
 
-## Architecture
+## 系统架构
 
-K3s is available for the following architectures:
+K3s 在下述架构下可用：
 - x86_64
 - armhf
 - arm64/aarch64
 
-:::warning ARM64 Page Size
+:::warning ARM64 分页大小
 
-Prior to May 2023 releases (v1.24.14+k3s1, v1.25.10+k3s1, v1.26.5+k3s1, v1.27.2+k3s1), on `aarch64/arm64` systems, the kernel must use 4k pages. **RHEL9**, **Ubuntu**, **Raspberry PI OS**, and **SLES** all meet this requirement.
+在 2023 年 5 月之前的版本（v1.24.14+k3s1、v1.25.10+k3s1、v1.26.5+k3s1、v1.27.2+k3s1）中，aarch64/arm64 系统的内核必须使用 4 KB 分页大小。RHEL9、Ubuntu、Raspberry PI OS 和 SLES 等均满足此要求。
 
 :::
 
-## Operating Systems
+## 操作系统
 
-K3s is expected to work on most modern Linux systems.
+K3s 应运行于最新 Linux 系统中。
 
-Some OSs have additional setup requirements:
+部分操作系统有额外的安装条件：
 <Tabs queryString="os">
 <TabItem value="rhel" label="Red Hat Enterprise Linux / CentOS / Fedora">
 
