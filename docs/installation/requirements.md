@@ -73,6 +73,8 @@ OS versions prior to RHEL 8.4 carry NetworkManager with a known bug that interfe
 systemctl disable nm-cloud-setup.service nm-cloud-setup.timer
 reboot
 ```
+:::
+
 </TabItem>
 <TabItem value="debian" label="Ubuntu / Debian">
 
