@@ -4,9 +4,9 @@ title: Helm
 
 Helm 是 Kubernetes 的包管理工具。Helm Chart 为 Kubernetes YAML 清单文件提供了模板语法。借助 Helm，开发人员或集群管理员可以创建称为 Chart 的可配置模板，而不仅仅是使用静态清单。如果你需要创建自己的 Chart catalog，请参阅 [https://helm.sh/docs/intro/quickstart/](https://helm.sh/docs/intro/quickstart/)。
 
-K3s 不需要使用任何特殊配置来支持 Helm。请确保你已根据[集群访问](./cluster-access.md)文档正确设置了 kubeconfig 路径。
+K3s 不需要使用任何特殊配置来支持 Helm。请确保你已根据[集群访问](../cluster-access.md)文档正确设置了 kubeconfig 路径。
 
-K3s 包含一个 [Helm Controller](https://github.com/k3s-io/helm-controller/)，它使用 HelmChart 自定义资源定义 (CRD) 来管理 Helm Chart 的安装、升级、重新配置和卸载。与[自动部署 AddOn 清单](./installation/packaged-components.md)配合使用后，它可以在磁盘上创建单个文件，自动在集群上安装 Helm Chart。
+K3s 包含一个 [Helm Controller](https://github.com/k3s-io/helm-controller/)，它使用 HelmChart 自定义资源定义 (CRD) 来管理 Helm Chart 的安装、升级、重新配置和卸载。与[自动部署 AddOn 清单](../installation/packaged-components.md)配合使用后，它可以在磁盘上创建单个文件，自动在集群上安装 Helm Chart。
 
 ### 使用 Helm Controller
 
@@ -104,7 +104,7 @@ spec:
 [v1.17.0+k3s.1](https://github.com/k3s-io/k3s/releases/tag/v1.17.0%2Bk3s.1) 开始支持 Helm v3 并默认使用它。
 :::
 
-K3s 可以处理 Helm v2 或 Helm v3。如果你想迁移到 Helm v3，Helm 的[这篇博客文章](https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/)解释了如何使用插件进行迁移。有关更多信息，请参阅[官方 Helm 3 文档](https://helm.sh/docs/)。请确保你已按照[集群访问](./cluster-access.md)部分正确设置了 kubeconfig。
+K3s 可以处理 Helm v2 或 Helm v3。如果你想迁移到 Helm v3，Helm 的[这篇博客文章](https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/)解释了如何使用插件进行迁移。有关更多信息，请参阅[官方 Helm 3 文档](https://helm.sh/docs/)。请确保你已按照[集群访问](../cluster-access.md)部分正确设置了 kubeconfig。
 
 :::note
 Helm 3 不再需要 Tiller 和 `helm init` 命令。详情请参阅官方文档。

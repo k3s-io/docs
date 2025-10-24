@@ -26,7 +26,7 @@ Traefikが使用するノードを制限し、拡張してIngressステータス
 
 Traefikはサーバーの起動時にデフォルトでデプロイされます。詳細については[パッケージ化されたコンポーネントの管理](../installation/packaged-components.md)を参照してください。デフォルトの設定ファイルは`/var/lib/rancher/k3s/server/manifests/traefik.yaml`にあります。
 
-`traefik.yaml`ファイルは手動で編集しないでください。K3sは起動時にデフォルトでファイルを置き換えます。代わりに、Traefikをカスタマイズするには、`/var/lib/rancher/k3s/server/manifests`に追加の`HelmChartConfig`マニフェストを作成します。詳細および例については[HelmChartConfigを使用したパッケージ化されたコンポーネントのカスタマイズ](../helm.md#customizing-packaged-components-with-helmchartconfig)を参照してください。可能な設定値については、公式の[Traefik Helm設定パラメータ](https://github.com/traefik/traefik-helm-chart/tree/master/traefik)を参照してください。
+`traefik.yaml`ファイルは手動で編集しないでください。K3sは起動時にデフォルトでファイルを置き換えます。代わりに、Traefikをカスタマイズするには、`/var/lib/rancher/k3s/server/manifests`に追加の`HelmChartConfig`マニフェストを作成します。詳細および例については[HelmChartConfigを使用したパッケージ化されたコンポーネントのカスタマイズ](../add-ons/helm.md#customizing-packaged-components-with-helmchartconfig)を参照してください。可能な設定値については、公式の[Traefik Helm設定パラメータ](https://github.com/traefik/traefik-helm-chart/tree/master/traefik)を参照してください。
 
 クラスターからTraefikを削除するには、すべてのサーバーを`--disable=traefik`フラグで起動します。
 

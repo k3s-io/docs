@@ -63,4 +63,4 @@ kube-system   coredns-85cb69466-vcq7j                  1/1     Running   0      
 
 ## Helm AddOns
 
-自動デプロイマニフェストを介してHelmチャートを管理する方法については、[Helm](../helm.md)セクションを参照してください。
+自動デプロイマニフェストを介してHelmチャートを管理する方法については、[Helm](../add-ons/helm.md)セクションを参照してください。

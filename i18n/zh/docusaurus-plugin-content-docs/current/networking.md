@@ -22,7 +22,7 @@ Traefik Ingress Controller 部署了一个使用端口 80 和 443 的 LoadBalanc
 
 Traefik 在启动服务器时默认部署。有关详细信息，请参阅[管理打包组件](./installation/packaged-components.md)。默认配置文件位于 `/var/lib/rancher/k3s/server/manifests/traefik.yaml`。
 
-不要手动编辑 `traefik.yaml` 文件，因为 K3s 会在启动时使用默认值替换该文件。相反，你需要通过在 `/var/lib/rancher/k3s/server/manifests` 中创建其他 `HelmChartConfig` 清单来自定义 Traefik。有关更多详细信息和示例，请参阅[使用 HelmChartConfig 自定义打包组件](./helm.md#使用-helmchartconfig-自定义打包组件)。有关配置值的更多信息，请参阅[官方 Traefik Helm 配置参数](https://github.com/traefik/traefik-helm-chart/tree/master/traefik)。
+不要手动编辑 `traefik.yaml` 文件，因为 K3s 会在启动时使用默认值替换该文件。相反，你需要通过在 `/var/lib/rancher/k3s/server/manifests` 中创建其他 `HelmChartConfig` 清单来自定义 Traefik。有关更多详细信息和示例，请参阅[使用 HelmChartConfig 自定义打包组件](./add-ons/helm.md#使用-helmchartconfig-自定义打包组件)。有关配置值的更多信息，请参阅[官方 Traefik Helm 配置参数](https://github.com/traefik/traefik-helm-chart/tree/master/traefik)。
 
 要从集群中删除 Traefik，请使用 `--disable=traefik` 标志来启动所有 Server。
 
