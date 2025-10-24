@@ -54,7 +54,7 @@ kube-apiserver-arg:
   - 'audit-log-maxsize=100'
   - 'service-account-extend-token-expiration=false'
 kube-controller-manager-arg:
-  - 'terminated-pod-gc-threshold=10'
+  - 'terminated-pod-gc-threshold=100'
 kubelet-arg:
   - 'streaming-connection-idle-timeout=5m'
   - "tls-cipher-suites=TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305"
@@ -681,4 +681,4 @@ kubectl patch serviceaccount --namespace kube-public default --patch '{"automoun
 
 ## Conclusion
 
-If you have followed this guide, your K3s cluster will be configured to comply with the CIS Kubernetes Benchmark. You can review the [CIS 1.8 Self-Assessment Guide](self-assessment-1.8.md) to understand the expectations of each of the benchmark's checks and how you can do the same on your cluster.
+If you have followed this guide, your K3s cluster will be configured to comply with the CIS Kubernetes Benchmark. You can review the [CIS 1.11 Self-Assessment Guide](self-assessment-1.11.md) to understand the expectations of each of the benchmark's checks and how you can do the same on your cluster.
