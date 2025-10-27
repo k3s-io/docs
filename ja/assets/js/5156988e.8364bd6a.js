@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkk_3_s_docs=self.webpackChunkk_3_s_docs||[]).push([[1650],{56680:s=>{s.exports=JSON.parse('{"tags":[{"label":"runc","permalink":"/ja/blog/tags/runc","count":1},{"label":"k3s","permalink":"/ja/blog/tags/k-3-s","count":1},{"label":"sysbox","permalink":"/ja/blog/tags/sysbox","count":1}]}')}}]);

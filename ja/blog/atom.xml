@@ -78,7 +78,6 @@
             <uri>https://github.com/galal-hussein</uri>
         </author>
         <category label="runc" term="runc"/>
-        <category label="k3s" term="k3s"/>
         <category label="sysbox" term="sysbox"/>
     </entry>
     <entry>
