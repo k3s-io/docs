@@ -66,11 +66,15 @@ firewall-cmd --reload
 
 Additional ports may need to be opened depending on your setup. See [Inbound Rules](#inbound-rules-for-k3s-nodes) for more information. If you change the default CIDR for pods or services, you will need to update the firewall rules accordingly.
 
-If enabled, it is required to disable nm-cloud-setup and reboot the node:
+:::warning Older RHEL/CentOS Releases
+
+OS versions prior to RHEL 8.4 carry NetworkManager with a known bug that interferes with K3s networking. If using an older release, it is required to disable nm-cloud-setup and reboot the node:
 ```bash
 systemctl disable nm-cloud-setup.service nm-cloud-setup.timer
 reboot
 ```
+:::
+
 </TabItem>
 <TabItem value="debian" label="Ubuntu / Debian">
 
