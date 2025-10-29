@@ -6,7 +6,7 @@ Container images are cached locally on each node by the containerd image store. 
 
 ## On-demand image pulling
 
-Kubernetes, by default, automatically pulls images when a Pod requires them if the image is not already present on the node. This behavior can be changed by using the [image pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) field of the Pod. When using the default `IfNotPresent` policy, containerd will pull the image from either upstream (default) or your [private registry](installation/private-registry.md) and store it in its image store. Users do not need to apply any additional configuration for on-demand image pulling to work.
+Kubernetes, by default, automatically pulls images when a Pod requires them if the image is not already present on the node. This behavior can be changed by using the [image pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) field of the Pod. When using the default `IfNotPresent` policy, containerd will pull the image from either upstream (default) or your [private registry](../installation/private-registry.md) and store it in its image store. Users do not need to apply any additional configuration for on-demand image pulling to work.
 
 
 ## Pre-import images
@@ -21,7 +21,7 @@ K3s includes two mechanisms to pre-import images into the containerd image store
 <Tabs groupId="import-images" queryString>
 <TabItem value="Online image importing" default>
 
-Users can trigger a pull of images into the containerd image store by placing a text file containing the image names, one per line, in the `/var/lib/rancher/k3s/agent/images` directory. The text file can be placed before K3s is started, or created/modified while K3s is running. K3s will sequentially pull the images via the CRI API, optionally using the [registries.yaml](installation/private-registry.md) configuration.
+Users can trigger a pull of images into the containerd image store by placing a text file containing the image names, one per line, in the `/var/lib/rancher/k3s/agent/images` directory. The text file can be placed before K3s is started, or created/modified while K3s is running. K3s will sequentially pull the images via the CRI API, optionally using the [registries.yaml](../installation/private-registry.md) configuration.
 
 For example:
 
@@ -57,7 +57,7 @@ After a few seconds, the images included in the image tarball will be available 
 
 Use `sudo k3s ctr images list` to query the containerd image store.
 
-This is the method used in Airgap. Please follow the [Airgap install documentation](installation/airgap.md) for detailed information.
+This is the method used in Airgap. Please follow the [Airgap install documentation](../installation/airgap.md) for detailed information.
 
 </TabItem>
 </Tabs>
@@ -66,6 +66,6 @@ This is the method used in Airgap. Please follow the [Airgap install documentati
 
 K3s supports two alternatives for image registries:
 
-* [Private Registry Configuration](installation/private-registry.md) covers use of `registries.yaml` to configure container image registry authentication and mirroring.
+* [Private Registry Configuration](../installation/private-registry.md) covers use of `registries.yaml` to configure container image registry authentication and mirroring.
 
-* [Embedded Registry Mirror](installation/registry-mirror.md) shows how to enable the embedded distributed image registry mirror, for peer-to-peer sharing of images between nodes.
+* [Embedded Registry Mirror](../installation/registry-mirror.md) shows how to enable the embedded distributed image registry mirror, for peer-to-peer sharing of images between nodes.

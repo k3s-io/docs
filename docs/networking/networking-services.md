@@ -26,7 +26,7 @@ To restrict the nodes used by Traefik, and by extension the node IPs advertised 
 
 Traefik is deployed by default when starting the server. The default chart values can be found in `/var/lib/rancher/k3s/server/manifests/traefik.yaml`, but this file should not be edited manually, as K3s will replace the file with defaults at startup. 
 Instead, you should customize Traefik by creating an additional `HelmChartConfig` manifest in `/var/lib/rancher/k3s/server/manifests`.
-For more details and an example see [Customizing Packaged Components with HelmChartConfig](../helm.md#customizing-packaged-components-with-helmchartconfig).
+For more details and an example see [Customizing Packaged Components with HelmChartConfig](../add-ons/helm.md#customizing-packaged-components-with-helmchartconfig).
 For more information on the possible configuration values, refer to `values.yaml` of the [Traefik Helm Chart](https://github.com/k3s-io/k3s-charts/tree/main/charts/traefik) included with your version of K3s.
 
 To remove Traefik from your cluster, start all servers with the `--disable=traefik` flag.
