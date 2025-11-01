@@ -69,7 +69,7 @@ spec:
       - "true"
   serviceAccountName: system-upgrade
   upgrade:
-    image: rancher/k3s-upgrade
+    image: docker.io/rancher/k3s-upgrade
   channel: https://update.k3s.io/v1-release/channels/stable
 ---
 # Agent plan
@@ -89,10 +89,10 @@ spec:
     args:
     - prepare
     - server-plan
-    image: rancher/k3s-upgrade
+    image: docker.io/rancher/k3s-upgrade
   serviceAccountName: system-upgrade
   upgrade:
-    image: rancher/k3s-upgrade
+    image: docker.io/rancher/k3s-upgrade
   channel: https://update.k3s.io/v1-release/channels/stable
 ```
 
