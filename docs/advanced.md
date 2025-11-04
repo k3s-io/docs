@@ -24,6 +24,49 @@ By default, K3s uses a single static token for both servers and agents. With car
 It is also possible to enable a second static token that can only be used to join agents, or to create temporary `kubeadm` style join tokens that expire automatically.
 For more information, see the [`k3s token` command documentation](./cli/token.md#k3s-token-1).
 
+## Configuring DNS Resolution
+
+### Nameserver Viability Checks
+
+On startup, each node checks the files at `/etc/resolv.conf` and `/run/systemd/resolve/resolv.conf` for loopback, multicast, or link-local nameservers. 
+If any such entries are present, the configuration file is not used, as such entries would not function properly within pods that [inherit name resolution configuration](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy) from their node.
+If no usable resolv.conf is found, K3s will print a warning message to the logs, and generate a stub resolv.conf that uses `8.8.8.8` and `2001:4860:4860::8888` as the nameservers.
+
+If you want to provide K3s with an alternative resolver configuration without modifying the system configuration files, you may use the `--resolv-conf` option to specify the path to a suitable file.
+Manually selected files are not subejct to viability checks.
+
+### CoreDNS Custom Configuration Imports
+
+In order to customize the CoreDNS configuration, you may create a ConfigMap named `coredns-custom` in the `kube-system` namespace.
+Keys matching `*.override` will be imported into the `:.53` Server Block.
+Additional Server Blocks may be placed in keys matching `*.server`.
+Additional content (zone files, etc) may also be present, and will be mounted under `/etc/coredns/custom` in the coredns pods.
+
+Here is an example ConfigMap that forwards lookups to `example.com` to a nameserver at 10.0.0.1, and serves `example.net` from an [RFC 1035](https://datatracker.ietf.org/doc/html/rfc1035#section-5) compliant text file:
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: coredns-custom
+  namespace: kube-system
+data:
+  example-com.override: |
+    forward example.com 10.0.0.1
+  example-net.server: |
+    example.net:53 {
+      log
+      errors
+      file /etc/coredns/custom/db.example.net
+    }
+  db.example.net: |
+    $ORIGIN example.net.
+    @       3600 IN SOA    sns.dns.icann.org. noc.dns.icann.org. 2017042745 7200 3600 1209600 3600
+            3600 IN NS     a.iana-servers.net.
+            3600 IN NS     b.iana-servers.net.
+    www          IN A      127.0.0.1
+                 IN AAAA   ::1
+```
+
 ## Configuring an HTTP proxy
 
 If you are running K3s in an environment, which only has external connectivity through an HTTP proxy, you can configure your proxy settings on the K3s systemd service. These proxy settings will then be used in K3s and passed down to the embedded containerd and kubelet. Note that proxy configuration and other environment variables from the host are NOT passed into Pods.
