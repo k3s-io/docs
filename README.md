@@ -20,7 +20,7 @@ This command starts a local development server and opens up a browser window. Mo
 
 You can also use Docker to launch the website without needing to install and configure yarn:
 ```
-$ docker run --rm -d --name k3s-docs -e HOME=$PWD -v $PWD:$PWD -w $PWD -u $(id -u) -p 3000:3000 node:22 sh -c 'corepack yarn start -h 0.0.0.0'
+$ docker run --rm -d --name k3s-docs -e HOME=$PWD -v $PWD:$PWD -w $PWD -u $(id -u) -p 3000:3000 node:22 sh -c 'corepack yarn install --immutable && corepack yarn start -h 0.0.0.0'
 ```
 
 ### Build
