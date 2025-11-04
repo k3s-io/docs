@@ -33,7 +33,7 @@ If any such entries are present, the configuration file is not used, as such ent
 If no usable resolv.conf is found, K3s will print a warning message to the logs, and generate a stub resolv.conf that uses `8.8.8.8` and `2001:4860:4860::8888` as the nameservers.
 
 If you want to provide K3s with an alternative resolver configuration without modifying the system configuration files, you may use the `--resolv-conf` option to specify the path to a suitable file.
-Manually selected files are not subejct to viability checks.
+Manually specified resolver configuration files are not subject to viability checks.
 
 ### CoreDNS Custom Configuration Imports
 
