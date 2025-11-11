@@ -17,24 +17,15 @@ K3s provides mechanisms for ensuring large images are available quickly, that ad
 - Offline (Air-Gapped) Clusters: Where no external registry is available, K3s can `import` images directly from local tarball archives.
 
 1. Pre-Pulling Images via a Manifest File (Online)
-In scenarios with internet connectivity, the goal is to initiate image pulls as early and efficiently as possible. K3s can be instructed to sequentially pull a set of images into the embedded containerd store during startup. This is ideal for ensuring base images are ready the moment the cluster starts.
+In scenarios with internet connectivity, the goal is to initiate image pulls as early and efficiently as possible. K3s can be instructed to sequentially pull a set of images into the embedded containerd store during startup or while K3s is running. This is ideal for ensuring base images are ready the moment the cluster starts or the moment the application is deployed. However, if this process is done before the cluster is started, K3s won't successfully start until all images have been pulled, which could make K3s fail to start if it takes more than 15 minutes. If you suspect this is happening to you, you'd better do the pre-pulling while K3s is running. 
 
-Users can trigger a pull of images into the containerd image store by placing a simple text file containing the image names, one per line, in the /var/lib/rancher/k3s/agent/images directory. This can be done before K3s starts or while K3s is running.
-
-Imagine the file `example.txt` which contains:
-
-```text
-docker.io/pytorch/pytorch:2.9.0-cuda12.6-cudnn9-runtime
-```
-Before starting the k3s service in the node, do the following:
+Users can trigger a pull of images into the containerd image store by placing a simple text file containing the image names, one per line, in the `/var/lib/rancher/k3s/agent/images` directory. As we have just explained, this can be done before K3s starts or while K3s is running. For example, you can execute the following in one of the nodes:
 
 ```bash
-# 1. Create the images directory on the node
-mkdir -p /var/lib/rancher/k3s/agent/images
-
-# 2. Copy the manifest file (example.txt)
-cp example.txt /var/lib/rancher/k3s/agent/images
+mkdir -p /var/lib/rancher/k3s/agent/images && echo docker.io/pytorch/pytorch:2.9.0-cuda12.6-cudnn9-runtime > /var/lib/rancher/k3s/agent/images/pytorch.txt
 ```
+In the previous command, we have created the images directory on the node and dropped a file names `pytorch.txt` that contains the image: `docker.io/pytorch/pytorch:2.9.0-cuda12.6-cudnn9-runtime`.
+
 The K3s process will then pull these images via the CRI API. You should see the following two logs:
 ```log
 # When the k3s controller detects the file
@@ -110,7 +101,11 @@ And you should be able to see metrics of Spegel by querying the supervisor metri
 ```bash
 kubectl get --server https://10.11.0.11:6443 --raw /metrics  | grep spegel
 ```
+## Bonus: eStargz images ⚡ ##
 
+A different solution to speed up the creation of pods is by using a special image format called eStargz. This enables lazy pulling, which means that the application can start almost instantly while the rest of the image is pulled in the background. This strategy requires both the image to be specifically built in the eStargz format and the K3s agent to be configured to use the stargz snapshotter: `--snapshotter=estargz` flag, or with `snapshotter: estargz` in the configuration file.
+
+This is currently an experimental feature in K3s and we have more information in the [advance section of our docs](https://docs.k3s.io/advanced#enabling-lazy-pulling-of-estargz-experimental). We would love to hear your feedback if you are using it.
 
 ## Conclusion 🏁 ##
 
