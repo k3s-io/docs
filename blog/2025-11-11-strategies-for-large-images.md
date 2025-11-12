@@ -5,7 +5,7 @@ authors: manuelbuil
 hide_table_of_contents: true
 ---
 
-Slow image pulls can be annoying and can increase Kubernetes startup times over a healthy threshold, particularly in resource-constrained or air-gapped environments. The situation gets worsened by new AI cloud native apps, which often rely on astronomically large images (several gigabytes). This post dives into K3s mechanisms, like pre-pulling images and the embedded registry mirror, that can effectively improve the user's experience when handling large images.
+Slow image pulls can be annoying and may increase Kubernetes startup times over a healthy threshold, particularly in resource-constrained or air-gapped environments. The situation is exacerbated by new AI-driven apps, which often rely on astronomically large images, frequently tens or hundreds of gigabytes. This post dives into mechanisms that K3s makes available to improve the user's experience when handling large images.
 
 <!-- truncate -->
 
@@ -74,7 +74,7 @@ Note that the caching mechanism needs to be enabled carefully. If an image was r
 
 ## Embedded Registry Mirror 🕸️ ##
 
-K3s offers an in-cluster container image registry mirror by embedding [Spegel](https://spegel.dev/). Its primary use case is to accelerate image pulling and reduce external network dependency in Kubernetes clusters by ensuring images are pulled from within the cluster network rather than repeatedly from a central registry. To enable this feature, server nodes must be started with the `--embedded-registry` flag, or with `embedded-registry: true` in the configuration file. When enabled, every node in your cluster instantly becomes a stateless, local image mirror listening on port 6443. Nodes share a constantly updated list of available images over a peer-to-peer network on port 5001.
+K3s offers an in-cluster container image registry mirror by embedding [Spegel](https://spegel.dev/). Its primary use case is to accelerate image pulling and reduce external network dependency in Kubernetes clusters by allowing nodes to pull cached image content directly from other nodes whenever possible, instead of requiring each node to reach out to a central registry. To enable this feature, server nodes must be started with the `--embedded-registry` flag, or with `embedded-registry: true` in the configuration file. When enabled, every node in your cluster instantly becomes a stateless, local image mirror listening on port 6443. Nodes share a constantly updated list of available images over a peer-to-peer network on port 5001.
 
 ```bash
 # Enable the embedded registry mirror
@@ -101,11 +101,14 @@ And you should be able to see metrics of Spegel by querying the supervisor metri
 ```bash
 kubectl get --server https://10.11.0.11:6443 --raw /metrics  | grep spegel
 ```
+
+For more information check the [docs](https://docs.k3s.io/installation/registry-mirror)
+
 ## Bonus: eStargz images ⚡ ##
 
 A different solution to speed up the creation of pods is by using a special image format called eStargz. This enables lazy pulling, which means that the application can start almost instantly while the rest of the image is pulled in the background. This strategy requires both the image to be specifically built in the eStargz format and the K3s agent to be configured to use the stargz snapshotter: `--snapshotter=estargz` flag, or with `snapshotter: estargz` in the configuration file.
 
-This is currently an experimental feature in K3s and we have more information in the [advance section of our docs](https://docs.k3s.io/advanced#enabling-lazy-pulling-of-estargz-experimental). We would love to hear your feedback if you are using it.
+This is currently an experimental feature in K3s and we have more information in the [advanced section of our docs](https://docs.k3s.io/advanced#enabling-lazy-pulling-of-estargz-experimental). We would love to hear your feedback if you are using it.
 
 ## Conclusion 🏁 ##
 
