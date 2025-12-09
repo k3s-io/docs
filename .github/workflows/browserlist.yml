@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
+      - name: Enable Corepack for Modern Yarn
+        run: corepack enable
       - name: Update Browserlist
         run: npx update-browserslist-db@latest
       - name: Get current month and year
