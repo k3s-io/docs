@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Enable Corepack for Modern Yarn
         run: corepack enable
       - name: Update Browserlist
