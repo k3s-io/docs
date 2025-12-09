@@ -1,4 +1,4 @@
-name: Test deployment
+name: Tests
 
 on:
   pull_request:
@@ -7,7 +7,26 @@ on:
 
 jobs:
   test-deploy:
-    name: Test deployment
+    name: Test Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Enable Corepack for Modern Yarn
+        run: corepack enable
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn install --immutable
+      - name: Check Markdown formatting
+        run: ./scripts/linter.sh
+      - name: Test build website
+        run: yarn build
+
+  test-links:
+    name: Test Links
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -24,8 +43,4 @@ jobs:
         run: yarn run remark --use remark-validate-links --no-config --frail ./docs
       - name: Check external links
         run: yarn run remark --use remark-lint-no-dead-urls --frail ./docs
-      - name: Check Markdown formatting
-        run: ./scripts/linter.sh
-      - name: Test build website
-        run: yarn build
       
