@@ -43,7 +43,7 @@ This method requires you to manually deploy the necessary images to each node, a
 2. Transfer the images archive to the airgap nodes. Place them in the agent's image directory, for example:
   ```bash
   sudo mkdir -p /var/lib/rancher/k3s/agent/images/
-  cp k3s-airgap-images-amd64.tar.zst /var/lib/rancher/k3s/agent/images/k3s-airgap-images-amd64.tar.zst
+  sudo cp k3s-airgap-images-amd64.tar.zst /var/lib/rancher/k3s/agent/images/k3s-airgap-images-amd64.tar.zst
   ```
 3. Proceed to the [Install K3s](#2-install-k3s) section below.
 
