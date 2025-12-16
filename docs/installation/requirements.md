@@ -33,6 +33,8 @@ Some OSs have additional setup requirements:
 <Tabs queryString="os">
 <TabItem value="suse" label="SUSE Linux Enterprise / openSUSE">
 
+#### Firewalld
+
 It is recommended to turn off firewalld:
 ```bash
 systemctl disable firewalld --now
@@ -50,6 +52,14 @@ Additional ports may need to be opened depending on your setup. See [Inbound Rul
 
 </TabItem>
 <TabItem value="rhel" label="Red Hat Enterprise Linux / CentOS / Fedora">
+
+#### RHEL 10
+On RHEL 10, an additional package is required:
+```bash
+sudo dnf install -y kernel-modules-extra
+```
+
+#### Firewalld
 
 It is recommended to turn off firewalld:
 ```bash
@@ -79,6 +89,8 @@ reboot
 <TabItem value="debian" label="Ubuntu / Debian">
 
 Older Debian release may suffer from a known iptables bug. See [Known Issues](../known-issues.md#iptables).
+
+#### UFW
 
 It is recommended to turn off ufw (uncomplicated firewall):
 ```bash
