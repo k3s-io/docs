@@ -91,7 +91,7 @@ As mentioned, the format of the value passed to the `datastore-endpoint` paramet
 
   `https://etcd-host-1:2379,https://etcd-host-2:2379,https://etcd-host-3:2379`
 
-  The above assumes a typical three node etcd cluster. The parameter can accept one more comma separated etcd URLs.
+  The above assumes a typical three node etcd cluster. The parameter can accept one or more comma separated etcd URLs.
 
 </TabItem>
 </Tabs>
