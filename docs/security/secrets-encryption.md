@@ -30,6 +30,12 @@ K3s supports the following encryption providers:
 - `aescbc`: AES-CBC with PKCS#7 padding
 - `secretbox`: XSalsa20 and Poly1305
 
+#### Migrating Providers
+You can migrate from the `aescbc` provider to the `secretbox` provider by following these steps:
+1. Ensure that the `secretbox` provider is supported by your K3s version.
+2. Update/Add the `secrets-encryption-provider` flag in your K3s configuration file to `secretbox`.
+3. Rotate the encryption keys, following the [Encryption Key Rotation](#encryption-key-rotation) section below.
+
 
 ## Generated encryption config file
 

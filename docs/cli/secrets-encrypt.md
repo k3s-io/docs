@@ -23,12 +23,10 @@ K3s contains a CLI tool `secrets-encrypt`, which enables automatic control over 
 Failure to follow proper procedure for rotating encryption keys can leave your cluster permanently corrupted. Proceed with caution.
 :::
 
-### New Encryption Key Rotation (Experimental)
+### Encryption Key Rotation
 
 :::info Version Gate
-Available as of [v1.28.1+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.28.1%2Bk3s1). This new version of the tool utilized K8s [automatic config reloading](https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/#configure-automatic-reloading) which is currently in beta. GA is expected in v1.29.0
-
-For older releases, see [Encryption Key Rotation Classic](#encryption-key-rotation-classic)
+Available as of the September 2024 releases: v1.29.9+k3s1, v1.30.5+k3s1, v1.31.1+k3s1
 :::
 
 <Tabs groupId="se" queryString>
@@ -96,6 +94,10 @@ To rotate secrets encryption keys on HA setups:
 </Tabs>
 
 ### Encryption Key Rotation Classic
+
+:::tip New Procedure
+If using K3s versions newer than v1.30.1+k3s1, we recommend using the [Encryption Key Rotation](#encryption-key-rotation) instead.
+:::
 
 <Tabs groupId="se" queryString>
 <TabItem value="Single-Server" default>
