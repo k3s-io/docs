@@ -26,7 +26,7 @@ Failure to follow proper procedure for rotating encryption keys can leave your c
 ### Encryption Key Rotation
 
 :::info Version Gate
-Available as of the September 2024 releases: v1.29.9+k3s1, v1.30.5+k3s1, v1.31.1+k3s1
+Available as of the September 2024 releases: v1.30.5+k3s1, v1.31.1+k3s1
 :::
 
 <Tabs groupId="se" queryString>
@@ -93,10 +93,10 @@ To rotate secrets encryption keys on HA setups:
 </TabItem>
 </Tabs>
 
-### Encryption Key Rotation Classic
+### Legacy Encryption Key Rotation
 
 :::tip New Procedure
-If using K3s versions newer than v1.30.1+k3s1, we recommend using the [Encryption Key Rotation](#encryption-key-rotation) instead.
+If using K3s versions v1.30+, we recommend using the [Encryption Key Rotation](#encryption-key-rotation) instead.
 :::
 
 <Tabs groupId="se" queryString>
