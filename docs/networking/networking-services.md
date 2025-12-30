@@ -62,6 +62,15 @@ Upstream Kubernetes allows Services of type LoadBalancer to be created, but does
 
 The ServiceLB controller watches Kubernetes [Services](https://kubernetes.io/docs/concepts/services-networking/service/) with the `spec.type` field set to `LoadBalancer`.
 
+:::warning Security Warning: Port Shadowing Risk
+
+ServiceLB (klipper-lb) works by binding to host ports (e.g., 80, 443) on the node's network interface.
+If a pod with `hostNetwork: true` is deployed and binds to these ports *before* ServiceLB, it can intercept traffic intended for the LoadBalancer or prevent it from starting.
+In multi-tenant environments, it is strongly recommended to restrict `hostNetwork` usage via Admission Controllers (like PSA or Kyverno) to prevent port hijacking.
+This behavior has been verified on K3s `v1.33.6+k3s1` where a malicious pod could successfully shadow the default Traefik ingress port.
+
+:::
+
 For each LoadBalancer Service, a [DaemonSet](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/) is created in the `kube-system` namespace. This DaemonSet in turn creates ServiceLB Pods with a `svc-` prefix, on each node. These pods leverage hostPort using the service port, hence they will only be deployed on nodes that have that port available. If there aren't any nodes with that port available, the LB will remain Pending. Note that it is possible to expose multiple Services on the same node, as long as they use different ports.
 
 When the ServiceLB Pod runs on a node that has an external IP configured, the node's external IP is populated into the Service's `status.loadBalancer.ingress` address list with `ipMode: VIP`. Otherwise, the node's internal IP is used.
