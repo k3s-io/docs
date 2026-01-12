@@ -58,7 +58,7 @@ Chart values are used in the following order, from least to greatest precedence:
 4. HelmChartConfig `spec.valuesSecrets` in listed order of secret name and keys
 5. HelmChart `spec.set`
 
-Here's an example of how you might deploy Apache from the Bitnami chart repository, overriding some of the default chart values. Note that the HelmChart resource itself is in the `kube-system` namespace, but the chart's resources will be deployed to the `web` namespace, which is created in the same manifest. This can be useful if you want to keep your HelmChart resources separated from the the resources they deploy.
+Here's an example of how you might deploy Apache from the Bitnami chart repository, overriding some of the default chart values. Note that the HelmChart resource itself is in the `kube-system` namespace, but the chart's resources will be deployed to the `web` namespace, which is created in the same manifest. This can be useful if you want to keep your HelmChart resources separated from the resources they deploy.
 
 ```yaml
 apiVersion: v1
