@@ -148,7 +148,7 @@ The S3 config Secret cannot be used when restoring a snapshot, as the apiserver 
 S3 configuration must be passed via the CLI when restoring a snapshot stored on S3.
 
 :::note
-Pass only the the `--etcd-s3` and `--etcd-s3-config-secret` flags to enable the Secret.  
+Pass only the `--etcd-s3` and `--etcd-s3-config-secret` flags to enable the Secret.  
 If any other S3 configuration flags are set, the Secret will be ignored.
 :::
 
