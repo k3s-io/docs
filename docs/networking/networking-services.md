@@ -108,7 +108,7 @@ K3s provides an embedded Cloud Controller Manager (CCM) that does the following:
 Before deploying an external CCM, you must start all K3s servers with the `--disable-cloud-controller` flag to disable the embedded CCM. When using an external CCM, node addresses will be provided by cloud provider instance metadata APIs, instead of the K3s flag values.
 
 :::note
-If you disable the built-in CCM and do not deploy and properly configure an external substitute, nodes will remain tainted and unschedulable.
+If you disable the built-in CCM and add the `kubelet-arg` `cloud-provider=external`, without deploying and properly configuring an external substitute, nodes will remain tainted and unschedulable.
 :::
 
 
