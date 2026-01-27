@@ -297,12 +297,27 @@ See https://rootlesscontaine.rs/ to learn more about Rootless Kubernetes.
 * Enable cgroup v2 delegation, see https://rootlesscontaine.rs/getting-started/common/cgroup2/ .
   This step is required; the rootless kubelet will fail to start without the proper cgroups delegated.
 
-* Download `k3s-rootless.service` from [`https://github.com/k3s-io/k3s/blob/<VERSION>/k3s-rootless.service`](https://github.com/k3s-io/k3s/blob/main/k3s-rootless.service).
-  Make sure to use the same version of `k3s-rootless.service` and `k3s`.
+* On Ubuntu or other distributions with AppArmor support, you must allow the K3s binary to run unconfined:
+  ```bash
+  cat <<EOF | sudo tee "/etc/apparmor.d/usr.local.bin.k3s"
+  abi <abi/4.0>,
+  include <tunables/global>
+
+  /usr/local/bin/k3s flags=(unconfined) {
+    userns,
+
+    include if exists <local/usr.local.bin.k3s>
+  }
+  EOF
+
+  sudo systemctl restart apparmor.service
+  ```
+
+* Download `k3s-rootless.service` from [`https://github.com/k3s-io/k3s/blob/main/k3s-rootless.service`](https://github.com/k3s-io/k3s/blob/main/k3s-rootless.service).
 
 * Install `k3s-rootless.service` to `~/.config/systemd/user/k3s-rootless.service`.
   Installing this file as a system-wide service (`/etc/systemd/...`) is not supported.
-  Depending on the path of `k3s` binary, you might need to modify the `ExecStart=/usr/local/bin/k3s ...` line of the file.
+  Depending on the path to the `k3s` binary, you might need to modify the `ExecStart=/usr/local/bin/k3s ...` line of the file.
 
 * Run `systemctl --user daemon-reload`
 
