@@ -179,6 +179,8 @@ If you wish to utilize the metrics server, all nodes must be accessible to each 
 
 If you plan on achieving high availability with embedded etcd, server nodes must be accessible to each other on ports 2379 and 2380.
 
+Additional changes to the firewall may be required depending on the OS used.
+
 :::tip Important
 The VXLAN port on nodes should not be exposed to the world as it opens up your cluster network to be accessed by anyone. Run your nodes behind a firewall/security group that disables access to port 8472.
 :::
@@ -194,15 +196,33 @@ Flannel relies on the [Bridge CNI plugin](https://www.cni.dev/plugins/current/ma
 | TCP      | 2379-2380 | Servers   | Servers     | Required only for HA with embedded etcd
 | TCP      | 6443      | Agents    | Servers     | K3s supervisor and Kubernetes API Server
 | UDP      | 8472      | All nodes | All nodes   | Required only for Flannel VXLAN
-| TCP      | 10250     | All nodes | All nodes   | Kubelet metrics
+| TCP      | 10250     | All nodes | All nodes   | Kubelet metrics and API
 | UDP      | 51820     | All nodes | All nodes   | Required only for Flannel Wireguard with IPv4
 | UDP      | 51821     | All nodes | All nodes   | Required only for Flannel Wireguard with IPv6
 | TCP      | 5001      | All nodes | All nodes   | Required only for embedded distributed registry (Spegel)
 | TCP      | 6443      | All nodes | All nodes   | Required only for embedded distributed registry (Spegel)
 
+### Outbound Rules for K3s Nodes
+
 Typically, all outbound traffic is allowed.
 
-Additional changes to the firewall may be required depending on the OS used.
+### Local Ports
+
+Kubernetes and the Container Runtime listen on the loopback interface for monitoring and communication between components. Avoid deploying other workloads that use these ports, or using these as the Node Port for pods or services.
+
+| Protocol | Port      | Description
+|----------|-----------|------------
+| TCP      | 2381      | etcd metrics
+| TCP      | 2382      | etcd legacy HTTP API
+| TCP      | 6444      | kube-apiserver local access
+| TCP      | 10010     | containerd and cri-dockerd CRI service exec/logs streaming
+| TCP      | 10248     | kubelet health
+| TCP      | 10249     | kube-proxy metrics
+| TCP      | 10250     | kubelet metrics and API
+| TCP      | 10256     | kube-proxy health
+| TCP      | 10257     | kube-controller-manager metrics
+| TCP      | 10258     | cloud-controller-manager metrics
+| TCP      | 10259     | kube-scheduler metrics
 
 ## Large Clusters
 
