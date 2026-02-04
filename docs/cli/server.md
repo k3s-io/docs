@@ -47,22 +47,27 @@ The following options must be set to the same value on all servers in the cluste
 | `--etcd-snapshot-schedule-cron` value |                          | "0 */12 \* \* \*"                      | Snapshot interval time in cron spec. eg. every 5 hours '0 */5 _ \* _'         |
 | `--etcd-snapshot-retention` value     |                          | 5                                      | Number of snapshots to retain                                                 |
 | `--etcd-snapshot-dir` value           |                          | $\{data-dir\}/db/snapshots             | Directory to save db snapshots                                                |
+
+### S3 etcd Snapshot Storage
+
+| Flag                                  | Environment Variable     | Default                                | Description                                                                   |
+|---------------------------------------|--------------------------|----------------------------------------|-------------------------------------------------------------------------------|
 | `--etcd-s3`                           |                          |                                        | Enable backup to S3                                                           |
 | `--etcd-s3-endpoint` value            |                          | "s3.amazonaws.com"                     | S3 endpoint url                                                               |
 | `--etcd-s3-endpoint-ca` value         |                          |                                        | S3 custom CA cert to connect to S3 endpoint                                   |
 | `--etcd-s3-skip-ssl-verify`           |                          |                                        | Disables S3 SSL certificate validation                                        |
 | `--etcd-s3-access-key` value          | `AWS_ACCESS_KEY_ID`      |                                        | S3 access key                                                                 |
 | `--etcd-s3-secret-key` value          | `AWS_SECRET_ACCESS_KEY`  |                                        | S3 secret key                                                                 |
+| `--etcd-s3-session-token` value       | `AWS_SESSION_TOKEN`      |                                        | S3 session token                                                              |
 | `--etcd-s3-bucket` value              |                          |                                        | S3 bucket name                                                                |
+| `--etcd-s3-bucket-lookup-type` value  |                          |                                        | S3 bucket lookup type, one of 'auto', 'dns', 'path'; default is 'auto' if not set |
 | `--etcd-s3-region` value              |                          | "us-east-1"                            | S3 region / bucket location (optional)                                        |
 | `--etcd-s3-folder` value              |                          |                                        | S3 folder                                                                     |
-| `--etcd-s3-proxy` |  |  | Proxy server to use when connecting to S3, overriding any proxy-releated environment variables |
-| `--etcd-s3-config-secret` |  |  | Name of secret in the kube-system namespace used to configure S3, if etcd-s3 is enabled and no other etcd-s3 options are set |
+| `--etcd-s3-retention` value           |                          | 5                                      | S3 retention limit                                                            |
+| `--etcd-s3-proxy` value               |                          |                                        | Proxy server to use when connecting to S3, overriding any proxy-releated environment variables |
+| `--etcd-s3-config-secret` value       |                          |                                        | Name of secret in the kube-system namespace used to configure S3, if etcd-s3 is enabled and no other etcd-s3 options are set |
 | `--etcd-s3-insecure`                  |                          |                                        | Disables S3 over HTTPS                                                        |
 | `--etcd-s3-timeout` value             |                          | 5m0s                                   | S3 timeout (default: 5m0s)                                                    |
-
-
-
 
 ### Cluster Options
 

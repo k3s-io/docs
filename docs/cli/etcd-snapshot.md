@@ -95,9 +95,12 @@ K3s supports replicating etcd snapshots to and restoring etcd snapshots from S3-
 | `--etcd-s3-skip-ssl-verify` | Disables S3 SSL certificate validation |
 | `--etcd-s3-access-key` |  S3 access key |
 | `--etcd-s3-secret-key` | S3 secret key |
+| `--etcd-s3-session-token` | S3 session token |
 | `--etcd-s3-bucket` | S3 bucket name |
+| `--etcd-s3-bucket-lookup-type` | S3 bucket lookup type, one of 'auto', 'dns', 'path'; default is 'auto' if not set |
 | `--etcd-s3-region` | S3 region / bucket location (optional). defaults to us-east-1 |
 | `--etcd-s3-folder` | S3 folder |
+| `--etcd-s3-retention` | S3 retention limit (default: 5) |
 | `--etcd-s3-proxy` | Proxy server to use when connecting to S3, overriding any proxy-releated environment variables |
 | `--etcd-s3-insecure` | Disables S3 over HTTPS |
 | `--etcd-s3-timeout` | S3 timeout (default: `5m0s`) |
