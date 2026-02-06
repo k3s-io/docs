@@ -81,10 +81,6 @@ The command performs integrity checks to confirm that the updated certificates a
 If the updated data is acceptable, the datastore's encrypted bootstrap key is updated, and the new certificates and keys will be used the next time K3s starts.
 If problems are encountered while validating the certificates and keys, an error is reported to the system log and the operation is cancelled without changes.
 
-:::info Version Gate
-Support for the `k3s certificate rotate-ca` command and the ability to use CA certificates signed by an external CA is available starting with the 2023-02 releases (v1.26.2+k3s1, v1.25.7+k3s1, v1.24.11+k3s1, v1.23.17+k3s1).
-:::
-
 ### Using Custom CA Certificates
 
 #### Cautions Against CA Reuse
