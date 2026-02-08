@@ -16,7 +16,7 @@ Manifests for packaged components are managed by K3s, and should not be altered.
 
 ### User AddOns
 
-You may place additional files in the manifests directory for deployment as an `AddOn`. Each file may contain multiple Kubernetes resources, delmited by the `---` YAML document separator. For more information on organizing resources in manifests, see the [Managing Resources](https://kubernetes.io/docs/concepts/cluster-administration/manage-deployment/) section of the Kubernetes documentation.
+You may place additional files in the manifests directory for deployment as an `AddOn`. Each file may contain multiple Kubernetes resources, delimited by the `---` YAML document separator. For more information on organizing resources in manifests, see the [Managing Resources](https://kubernetes.io/docs/concepts/cluster-administration/manage-deployment/) section of the Kubernetes documentation.
 
 #### File Naming Requirements
 
