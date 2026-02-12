@@ -38,7 +38,7 @@ This method requires you to manually deploy the necessary images to each node, a
 
 1. On internet accessible machine, download the images archive for your architecture from the [releases](https://github.com/k3s-io/k3s/releases) page for the version of K3s you will be running. For example:
   ```bash
-  curl -L -o k3s-airgap-images-amd64.tar.zst "https://github.com/k3s-io/k3s/releases/download/v1.33.1%2Bk3s1/k3s-airgap-images-amd64.tar.zst"
+  curl -L -o k3s-airgap-images-amd64.tar.zst "https://github.com/k3s-io/k3s/releases/download/v1.33.3%2Bk3s1/k3s-airgap-images-amd64.tar.zst"
   ```
 2. Transfer the images archive to the airgap nodes. Place them in the agent's image directory, for example:
   ```bash
