@@ -200,96 +200,140 @@ server-3   Ready    control-plane,etcd,master   3m16s   v1.27.3+k3s1
 ## Kube-VIP
 
 :::info
-This example explains the control-plane load balancer setup using ARP mode.
+This example configures kube-vip in ARP (layer‑2) mode to provide a Virtual IP (VIP) and a control-plane load balancer. The manifest below deploys kube-vip as a DaemonSet on control-plane nodes and announces the VIP on the node network. Adjust the interface and subnet to match your environment.
 :::
 
 [Kube-VIP](https://kube-vip.io/) provides a virtual IP and load balancer for the Kubernetes control plane and for Services of type LoadBalancer. The instructions below show how to generate and deploy the daemonset manifest on K3s control-plane nodes.
 
-1) Create the manifests directory
-
-```bash
-sudo mkdir -p /var/lib/rancher/k3s/server/manifests/
-sudo chown root:root /var/lib/rancher/k3s/server/manifests/
-```
-
-2) Install RBAC manifest
+1) Install the RBAC manifest:
 
 ```bash
 curl -fsSL https://kube-vip.io/manifests/rbac.yaml -o /var/lib/rancher/k3s/server/manifests/kube-vip-rbac.yaml
 ```
 
-3) Prepare variables
-
-- Choose a VIP that is not in use on the network:
+or
 
 ```bash
-export VIP=10.10.10.100
+kubectl apply -f https://kube-vip.io/manifests/rbac.yaml
 ```
 
-- (Optional) Set the network interface name to use for ARP announcements (discover with `ip a`). If omitted, kube-vip will attempt to detect the interface.
+2) Deploy the kube-vip daemonset:
+
+- Update these values before applying:
+  - vip_interface: the network interface name on each control-plane host (e.g. ens160, eth0).
+  - address: the VIP (example: 10.10.10.100).
+  - node affinity: ensure it matches your control-plane node labels (node-role.kubernetes.io/control-plane vs master).
+- The list of environment variables is available in the [documentation](kube-vip.io/docs/installation/flags/#environment-variables).
+
+Apply the following manifest using the `kubectl apply -f` command.
+
+```yaml
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  labels:
+    app.kubernetes.io/name: kube-vip-ds
+    app.kubernetes.io/version: v1.0.4
+  name: kube-vip-ds
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: kube-vip-ds
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: kube-vip-ds
+        app.kubernetes.io/version: v1.0.4
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-role.kubernetes.io/master
+                operator: Exists
+            - matchExpressions:
+              - key: node-role.kubernetes.io/control-plane
+                operator: Exists
+      containers:
+      - args:
+        - manager
+        env:
+        - name: vip_arp
+          value: "true"
+        - name: port
+          value: "6443"
+        - name: vip_nodename
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: vip_interface
+          value: ens160         # <- CHANGE to your host interface or ommit
+        - name: vip_subnet
+          value: "32"
+        - name: cp_enable
+          value: "true"
+        - name: cp_namespace
+          value: kube-system
+        - name: vip_ddns
+          value: "false"
+        - name: vip_leaderelection
+          value: "true"
+        - name: vip_leaseduration
+          value: "5"
+        - name: vip_renewdeadline
+          value: "3"
+        - name: vip_retryperiod
+          value: "1"
+        - name: address
+          value: 10.10.10.100   # <- CHANGE to your VIP
+        image: ghcr.io/kube-vip/kube-vip:v1.0.4
+        imagePullPolicy: Always
+        name: kube-vip
+        resources: {}
+        securityContext:
+          capabilities:
+            add:
+            - NET_ADMIN
+            - NET_RAW
+            - SYS_TIME
+      hostNetwork: true
+      serviceAccountName: kube-vip
+      tolerations:
+      - effect: NoSchedule
+        operator: Exists
+      - effect: NoExecute
+        operator: Exists
+  updateStrategy: {}
+```
+
+3) Verify kube-vip and VIP announcement
 
 ```bash
-export INTERFACE=eth0
+# check pods
+kubectl -n kube-system get pods -l app.kubernetes.io/name=kube-vip-ds
+
+# on a control-plane host, confirm the VIP is in the ARP/neighbor table
+ip neigh show | grep 10.10.10.100
 ```
 
-- Set the kube-vip version (or obtain the latest tag programmatically):
+4) TLS certificate note
+
+If K3s was installed before the VIP was added to the API server certificate SANs, kubelets and API clients will not trust the server certificate for the VIP. To include the VIP in server certificates:
 
 ```bash
-export KVVERSION=v1.4.0
-# or to obtain latest using jq:
-# export KVVERSION=$(curl -sL https://api.github.com/repos/kube-vip/kube-vip/releases | jq -r '.[0].tag_name')
+# Stop K3s service
+systemctl stop k3s
+
+# Rotate server certificates to include the configured tls-san/VIP
+k3s certificate rotate
+
+# Start K3s service
+systemctl start k3s
 ```
 
-4) Generate the daemonset manifest
-
-Use the kube-vip container to generate the manifest and write it directly to the k3s static-manifests directory. The command requires sufficient privileges (NET_ADMIN / host networking). Examples for common runtimes:
-
-- containerd (ctr):
-
-```bash
-sudo ctr image pull ghcr.io/kube-vip/kube-vip:$KVVERSION
-sudo ctr run --rm --net-host --privileged ghcr.io/kube-vip/kube-vip:$KVVERSION kube-vip /kube-vip manifest daemonset \
-  --interface "$INTERFACE" \
-  --address "$VIP" \
-  --inCluster \
-  --taint \
-  --controlplane \
-  --arp \
-  --leaderElection > /var/lib/rancher/k3s/server/manifests/kube-vip.yaml
-```
-
-- Docker:
-
-```bash
-sudo docker run --network host --rm --privileged ghcr.io/kube-vip/kube-vip:$KVVERSION /kube-vip manifest daemonset \
-  --interface "$INTERFACE" \
-  --address "$VIP" \
-  --inCluster \
-  --taint \
-  --controlplane \
-  --arp \
-  --leaderElection > /var/lib/rancher/k3s/server/manifests/kube-vip.yaml
-```
-
-Notes:
-- The `--interface` flag is optional. If omitted, kube-vip will attempt to select the correct interface on each node.
-- `--arp` selects ARP mode for the VIP. Use a mode appropriate for your network (ARP is common for layer-2 networks).
-- Keep `--taint` if you want control-plane nodes to remain unschedulable for regular workloads.
-
-5) Deploy / reconcile
-
-- K3s automatically loads manifests placed in /var/lib/rancher/k3s/server/manifests/. After placing the manifest, kube-vip will start on the control-plane nodes.
-- Verify the kube-vip pods and the VIP announcement with `kubectl -n kube-system get pods` and `ip neigh` / `arping` as needed.
-
-6) TLS certificate note
-
-- If you are installing K3s after creating the VIP, install K3s with the VIP included in TLS SANs:
-
-```bash
-curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION="vX.Y.Z" sh -s -- --tls-san $VIP
-```
-
-- If K3s is already installed without the VIP in the server certificate, you must reconfigure or rotate the server certificates to include the VIP in the SANs so kubelets and clients can validate the API server certificate.
+- After rotation, verify API access using the VIP: kubectl --server=https://10.10.10.100:6443 get nodes
 
 </TabItem>
 </Tabs>
