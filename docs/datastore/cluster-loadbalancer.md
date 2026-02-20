@@ -223,7 +223,7 @@ kubectl apply -f https://kube-vip.io/manifests/rbac.yaml
   - vip_interface: the network interface name on each control-plane host (e.g. ens160, eth0).
   - address: the VIP (example: 10.10.10.100).
   - node affinity: ensure it matches your control-plane node labels (node-role.kubernetes.io/control-plane vs master).
-- The list of environment variables is available in the [documentation](kube-vip.io/docs/installation/flags/#environment-variables).
+- The list of environment variables is available in the [documentation](https://kube-vip.io/docs/installation/flags/#environment-variables).
 
 Apply the following manifest using the `kubectl apply -f` command.
 
@@ -269,7 +269,7 @@ spec:
             fieldRef:
               fieldPath: spec.nodeName
         - name: vip_interface
-          value: ens160         # <- CHANGE to your host interface or ommit
+          value: ens160         # <- CHANGE to your host interface or omit
         - name: vip_subnet
           value: "32"
         - name: cp_enable
