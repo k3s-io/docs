@@ -195,4 +195,145 @@ server-2   Ready    control-plane,etcd,master   3m58s   v1.27.3+k3s1
 server-3   Ready    control-plane,etcd,master   3m16s   v1.27.3+k3s1
 ```
 </TabItem>
+<TabItem value="Kube-VIP">
+
+## Kube-VIP
+
+:::info
+This example configures kube-vip in ARP (layer‑2) mode to provide a Virtual IP (VIP) and a control-plane load balancer. The manifest below deploys kube-vip as a DaemonSet on control-plane nodes and announces the VIP on the node network. Adjust the interface and subnet to match your environment.
+:::
+
+[Kube-VIP](https://kube-vip.io/) provides a virtual IP and load balancer for the Kubernetes control plane and for Services of type LoadBalancer. The instructions below show how to generate and deploy the daemonset manifest on K3s control-plane nodes.
+
+1) Install the RBAC manifest:
+
+```bash
+curl -fsSL https://kube-vip.io/manifests/rbac.yaml -o /var/lib/rancher/k3s/server/manifests/kube-vip-rbac.yaml
+```
+
+or
+
+```bash
+kubectl apply -f https://kube-vip.io/manifests/rbac.yaml
+```
+
+2) Deploy the kube-vip daemonset:
+
+- Update these values before applying:
+  - vip_interface: the network interface name on each control-plane host (e.g. ens160, eth0).
+  - address: the VIP (example: 10.10.10.100).
+  - node affinity: ensure it matches your control-plane node labels (node-role.kubernetes.io/control-plane vs master).
+- The list of environment variables is available in the [documentation](https://kube-vip.io/docs/installation/flags/#environment-variables).
+
+Apply the following manifest using the `kubectl apply -f` command.
+
+```yaml
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  labels:
+    app.kubernetes.io/name: kube-vip-ds
+    app.kubernetes.io/version: v1.0.4
+  name: kube-vip-ds
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: kube-vip-ds
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: kube-vip-ds
+        app.kubernetes.io/version: v1.0.4
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-role.kubernetes.io/master
+                operator: Exists
+            - matchExpressions:
+              - key: node-role.kubernetes.io/control-plane
+                operator: Exists
+      containers:
+      - args:
+        - manager
+        env:
+        - name: vip_arp
+          value: "true"
+        - name: port
+          value: "6443"
+        - name: vip_nodename
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: vip_interface
+          value: ens160         # <- CHANGE to your host interface or omit
+        - name: vip_subnet
+          value: "32"
+        - name: cp_enable
+          value: "true"
+        - name: cp_namespace
+          value: kube-system
+        - name: vip_ddns
+          value: "false"
+        - name: vip_leaderelection
+          value: "true"
+        - name: vip_leaseduration
+          value: "5"
+        - name: vip_renewdeadline
+          value: "3"
+        - name: vip_retryperiod
+          value: "1"
+        - name: address
+          value: 10.10.10.100   # <- CHANGE to your VIP
+        image: ghcr.io/kube-vip/kube-vip:v1.0.4
+        imagePullPolicy: Always
+        name: kube-vip
+        resources: {}
+        securityContext:
+          capabilities:
+            add:
+            - NET_ADMIN
+            - NET_RAW
+            - SYS_TIME
+      hostNetwork: true
+      serviceAccountName: kube-vip
+      tolerations:
+      - effect: NoSchedule
+        operator: Exists
+      - effect: NoExecute
+        operator: Exists
+  updateStrategy: {}
+```
+
+3) Verify kube-vip and VIP announcement
+
+```bash
+# check pods
+kubectl -n kube-system get pods -l app.kubernetes.io/name=kube-vip-ds
+
+# on a control-plane host, confirm the VIP is in the ARP/neighbor table
+ip neigh show | grep 10.10.10.100
+```
+
+4) TLS certificate note
+
+If K3s was installed before the VIP was added to the API server certificate SANs, kubelets and API clients will not trust the server certificate for the VIP. To include the VIP in server certificates:
+
+```bash
+# Stop K3s service
+systemctl stop k3s
+
+# Rotate server certificates to include the configured tls-san/VIP
+k3s certificate rotate
+
+# Start K3s service
+systemctl start k3s
+```
+
+- After rotation, verify API access using the VIP: kubectl --server=https://10.10.10.100:6443 get nodes
+
+</TabItem>
 </Tabs>
