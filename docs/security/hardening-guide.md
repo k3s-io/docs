@@ -143,7 +143,7 @@ plugins:
     exemptions:
       usernames: []
       runtimeClasses: []
-      namespaces: [kube-system, cis-operator-system]
+      namespaces: [kube-system, compliance-operator-system]
 ```
 </TabItem>
 <TabItem value="v1.24 and Older" default>
