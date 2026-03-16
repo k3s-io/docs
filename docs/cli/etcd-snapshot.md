@@ -304,6 +304,20 @@ The token value can also be set in the K3s config file.
 2. If there is a token set in the K3s config file, make sure it is the same as the `<BACKED-UP-TOKEN-VALUE>`, otherwise k3s will fail to start.
 :::
 
+### Security
+
+Snapshots contain a complete copy of the etcd datastore, along with cluster certificate authority (CA) certificates and private keys.
+If [secrets encryption](secrets-encrypt.md) is enabled, snapshots also include the secrets encryption configuration and keys.
+This information is encrypted with an AES-256 key derived from the server's join token using PBKDF2.
+
+Administrators should be aware of the following concerns when backing up or restoring snapshots:
+* Any attacker who can convince you to restore a snapshot under their control can gain complete control of the cluster and nodes via multiple attack vectors - it is now their cluster, not yours.
+* Any attacker who possesses a copy of the etcd snapshot file can extract all unencrypted Kubernetes resources.
+* Any attacker who possesses a copy of the etcd snapshot file AND the server join token can extract encrypted resources, along with private keys to the cluster CAs.
+
+Snapshots stored locally on the node are protected via normal Unix filesystem permissions and access controls.
+It is recommended that administrators safely store snapshots to a S3-compatible service that supports bucket access controls, server-side encryption, and retention controls.
+Validating the integrity and chain of custody of datastore snapshots is the responsibility of the administrator.
 
 ## ETCDSnapshotFile Custom Resources
 
