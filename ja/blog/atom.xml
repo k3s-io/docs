@@ -2,11 +2,110 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://docs.k3s.io/ja/blog</id>
     <title>K3s Blog</title>
-    <updated>2026-01-15T00:00:00.000Z</updated>
+    <updated>2026-03-16T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://docs.k3s.io/ja/blog"/>
     <subtitle>K3s Blog</subtitle>
     <icon>https://docs.k3s.io/ja/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[Project K3s at KubeCon + CloudNativeCon Europe 2026 in Amsterdam]]></title>
+        <id>https://docs.k3s.io/ja/blog/2026/03/16/K3s-KubeCon-EU-2026</id>
+        <link href="https://docs.k3s.io/ja/blog/2026/03/16/K3s-KubeCon-EU-2026"/>
+        <updated>2026-03-16T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[K3s team at KubeCon Europe 2026]]></summary>
+        <content type="html"><![CDATA[<p>The cloud-native community is heading to Amsterdam for <strong>KubeCon + CloudNativeCon Europe 2026</strong>, and <strong>Project K3s</strong> is excited to be part of the action! As one of the most widely adopted lightweight Kubernetes distributions, K3s continues to empower edge, IoT, and resource-constrained environments across industries.</p>
+<p>From satellites to smart farming, K3s is proving that Kubernetes can run anywhere — and this year’s KubeCon is packed with sessions that highlight exactly that.</p>
+<h1>K3s at KubeCon Europe 2026</h1>
+<p>Whether you're a long-time user or just discovering K3s, there are plenty of opportunities to learn, connect, and contribute during the event.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="lightning-talk">Lightning Talk<a href="https://docs.k3s.io/ja/blog/2026/03/16/K3s-KubeCon-EU-2026#lightning-talk" class="hash-link" aria-label="Lightning Talk への直接リンク" title="Lightning Talk への直接リンク" translate="no">​</a></h2>
+<p>K3s will be featured in a <strong>Lightning Talk</strong>, delivering a fast-paced update on the project and its latest innovations.</p>
+<p><strong>Project Lightning Talk – K3s</strong><br>
+<!-- -->📅 Monday, March 23, 2026<br>
+<!-- -->🕒 14:22 – 14:27 CET<br>
+<!-- -->📍 Elicium<br>
+<!-- -->🎤 Speaker: Manuel Buil, Maintainer, SUSE</p>
+<p><a href="https://sched.co/2EFyQ" target="_blank" rel="noopener noreferrer" class="">View session details</a></p>
+<p>Expect a concise overview of how K3s continues to evolve and support modern cloud-native workloads at the edge and beyond.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="-contribfest-k3s-session">🚨 ContribFest: K3s Session<a href="https://docs.k3s.io/ja/blog/2026/03/16/K3s-KubeCon-EU-2026#-contribfest-k3s-session" class="hash-link" aria-label="🚨 ContribFest: K3s Session への直接リンク" title="🚨 ContribFest: K3s Session への直接リンク" translate="no">​</a></h2>
+<p>Want to get hands-on with K3s and contribute to the project? Don’t miss the <strong>K3s ContribFest Session</strong>!</p>
+<p><strong>K3s ContribFest Session</strong><br>
+<!-- -->📅 Wednesday, March 25, 2026<br>
+<!-- -->🕒 14:15 – 15:30 CET<br>
+<!-- -->📍 Room G107<br>
+<!-- -->🎤 Manuel Buil (SUSE) &amp; Orlin Vasilev (SAP)</p>
+<p><a href="https://sched.co/2EF7m" target="_blank" rel="noopener noreferrer" class="">Join the session</a></p>
+<p>This interactive session is perfect for:</p>
+<ul>
+<li class="">New contributors looking to get started</li>
+<li class="">Developers interested in K3s internals</li>
+<li class="">Users who want to give back to the community</li>
+<li class="">Anyone curious about how open source collaboration works in practice</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="k3s-in-the-wild-must-see-talks">K3s in the Wild: Must-See Talks<a href="https://docs.k3s.io/ja/blog/2026/03/16/K3s-KubeCon-EU-2026#k3s-in-the-wild-must-see-talks" class="hash-link" aria-label="K3s in the Wild: Must-See Talks への直接リンク" title="K3s in the Wild: Must-See Talks への直接リンク" translate="no">​</a></h2>
+<p>K3s continues to shine in real-world use cases across edge computing, AI, and distributed systems. Here are some exciting sessions where K3s plays a role:</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="-edge-computing-in-space">🚀 Edge Computing in Space<a href="https://docs.k3s.io/ja/blog/2026/03/16/K3s-KubeCon-EU-2026#-edge-computing-in-space" class="hash-link" aria-label="🚀 Edge Computing in Space への直接リンク" title="🚀 Edge Computing in Space への直接リンク" translate="no">​</a></h3>
+<p><strong>Bringing Cloud Native PaaS to Space: Onboard Edge Computing for Satellites</strong><br>
+<!-- -->Speakers: Adèle Karam-Hankache &amp; Sergiu Weisz<br>
+<a href="https://kccnceu2026.sched.com/event/2CVyc/bringing-cloud-native-paas-to-space-onboard-edge-computing-for-satellites-adele-karam-hankache-thales-alenia-space-sergiu-weisz-politehnica-bucharest?iframe=no&amp;w=100%25&amp;sidebar=yes&amp;bg=no" target="_blank" rel="noopener noreferrer" class="">Watch session</a></p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="-kubernetes-on-tractors">🚜 Kubernetes on Tractors<a href="https://docs.k3s.io/ja/blog/2026/03/16/K3s-KubeCon-EU-2026#-kubernetes-on-tractors" class="hash-link" aria-label="🚜 Kubernetes on Tractors への直接リンク" title="🚜 Kubernetes on Tractors への直接リンク" translate="no">​</a></h3>
+<p><strong>Cloud Native at the Farm Edge: Running Kubernetes and AI on Tractors</strong><br>
+<!-- -->Speakers: Mauro Morales &amp; Jordan Karapanagiotis<br>
+<a href="https://kccnceu2026.sched.com/event/2CW75/cloud-native-at-the-farm-edge-running-kubernetes-and-ai-on-tractors-mauro-morales-spectro-cloud-jordan-karapanagiotis-aurea-imaging?iframe=no&amp;w=100%25&amp;sidebar=yes&amp;bg=no" target="_blank" rel="noopener noreferrer" class="">Watch session</a></p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="-multi-tenancy--isolation">🏰 Multi-Tenancy &amp; Isolation<a href="https://docs.k3s.io/ja/blog/2026/03/16/K3s-KubeCon-EU-2026#-multi-tenancy--isolation" class="hash-link" aria-label="🏰 Multi-Tenancy &amp; Isolation への直接リンク" title="🏰 Multi-Tenancy &amp; Isolation への直接リンク" translate="no">​</a></h3>
+<p><strong>Three Shades of Isolation: A Multi-Tenancy Fortress</strong><br>
+<!-- -->Speakers: Braulio Dumba &amp; Paolo Dettori<br>
+<a href="https://kccnceu2026.sched.com/event/2CW7T/three-shades-of-isolation-a-multi-tenancy-fortress-braulio-dumba-paolo-dettori-ibm?iframe=no&amp;w=100%25&amp;sidebar=yes&amp;bg=no" target="_blank" rel="noopener noreferrer" class="">Watch session</a></p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="️-platform-engineering-evolution">⚙️ Platform Engineering Evolution<a href="https://docs.k3s.io/ja/blog/2026/03/16/K3s-KubeCon-EU-2026#%EF%B8%8F-platform-engineering-evolution" class="hash-link" aria-label="⚙️ Platform Engineering Evolution への直接リンク" title="⚙️ Platform Engineering Evolution への直接リンク" translate="no">​</a></h3>
+<p><strong>Platform Engineering 2.0: Just Enough Kubernetes and AI-Native DevOps</strong><br>
+<!-- -->Speaker: Shweta Vohra<br>
+<a href="https://kccnceu2026.sched.com/event/2CW80/platform-engineering-20-just-enough-kubernetes-and-ai-native-devops-shweta-vohra-bookingcom?iframe=no&amp;w=100%25&amp;sidebar=yes&amp;bg=no" target="_blank" rel="noopener noreferrer" class="">Watch session</a></p>
+<p>These talks showcase how K3s is enabling innovation in environments where traditional Kubernetes would be too heavy or complex.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="️-open--accessible-cloud">☁️ Open &amp; Accessible Cloud<a href="https://docs.k3s.io/ja/blog/2026/03/16/K3s-KubeCon-EU-2026#%EF%B8%8F-open--accessible-cloud" class="hash-link" aria-label="☁️ Open &amp; Accessible Cloud への直接リンク" title="☁️ Open &amp; Accessible Cloud への直接リンク" translate="no">​</a></h3>
+<p><strong>Krafting the Cloud: Building a Free, Open, and Accessible Cloud</strong><br>
+<!-- -->Speaker: Alex Bissessur<br>
+<a href="https://kccnceu2026.sched.com/event/2CW4l/cl-lightning-talk-krafting-the-cloud-building-a-free-open-and-accessible-cloud-alex-bissessur-la-sentinelle?iframe=no&amp;w=100%25&amp;sidebar=yes&amp;bg=no" target="_blank" rel="noopener noreferrer" class="">Watch session</a></p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="panel-discussion">Panel Discussion<a href="https://docs.k3s.io/ja/blog/2026/03/16/K3s-KubeCon-EU-2026#panel-discussion" class="hash-link" aria-label="Panel Discussion への直接リンク" title="Panel Discussion への直接リンク" translate="no">​</a></h2>
+<p>K3s is also represented in broader CNCF conversations around security and project sustainability.</p>
+<p><strong>Strengthening CNCF Projects: Impact of Security Self-Assessments</strong><br>
+<!-- -->🎤 Featuring Orlin Vasilev and other industry experts</p>
+<p><a href="https://kccnceu2026.sched.com/event/2EF6x/strengthening-cncf-projects-impact-of-security-self-assessments-eddie-knight-sonatype-bradley-andersen-k8gb-justin-cappos-new-york-university-shuting-zhao-nirmata-orlin-vasilev-suse?iframe=no&amp;w=100%25&amp;sidebar=yes&amp;bg=no" target="_blank" rel="noopener noreferrer" class="">View panel details</a></p>
+<p>This panel dives into how CNCF projects, including K3s, are improving security practices and building trust across the ecosystem.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="find-k3s-at-the-project-pavilion">Find K3s at the Project Pavilion<a href="https://docs.k3s.io/ja/blog/2026/03/16/K3s-KubeCon-EU-2026#find-k3s-at-the-project-pavilion" class="hash-link" aria-label="Find K3s at the Project Pavilion への直接リンク" title="Find K3s at the Project Pavilion への直接リンク" translate="no">​</a></h3>
+<p>Stop by the K3s kiosk at <strong>booth P-1A</strong> during the following times:</p>
+<p><strong>Wednesday:</strong> 10:00 – 13:30<br>
+<strong>Thursday:</strong> 10:00 – 12:00</p>
+<p>Come chat with contributors, ask questions, and learn more about K3s in real-world use cases!</p>
+<p>Don’t forget to explore the <strong>Project Pavilion</strong>, where CNCF projects come together to showcase their work and connect with the community.</p>
+<p>Learn more:<br>
+<a href="https://events.linuxfoundation.org/kubecon-cloudnativecon-europe/features-add-ons/project-engagement/" target="_blank" rel="noopener noreferrer" class="">https://events.linuxfoundation.org/kubecon-cloudnativecon-europe/features-add-ons/project-engagement/</a></p>
+<p>While K3s may appear across multiple booths and partner ecosystems, this is the perfect place to:</p>
+<ul>
+<li class="">Meet contributors and maintainers</li>
+<li class="">Discover integrations and real-world use cases</li>
+<li class="">Ask questions about running K3s in production</li>
+<li class="">Explore ways to get involved</li>
+</ul>
+<p><img decoding="async" loading="lazy" alt="Project Pavilion Map – K3s Location" src="https://docs.k3s.io/ja/assets/images/kubecon-eu-2026-project-pavilion-map-70594056e73841e810ee63f3c9a98970.png" width="1200" height="927" class="img_ev3q"></p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="join-the-k3s-community">Join the K3s Community<a href="https://docs.k3s.io/ja/blog/2026/03/16/K3s-KubeCon-EU-2026#join-the-k3s-community" class="hash-link" aria-label="Join the K3s Community への直接リンク" title="Join the K3s Community への直接リンク" translate="no">​</a></h2>
+<p>K3s has grown into one of the most impactful Kubernetes distributions thanks to its vibrant and welcoming community. Whether you're running clusters at the edge, in the cloud, or somewhere entirely unexpected — there’s a place for you in the K3s ecosystem.</p>
+<p>KubeCon is the perfect opportunity to:</p>
+<ul>
+<li class="">Meet fellow K3s users and contributors</li>
+<li class="">Share your use cases and experiences</li>
+<li class="">Learn from real-world deployments</li>
+<li class="">Start contributing to the project</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="see-you-in-amsterdam">See You in Amsterdam!<a href="https://docs.k3s.io/ja/blog/2026/03/16/K3s-KubeCon-EU-2026#see-you-in-amsterdam" class="hash-link" aria-label="See You in Amsterdam! への直接リンク" title="See You in Amsterdam! への直接リンク" translate="no">​</a></h2>
+<p>We’re excited to connect with the global cloud-native community and showcase how K3s continues to push the boundaries of Kubernetes.</p>
+<p>If you're passionate about <strong>edge computing, lightweight Kubernetes, and open source collaboration</strong>, don’t miss the K3s sessions at KubeCon Europe 2026.</p>
+<p><strong>See you in Amsterdam!</strong></p>
+<p><a href="https://events.linuxfoundation.org/kubecon-cloudnativecon-europe/" target="_blank" rel="noopener noreferrer" class=""><em>For more details and to register for KubeCon + CloudNativeCon Europe 2026, visit the official event page.</em></a></p>
+<p><a href="https://www.linkedin.com/in/orlinvasilev/" target="_blank" rel="noopener noreferrer" class="">Orlin Vasilev</a><br>
+<!-- -->K3s Community Manager</p>]]></content>
+        <author>
+            <name>orlix</name>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Kubernetes v1.35 is out!]]></title>
         <id>https://docs.k3s.io/ja/blog/2026/01/15/K3s-1.35-release</id>
