@@ -77,10 +77,31 @@ After registration, the agent nodes establish a connection directly to one of th
 
 ### How Agent Node Registration Works
 
-Agent nodes are registered with a websocket connection initiated by the `k3s agent` process, and the connection is maintained by a client-side load balancer running as part of the agent process. Initially, the agent connects to the supervisor (and kube-apiserver) via the local load-balancer on port 6443. The load-balancer maintains a list of available endpoints to connect to. The default (and initially only) endpoint is seeded by the hostname from the `--server` address. Once it connects to the cluster, the agent retrieves a list of kube-apiserver addresses from the Kubernetes service endpoint list in the default namespace. Those endpoints are added to the load balancer, which then maintains stable connections to all servers in the cluster, providing a connection to the kube-apiserver that tolerates outages of individual servers.
+#### Agent load-balancer
 
-Agents will register with the server using the node cluster secret along with a randomly generated password for the node, stored at `/etc/rancher/node/password`. The server will store the passwords for individual nodes as Kubernetes secrets, and any subsequent attempts must use the same password. Node password secrets are stored in the `kube-system` namespace with names using the template `<host>.node-password.k3s`. This is done to protect the integrity of node IDs.
+Agent nodes are registered with a websocket connection initiated by the `k3s agent` process, and the connection is maintained by a client-side load balancer running as part of the agent process.
+Initially, the agent connects to the supervisor (and kube-apiserver) via the local load-balancer on port 6443.
+The load-balancer maintains a dynamic list of server endpoints, and uses these as the back-end target pool for the local load-balancer.
+The default (and initially only) endpoint is seeded by the hostname from the `--server` address. 
+Once connected to the cluster, the agent retrieves a list of kube-apiserver addresses from the Kubernetes service endpoint list in the default namespace.
+Endpoint addresses are synced to the load-balancer, which then maintains stable connections to all servers in the cluster, providing a connection to the kube-apiserver that tolerates outages of individual servers.
 
-If the `/etc/rancher/node` directory of an agent is removed, or you wish to rejoin a node using an existing name, the node should be deleted from the cluster. This will clean up both the old node entry, and the node password secret, and allow the node to (re)join the cluster.
+#### Node-password secrets
 
-If you frequently reuse hostnames, but are unable to remove the node password secrets, a unique node ID can be automatically appended to the hostname by launching K3s servers or agents using the `--with-node-id` flag. When enabled, the node ID is also stored in `/etc/rancher/node/`.
+Agents register to the cluster using the the join token as credentials, along with a randomly generated password for the node.
+The agent stores its selected password locally at `/etc/rancher/node/password`, and the cluster stores a hash of the password in a Kubernetes secret.
+Node password secrets are stored in the `kube-system` namespace with names using the template `<node-name>.node-password.k3s`.
+In order to protect the integrity of node identities, any subsequent attempts to re-register or obtain certificates for a node that has a node password secret must use the same password.
+
+Creation of node password secrets fails open, to allow recovery from outages affecting validating webhooks.
+Nodes must be allowed to join even during an outage so that pods for the webhook can be started.
+Once the outage is resolved, creation of node password secrets is resumed.
+
+Node password secrets are deleted when their owning node resource is deleted.
+Node password secrets that never had an owning node resource created are periodically garbage-collected.
+
+If the `/etc/rancher/node` directory of an agent is removed, or you wish to rejoin a node using an existing name, the node should be deleted from the cluster.
+This will clean up both the old node entry, and the node password secret, and allow the node to (re)join the cluster.
+
+If you frequently reuse hostnames, but are unable to remove the node password secrets, a unique node ID can be automatically appended to the hostname by launching K3s servers or agents using the `--with-node-id` flag.
+When enabled, the node ID is also stored in `/etc/rancher/node/`.
