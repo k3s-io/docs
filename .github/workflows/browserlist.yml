@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       - name: Enable Corepack for Modern Yarn
         run: corepack enable
       - name: Update Browserlist
@@ -21,7 +21,7 @@ jobs:
         id: date
         run: echo "month_year=$(date +'%B %Y')" >> $GITHUB_OUTPUT
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@22a9089034f40e5a961c8808d113e2c98fb63676 # v7
         with:
           commit-message: update browserlist db
           title: Update Browsers List DB ${{ steps.date.outputs.month_year }}
