@@ -79,6 +79,11 @@ ip6tables-save | grep -v KUBE-ROUTER | ip6tables-restore
 ```
 :::
 
+:::warning
+Network policies are not enforced at pod startup. kube-router network rules are programmed asynchronously after the pod's network is already live. During this window, all traffic is permitted regardless of any applicable NetworkPolicy. More details can be found [here](https://github.com/cloudnativelabs/kube-router/issues/873).
+If stricter enforcement is required, disable the embedded controller and use a CNI plugin with built-in network policy support such as Calico or Cilium.
+:::
+
 ## Service Load Balancer
 
 Any LoadBalancer controller can be deployed to your K3s cluster. By default, K3s provides a load balancer known as [ServiceLB](https://github.com/k3s-io/klipper-lb) (formerly Klipper LoadBalancer) that uses available host ports.
