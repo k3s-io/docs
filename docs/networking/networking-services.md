@@ -55,7 +55,7 @@ spec:
         enabled: true
 #       experimentalChannel: true (read warning below)
 ```
-Traefik is compatible with [Gateway API v1.4](https://gateway-api.sigs.k8s.io/reference/1.4/spec/).
+Traefik is compatible with [Gateway API v1.4](https://gateway-api.sigs.k8s.io/reference/api-spec/1.4/spec/).
 
 :::warning Gateway API resources
 Prior to the April 2026 releases (v1.33.11+k3s1, v1.34.7+k3s1 and v1.35.4+k3s1) Gateway API CRDs are removed if traefik is disabled after previously having been enabled. When using an affected release, avoid disabling traefik or uninstalling the traefik-crds AddOn if your cluster contains Gateway API resources that you do not want removed.

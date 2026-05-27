@@ -681,4 +681,4 @@ kubectl patch serviceaccount --namespace kube-public default --patch '{"automoun
 
 ## Conclusion
 
-If you have followed this guide, your K3s cluster will be configured to comply with the CIS Kubernetes Benchmark. You can review the [CIS 1.11 Self-Assessment Guide](self-assessment-1.11.md) to understand the expectations of each of the benchmark's checks and how you can do the same on your cluster.
+If you have followed this guide, your K3s cluster will be configured to comply with the CIS Kubernetes Benchmark. You can review the [CIS 1.12 Self-Assessment Guide](self-assessment-1.12.md) to understand the expectations of each of the benchmark's checks and how you can do the same on your cluster.
