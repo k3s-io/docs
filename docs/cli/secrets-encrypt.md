@@ -8,10 +8,6 @@ K3s supports enabling secrets encryption at rest. For more information, see [Sec
 
 ## Secrets Encryption Tool
 
-:::info Version Gate
-Available as of [v1.21.8+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.21.8%2Bk3s1)
-:::
-
 K3s contains a CLI tool `secrets-encrypt`, which enables automatic control over the following:
 
 - Disabling/Enabling secrets encryption
@@ -35,10 +31,6 @@ To rotate secrets encryption keys on a single-server cluster:
 
 1. Start the K3s server with the flag `--secrets-encryption`
 
-    :::note 
-    Starting K3s without encryption and enabling it at a later time is currently *not* supported.
-    :::
-
 2. Rotate secrets encryption keys
     ```
     k3s secrets-encrypt rotate-keys
@@ -54,14 +46,11 @@ To rotate secrets encryption keys on a single-server cluster:
 </TabItem>
 <TabItem value="High-Availability">
 
+For brevity, the servers will be referred to as S1, S2, S3.
+
 To rotate secrets encryption keys on HA setups:
 
-
-1. Start up all three K3s servers with the `--secrets-encryption` flag. For brevity, the servers will be referred to as S1, S2, S3.
-
-    :::note
-    Starting K3s without encryption and enabling it at a later time is currently *not* supported.
-    :::
+1. Start up all three K3s servers with the `--secrets-encryption` flag. 
 
 2. Rotate secrets encryption keys on S1
 
@@ -93,6 +82,107 @@ To rotate secrets encryption keys on HA setups:
 </TabItem>
 </Tabs>
 
+### Enable Secrets Encryption on an Existing Cluster
+
+:::info Version Gate
+Available as of the March 2026 releases: v1.33.10+k3s1, v1.34.6+k3s1, v1.35.3+k3s1
+:::
+
+Use this procedure when the cluster was started without `--secrets-encryption` and you want to enable secrets encryption at a later time.
+
+<Tabs groupId="se" queryString>
+<TabItem value="Single-Server" default>
+
+1. Verify encryption is currently disabled
+
+    ```bash
+    $ k3s secrets-encrypt status 
+    Encryption Status: Disabled, no configuration file found
+    ```
+
+2. Enable secrets encryption on the server
+
+    ```bash
+    k3s secrets-encrypt enable
+    ```
+
+3. Modify the server args/config and add `--secrets-encryption`. Restart the server.
+
+4. Verify the status shows encryption disabled but at the `start` stage
+
+    ```bash
+    $ k3s secrets-encrypt status
+    Encryption Status: Disabled
+    Current Rotation Stage: start
+    Server Encryption Hashes: All hashes match
+    ```
+
+5. Rotate keys to enable encryption for new secrets
+
+    ```bash
+    k3s secrets-encrypt rotate-keys
+    ```
+
+6. Restart the server with the same arguments
+
+7. Verify encryption is enabled
+
+    ```bash
+    $ k3s secrets-encrypt status
+    Encryption Status: Enabled
+    Current Rotation Stage: reencrypt_finished
+    Server Encryption Hashes: All hashes match
+    ```
+
+</TabItem>
+<TabItem value="High-Availability">
+
+For brevity, the servers will be referred to as S1, S2, S3.
+
+1. Verify encryption is currently disabled
+
+    ```bash
+    k3s secrets-encrypt status
+    Encryption Status: Disabled, no configuration file found
+    ```
+
+2. Enable secrets encryption on S1
+
+    ```bash
+    k3s secrets-encrypt enable
+    ```
+
+3. Restart all servers with `--secrets-encryption`
+
+4. Verify the status shows encryption disabled but at the `start` stage, and that all server hashes match
+
+    ```bash
+    k3s secrets-encrypt status
+    Encryption Status: Disabled
+    Current Rotation Stage: start
+    Server Encryption Hashes: All hashes match
+    ```
+
+5. Rotate keys on S1 to enable encryption for new secrets
+
+    ```bash
+    k3s secrets-encrypt rotate-keys
+    ```
+
+6. Restart all servers with the same arguments
+
+7. Verify encryption is enabled
+
+    ```bash
+    k3s secrets-encrypt status
+    Encryption Status: Enabled
+    Current Rotation Stage: reencrypt_finished
+    Server Encryption Hashes: All hashes match
+    ```
+
+</TabItem>
+</Tabs>
+
 ### Legacy Encryption Key Rotation
 
 :::tip New Procedure
@@ -105,10 +195,6 @@ If using K3s versions v1.30+, we recommend using the [Encryption Key Rotation](#
 To rotate secrets encryption keys on a single-server cluster:
 
 1. Start the K3s server with the flag `--secrets-encryption`
-
-    :::note 
-    Starting K3s without encryption and enabling it at a later time is currently *not* supported.
-    :::
 
 2. Prepare
 
@@ -144,15 +230,12 @@ To rotate secrets encryption keys on a single-server cluster:
 </TabItem>
 <TabItem value="High-Availability">
 
-The steps are the same for both embedded DB and external DB clusters.
+The steps are the same for both embedded DB and external DB clusters. or brevity, the servers will be referred to as S1, S2, S3.
 
 To rotate secrets encryption keys on HA setups:
 
-
-
-1. Start up all three K3s servers with the `--secrets-encryption` flag. For brevity, the servers will be referred to as S1, S2, S3.
+1. Start up all three K3s servers with the `--secrets-encryption` flag. F
     :::note Notes
-    - Starting K3s without encryption and enabling it at a later time is currently *not* supported.
     - While not required, it is recommended that you pick one server node from which to run the `secrets-encrypt` commands.
     :::
 
@@ -200,8 +283,6 @@ To rotate secrets encryption keys on HA setups:
 <Tabs groupId="se" queryString>
 <TabItem value="Single-Server" default>
 
-After launching a server with `--secrets-encryption` flag, secrets encryption can be disabled.
-
 To disable secrets encryption on a single-node cluster:
 
 1. Disable
@@ -243,13 +324,11 @@ To re-enable secrets encryption on a single node cluster:
 </TabItem>
 <TabItem value="High-Availability">
 
-After launching a HA cluster with `--secrets-encryption` flags, secrets encryption can be disabled.
-
 :::note
 While not required, it is recommended that you pick one server node from which to run the `secrets-encrypt` commands.
 :::
 
-For brevity, the three servers used in this guide will be referred to as S1, S2, S3.
+For brevity, the servers will be referred to as S1, S2, S3.
 
 To disable secrets encryption on a HA cluster:
 
@@ -334,5 +413,5 @@ Details on each section are as follows:
 - __Server Encryption Hashes__: Useful for HA clusters, this indicates whether all servers are on the same stage with their local files. This can be used to identify whether a restart of servers is required before proceeding to the next stage. In the HA example above, node-1 and node-2 have different hashes, indicating that they currently do not have the same encryption configuration. Restarting the servers will sync up their configuration.
 - __Key Table__: Summarizes information about the secrets encryption keys found on the node.  
   * __Active__: The "*" indicates which, if any, of the keys are currently used for secrets encryption. An active key is used by Kubernetes to encrypt any new secrets.
-  * __Key Type__: All keys using this tool are `AES-CBC` type. See more info [here.](https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/#providers)
+  * __Key Type__: Keys using this tool support `AES-CBC` and `secretbox` types. See more info [here.](https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/#providers)
   * __Name__: Name of the encryption key.  
