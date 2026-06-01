@@ -2,11 +2,58 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://docs.k3s.io/zh/blog</id>
     <title>K3s Blog</title>
-    <updated>2026-03-16T00:00:00.000Z</updated>
+    <updated>2026-05-27T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://docs.k3s.io/zh/blog"/>
     <subtitle>K3s Blog</subtitle>
     <icon>https://docs.k3s.io/zh/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[Kubernetes v1.36 is out!]]></title>
+        <id>https://docs.k3s.io/zh/blog/2026/05/27/K3s-1.36-release</id>
+        <link href="https://docs.k3s.io/zh/blog/2026/05/27/K3s-1.36-release"/>
+        <updated>2026-05-27T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[A deep dive into the latest K3s features, security enhancements, and community milestones]]></summary>
+        <content type="html"><![CDATA[<p>Kubernetes 1.36 has officially landed! Following our continuous commitment to providing a lightweight yet production-grade Kubernetes distribution, the K3s team and community have put together another incredible milestone release. Here is what's new in the world of K3s.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="key-features-and-improvements-">Key Features and Improvements ✨<a href="https://docs.k3s.io/zh/blog/2026/05/27/K3s-1.36-release#key-features-and-improvements-" class="hash-link" aria-label="标题的直接链接" title="标题的直接链接" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="core-storage-evolution-etcd-36--sqlite-upgrades-">Core Storage Evolution: etcd 3.6 &amp; SQLite Upgrades 💾<a href="https://docs.k3s.io/zh/blog/2026/05/27/K3s-1.36-release#core-storage-evolution-etcd-36--sqlite-upgrades-" class="hash-link" aria-label="标题的直接链接" title="标题的直接链接" translate="no">​</a></h3>
+<p>We have officially upgraded our bundled etcd to the v3.6 series. While this brings large performance improvements and memory optimizations upstream, it introduces a critically important caveat for administrators running High Availability (HA) clusters: etcd v3.6 changes the data directory structure, which prevents a clean downgrade to v3.5 once your cluster has updated. If you ever need to rollback a v1.36 cluster to v1.35, you must follow specific manual snapshot restoration and node cleaning procedures. Be sure to review our dedicated migration guide before upgrading production environments.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="revolutionizing-builds-with-the-nix-snapshotter-️">Revolutionizing Builds with the Nix Snapshotter ❄️<a href="https://docs.k3s.io/zh/blog/2026/05/27/K3s-1.36-release#revolutionizing-builds-with-the-nix-snapshotter-%EF%B8%8F" class="hash-link" aria-label="标题的直接链接" title="标题的直接链接" translate="no">​</a></h3>
+<p>In an exciting move for reproducibility and declarative environments, K3s now includes native support for the Nix snapshotter plugin. This integration allows users to leverage Nix store paths directly as container layers, opening the door for blazingly fast image provisioning and native NixOS container deployments within K3s clusters.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="streamlined-runtimes-default-imports-to-containerd-base-templates-️">Streamlined Runtimes: Default Imports to Containerd Base Templates 🏗️<a href="https://docs.k3s.io/zh/blog/2026/05/27/K3s-1.36-release#streamlined-runtimes-default-imports-to-containerd-base-templates-%EF%B8%8F" class="hash-link" aria-label="标题的直接链接" title="标题的直接链接" translate="no">​</a></h3>
+<p>Customizing your container runtime configuration just got much easier. K3s now supports importing containerd configuration drop-ins. This architectural change allows administrators to modularly add configuration snippets that add to or replace configuration from the base file without having to extend or replace the entire default configuration template.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="dynamic-security-secrets-encryption-for-existing-clusters-">Dynamic Security: Secrets Encryption for Existing Clusters 🔐<a href="https://docs.k3s.io/zh/blog/2026/05/27/K3s-1.36-release#dynamic-security-secrets-encryption-for-existing-clusters-" class="hash-link" aria-label="标题的直接链接" title="标题的直接链接" translate="no">​</a></h3>
+<p>Security is never static, and neither should your cluster configuration be. Historically, enabling at-rest Secrets Encryption required setting it up during the initial cluster bootstrapping phase. With v1.36, you can now enable secrets encryption on existing clusters without needing to recreate them, making it vastly easier to harden legacy deployments. You can also switch between encryption providers - both <code>aescbc</code> and <code>secretbox</code> are natively supported.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="ai--hardware-acceleration-containerd-22-with-nri-support-">AI &amp; Hardware Acceleration: Containerd 2.2 with NRI Support 🚀<a href="https://docs.k3s.io/zh/blog/2026/05/27/K3s-1.36-release#ai--hardware-acceleration-containerd-22-with-nri-support-" class="hash-link" aria-label="标题的直接链接" title="标题的直接链接" translate="no">​</a></h3>
+<p>We have bumped our embedded container runtime to Containerd 2.2, which introduces out-of-the-box support for the Node Resource Interface (NRI). This is a game-changer for clusters running edge AI and heavy GPU workloads, enabling cleaner integration with the NVIDIA Container Toolkit and runtime-level device management.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="language--api-stability-go-125--gateway-api-crds-">Language &amp; API Stability: Go 1.25 &amp; Gateway API CRDs 🤝<a href="https://docs.k3s.io/zh/blog/2026/05/27/K3s-1.36-release#language--api-stability-go-125--gateway-api-crds-" class="hash-link" aria-label="标题的直接链接" title="标题的直接链接" translate="no">​</a></h3>
+<p>K3s continues to pull in the latest performance and toolchain enhancements by building on Go 1.25. Additionally, we have adjusted our ingress defaults: if you choose to disable or remove the built-in Traefik ingress controller, K3s will now keep the Gateway API CRDs intact instead of cleaning them up. This ensures your custom ingress infrastructure won't break during adjustments, paving the way for bundled Gateway API CRDs coming natively in v1.37.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="bug-fixes-and-notable-changes-️">Bug Fixes and Notable Changes 🛠️<a href="https://docs.k3s.io/zh/blog/2026/05/27/K3s-1.36-release#bug-fixes-and-notable-changes-%EF%B8%8F" class="hash-link" aria-label="标题的直接链接" title="标题的直接链接" translate="no">​</a></h2>
+<p>As always, we’ve ironed out numerous bugs under the hood. Here are the most impactful fixes included in this release:</p>
+<ul>
+<li class="">
+<p><strong>Resilience &amp; etcd Cluster Hardening</strong>
+This release eliminates critical race conditions during cluster expansion to guarantee that slow-responding nodes register reliably during initialization. It also patches edge-case bootstrap data bugs, allowing the cluster to recover quorum and reconcile smoothly even after sudden multi-node power failures. Finally, the process for transferring voting rights during dynamic member upgrades has been refined, successfully eliminating transient API timeouts.</p>
+</li>
+<li class="">
+<p><strong>Core Networking &amp; Logic Fixes</strong>
+To improve storage reliability, we resolved a subtle network synchronization issue that previously caused metric deadlocks during simultaneous multi-volume attachments. Additionally, internal certificate rotation tracking has been significantly hardened to prevent nodes from entering continuous reload loops if the system time is modified. K3s also resolves private dual-stack registration anomalies, eliminating unexpected node join delays in mixed IPv4/IPv6 topologies.</p>
+</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="version-bumps-for-key-components-">Version Bumps for Key Components 🚀<a href="https://docs.k3s.io/zh/blog/2026/05/27/K3s-1.36-release#version-bumps-for-key-components-" class="hash-link" aria-label="标题的直接链接" title="标题的直接链接" translate="no">​</a></h2>
+<table><thead><tr><th style="text-align:left">Component</th><th style="text-align:left">New Version</th></tr></thead><tbody><tr><td style="text-align:left">Kine</td><td style="text-align:left">v0.14.14</td></tr><tr><td style="text-align:left">SQLite</td><td style="text-align:left">v3.51.2</td></tr><tr><td style="text-align:left">Etcd</td><td style="text-align:left">v3.6.7</td></tr><tr><td style="text-align:left">Containerd</td><td style="text-align:left">v2.2.2</td></tr><tr><td style="text-align:left">Runc</td><td style="text-align:left">v1.4.1</td></tr><tr><td style="text-align:left">Flannel</td><td style="text-align:left">v0.28.2</td></tr><tr><td style="text-align:left">Metrics-server</td><td style="text-align:left">v0.8.1</td></tr><tr><td style="text-align:left">Traefik</td><td style="text-align:left">v3.6.10</td></tr><tr><td style="text-align:left">Coredns</td><td style="text-align:left">v1.14.2</td></tr><tr><td style="text-align:left">Helm-controller</td><td style="text-align:left">v0.16.17</td></tr><tr><td style="text-align:left">Local-path-provisioner</td><td style="text-align:left">v0.0.35</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="special-thanks-to-our-contributors-">Special Thanks to Our Contributors 🙏<a href="https://docs.k3s.io/zh/blog/2026/05/27/K3s-1.36-release#special-thanks-to-our-contributors-" class="hash-link" aria-label="标题的直接链接" title="标题的直接链接" translate="no">​</a></h2>
+<p>We are incredibly grateful to our community members who contributed key improvements, rigorous testing, and code during this cycle. A massive thank you to:</p>
+<p>@Ada, @CharlieTonnesla, @DT1mote, @FabianoFidêncio, @JonHermansen, @MichaelMoll, @RahulRai, @RicardoNoriega, @TomRisse, and @zijiren</p>
+<p>Your passion and hard work are what push K3s forward!</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="join-our-adopters-list-">Join our Adopters list 💎<a href="https://docs.k3s.io/zh/blog/2026/05/27/K3s-1.36-release#join-our-adopters-list-" class="hash-link" aria-label="标题的直接链接" title="标题的直接链接" translate="no">​</a></h2>
+<p>If K3s is making your life easier, the best way to say "thanks" is to add your company to our official Adopters list. It’s a tiny gesture that carries a lot of weight for the project's health and visibility within the CNCF ecosystem. We are currently working hard to get our 'status' inside the CNCF to progress and showing a large list of Adopters would help tremendously.</p>
+<p>The task is easy: create a PR that adds your name in <a href="https://github.com/k3s-io/k3s/blob/main/ADOPTERS.md" target="_blank" rel="noopener noreferrer" class="">https://github.com/k3s-io/k3s/blob/main/ADOPTERS.md</a>.</p>
+<p>Thanks a lot!</p>]]></content>
+        <author>
+            <name>Manuel Buil</name>
+            <uri>https://github.com/manuelbuil</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Project K3s at KubeCon + CloudNativeCon Europe 2026 in Amsterdam]]></title>
         <id>https://docs.k3s.io/zh/blog/2026/03/16/K3s-KubeCon-EU-2026</id>
