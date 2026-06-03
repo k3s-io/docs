@@ -191,7 +191,10 @@ If you wish to provide a full containerd configuration file instead of the defau
 The template file is rendered into the containerd config using the [`text/template`](https://pkg.go.dev/text/template) library.
 Search for `ContainerdConfigTemplateV3` in [`templates.go`](https://github.com/k3s-io/k3s/blob/main/pkg/agent/templates/templates.go) for the default template content.
 The template is executed with a [`ContainerdConfig`](https://github.com/k3s-io/k3s/blob/main/pkg/agent/templates/templates.go#L22-L33) struct as its dot value (data argument).
-For best results and to get your future cluster and node configuration changes reflected properly, do NOT simply copy a prerendered `config.toml` with your changes into the template location, provide the template file with template markup.
+
+:::warning
+For best results, do NOT simply copy a prerendered `config.toml` into the template and make your desired changes. Use the base template, or provide a full template based on the k3s defaults linked above.
+:::
 
 :::info Older K3s versions
 With older K3s releases which contain containerd 1.7, the expected config version is 2 and the template file used is `config.toml.tmpl` instead of `config-v3.toml.tmpl`.
