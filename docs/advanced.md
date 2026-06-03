@@ -170,8 +170,10 @@ sudo etcdctl version \
 
 K3s will generate a configuration file for containerd at `/var/lib/rancher/k3s/agent/etc/containerd/config.toml` using values specific to the current cluster and node configuration.
 
+:::info Version Gate
 Starting with February 2025 releases, K3s includes containerd 2+ and the configuration file declares and uses the `version = 3` format.
 Starting with April 2026 K3s releases, the default generated `config.toml` includes `imports` directive with the `config-v3.toml.d/*.toml` path.
+:::
 
 So with recent K3s versions, the simplest way to tweak specific configuration values while keeping the K3s-provided defaults is to create the `/var/lib/rancher/k3s/agent/etc/containerd/config-v3.toml.d` directory and put a drop-in file with just the values you wish to change there:
 
