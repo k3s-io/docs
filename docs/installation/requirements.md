@@ -226,17 +226,7 @@ Hardware requirements are based on the size of your K3s cluster. For production 
 - PostgreSQL
 - etcd
 
-### CPU and Memory
-
-The following are the minimum CPU and memory requirements for nodes in a high-availability K3s server:
-
-| Deployment Size |   Nodes   | vCPUs |  RAM  |
-|:---------------:|:---------:|:-----:|:-----:|
-|      Small      |  Up to 10 |   2   |  4 GB |
-|      Medium     | Up to 100 |   4   |  8 GB |
-|      Large      | Up to 250 |   8   | 16 GB |
-|     X-Large     | Up to 500 |   16  | 32 GB |
-|     XX-Large    |   500+    |   32  | 64 GB |
+For control-plane node CPU and memory sizing relative to the number of agents, see the [Server Sizing Guide](#server-sizing-guide) above.
 
 ### Disks
 
