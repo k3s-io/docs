@@ -45,7 +45,7 @@ Three additional nodes exist with hostnames and IPs of:
 
 [HAProxy](http://www.haproxy.org/) is an open source option that provides a TCP load balancer. It also supports HA for the load balancer itself, ensuring redundancy at all levels. See [HAProxy Documentation](http://docs.haproxy.org/2.8/intro.html) for more info.
 
-Additionally, we will use KeepAlived to generate a virtual IP (VIP) that will be used to access the cluster. See [KeepAlived Documentation](https://www.keepalived.org/manpage.html) for more info.
+Additionally, we will use KeepAlived to generate a virtual IP (VIP) that will be used to access the cluster. See [KeepAlived Documentation](https://www.keepalived.org/documentation/) for more info.
 
 
 
