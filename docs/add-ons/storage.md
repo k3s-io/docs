@@ -82,7 +82,7 @@ Longhorn does not support ARM32.
 ::: 
 
 
-K3s supports [Longhorn](https://github.com/longhorn/longhorn), an open-source distributed block storage system for Kubernetes.
+K3s supports [Longhorn](https://github.com/longhorn/longhorn), an open-source distributed block storage system for Kubernetes. To use it, you must first meet the [installation requirements](https://longhorn.io/docs/1.12.0/deploy/install/#installation-requirements) on every node in your cluster.
 
 Below we cover a simple example. For more information, refer to the [official documentation](https://longhorn.io/docs/latest/).
 
