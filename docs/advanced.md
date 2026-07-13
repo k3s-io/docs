@@ -168,28 +168,41 @@ sudo etcdctl version \
 
 ## Configuring containerd
 
+K3s will generate a configuration file for containerd at `/var/lib/rancher/k3s/agent/etc/containerd/config.toml` using values specific to the current cluster and node configuration.
+
 :::info Version Gate
-K3s includes containerd 2.0 as of the February 2025 releases: v1.31.6+k3s1 and v1.32.2+k3s1.  
-Be aware that containerd 2.0 prefers config version 3, while containerd 1.7 prefers config version 2.
+Starting with February 2025 releases, K3s includes containerd 2+ and the configuration file declares and uses the `version = 3` format.
+Starting with April 2026 K3s releases, the default generated `config.toml` includes `imports` directive with the `config-v3.toml.d/*.toml` path.
 :::
 
-K3s will generate a configuration file for containerd at `/var/lib/rancher/k3s/agent/etc/containerd/config.toml`, using values specific to the current cluster and node configuration.
+So with recent K3s versions, the simplest way to tweak specific configuration values while keeping the K3s-provided defaults is to create the `/var/lib/rancher/k3s/agent/etc/containerd/config-v3.toml.d` directory and put a drop-in file with just the values you wish to change there:
 
-For advanced customization, you can create a containerd config template in the same directory:
-* For containerd 2.0, place a version 3 configuration template in `config-v3.toml.tmpl`  
-  See the [containerd 2.0 documentation](https://github.com/containerd/containerd/blob/release/2.0/docs/cri/config.md) for more information.
-* For containerd 1.7 and earlier, place a version 2 configuration template in `config.toml.tmpl`  
-  See the [containerd 1.7 documentation](https://github.com/containerd/containerd/blob/release/1.7/docs/cri/config.md) for more information.
+```toml title="/var/lib/rancher/k3s/agent/etc/containerd/config-v3.toml.d/cgroups.toml"
+version = 3
+[plugins.'io.containerd.cri.v1.runtime'.containerd.runtimes.runc]
+  cgroup_writable = true
+```
 
-Containerd 2.0 is backwards compatible with prior config versions, and k3s will continue to render legacy version 2 configuration from `config.toml.tmpl` if `config-v3.toml.tmpl` is not found.
+To quote the [containerd-config.toml man page(5)](https://containerd.io/docs/2.3/man/containerd-config.toml.5/):
 
+> Imported files will overwrite simple fields like `int` or `string` (if not empty) and will append `array` and `map` fields.
+
+If you wish to provide a full containerd configuration file instead of the default one, you can create a containerd config template `config-v3.toml.tmpl` in `/var/lib/rancher/k3s/agent/etc/containerd`.
 The template file is rendered into the containerd config using the [`text/template`](https://pkg.go.dev/text/template) library.
-See `ContainerdConfigTemplateV3` and `ContainerdConfigTemplate` in [`templates.go`](https://github.com/k3s-io/k3s/blob/main/pkg/agent/templates/templates.go) for the default template content.
+Search for `ContainerdConfigTemplateV3` in [`templates.go`](https://github.com/k3s-io/k3s/blob/main/pkg/agent/templates/templates.go) for the default template content.
 The template is executed with a [`ContainerdConfig`](https://github.com/k3s-io/k3s/blob/main/pkg/agent/templates/templates.go#L22-L33) struct as its dot value (data argument).
+
+:::warning
+For best results, do NOT simply copy a prerendered `config.toml` into the template and make your desired changes. Use the base template, or provide a full template based on the k3s defaults linked above.
+:::
+
+:::info Older K3s versions
+With older K3s releases which contain containerd 1.7, the expected config version is 2 and the template file used is `config.toml.tmpl` instead of `config-v3.toml.tmpl`.
+:::
 
 ### Base template
 
-You can extend the K3s base template instead of copy-pasting the complete stock template out of the K3s source code. This is useful if you only need to build on the existing configuration by adding a few extra lines before or after the defaults.
+If you have K3s version which does not include the `imports` directive by default and the drop-in config files cannot be used, you can extend the K3s base template instead of copy-pasting the complete stock template out of the K3s source code. This is useful if you only need to build on the existing configuration by adding a few extra lines before or after the defaults.
 
 ```toml title="/var/lib/rancher/k3s/agent/etc/containerd/config-v3.toml.tmpl"
 {{ template "base" . }}
@@ -201,9 +214,22 @@ You can extend the K3s base template instead of copy-pasting the complete stock 
   SystemdCgroup = true
 ```
 
-:::warning
-For best results, do NOT simply copy a prerendered `config.toml` into the template and make your desired changes. Use the base template, or provide a full template based on the k3s defaults linked above.
-:::
+This approach however can only be used to add sections and values that do not exist in the base template at all. For example, attempts to configure values in `[plugins.'io.containerd.cri.v1.runtime'.containerd.runtimes.runc]` will cause containerd to fail with
+```
+containerd: failed to unmarshal TOML: toml: table runc already exists
+```
+error in `/var/lib/rancher/k3s/agent/containerd/containerd.log`.
+
+You can amend the default base template with the `imports` directive to enable the drop-in config file setup even on older K3s versions:
+```toml title="/var/lib/rancher/k3s/agent/etc/containerd/config-v3.toml.tmpl"
+imports = ["/var/lib/rancher/k3s/agent/etc/containerd/config-v3.toml.d/*.toml"]
+{{ template "base" . }}
+```
+Note however that once you upgrade to newer K3s version which has the `imports` in the base template by default, you will get an error
+```
+containerd: failed to unmarshal TOML: toml: key imports is already defined
+```
+and will need to remove that directive (or the whole template file and just use the default drop-in setup).
 
 ## Alternative Container Runtime Support
 
