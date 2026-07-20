@@ -13,7 +13,7 @@ The System Upgrade controller schedules upgrades by monitoring plans and selecti
 :::warning
 If the K3s cluster is managed by Rancher, you should use the Rancher UI to manage upgrades.
 - If the K3s cluster was imported (registered) into Rancher, Rancher will by default manage the system-upgrade-controller deployment and plans. Do not follow the steps on this page unless you have disabled version management in Rancher.  
-  See [Configuring Version Management for RKE2 and K3s Clusters](https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/kubernetes-clusters-in-rancher-setup/register-existing-clusters#configuring-version-management-for-rke2-and-k3s-clusters) for more information.
+  See [Additional Features for Registered RKE2 and K3s Clusters](https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/kubernetes-clusters-in-rancher-setup/register-existing-clusters#_additional_features_for_registered_rke2_and_k3s_clusters) for more information.
 - If the K3s cluster was provisioned by Rancher, Rancher will use system agent to manage version upgrades. Do not follow the steps on this page.
 - If the K3s cluster is *not* managed by Rancher, you may follow the steps below.
 :::
