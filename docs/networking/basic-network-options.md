@@ -26,23 +26,6 @@ This page describes K3s network configuration options, including configuration o
 | `--flannel-backend=ipsec` | Use strongSwan IPSec via the `swanctl` binary to encrypt network traffic. (Deprecated; will be removed in v1.27.0) |
 | `--flannel-backend=none` | Disable Flannel entirely. |
 
-:::info Version Gate
-
-K3s no longer includes strongSwan `swanctl` and `charon` binaries starting with the 2022-12 releases (v1.26.0+k3s1, v1.25.5+k3s1, v1.24.9+k3s1, v1.23.15+k3s1). Please install the correct packages on your node before upgrading to or installing these releases if you want to use the `ipsec` backend.
-
-:::
-
-### Migrating from `wireguard` or `ipsec` to `wireguard-native`
-
-The legacy `wireguard` backend requires installation of the `wg` tool on the host. This backend is not available in K3s v1.26 and higher, in favor of `wireguard-native` backend, which directly interfaces with the kernel.
-
-The legacy `ipsec` backend requires installation of the `swanctl` and `charon` binaries on the host. This backend is not available in K3s v1.27 and higher, in favor of the `wireguard-native` backend.
-
-We recommend that users migrate to the new backend as soon as possible. The migration requires a short period of downtime while nodes come up with the new configuration. You should follow these two steps:
-
-1. Update the K3s config on all server nodes. If using config files, the `/etc/rancher/k3s/config.yaml` should include `flannel-backend: wireguard-native` instead of `flannel-backend: wireguard` or `flannel-backend: ipsec`. If you are configuring K3s via CLI flags in the systemd unit, the equivalent flags should be changed.
-2. Reboot all nodes, starting with the servers.
-
 ### Flannel Agent Options
 
 * These options are available for each agent and are specific to the Flannel instance running on that node
@@ -140,17 +123,6 @@ The egress selector mode may be configured on servers via the `--egress-selector
 
 ## Dual-stack (IPv4 + IPv6) Networking
 
-:::info Version Gate
-
-Experimental support is available as of [v1.21.0+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.21.0%2Bk3s1).  
-Stable support is available as of [v1.23.7+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.23.7%2Bk3s1). 
-
-:::
-
-:::warning Known Issue 
-
-Before 1.27, Kubernetes [Issue #111695](https://github.com/kubernetes/kubernetes/issues/111695) causes the Kubelet to ignore the node IPv6 addresses if you have a dual-stack environment and you are not using the primary network interface for cluster traffic. To avoid this bug, use 1.27 or newer or add the following flag to both K3s servers and agents:
-
 ```
 --kubelet-arg="node-ip=0.0.0.0" # To proritize IPv4 traffic
 #OR
@@ -179,10 +151,6 @@ When defining cluster-cidr and service-cidr with IPv6 as the primary family, the
 :::
 
 ## Single-stack IPv6 Networking
-
-:::info Version Gate
-Available as of [v1.22.9+k3s1](https://github.com/k3s-io/k3s/releases/tag/v1.22.9%2Bk3s1)
-:::
 
 :::warning Known Issue
 If your IPv6 default route is set by a router advertisement (RA), you will need to set the sysctl `net.ipv6.conf.all.accept_ra=2`; otherwise, the node will drop the default route once it expires. Be aware that accepting RAs could increase the risk of [man-in-the-middle attacks](https://github.com/kubernetes/kubernetes/issues/91507).

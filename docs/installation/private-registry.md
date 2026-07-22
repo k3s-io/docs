@@ -23,10 +23,6 @@ For example, when pulling `registry.example.com:5000/rancher/mirrored-pause:3.6`
 In order to be recognized as a registry, the first component of the image name must contain at least one period or colon.
 For historical reasons, images without a registry specified in their name are implicitly identified as being from `docker.io`.
 
-:::info Version Gate
-The `--disable-default-registry-endpoint` option is available as of January 2024 releases: v1.26.13+k3s1, v1.27.10+k3s1, v1.28.6+k3s1, v1.29.1+k3s1
-:::
-
 Nodes may be started with the `--disable-default-registry-endpoint` option.
 When this is set, containerd will not fall back to the default registry endpoint, and will only pull from configured mirror endpoints,
 along with the distributed registry if it is enabled.
@@ -105,11 +101,6 @@ mirrors:
       "^rancher/(.*)": "mirrorproject/rancher-images/$1"
 ```
 
-:::info Version Gate
-Rewrites are no longer applied to the [Default Endpoint](#default-endpoint-fallback) as of the January 2024 releases: v1.26.13+k3s1, v1.27.10+k3s1, v1.28.6+k3s1, v1.29.1+k3s1  
-Prior to these releases, rewrites were also applied to the default endpoint, which would prevent K3s from pulling from the upstream registry if the image could not be pulled from a mirror endpoint, and the image was not available under the modified name in the upstream.
-::::
-
 If you want to apply rewrites when pulling directly from a registry - when it is not being used as a mirror for a different upstream registry - you must provide a mirror endpoint that does not match the default endpoint.
 Mirror endpoints in `registries.yaml` that match the default endpoint are ignored; the default endpoint is always tried last with no rewrites, if fallback has not been disabled.
 
@@ -153,10 +144,6 @@ The `auth` part consists of either username/password or authentication token:
 Below are basic examples of using private registries in different modes:
 
 ### Wildcard Support
-
-:::info Version Gate
-Wildcard support is available as of the March 2024 releases: v1.26.15+k3s1, v1.27.12+k3s1, v1.28.8+k3s1, v1.29.3+k3s1
-:::
 
 The `"*"` wildcard entry can be used in the `mirrors` and `configs` sections to provide default configuration for all registries.
 The default configuration will only be used if there is no specific entry for that registry. Note that the asterisk MUST be quoted.
