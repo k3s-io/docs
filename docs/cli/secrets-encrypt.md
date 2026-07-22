@@ -21,10 +21,6 @@ Failure to follow proper procedure for rotating encryption keys can leave your c
 
 ### Encryption Key Rotation
 
-:::info Version Gate
-Available as of the September 2024 releases: v1.30.5+k3s1, v1.31.1+k3s1
-:::
-
 <Tabs groupId="se" queryString>
 <TabItem value="Single-Server" default>
 To rotate secrets encryption keys on a single-server cluster:

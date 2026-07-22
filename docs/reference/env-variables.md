@@ -42,10 +42,6 @@ Setting `K3S_URL` without explicitly setting an exec command will default the co
 
 When running the agent, `K3S_TOKEN` must also be set.
 
-:::info Version Gate
-Available as of October 2024 releases: v1.28.15+k3s1, v1.29.10+k3s1, v1.30.6+k3s1, v1.31.2+k3s1.
-:::
-
 K3s will now use `PATH` to find alternative container runtimes, in addition to checking the default paths used by the container runtime packages. In order to use this feature, you must modify the K3s service's PATH environment variable to add the directories containing the container runtime binaries.
 
 It's recommended that you modify one of this two environment files:

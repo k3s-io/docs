@@ -106,6 +106,11 @@ K3s supports replicating etcd snapshots to and restoring etcd snapshots from S3-
 | `--etcd-s3-timeout` | S3 timeout (default: `5m0s`) |
 | `--etcd-s3-config-secret` | Name of secret in the kube-system namespace used to configure S3, if etcd-s3 is enabled and no other etcd-s3 options are set |
 
+:::note
+`--etcd-snapshot-retention` sets `--etcd-s3-retention`, if it is not explicitly set in the config.
+:::
+
+
 For example, this is how the creation and deletion of on-demand etcd snapshots in S3 would work:
 
 ```shell-session
@@ -125,22 +130,7 @@ $ k3s etcd-snapshot --s3 --s3-bucket=test-bucket --s3-access-key=test --s3-secre
 Name                              Location                                                                          Size    Created
 ```
 
-### S3 Retention
-
-:::info Version Gate
-Starting in versions v1.34.0+k3s1, v1.33.4+k3s1, v1.32.8+k3s1, v1.31.12+k3s1, K3s includes a new flag for S3 retention. It has the same default value as the local snapshot retention.
-:::
-
-| Flag | Description |
-| ----------- | --------------- |
-| `--etcd-s3-retention` | Number of snapshots in S3 to retain (default: `5`) |
-
-
 ### S3 Configuration Secret Support
-
-:::info Version Gate
-S3 Configuration Secret support is available as of the August 2024 releases: v1.30.4+k3s1, v1.29.8+k3s1, v1.28.13+k3s1
-:::
 
 K3s supports reading etcd S3 snapshot configuration from a Kubernetes Secret.
 This may be preferred to hardcoding credentials in K3s CLI flags or config files for security reasons, or if credentials need to be rotated without restarting K3s.

@@ -8,10 +8,6 @@ For more information about Multus, refer to the [multus-cni](https://github.com/
 
 Multus can not be deployed standalone. It always requires at least one conventional CNI plugin that fulfills the Kubernetes cluster network requirements. That CNI plugin becomes the default for Multus, and will be used to provide the primary interface for all pods. When deploying K3s with default options, that CNI plugin is Flannel.
 
-:::info Version Gate
-K3s uses a fixed CNI binary path as of the October 2024 releases: v1.28.15+k3s1, v1.29.10+k3s1, v1.30.6+k3s1, v1.31.2+k3s1.
-:::
-
 K3s looks at `$DATA_DIR/data/cni` for CNI plugin binaries. By default this is `/var/lib/rancher/k3s/data/cni`. Additional CNI plugins should be installed to this location.
 
 Prior to the October 2024 releases, CNI binaries were part of the K3s userspace bundle at `$DATA_DIR/data/$HASH/bin`, where the hash is unique to each release of K3s.
