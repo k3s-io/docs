@@ -12,6 +12,24 @@ K3s includes a [Helm Controller](https://github.com/k3s-io/helm-controller/) tha
 
 The [HelmChart Custom Resource](https://github.com/k3s-io/helm-controller#helm-controller) captures most of the options you would normally pass to the `helm` command-line tool.
 
+K3s also supports passing arguments directly to the `helm-controller` process with `helm-controller-arg`.
+This is useful when you want to tune controller behavior globally.
+
+For example, to customize the CPU and memory resources allocated to Helm job pods:
+
+```yaml
+# /etc/rancher/k3s/config.yaml
+helm-controller-arg:
+  - 'job-resources={"requests": {"cpu": "0.2", "memory": "64M"}, "limits": {"cpu": "1", "memory": "256M"}}'
+```
+
+You can specify `helm-controller-arg` multiple times in CLI form, or as a YAML list in the configuration file.
+
+:::info Version Gate
+The  `helm-controller-arg` flag is available since the K3s July 2026 releases: v1.36.3+k3s1, v1.35.7+k3s1, v1.34.10+k3s1, v1.33.13+k3s2
+:::
+
+
 ### HelmChart Field Definitions
 
 :::note
