@@ -234,7 +234,7 @@ OPTIONS:
    --write-kubeconfig value, -o value         (client) Write kubeconfig for admin client to this file [$K3S_KUBECONFIG_OUTPUT]
    --write-kubeconfig-mode value              (client) Write kubeconfig with this mode [$K3S_KUBECONFIG_MODE]
    --write-kubeconfig-group value             (client) Write kubeconfig with this group [$K3S_KUBECONFIG_GROUP]
-   --helm-job-image value                     (helm) Default image to use for helm jobs
+   --helm-controller-arg value                (helm) Customized configuration for helm-controller process
    --token value, -t value                    (cluster) Shared secret used to join a server or agent to a cluster [$K3S_TOKEN]
    --token-file value                         (cluster) File containing the token [$K3S_TOKEN_FILE]
    --agent-token value                        (cluster) Shared secret used to join agents to the cluster, but not servers [$K3S_AGENT_TOKEN]
