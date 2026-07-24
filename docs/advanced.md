@@ -28,9 +28,10 @@ For more information, see the [`k3s token` command documentation](./cli/token.md
 
 ### Nameserver Viability Checks
 
-On startup, each node checks the files at `/etc/resolv.conf` and `/run/systemd/resolve/resolv.conf` for loopback, multicast, or link-local nameservers. 
-If any such entries are present, the configuration file is not used, as such entries would not function properly within pods that [inherit name resolution configuration](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy) from their node.
-If no usable resolv.conf is found, K3s will print a warning message to the logs, and generate a stub resolv.conf that uses `8.8.8.8` and `2001:4860:4860::8888` as the nameservers.
+On startup, each node checks the files at `/etc/resolv.conf` and `/run/systemd/resolve/resolv.conf` for loopback, multicast, or link-local nameservers.
+If no such entries are found, the Kubelet is configured to use the file as its resolver configuration file, via the `--resolv-conf` flag.
+K3s performs these checks because nameserver addresses of these types would not function properly within pods that [inherit name resolution configuration](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy) from their node.
+If no usable resolv.conf is found, K3s will print a warning message to the logs, and generate a stub resolver configuration that uses `8.8.8.8` and `2001:4860:4860::8888` as the nameservers.
 
 If you want to provide K3s with an alternative resolver configuration without modifying the system configuration files, you may use the `--resolv-conf` option to specify the path to a suitable file.
 Manually specified resolver configuration files are not subject to viability checks.
