@@ -5,6 +5,24 @@ function gen_md_link()
     echo "${release_link}"
 }
 
+function convert_warning_blockquotes() {
+    local file=$1
+    dos2unix -q ${file}
+    perl -i -p0e '
+        if(m/^(.*)> \[!WARNING\]\R((?:^>\s?.*?$))^(.*)/gms) {
+            my $pre = $1;
+            my $body = $2;
+            my $post = $3;
+            my $title = "Warning";
+            $body =~ s/^> ?//mg;
+            $body =~ s/^\s+|\s+$//g;
+            if ($body =~ s/\s?^\*\*(.+?)\*\*\R?//) {
+                $title = $1;
+            }
+            $_ = "$pre\n:::warning $title\n$body\n:::\n$post";
+        }' "${file}"
+}
+
 MINORS=${MINORS:-"v1.33 v1.34 v1.35 v1.36"}
 
 for minor in $MINORS; do
@@ -13,10 +31,11 @@ for minor in $MINORS; do
     previous=""
     file=docs/release-notes/${minor}.X.md
     for patch in $(gh release list -R "k3s-io/${product}" --exclude-drafts --exclude-pre-releases --limit=1000 | awk -F '\t' '{ print $3 }' | grep ^"${minor}"); do
+        release_tmp=$(mktemp)
         publish_date=$(gh release view "${patch}" -R "k3s-io/${product}" --json publishedAt -q '.publishedAt' | awk -F'T' '{ print $1 }')
-        echo "# Release ${patch}" >> "${file}"
-        gh release view "${patch}" -R "k3s-io/${product}" --json body -q '.body' >> "${file}"
-        echo "-----" >> "${file}"
+        echo "# Release ${patch}" >> "${release_tmp}"
+        gh release view "${patch}" -R "k3s-io/${product}" --json body -q '.body' >> "${release_tmp}"
+        echo "-----" >> "${release_tmp}"
         body=$(gh release view "${patch}" -R "k3s-io/${product}" --json body -q '.body')
         # Extract from each release notes the component table, building a single table with all the components
         if [ -z "${previous}" ]; then
@@ -37,14 +56,17 @@ for minor in $MINORS; do
         echo " |" >> $k3s_table
         previous=$patch
         # Remove the component table from each individual release notes
-        perl -i -p0e 's/^## Embedded Component Versions.*?^-----/-----/gms' "${file}"
+        perl -i -p0e 's/^## Embedded Component Versions.*?^-----/-----/gms' "${release_tmp}"
         # Add extra levels for Docusaurus Sidebar and link to GH release page
-        sed -i 's/^# Release \(.*\)/## Release [\1](https:\/\/github.com\/k3s-io\/k3s\/releases\/tag\/\1)/' "${file}"
-        sed -i 's/^## Changes since/### Changes since/' "${file}"
+        sed -i 's/^# Release \(.*\)/## Release [\1](https:\/\/github.com\/k3s-io\/k3s\/releases\/tag\/\1)/' "${release_tmp}"
+        sed -i 's/^## Changes since/### Changes since/' "${release_tmp}"
         # Specific fixes for v1.28
-        sed -i 's/^\(Kubernetes v1.28 contains a critical regression.*\)$/:::danger Critical Regression\n\1\n:::/g' "${file}"
+        sed -i 's/^\(Kubernetes v1.28 contains a critical regression.*\)$/:::danger Critical Regression\n\1\n:::/g' "${release_tmp}"
         # Replace ⚠️ IMPORTANT with Admonition around the text
-        sed -i 's/⚠️ IMPORTANT: \(.*\)/:::warning Important\n\1\n:::/g' "${file}"
+        sed -i 's/⚠️ IMPORTANT: \(.*\)/:::warning Important\n\1\n:::/g' "${release_tmp}"
+        convert_warning_blockquotes "${release_tmp}"
+        cat "${release_tmp}" >> "${file}"
+        rm "${release_tmp}"
     done
     echo -e "\n<br />\n" >> $k3s_table
     # Append the global component and version table
