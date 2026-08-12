@@ -51,7 +51,7 @@ configs:
     auth:
       username: <BASIC AUTH USERNAME>
       password: <BASIC AUTH PASSWORD>
-      token: <BEARER TOKEN>
+      auth: <BASE64 USERNAME:PASSWORD>
     tls:
       ca_file: <PATH TO SERVER CA>
       cert_file: <PATH TO CLIENT CERT>
@@ -148,7 +148,7 @@ The `auth` part consists of either username/password or authentication token:
 |------------|---------------------------------------------------------|
 | `username` | user name of the private registry basic auth            |
 | `password` | user password of the private registry basic auth        |
-| `auth`     | authentication token of the private registry basic auth |
+| `auth`     | base64 encode of the username:password |
 
 Below are basic examples of using private registries in different modes:
 
@@ -220,7 +220,7 @@ configs:
 Below are examples showing how you may configure `/etc/rancher/k3s/registries.yaml` on each node when _not_ using TLS.
 
 <Tabs>
-<TabItem value="With Authentication">
+<TabItem value="Private Registry With Authentication">
 
 ```yaml
 mirrors:
@@ -234,6 +234,20 @@ configs:
       password: xxxxxx # this is the registry password
 ```
 
+</TabItem>
+<TabItem value="Docker Hub With Authentication">
+
+```yaml
+mirrors:
+  docker.io:
+    endpoint:
+      - "https://index.docker.io/v2"
+configs:
+  "https://index.docker.io/v2":
+    auth:
+      username: xxxxxx # Docker Hub username
+      password: xxxxxx # Docker Hub password or PAT (Personal Access Token)
+```
 </TabItem>
 <TabItem value="Without Authentication">
 
