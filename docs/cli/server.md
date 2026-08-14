@@ -146,7 +146,7 @@ The following options must be set to the same value on all servers in the cluste
 
 | Flag                                 | Description                                                    |
 |--------------------------------------|----------------------------------------------------------------|
-| `--default-local-storage-path` value | Default local storage path for local provisioner storage class |
+| `--default-local-storage-path` value | Default local storage path for local provisioner storage class (default: `/var/lib/rancher/k3s/storage`) |
 
 ### Kubernetes Components
 

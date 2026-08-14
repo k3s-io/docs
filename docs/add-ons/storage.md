@@ -12,7 +12,28 @@ This page describes how to set up persistent storage with a local storage provid
 
 
 ## Setting up the Local Storage Provider
-K3s comes with Rancher's Local Path Provisioner and this enables the ability to create persistent volume claims out of the box using local storage on the respective node. Below we cover a simple example. For more information please reference the official documentation [here](https://github.com/rancher/local-path-provisioner/blob/master/README.md#usage).
+K3s comes with Rancher's Local Path Provisioner, which provides the ability to create persistent volumes using local paths on nodes. Note that this does result in permanently binding the pod to the node hosting the volume; for more information please reference the [upstream project documentation](https://github.com/rancher/local-path-provisioner/blob/master/README.md#usage).
+
+By default, persistent volumes are created on the host filesystem under `/var/lib/rancher/k3s/storage` (or `${HOME}/.rancher/k3s/storage` if running in rootless mode).
+
+### Customizing the Default Local Storage Path
+
+You can customize the default path where the Local Path Provisioner stores persistent volume data by passing the `--default-local-storage-path` option on server nodes. Additional per-node customization is also possible; see the official documentation for details.
+
+This can be configured via the command line flag when installing or running the K3s server:
+
+```bash
+curl -sfL https://get.k3s.io | sh -s - server --default-local-storage-path /opt/local-path-provisioner
+```
+
+Or by defining it in the `/etc/rancher/k3s/config.yaml` configuration file:
+
+```yaml
+# /etc/rancher/k3s/config.yaml
+default-local-storage-path: "/opt/local-path-provisioner"
+```
+
+### Usage Example
 
 Create a hostPath backed persistent volume claim and a pod to utilize it:
 
