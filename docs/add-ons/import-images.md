@@ -8,13 +8,28 @@ Container images are cached locally on each node by the containerd image store. 
 
 Kubernetes, by default, automatically pulls images when a Pod requires them if the image is not already present on the node. This behavior can be changed by using the [image pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) field of the Pod. When using the default `IfNotPresent` policy, containerd will pull the image from either upstream (default) or your [private registry](../installation/private-registry.md) and store it in its image store. Users do not need to apply any additional configuration for on-demand image pulling to work.
 
-
 ## Pre-import images
-:::info Version Gate
-The pre-importing of images while K3s is running feature is available as of January 2025 releases: v1.32.0+k3s1, v1.31.5+k3s1, v1.30.9+k3s1, v1.29.13+k3s1. Before that, K3s pre-imported the images only when booting.
-:::
 
 Pre-importing images onto the node is essential if you configure Kubernetes' `imagePullPolicy` as `Never`. You might do this for security reasons or to reduce the time it takes for your K3s nodes to spin up.
+
+### Conditional Image Imports
+
+By default, image archives are imported every time k3s starts. This is done to ensure that all the images are consistently available, even if some images have been removed or pruned since last startup. However, this delays startup as the kubelet is not started until after all archives have been processed. To alleviate this delay there is an option to only import tarballs that have changed since they were last imported, even across restarts.
+
+To enable this feature, create a `.cache.json` file in the images directory:
+```bash
+touch /var/lib/rancher/k3s/agent/images/.cache.json
+```
+The cache file will store archive metadata as files are processed. Subsequent restarts of K3s will not import the images, as long as the size and modification time of the archive remains the same.
+
+:::warning
+When this feature is enabled, it will not be possible to ensure that all images are available every time k3s starts. If an image was removed or pruned since last startup, take manual action to reimport the image. Either:
+* Manually import the archive with `ctr image import`.
+* Use `touch` to modify the timestamp of the archive containing the image.
+* Clear the contents of the `.cache.json` file, and restart k3s.
+:::
+
+### Import Mechanisms
 
 K3s includes two mechanisms to pre-import images into the containerd image store:
 
