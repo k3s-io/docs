@@ -22,3 +22,10 @@ orlix:
   image_url: https://github.com/OrlinVasilev.png
   url: https://github.com/OrlinVasilev
   name: Orlin Vasilev
+
+brandond:
+  title: K3s maintainer
+  image_url: https://github.com/brandond.png
+  url: https://github.com/brandond
+  name: Brad Davidson
+
