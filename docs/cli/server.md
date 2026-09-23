@@ -45,7 +45,7 @@ The following options must be set to the same value on all servers in the cluste
 | `--etcd-disable-snapshots`            |                          | false                                  | Disable automatic etcd snapshots                                              |
 | `--etcd-snapshot-name` value          |                          | "etcd-snapshot-&lt;unix-timestamp&gt;" | Set the base name of etcd snapshots.                                          |
 | `--etcd-snapshot-schedule-cron` value |                          | "0 */12 \* \* \*"                      | Snapshot interval time in cron spec. eg. every 5 hours '0 */5 _ \* _'         |
-| `--etcd-snapshot-retention` value     |                          | 5                                      | Number of snapshots to retain                                                 |
+| `--etcd-snapshot-retention` value     |                          | 5                                      | Number of local snapshots to retain per server node                           |
 | `--etcd-snapshot-dir` value           |                          | $\{data-dir\}/db/snapshots             | Directory to save db snapshots                                                |
 
 ### S3 etcd Snapshot Storage
@@ -63,7 +63,7 @@ The following options must be set to the same value on all servers in the cluste
 | `--etcd-s3-bucket-lookup-type` value  |                          |                                        | S3 bucket lookup type, one of 'auto', 'dns', 'path'; default is 'auto' if not set |
 | `--etcd-s3-region` value              |                          | "us-east-1"                            | S3 region / bucket location (optional)                                        |
 | `--etcd-s3-folder` value              |                          |                                        | S3 folder                                                                     |
-| `--etcd-s3-retention` value           |                          | 5                                      | S3 retention limit                                                            |
+| `--etcd-s3-retention` value           |                          | 5                                      | Number of snapshots in S3 to retain cluster-wide                              |
 | `--etcd-s3-proxy` value               |                          |                                        | Proxy server to use when connecting to S3, overriding any proxy-releated environment variables |
 | `--etcd-s3-config-secret` value       |                          |                                        | Name of secret in the kube-system namespace used to configure S3, if etcd-s3 is enabled and no other etcd-s3 options are set |
 | `--etcd-s3-insecure`                  |                          |                                        | Disables S3 over HTTPS                                                        |
@@ -256,7 +256,7 @@ OPTIONS:
    --etcd-disable-snapshots                   (db) Disable automatic etcd snapshots
    --etcd-snapshot-name value                 (db) Set the base name of etcd snapshots (default: etcd-snapshot-<unix-timestamp>) (default: "etcd-snapshot")
    --etcd-snapshot-schedule-cron value        (db) Snapshot interval time in cron spec. eg. every 5 hours '0 */5 * * *' (default: "0 */12 * * *")
-   --etcd-snapshot-retention value            (db) Number of snapshots to retain (default: 5)
+   --etcd-snapshot-retention value            (db) Number of local snapshots to retain per server node (default: 5)
    --etcd-snapshot-dir value                  (db) Directory to save db snapshots. (default: ${data-dir}/db/snapshots)
    --etcd-snapshot-compress                   (db) Compress etcd snapshot
    --etcd-s3                                  (db) Enable backup to S3
