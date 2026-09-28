@@ -32,7 +32,7 @@ The following options control the operation of scheduled snapshots:
 | `--etcd-snapshot-name` | Sets the base name of etcd scheduled snapshots. (Default: `etcd-snapshot`) |
 | `--etcd-snapshot-compress` | Compress etcd snapshots |
 | `--etcd-snapshot-dir` | Directory to save db snapshots. (Default location: `${data-dir}/db/snapshots`) |
-| `--etcd-snapshot-retention` | Number of local snapshots to retain per server node (default: 5) |
+| `--etcd-snapshot-retention` | Number of local snapshots to retain on each server node (default: 5) |
 | `--etcd-snapshot-schedule-cron` |  Snapshot interval time in cron spec. eg. every 5 hours `0 */5 * * *` (default: `0 */12 * * *`) |
 
 The data-dir value defaults to `/var/lib/rancher/k3s` and can be changed independently by setting the `--data-dir` flag.
@@ -100,7 +100,7 @@ K3s supports replicating etcd snapshots to and restoring etcd snapshots from S3-
 | `--etcd-s3-bucket-lookup-type` | S3 bucket lookup type, one of 'auto', 'dns', 'path'; default is 'auto' if not set |
 | `--etcd-s3-region` | S3 region / bucket location (optional). defaults to us-east-1 |
 | `--etcd-s3-folder` | S3 folder |
-| `--etcd-s3-retention` | Number of snapshots in S3 to retain cluster-wide (default: `5`) |
+| `--etcd-s3-retention` | Number of S3 snapshots to retain in the configured region, bucket, and prefix (default: `5`) |
 | `--etcd-s3-proxy` | Proxy server to use when connecting to S3, overriding any proxy-releated environment variables |
 | `--etcd-s3-insecure` | Disables S3 over HTTPS |
 | `--etcd-s3-timeout` | S3 timeout (default: `5m0s`) |
@@ -145,7 +145,7 @@ S3 retention is intentionally not per node. All etcd servers upload into the sam
 
 | Flag | Description |
 | ----------- | --------------- |
-| `--etcd-s3-retention` | Number of snapshots in S3 to retain cluster-wide (default: `5`) |
+| `--etcd-s3-retention` | Number of S3 snapshots to retain in the configured region, bucket, and prefix (default: `5`) |
 
 ### S3 Configuration Secret Support
 
