@@ -32,7 +32,7 @@ The following options control the operation of scheduled snapshots:
 | `--etcd-snapshot-name` | Sets the base name of etcd scheduled snapshots. (Default: `etcd-snapshot`) |
 | `--etcd-snapshot-compress` | Compress etcd snapshots |
 | `--etcd-snapshot-dir` | Directory to save db snapshots. (Default location: `${data-dir}/db/snapshots`) |
-| `--etcd-snapshot-retention` | Number of local snapshots to retain **per server node** (default: 5) |
+| `--etcd-snapshot-retention` | Number of local snapshots to retain per server node (default: 5) |
 | `--etcd-snapshot-schedule-cron` |  Snapshot interval time in cron spec. eg. every 5 hours `0 */5 * * *` (default: `0 */12 * * *`) |
 
 The data-dir value defaults to `/var/lib/rancher/k3s` and can be changed independently by setting the `--data-dir` flag.
