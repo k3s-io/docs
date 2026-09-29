@@ -41,13 +41,13 @@ If you mirror K3s system images, use `--system-default-registry`, run air-gapped
 | Your setup | What to do |
 | :--- | :--- |
 | Nodes pull straight from the internet, no mirrors or private registry | Nothing. K3s pulls from the new location after the upgrade. |
-| You use `--system-default-registry` | Mirror the images from their new location into your registry. |
-| You set `--system-default-registry` to an empty value (`""`) | Remove it. An empty value will be rejected at startup. |
-| You mirror or proxy `docker.io` in `registries.yaml` (pull-through cache, Harbor, Artifactory, etc.) | Add a mirror entry for `ghcr.io`. |
-| You use the embedded registry mirror (`--embedded-registry`) | Add `ghcr.io` to `mirrors` in `registries.yaml`. |
-| You run air-gapped clusters | Use the v1.40 airgap artifacts and update any tooling that mirrors or retags images. |
+| You use `--system-default-registry` | Mirror the images from their new location into your registry. [More details](#if-you-use---system-default-registry) |
+| You set `--system-default-registry` to an empty value (`""`) | Remove it. An empty value will be rejected at startup. [More details](#if-you-use---system-default-registry) |
+| You mirror or proxy `docker.io` in `registries.yaml` (pull-through cache, Harbor, Artifactory, etc.) | Add a mirror entry for `ghcr.io`. [More details](#if-you-use-registriesyaml) |
+| You use the embedded registry mirror (`--embedded-registry`) | Add `ghcr.io` to `mirrors` in `registries.yaml`. [More details](#if-you-use-registriesyaml) |
+| You run air-gapped clusters | Use the v1.40 airgap artifacts and update any tooling that mirrors or retags images. [More details](#if-you-run-air-gapped) |
 
-## If you use `--system-default-registry`
+### If you use `--system-default-registry`
 
 K3s swaps the registry host for yours and keeps the repository path. So with:
 
@@ -66,7 +66,7 @@ Your registry needs to have the images under `k3s-io/` and `rancher/` **before**
 
 If you don't set a registry, K3s now uses `ghcr.io` as the default. Setting the flag to an empty string used to mean "use the default", but now it makes the server fail at startup, so drop it from your config instead.
 
-## If you use `registries.yaml`
+### If you use `registries.yaml`
 
 If you only mirror `docker.io` today:
 
@@ -102,7 +102,7 @@ mirrors:
 
 Don't forget a `configs` entry if your registry needs auth or custom TLS. The file has to be updated on **every node**, and K3s restarted on each one. See [Private Registry Configuration](/installation/private-registry) for all the options.
 
-## If you run air-gapped
+### If you run air-gapped
 
 The v1.40 airgap tarballs (`k3s-airgap-images-<arch>.tar.zst`) and `k3s-images.txt` reference the new `ghcr.io` images. Tarballs from older releases still carry the old `rancher/...` names and **won't work with v1.40**: if you load one into a private registry, the images end up as `<registry>/rancher/<image>`, while K3s asks for `<registry>/k3s-io/<image>`. Always use the tarball that matches your K3s version.
 
