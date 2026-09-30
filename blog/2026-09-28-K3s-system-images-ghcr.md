@@ -15,7 +15,6 @@ We're announcing this now so you have a few releases to get ready.
 
 The packaged components (CoreDNS, Traefik, local-path-provisioner, metrics-server, klipper-helm, klipper-lb and the pause image) are currently pulled from `docker.io/rancher/...`. From v1.40 on, they'll all be pulled from `ghcr.io/k3s-io/...`.
 
-This includes local-path-provisioner. Even though Rancher publishes it to `ghcr.io/rancher`, we'll mirror it ourselves as `ghcr.io/k3s-io/local-path-provisioner`, so every system image are under the same prefix.
 
 Only the images K3s deploys itself are affected. Your own workloads keep pulling from wherever they pull today.
 
