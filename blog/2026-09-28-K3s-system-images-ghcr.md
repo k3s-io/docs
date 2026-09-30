@@ -15,6 +15,8 @@ We're announcing this now so you have a few releases to get ready.
 
 The packaged components (CoreDNS, Traefik, local-path-provisioner, metrics-server, klipper-helm, klipper-lb and the pause image) are currently pulled from `docker.io/rancher/...`. From v1.40 on, they'll all be pulled from `ghcr.io/k3s-io/...`.
 
+This includes local-path-provisioner. Even though Rancher publishes it to `ghcr.io/rancher`, we'll mirror it ourselves as `ghcr.io/k3s-io/local-path-provisioner`, so every system image are under the same prefix.
+
 Only the images K3s deploys itself are affected. Your own workloads keep pulling from wherever they pull today.
 
 Releases before v1.40 keep using the images they shipped with, so nothing changes on a cluster until you upgrade it to v1.40.
@@ -29,8 +31,6 @@ We'll keep publishing the images to Docker Hub under `rancher/<image>`, but K3s 
 
 :::warning Before upgrading to v1.40
 If you mirror K3s system images, use `--system-default-registry`, run air-gapped clusters, or restrict outbound traffic from your nodes, you need to modify your configuration when upgrading to v1.40 or higher.
-
-`--system-default-registry` now defaults to `ghcr.io`, and **an empty value makes the server fail at startup**. If you have `system-default-registry: ""` in your `config.yaml`, or automation that always passes the flag, remove it before upgrading to `v1.40`.
 :::
 
 ## Am I affected?
@@ -39,7 +39,6 @@ If you mirror K3s system images, use `--system-default-registry`, run air-gapped
 | :--- | :--- |
 | Nodes pull directly from Docker Hub; no mirrors or private registry | Nothing. K3s pulls system images from GHCR after the upgrade. |
 | You use `--system-default-registry` | Mirror the images from their new location into your registry. [More details](#if-you-use---system-default-registry) |
-| You set `--system-default-registry` to an empty value (`""`) | Remove it. An empty value will be rejected at startup. [More details](#if-you-use---system-default-registry) |
 | You mirror or proxy `docker.io` in `registries.yaml` (pull-through cache, Harbor, Artifactory, etc.) | Add a mirror entry for `ghcr.io`. [More details](#if-you-use-registriesyaml) |
 | You use the embedded registry mirror (`--embedded-registry`) | Add `ghcr.io` to `mirrors` in `registries.yaml`. [More details](#if-you-use-registriesyaml) |
 | You use the airgap image tarballs | Use the v1.40 airgap artifacts and update any tooling that mirrors or retags images. [More details](#if-you-run-air-gapped) |
@@ -59,8 +58,6 @@ registry.example.com:5000/k3s-io/<image>:<tag>
 ```
 
 Your registry needs to have the images under `k3s-io/` **before** you upgrade. The process is the same one described in [Adding Images to the Private Registry](/installation/private-registry#adding-images-to-the-private-registry), just with the new names: grab `k3s-images.txt` for v1.40 from the [GitHub releases](https://github.com/k3s-io/k3s/releases) page, then pull, retag and push each image.
-
-If you don't set a registry, K3s now uses `ghcr.io` as the default. Setting the flag to an empty string used to mean "use the default", but now it makes the server fail at startup, so drop it from your config instead.
 
 ### If you use `registries.yaml`
 
