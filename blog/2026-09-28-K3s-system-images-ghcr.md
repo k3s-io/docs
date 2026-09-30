@@ -5,7 +5,7 @@ authors: [vitorsavian]
 hide_table_of_contents: true
 ---
 
-Starting with **K3s v1.40**, the system images that K3s deploys will come from the GitHub Container Registry (`ghcr.io/k3s-io`) instead of Docker Hub. If you run K3s with the default settings and your nodes have internet access, you don't have to do anything. If you use a private registry, `--system-default-registry` or air-gapped installs you will need to setup/mirror from ghcr.
+Starting with **K3s v1.40** (expected to be released in July 2027), the system images that K3s deploys will be pulled from the GitHub Container Registry (`ghcr.io/k3s-io`) instead of Docker Hub. If you run K3s with the default settings and your nodes have access to the GitHub Container Registry, you don't need to change anything. If you use registry mirrors, private registry, the `--system-default-registry` flag, or air-gap tarballs, you will need to modify your configuration.
 
 We're announcing this now so you have a few releases to get ready.
 
@@ -13,10 +13,7 @@ We're announcing this now so you have a few releases to get ready.
 
 ## What's changing
 
-The packaged components (CoreDNS, Traefik, local-path-provisioner, metrics-server, klipper-helm, klipper-lb and the pause image) are currently pulled from `docker.io/rancher/...`. From v1.40 on, they'll be pulled from:
-
-* `ghcr.io/k3s-io/<image>` for most of them
-* `ghcr.io/rancher/local-path-provisioner` for local-path-provisioner
+The packaged components (CoreDNS, Traefik, local-path-provisioner, metrics-server, klipper-helm, klipper-lb and the pause image) are currently pulled from `docker.io/rancher/...`. From v1.40 on, they'll all be pulled from `ghcr.io/k3s-io/...`.
 
 Only the images K3s deploys itself are affected. Your own workloads keep pulling from wherever they pull today.
 
@@ -24,28 +21,28 @@ Releases before v1.40 keep using the images they shipped with, so nothing change
 
 ### Why
 
-The `rancher` images on Docker Hub haven't been subject to pull rate limits because of an agreement between SUSE and Docker. That agreement is ending, so without this change you'd start hitting Docker Hub's rate limits when bringing up clusters (and so would our CI). See [k3s-io/k3s#14561](https://github.com/k3s-io/k3s/issues/14561) for the details.
+Images in the `rancher` organization on Docker Hub haven't been subject to rate-limiting because of a paid arrangement between SUSE and Docker. That arrangement is ending, and all pulls will now be subject to Docker Hub's [image pull usage limits](https://docs.docker.com/docker-hub/usage/pulls/). Without unlimited pulls, there is no longer any reason to prefer Docker Hub for our image hosting. See [k3s-io/k3s#14561](https://github.com/k3s-io/k3s/issues/14561) for more information.
 
 K3s already publishes some images to GHCR, and public images there don't have that kind of limit, so it was the obvious place to go. We're moving all of them, pause included, since leaving even one behind on Docker Hub would still leave you exposed to the limits.
 
 We'll keep publishing the images to Docker Hub under `rancher/<image>`, but K3s won't pull from there by default anymore.
 
 :::warning Before upgrading to v1.40
-If you mirror K3s system images, use `--system-default-registry`, run air-gapped clusters, or restrict outbound traffic from your nodes, you need to update your setup first.
+If you mirror K3s system images, use `--system-default-registry`, run air-gapped clusters, or restrict outbound traffic from your nodes, you need to modify your configuration when upgrading to v1.40 or higher.
 
 `--system-default-registry` now defaults to `ghcr.io`, and **an empty value makes the server fail at startup**. If you have `system-default-registry: ""` in your `config.yaml`, or automation that always passes the flag, remove it before upgrading to `v1.40`.
 :::
 
 ## Am I affected?
 
-| Your setup | What to do |
+| Current Configuration | Required Changes |
 | :--- | :--- |
-| Nodes pull straight from the internet, no mirrors or private registry | Nothing. K3s pulls from the new location after the upgrade. |
+| Nodes pull directly from Docker Hub; no mirrors or private registry | Nothing. K3s pulls system images from GHCR after the upgrade. |
 | You use `--system-default-registry` | Mirror the images from their new location into your registry. [More details](#if-you-use---system-default-registry) |
 | You set `--system-default-registry` to an empty value (`""`) | Remove it. An empty value will be rejected at startup. [More details](#if-you-use---system-default-registry) |
 | You mirror or proxy `docker.io` in `registries.yaml` (pull-through cache, Harbor, Artifactory, etc.) | Add a mirror entry for `ghcr.io`. [More details](#if-you-use-registriesyaml) |
 | You use the embedded registry mirror (`--embedded-registry`) | Add `ghcr.io` to `mirrors` in `registries.yaml`. [More details](#if-you-use-registriesyaml) |
-| You run air-gapped clusters | Use the v1.40 airgap artifacts and update any tooling that mirrors or retags images. [More details](#if-you-run-air-gapped) |
+| You use the airgap image tarballs | Use the v1.40 airgap artifacts and update any tooling that mirrors or retags images. [More details](#if-you-run-air-gapped) |
 
 ### If you use `--system-default-registry`
 
@@ -59,10 +56,9 @@ v1.40 will pull:
 
 ```text
 registry.example.com:5000/k3s-io/<image>:<tag>
-registry.example.com:5000/rancher/local-path-provisioner:<tag>
 ```
 
-Your registry needs to have the images under `k3s-io/` and `rancher/` **before** you upgrade. The process is the same one described in [Adding Images to the Private Registry](/installation/private-registry#adding-images-to-the-private-registry), just with the new names: grab `k3s-images.txt` for v1.40 from the [GitHub releases](https://github.com/k3s-io/k3s/releases) page, then pull, retag and push each image.
+Your registry needs to have the images under `k3s-io/` **before** you upgrade. The process is the same one described in [Adding Images to the Private Registry](/installation/private-registry#adding-images-to-the-private-registry), just with the new names: grab `k3s-images.txt` for v1.40 from the [GitHub releases](https://github.com/k3s-io/k3s/releases) page, then pull, retag and push each image.
 
 If you don't set a registry, K3s now uses `ghcr.io` as the default. Setting the flag to an empty string used to mean "use the default", but now it makes the server fail at startup, so drop it from your config instead.
 
@@ -107,7 +103,7 @@ Don't forget a `configs` entry if your registry needs auth or custom TLS. The fi
 The v1.40 airgap tarballs (`k3s-airgap-images-<arch>.tar.zst`) and `k3s-images.txt` reference the new `ghcr.io` images. Tarballs from older releases still carry the old `rancher/...` names and **won't work with v1.40**: if you load one into a private registry, the images end up as `<registry>/rancher/<image>`, while K3s asks for `<registry>/k3s-io/<image>`. Always use the tarball that matches your K3s version.
 
 * If you [deploy images manually](/installation/airgap), drop the v1.40 tarball into `/var/lib/rancher/k3s/agent/images/` on each node **before** upgrading the binary.
-* If you load the tarball into a private registry, push the images with the new `k3s-io/` and `rancher/` paths.
+* If you load the tarball into a private registry, push the images with the new `k3s-io/` path.
 * Update any scripts or pipelines that mirror, scan or retag images using the old `docker.io/rancher/...` names.
 
 ## Join our Adopters list
