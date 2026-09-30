@@ -15,7 +15,6 @@ We're announcing this now so you have a few releases to get ready.
 
 The packaged components (CoreDNS, Traefik, local-path-provisioner, metrics-server, klipper-helm, klipper-lb and the pause image) are currently pulled from `docker.io/rancher/...`. From v1.40 on, they'll all be pulled from `ghcr.io/k3s-io/...`.
 
-
 Only the images K3s deploys itself are affected. Your own workloads keep pulling from wherever they pull today.
 
 Releases before v1.40 keep using the images they shipped with, so nothing changes on a cluster until you upgrade it to v1.40.
@@ -57,6 +56,21 @@ registry.example.com:5000/k3s-io/<image>:<tag>
 ```
 
 Your registry needs to have the images under `k3s-io/` **before** you upgrade. The process is the same one described in [Adding Images to the Private Registry](/installation/private-registry#adding-images-to-the-private-registry), just with the new names: grab `k3s-images.txt` for v1.40 from the [GitHub releases](https://github.com/k3s-io/k3s/releases) page, then pull, retag and push each image.
+
+If you don't set `--system-default-registry`, or set it to an empty string, K3s now uses `ghcr.io` as the default. Setting this to an empty string previously defaulted to `docker.io`. This can still be explicitly set to `docker.io`, although this likely will not work unless you also add rewrites to `registries.yaml`, as the images are now prefixed with `k3s-io/` instead of `rancher/`.
+
+For example, to keep pulling the system images from `docker.io/rancher`:
+
+```yaml
+mirrors:
+  docker.io:
+    endpoint:
+      - "https://index.docker.io"
+    rewrite:
+      "^k3s-io/(.*)": "rancher/$1"
+```
+
+With this, `docker.io/k3s-io/<image>:<tag>` gets pulled as `docker.io/rancher/<image>:<tag>`. The endpoint is needed because rewrites are not applied to the default Docker Hub endpoint, so the rewrite only works when the images are pulled through a different endpoint like `index.docker.io` (see [Rewrites](/installation/private-registry#rewrites)).
 
 ### If you use `registries.yaml`
 
