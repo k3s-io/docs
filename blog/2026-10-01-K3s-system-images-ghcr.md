@@ -1,7 +1,7 @@
 ---
 title: K3s System Images Are Moving to GHCR
 description: Starting with v1.40, K3s system images will be pulled from ghcr.io/k3s-io. Here is what you need to know to prepare.
-authors: [vitorsavian]
+authors: [vitorsavian, brandond, dereknola]
 hide_table_of_contents: true
 ---
 
