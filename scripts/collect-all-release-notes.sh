@@ -23,7 +23,7 @@ function convert_warning_blockquotes() {
         }' "${file}"
 }
 
-MINORS=${MINORS:-"v1.33 v1.34 v1.35 v1.36"}
+MINORS=${MINORS:-"v1.34 v1.35 v1.36 v1.37"}
 
 for minor in $MINORS; do
     product=k3s
