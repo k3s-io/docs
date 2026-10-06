@@ -143,7 +143,7 @@ module.exports = {
           { from: '/reference/agent-config', to: '/cli/agent' },
           { from: '/reference/server-config', to: '/cli/server' },
 	        { from: '/installation/network-options', to: '/networking/basic-network-options' },
-	        { from: '/security/self-assessment', to: '/security/self-assessment-1.23' },
+	        { from: '/security/self-assessment', to: '/security/self-assessment-2.1' },
 	        { from: '/helm', to: '/add-ons/helm' },
 	        { from: '/import-images', to: '/add-ons/import-images' },
 	        { from: '/storage', to: '/add-ons/storage' },

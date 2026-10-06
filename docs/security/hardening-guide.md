@@ -531,7 +531,7 @@ Operators must manage network policies as normal for additional namespaces that 
 
 ### API Server audit configuration
 
-CIS requirements 1.2.22 to 1.2.25 are related to configuring audit logs for the API Server. K3s doesn't create by default the log directory and audit policy, as auditing requirements are specific to each user's policies and environment.
+CIS requirements for API Server audit logging are related to configuring audit logs and an audit policy for the API Server. K3s doesn't create by default the log directory and audit policy, as auditing requirements are specific to each user's policies and environment.
 
 The log directory, ideally, must be created before starting K3s. A restrictive access permission is recommended to avoid leaking potential sensitive information.
 
@@ -584,18 +584,6 @@ sudo systemctl restart k3s.service
 ## Manual Operations
 The following are controls that K3s currently does not pass by with the above configuration applied. These controls require manual intervention to fully comply with the CIS Benchmark.
 
-### Control 1.1.20
-Ensure that the Kubernetes PKI certificate file permissions are set to 600 or more restrictive (Manual)
-
-<details>
-<summary>Remediation</summary>
-K3s PKI certificate files are stored in `/var/lib/rancher/k3s/server/tls/` with permission 644.
-To remediate, run the following command:
-```bash
-chmod -R 600 /var/lib/rancher/k3s/server/tls/*.crt
-```
-</details>
-
 ### Control 1.2.9 
 Ensure that the admission control plugin EventRateLimit is set
 
@@ -627,7 +615,7 @@ kube-apiserver-arg:
 ```
 </details>
 
-### Control 1.2.21 
+### Control 1.2.20 
 Ensure that the --request-timeout argument is set as appropriate
 
 <details>
@@ -659,7 +647,7 @@ kubelet-arg:
 
 All the 5.X Controls are related to Kubernetes policy configuration. These controls are not enforced by K3s by default. 
 
-Refer to [CIS 1.8 Section 5](self-assessment-1.8.md#51-rbac-and-service-accounts) for more information on how to create and apply these policies.
+Refer to [CIS 2.1 Section 5](self-assessment-2.1.md#51-rbac-and-service-accounts) for more information on how to create and apply these policies.
 
 #### Control 5.1.5
 
@@ -681,4 +669,4 @@ kubectl patch serviceaccount --namespace kube-public default --patch '{"automoun
 
 ## Conclusion
 
-If you have followed this guide, your K3s cluster will be configured to comply with the CIS Kubernetes Benchmark. You can review the [CIS 1.12 Self-Assessment Guide](self-assessment-1.12.md) to understand the expectations of each of the benchmark's checks and how you can do the same on your cluster.
+If you have followed this guide, your K3s cluster will be configured to comply with the CIS Kubernetes Benchmark. You can review the [CIS 2.1 Self-Assessment Guide](self-assessment-2.1.md) to understand the expectations of each of the benchmark's checks and how you can do the same on your cluster.

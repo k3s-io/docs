@@ -8,11 +8,15 @@ First the hardening guide provides a list of security best practices to secure a
 
 * [Hardening Guide](hardening-guide.md)
 
-Second, is the self assessment to validate a hardened cluster. We currently have two different assessments available:
+Second, is the self assessment to validate a hardened cluster. The following assessments are available:
 
-* [CIS 1.9 Benchmark Self-Assessment Guide](self-assessment-1.9.md), for K3s version v1.27-v1.29
+* [CIS 2.1 Benchmark Self-Assessment Guide](self-assessment-2.1.md), for K3s version v1.36-v1.37
+
+* [CIS 1.12 Benchmark Self-Assessment Guide](self-assessment-1.12.md), for K3s version v1.32-v1.36
+
+* [CIS 1.11 Benchmark Self-Assessment Guide](self-assessment-1.11.md), for K3s version v1.29-v1.34
 
 * [CIS 1.10 Benchmark Self-Assessment Guide](self-assessment-1.10.md), for K3s version v1.28-v1.31
 
-* [CIS 1.11 Benchmark Self-Assessment Guide](self-assessment-1.11.md), for K3s version v1.29-v1.34
+* [CIS 1.9 Benchmark Self-Assessment Guide](self-assessment-1.9.md), for K3s version v1.27-v1.29
 
