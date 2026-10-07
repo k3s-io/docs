@@ -200,7 +200,10 @@ K3s runs through several steps when restoring a snapshot:
 8. (optional) Agents and control-plane servers can be started normally. 
 8. (optional) Etcd servers can be restarted to rejoin to the cluster after removing old database files.
 
-When restoring a snapshot, you don't need to use the same K3s version that created it; a higher minor version is also acceptable.
+When restoring a snapshot, you don't need to use the exact same K3s version that created it.
+A higher patch or minor version is also acceptable, as long as the Kubernetes [Version Skew Policy](https://kubernetes.io/releases/version-skew-policy/#supported-component-upgrade-order) is respected.
+Do not restore a snapshot from an older version of K3s that you could not upgrade directly from.
+Doing so may cause the apiserver to fail to decode resource versions that are no longer supported by your current version of Kubernetes.
 
 ### Snapshot Restore Steps
 
@@ -372,3 +375,26 @@ Events:
   ----    ------               ----  ----            -------
   Normal  ETCDSnapshotCreated  113s  k3s-supervisor  Snapshot on-demand-k3s-server-1-1730308816 saved on S3
 ```
+
+## Restricting Snapshot Destinations
+
+:::info Version Gate
+Snapshot Restrictions are available as of the October 2026 releases: v1.37.2+k3s1, v1.36.6+k3s1, v1.35.10+k3s1, v1.34.13+k3s1
+:::
+
+By default, K3s applies no restrictions on where snapshots are stored to or deleted from.
+When using the `k3s etcd-snapshot` CLI to create or delete snapshots, snapshots may be saved to or deleted from any path on the host, or any valid S3 endpoint.
+The CLI inherits its defaults from the server configuration, but options may be overridden via CLI flags to save or delete snapshots from custom locations.
+The CLI, and the server-side snapshot management API that the CLI interacts with, do not make any effort to validate target paths or confirm that files/objects targeted for deletion are actually etcd snapshots.
+
+Administrators who wish to restrict snapshot management operations (both save of on-demand snapshots, and deletion of existing snapshots) can use the `etcd-snapshot-restrictions` option.
+This option applies one or more restriction to snapshot management operations by disabling override of server-side settings by CLI flags.
+
+| Value | Effect |
+| ----- | ------ |
+| `all` | All of the effects listed below. |
+| `snapshot-dir` | Prevents overriding `etcd-snapshot-dir`, which restricts save/delete of local snapshots to operating within the server's configured path. |
+| `s3-endpoint` | Prevents overriding `etcd-s3-endpoint`, which restricts save/delete of S3 snapshots to operating against the server's configured endpoint. |
+| `s3-bucket` | Prevents overriding `etcd-s3-bucket`, which restricts save/delete of S3 snapshots to operating against the server's configured bucket. |
+| `s3-folder` | Prevents overriding `etcd-s3-folder`, which restricts save/delete of S3 snapshots to operating against the server's configured prefix within the bucket. |
+| `s3-proxy` | Prevents overriding `etcd-s3-proxy`, which restricts save/delete of S3 snapshots to using the server's configured HTTP proxy when connecting to the S3 endpoint. |

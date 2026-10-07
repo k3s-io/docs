@@ -37,7 +37,7 @@ The following options must be set to the same value on all servers in the cluste
 
 | Flag                                  | Environment Variable     | Default                                | Description                                                                   |
 |---------------------------------------|--------------------------|----------------------------------------|-------------------------------------------------------------------------------|
-| `--datastore-endpoint` value          | `K3S_DATASTORE_ENDPOINT` |                                        | Specify etcd, NATS, MySQL, Postgres, or SQLite data source name                      |
+| `--datastore-endpoint` value          | `K3S_DATASTORE_ENDPOINT` |                                        | Specify etcd, NATS, MySQL, Postgres, or SQLite data source name               |
 | `--datastore-cafile` value            | `K3S_DATASTORE_CAFILE`   |                                        | TLS Certificate Authority file used to secure datastore backend communication |
 | `--datastore-certfile` value          | `K3S_DATASTORE_CERTFILE` |                                        | TLS certification file used to secure datastore backend communication         |
 | `--datastore-keyfile` value           | `K3S_DATASTORE_KEYFILE`  |                                        | TLS key file used to secure datastore backend communication                   |
@@ -45,8 +45,9 @@ The following options must be set to the same value on all servers in the cluste
 | `--etcd-disable-snapshots`            |                          | false                                  | Disable automatic etcd snapshots                                              |
 | `--etcd-snapshot-name` value          |                          | "etcd-snapshot-&lt;unix-timestamp&gt;" | Set the base name of etcd snapshots.                                          |
 | `--etcd-snapshot-schedule-cron` value |                          | "0 */12 \* \* \*"                      | Snapshot interval time in cron spec. eg. every 5 hours '0 */5 _ \* _'         |
-| `--etcd-snapshot-retention` value     |                          | 5                                      | Number of local snapshots to retain on each server node                           |
+| `--etcd-snapshot-retention` value     |                          | 5                                      | Number of local snapshots to retain on each server node                       |
 | `--etcd-snapshot-dir` value           |                          | $\{data-dir\}/db/snapshots             | Directory to save db snapshots                                                |
+| `--etcd-snapshot-restrictions` value  |                          |                                        | Enforce restrictions on snapshot configuration; when set the selected defaults cannot be overridden via 'etcd-snapshot' options (valid values: zero or more of 'snapshot-dir', 's3-endpoint', 's3-bucket', 's3-folder', 's3-proxy', 'all') |
 
 ### S3 etcd Snapshot Storage
 
