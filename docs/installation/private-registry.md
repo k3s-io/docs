@@ -109,11 +109,11 @@ Because the mirror endpoint does not match the default endpoint - **`"https://re
 
 ```yaml
 mirrors:
- registry.example.com
-   endpoint:
-     - "https://registry.example.com:443"
-   rewrite:
-     "^rancher/(.*)": "mirrorproject/rancher-images/$1"
+  registry.example.com:
+    endpoint:
+      - "https://registry.example.com:443"
+    rewrite:
+      "^rancher/(.*)": "mirrorproject/rancher-images/$1"
 ```
 
 
