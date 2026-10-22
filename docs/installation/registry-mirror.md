@@ -14,7 +14,7 @@ and publish a list of available images via a peer to peer network on port 5001.
 Any image available in the containerd image store on any node, can be pulled by other cluster members without access to an external registry.
 Images imported via [air-gap image tar files](./airgap.md?airgap-load-images=Manually+Deploy+Images) or [pre-imported](../add-ons/import-images.md#pre-import-images) are pinned in containerd to ensure that they remain available and are not pruned by Kubelet garbage collection.
 
-The peer to peer port can changed from 5001 by setting the `K3S_P2P_PORT` environment variable for the K3s service. The port must be set to the same value on all nodes.
+The peer to peer port can be changed from 5001 by setting the `K3S_P2P_PORT` environment variable for the K3s service. The port must be set to the same value on all nodes.
 Changing the port is unsupported and not recommended.
 
 ### Requirements
@@ -38,7 +38,7 @@ mirrors:
 ```
 
 Endpoints for registry mirrors may also be added as usual.
-In the following configuration, images pull attempts will first try the embedded mirror, then `mirror.example.com`, then finally `docker.io`:
+In the following configuration, image pull attempts will first try the embedded mirror, then `mirror.example.com`, then finally `docker.io`:
 ```yaml
 mirrors:
   docker.io:
@@ -83,9 +83,9 @@ mirrors:
 ### Latest Tag
 
 When no tag is specified for a container image, the implicit default tag is `latest`. This tag is frequently
-updated to point at the most recent version of the image. Because this tag will point at a different revisions
+updated to point at the most recent version of the image. Because this tag will point at different revisions
 of an image depending on when it is pulled, the distributed registry **will not** pull the `latest` tag from
-other nodes. This forces containerd go out to an upstream registry or registry mirror to ensure a consistent
+other nodes. This forces containerd to go out to an upstream registry or registry mirror to ensure a consistent
 view of what the `latest` tag refers to.
 
 This aligns with the [special `imagePullPolicy` defaulting](https://kubernetes.io/docs/concepts/containers/images/#imagepullpolicy-defaulting)

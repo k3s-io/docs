@@ -18,7 +18,7 @@ Another project that simplifies the process of setting up a K3s cluster is [k3su
 
 ## autok3s
 
-Another provisioning tool, [autok3s](https://github.com/cnrancher/autok3s), provides a GUI for provising k3s cluster across a range of cloud providers, VMs, and local machines. This tool is useful for users who prefer a graphical interface for provising K3s clusters. 
+Another provisioning tool, [autok3s](https://github.com/cnrancher/autok3s), provides a GUI for provisioning k3s clusters across a range of cloud providers, VMs, and local machines. This tool is useful for users who prefer a graphical interface for provisioning K3s clusters. 
 
 ## hetzner-k3s
 

@@ -82,7 +82,7 @@ Ensure that you retain a copy of this token as it is required when restoring fro
 
 ### 4. Optional: Configure a Fixed Registration Address
 
-Agent nodes need a URL to register against. This can be the IP or hostname of any server node, but in many cases those may change over time. For example, if running your cluster in a cloud that supports scaling groups, nodes may be created and destroyed over time, changing to different IPs from the initial set of server nodes. It would be best to have a stable endpoint in front of the server nodes that will not change over time. This endpoint can be set up using any number approaches, such as:
+Agent nodes need a URL to register against. This can be the IP or hostname of any server node, but in many cases those may change over time. For example, if running your cluster in a cloud that supports scaling groups, nodes may be created and destroyed over time, changing to different IPs from the initial set of server nodes. It would be best to have a stable endpoint in front of the server nodes that will not change over time. This endpoint can be set up using any number of approaches, such as:
 
 - A layer-4 (TCP) load balancer
 - Round-robin DNS

@@ -6,7 +6,7 @@ title: Managing Packaged Components
 
 On server nodes, any file found in `/var/lib/rancher/k3s/server/manifests` will automatically be deployed to Kubernetes in a manner similar to `kubectl apply`, both on startup and when the file is changed on disk. Deleting files out of this directory will not delete the corresponding resources from the cluster.
 
-Manifests are tracked as `AddOn` custom resources in the `kube-system` namespace. Any errors or warnings encountered when applying the manifest file may seen by using `kubectl describe` on the corresponding `AddOn`, or by using `kubectl get event -n kube-system` to view all events for that namespace, including those from the deploy controller.
+Manifests are tracked as `AddOn` custom resources in the `kube-system` namespace. Any errors or warnings encountered when applying the manifest file may be seen by using `kubectl describe` on the corresponding `AddOn`, or by using `kubectl get event -n kube-system` to view all events for that namespace, including those from the deploy controller.
 
 ### Packaged Components
 
@@ -24,7 +24,7 @@ The `AddOn` name for each file in the manifest directory is derived from the fil
 Ensure that all files within the manifests directory (or within any subdirectories) have names that are unique, and adhere to Kubernetes [object naming restrictions](https://kubernetes.io/docs/concepts/overview/working-with-objects/names/).
 Care should also be taken not to conflict with names in use by the default K3s packaged components, even if those components are disabled.
 
-Here is en example of an error that would be reported if the file name contains underscores:
+Here is an example of an error that would be reported if the file name contains underscores:
 > `Failed to process config: failed to process /var/lib/rancher/k3s/server/manifests/example_manifest.yaml:
    Addon.k3s.cattle.io "example_manifest" is invalid: metadata.name: Invalid value: "example_manifest": 
    a lowercase RFC 1123 subdomain must consist of lower case alphanumeric characters, '-' or '.', and must start and end with an alphanumeric character
