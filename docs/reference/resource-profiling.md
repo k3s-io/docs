@@ -22,7 +22,7 @@ The results are summarized as follows:
 
 The resource tests were intended to address the following problem statements:
 
-- On a single-node cluster, determine the legitimate minimum amount of CPU, memory, and IOPs that should be set aside to run the entire K3s stack server stack, assuming that a real workload will be deployed on the cluster.
+- On a single-node cluster, determine the legitimate minimum amount of CPU, memory, and IOPs that should be set aside to run the entire K3s server stack, assuming that a real workload will be deployed on the cluster.
 - On an agent (worker) node, determine the legitimate minimum amount of CPU, memory, and IOPs that should be set aside for the Kubernetes and K3s control plane components (the kubelet and k3s agent).
 
 ### Components Included for Baseline Measurements

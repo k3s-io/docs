@@ -88,7 +88,7 @@ Endpoint addresses are synced to the load-balancer, which then maintains stable 
 
 #### Node-password secrets
 
-Agents register to the cluster using the the join token as credentials, along with a randomly generated password for the node.
+Agents register to the cluster using the join token as credentials, along with a randomly generated password for the node.
 The agent stores its selected password locally at `/etc/rancher/node/password`, and the cluster stores a hash of the password in a Kubernetes secret.
 Node password secrets are stored in the `kube-system` namespace with names using the template `<node-name>.node-password.k3s`.
 In order to protect the integrity of node identities, any subsequent attempts to re-register or obtain certificates for a node that has a node password secret must use the same password.

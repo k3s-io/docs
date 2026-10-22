@@ -51,7 +51,7 @@ Count of current connections to loadbalancer server, labeled by loadbalancer nam
 ### k3s_loadbalancer_server_health
 
 Current health state of loadbalancer backend servers, labeled by loadbalancer name and server address.  
-State is enum of 0=INVALID, 1=FAILED, 2=STANDBY, 3=UNCHECKED, 4=RECOVERING, 5=HEALTHY, 6=PREFERRED, 7=ACTIVE.
+State is an enum of 0=INVALID, 1=FAILED, 2=STANDBY, 3=UNCHECKED, 4=RECOVERING, 5=HEALTHY, 6=PREFERRED, 7=ACTIVE.
 - Type: Gauge
 - Labels: <Label>name</Label> <Label>server</Label>
 
@@ -64,35 +64,35 @@ Time in seconds taken to dial a connection to a backend server, labeled by loadb
 ### k3s_etcd_snapshot_save_duration_seconds
 
 Total time in seconds taken to complete the etcd snapshot process, labeled by success/failure status.
-- Type: Histrogram
+- Type: Histogram
 - Labels: <Label>status</Label>
 
 ### k3s_etcd_snapshot_save_local_duration_seconds
 
 Total time in seconds taken to save a local snapshot file, labeled by success/failure status.
-- Type: Histrogram
+- Type: Histogram
 - Labels: <Label>status</Label>
 
 ### k3s_etcd_snapshot_save_s3_duration_seconds
 
 Total time in seconds taken to upload a snapshot file to S3, labeled by success/failure status.
-- Type: Histrogram
+- Type: Histogram
 - Labels: <Label>status</Label>
 
 ### k3s_etcd_snapshot_reconcile_duration_seconds
 
 Total time in seconds taken to sync the list of etcd snapshots, labeled by success/failure status.
-- Type: Histrogram
+- Type: Histogram
 - Labels: <Label>status</Label>
 
 ### k3s_etcd_snapshot_reconcile_local_duration_seconds
 
 Total time in seconds taken to list local snapshot files, labeled by success/failure status.
-- Type: Histrogram
+- Type: Histogram
 - Labels: <Label>status</Label>
 
 ### k3s_etcd_snapshot_reconcile_s3_duration_seconds
 
 Total time in seconds taken to list S3 snapshot files, labeled by success/failure status.
-- Type: Histrogram
+- Type: Histogram
 - Labels: <Label>status</Label>

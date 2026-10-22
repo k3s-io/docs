@@ -15,7 +15,7 @@ External load-balancers can be used to provide a fixed registration address for 
 
 All nodes in this example are running Ubuntu 20.04.
 
-For both examples, assume that a [HA K3s cluster with embedded etcd](../datastore/ha-embedded.md) has been installed on 3 nodes.
+For both examples, assume that an [HA K3s cluster with embedded etcd](../datastore/ha-embedded.md) has been installed on 3 nodes.
 
 Each k3s server is configured with:
 ```yaml
@@ -103,7 +103,7 @@ vrrp_instance haproxy-vip {
 }
 ```
 
-6) Restart HAProxy and KeepAlived on lb-1 and lb-2:
+4) Restart HAProxy and KeepAlived on lb-1 and lb-2:
 
 ```bash
 systemctl restart haproxy
@@ -116,7 +116,7 @@ systemctl restart keepalived
 curl -sfL https://get.k3s.io | K3S_TOKEN=lb-cluster-gd sh -s - agent --server https://10.10.10.100:6443
 ```
 
-You can now use `kubectl` from server node to interact with the cluster.
+You can now use `kubectl` from a server node to interact with the cluster.
 ```bash
 root@server-1 $ k3s kubectl get nodes -A
 NAME       STATUS   ROLES                       AGE     VERSION
@@ -140,7 +140,7 @@ Nginx does not natively support a High Availability (HA) configuration. If setti
 
 [Nginx Open Source](http://nginx.org/) provides a TCP load balancer. See [Using nginx as HTTP load balancer](https://nginx.org/en/docs/http/load_balancing.html) for more info.
 
-1) Create a `nginx.conf` file on lb-1 with the following contents:
+1) Create an `nginx.conf` file on lb-1 with the following contents:
 
 ```
 events {}
@@ -183,7 +183,7 @@ systemctl start nginx
 curl -sfL https://get.k3s.io | K3S_TOKEN=lb-cluster-gd sh -s - agent --server https://10.10.10.98:6443
 ```
 
-You can now use `kubectl` from server node to interact with the cluster.
+You can now use `kubectl` from a server node to interact with the cluster.
 ```bash
 root@server1 $ k3s kubectl get nodes -A
 NAME       STATUS   ROLES                       AGE     VERSION

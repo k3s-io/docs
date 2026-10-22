@@ -61,10 +61,10 @@ To rotate secrets encryption keys on HA setups:
     Current Rotation Stage: reencrypt_finished
     ```
     :::info
-    K3s will reencrypt ~5 secrets per second. Clusters with large # of secrets can take several minutes to reencrypt. You can track progress in the server logs.
+    K3s will reencrypt ~5 secrets per second. Clusters with a large number of secrets can take several minutes to reencrypt. You can track progress in the server logs.
     ::: 
 
-4. Restart K3s on S1 with same arguments. If running K3s as a service:
+4. Restart K3s on S1 with the same arguments. If running K3s as a service:
     ```bash
     # If using systemd
     systemctl restart k3s
@@ -182,7 +182,7 @@ For brevity, the servers will be referred to as S1, S2, S3.
 ### Legacy Encryption Key Rotation
 
 :::tip New Procedure
-If using K3s versions v1.30+, we recommend using the [Encryption Key Rotation](#encryption-key-rotation) instead.
+If using K3s versions v1.30+, we recommend using the [Encryption Key Rotation](#encryption-key-rotation) procedure instead.
 :::
 
 <Tabs groupId="se" queryString>
@@ -198,7 +198,7 @@ To rotate secrets encryption keys on a single-server cluster:
     k3s secrets-encrypt prepare
     ```
 
-3. Kill and restart the K3s server with same arguments. If running K3s as a service:
+3. Kill and restart the K3s server with the same arguments. If running K3s as a service:
     ```bash
     # If using systemd
     systemctl restart k3s
@@ -212,11 +212,11 @@ To rotate secrets encryption keys on a single-server cluster:
     k3s secrets-encrypt rotate
     ```
 
-5. Kill and restart the K3s server with same arguments
+5. Kill and restart the K3s server with the same arguments
 6. Reencrypt
     :::info
     K3s will reencrypt ~5 secrets per second.  
-    Clusters with large # of secrets can take several minutes to reencrypt.
+    Clusters with a large number of secrets can take several minutes to reencrypt.
     ::: 
     ```bash
     k3s secrets-encrypt reencrypt
@@ -226,11 +226,11 @@ To rotate secrets encryption keys on a single-server cluster:
 </TabItem>
 <TabItem value="High-Availability">
 
-The steps are the same for both embedded DB and external DB clusters. or brevity, the servers will be referred to as S1, S2, S3.
+The steps are the same for both embedded DB and external DB clusters. For brevity, the servers will be referred to as S1, S2, S3.
 
 To rotate secrets encryption keys on HA setups:
 
-1. Start up all three K3s servers with the `--secrets-encryption` flag. F
+1. Start up all three K3s servers with the `--secrets-encryption` flag.
     :::note Notes
     - While not required, it is recommended that you pick one server node from which to run the `secrets-encrypt` commands.
     :::
@@ -241,7 +241,7 @@ To rotate secrets encryption keys on HA setups:
     k3s secrets-encrypt prepare
     ```
 
-3. Kill and restart S1 with same arguments. If running K3s as a service:
+3. Kill and restart S1 with the same arguments. If running K3s as a service:
     ```bash
     # If using systemd
     systemctl restart k3s
@@ -249,7 +249,7 @@ To rotate secrets encryption keys on HA setups:
     rc-service k3s restart
     ```
 
-4. Once S1 is up, kill and restart the S2 and S3
+4. Once S1 is up, kill and restart S2 and S3
 
 5. Rotate on S1
 
@@ -257,20 +257,20 @@ To rotate secrets encryption keys on HA setups:
     k3s secrets-encrypt rotate
     ```
 
-6. Kill and restart S1 with same arguments
-7. Once S1 is up, kill and restart the S2 and S3
+6. Kill and restart S1 with the same arguments
+7. Once S1 is up, kill and restart S2 and S3
 
 8. Reencrypt on S1
     :::info
     K3s will reencrypt ~5 secrets per second.  
-    Clusters with large # of secrets can take several minutes to reencrypt.
+    Clusters with a large number of secrets can take several minutes to reencrypt.
     :::
     ```bash
     k3s secrets-encrypt reencrypt
     ```
 
-9. Kill and restart S1 with same arguments
-10. Once S1 is up, kill and restart the S2 and S3
+9. Kill and restart S1 with the same arguments
+10. Once S1 is up, kill and restart S2 and S3
 
 </TabItem>
 </Tabs>
@@ -287,7 +287,7 @@ To disable secrets encryption on a single-node cluster:
     k3s secrets-encrypt disable
     ```
 
-2. Kill and restart the K3s server with same arguments. If running K3s as a service:
+2. Kill and restart the K3s server with the same arguments. If running K3s as a service:
     ```bash
     # If using systemd
     systemctl restart k3s
@@ -301,7 +301,7 @@ To disable secrets encryption on a single-node cluster:
     k3s secrets-encrypt reencrypt --force --skip
     ```
 
-To re-enable secrets encryption on a single node cluster:
+To re-enable secrets encryption on a single-node cluster:
 
 1. Enable
 
@@ -309,7 +309,7 @@ To re-enable secrets encryption on a single node cluster:
     k3s secrets-encrypt enable
     ```
 
-2. Kill and restart the K3s server with same arguments
+2. Kill and restart the K3s server with the same arguments
 
 3. Reencrypt with flags
 
@@ -326,7 +326,7 @@ While not required, it is recommended that you pick one server node from which t
 
 For brevity, the servers will be referred to as S1, S2, S3.
 
-To disable secrets encryption on a HA cluster:
+To disable secrets encryption on an HA cluster:
 
 1. Disable on S1
 
@@ -334,7 +334,7 @@ To disable secrets encryption on a HA cluster:
     k3s secrets-encrypt disable
     ```
 
-2. Kill and restart S1 with same arguments. If running K3s as a service:
+2. Kill and restart S1 with the same arguments. If running K3s as a service:
     ```bash
     # If using systemd
     systemctl restart k3s
@@ -342,7 +342,7 @@ To disable secrets encryption on a HA cluster:
     rc-service k3s restart
     ```
 
-3. Once S1 is up, kill and restart the S2 and S3
+3. Once S1 is up, kill and restart S2 and S3
 
 
 4. Reencrypt with flags on S1
@@ -351,7 +351,7 @@ To disable secrets encryption on a HA cluster:
     k3s secrets-encrypt reencrypt --force --skip
     ```
 
-To re-enable secrets encryption on a HA cluster:
+To re-enable secrets encryption on an HA cluster:
 
 1. Enable on S1
 
@@ -359,8 +359,8 @@ To re-enable secrets encryption on a HA cluster:
     k3s secrets-encrypt enable
     ```
 
-2. Kill and restart S1 with same arguments
-3. Once S1 is up, kill and restart the S2 and S3
+2. Kill and restart S1 with the same arguments
+3. Once S1 is up, kill and restart S2 and S3
 
 4. Reencrypt with flags on S1
 
@@ -387,7 +387,7 @@ Active  Key Type  Name
 
 ```
 
-Another example on HA cluster, after rotating the keys, but before restarting the servers:  
+Another example on an HA cluster, after rotating the keys, but before restarting the servers:  
 ```bash
 $ k3s secrets-encrypt status
 Encryption Status: Enabled
@@ -403,7 +403,7 @@ Active  Key Type  Name
 
 Details on each section are as follows:  
 
-- __Encryption Status__: Displayed whether secrets encryption is disabled or enabled on the node  
+- __Encryption Status__: Displays whether secrets encryption is disabled or enabled on the node  
 - __Current Rotation Stage__: Indicates the current rotation stage on the node.  
   Stages are: `start`, `prepare`, `rotate`, `reencrypt_request`, `reencrypt_active`, `reencrypt_finished`  
 - __Server Encryption Hashes__: Useful for HA clusters, this indicates whether all servers are on the same stage with their local files. This can be used to identify whether a restart of servers is required before proceeding to the next stage. In the HA example above, node-1 and node-2 have different hashes, indicating that they currently do not have the same encryption configuration. Restarting the servers will sync up their configuration.

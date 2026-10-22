@@ -36,11 +36,11 @@ k3s-server-2   Ready    control-plane,master        5h39m   v1.20.4+k3s1
 
 ## Adding Roles To Existing Servers
 
-Roles can be added to existing dedicated nodes by restarting K3s with the disable flags removed. For example ,if you want to add the `control-plane` role to a dedicated `etcd` node, you can remove the `--disable-apiserver --disable-controller-manager --disable-scheduler` flags from the systemd unit or config file, and restart the service.
+Roles can be added to existing dedicated nodes by restarting K3s with the disable flags removed. For example, if you want to add the `control-plane` role to a dedicated `etcd` node, you can remove the `--disable-apiserver --disable-controller-manager --disable-scheduler` flags from the systemd unit or config file, and restart the service.
 
 ## Configuration File Syntax
 
-As with all other CLI flags, you can use the  [Configuration File](configuration.md#configuration-file) to disable components, instead of passing the options as CLI flags. For example, to create a dedicated `etcd` node, you can place the following values in `/etc/rancher/k3s/config.yaml`:
+As with all other CLI flags, you can use the [Configuration File](configuration.md#configuration-file) to disable components, instead of passing the options as CLI flags. For example, to create a dedicated `etcd` node, you can place the following values in `/etc/rancher/k3s/config.yaml`:
 
 ```yaml
 cluster-init: true

@@ -82,7 +82,7 @@ reboot
 </TabItem>
 <TabItem value="debian" label="Ubuntu / Debian">
 
-Older Debian release may suffer from a known iptables bug. See [Known Issues](../known-issues.md#iptables).
+Older Debian releases may suffer from a known iptables bug. See [Known Issues](../known-issues.md#iptables).
 
 #### UFW
 
@@ -106,7 +106,7 @@ Raspberry Pi OS is Debian based, and may suffer from a known iptables bug. See [
 
 #### Cgroups
 
-Standard Raspberry Pi OS installations do not start with `cgroups` enabled. **K3S** needs `cgroups` to start the systemd service. `cgroups`can be enabled by appending `cgroup_memory=1 cgroup_enable=memory` to `/boot/firmware/cmdline.txt`.\
+Standard Raspberry Pi OS installations do not start with `cgroups` enabled. **K3S** needs `cgroups` to start the systemd service. `cgroups` can be enabled by appending `cgroup_memory=1 cgroup_enable=memory` to `/boot/firmware/cmdline.txt`.\
 **Note:** On Debian 11 and older Pi OS releases the cmdline.txt is located at `/boot/cmdline.txt`.
 
 Example cmdline.txt:
@@ -115,7 +115,7 @@ console=serial0,115200 console=tty1 root=PARTUUID=58b06195-02 rootfstype=ext4 el
 ```
 
 #### Ubuntu Vxlan Module
-With Ubuntu 21.10 to Ubuntu 23.10, vxlan support on Raspberry Pi was moved into a separate kernel module. This step in not required for Ubuntu 24.04 and later.
+With Ubuntu 21.10 to Ubuntu 23.10, vxlan support on Raspberry Pi was moved into a separate kernel module. This step is not required for Ubuntu 24.04 and later.
 ```bash
 sudo apt install linux-modules-extra-raspi
 ```
@@ -154,7 +154,7 @@ When limited on CPU and RAM on the server (control-plane + etcd) node, there are
 
 :::tip High Availability Sizing
 When using a high-availability setup of 3 server nodes, the number of agents can scale roughly ~50% more than the above table. \
-Ex: 3 server with 4 vCPU/8 GB can scale to ~1200 agents.
+Ex: 3 servers with 4 vCPU/8 GB can scale to ~1200 agents.
 :::
 
 It is recommended to join agent nodes in batches of 50 or less to allow the CPU to free up space, as there is a spike on node join. Remember to modify the default `cluster-cidr` if desiring more than 255 nodes!
@@ -180,7 +180,7 @@ The VXLAN port on nodes should not be exposed to the world as it opens up your c
 :::
 
 :::danger
-Flannel relies on the [Bridge CNI plugin](https://www.cni.dev/plugins/current/main/bridge/) to create a L2 network that switches traffic. Rogue pods with `NET_RAW` capabilities can abuse that L2 network to launch attacks such as ARP spoofing. Therefore, as documented in the [Kubernetes docs](https://kubernetes.io/docs/concepts/security/pod-security-standards/), please set a restricted profile that disables `NET_RAW` on non-trustable pods.
+Flannel relies on the [Bridge CNI plugin](https://www.cni.dev/plugins/current/main/bridge/) to create an L2 network that switches traffic. Rogue pods with `NET_RAW` capabilities can abuse that L2 network to launch attacks such as ARP spoofing. Therefore, as documented in the [Kubernetes docs](https://kubernetes.io/docs/concepts/security/pod-security-standards/), please set a restricted profile that disables `NET_RAW` on non-trustable pods.
 :::
 
 ### Inbound Rules for K3s Nodes
