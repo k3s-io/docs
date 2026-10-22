@@ -34,6 +34,31 @@ For more information, see [Managing Packaged Components](../installation/package
 
 For details on the specific version of Traefik included with K3s, consult the Release Notes for your version.
 
+### Traefik Service Type
+
+By default, the Traefik Service is of type `LoadBalancer`. If Traefik is exposed through other means, for example an external load balancer or a tunnel that connects to it from inside the cluster, you can change the Service type with a HelmChartConfig. For example, to use `ClusterIP`:
+
+```yaml
+# /var/lib/rancher/k3s/server/manifests/k3s-traefik-config.yaml
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: traefik
+  namespace: kube-system
+spec:
+  valuesContent: |-
+    service:
+      spec:
+        type: ClusterIP
+```
+
+If you already have a HelmChartConfig for Traefik, add these values to it instead of creating a second one.
+
+:::warning Traefik chart v40
+Starting with the June 2026 releases (v1.33.13+k3s1, v1.34.9+k3s1, v1.35.6+k3s1 and v1.36.2+k3s1), K3s ships Traefik chart v40, which moved the Service type from `service.type` to `service.spec.type`. The old `service.type` key is silently ignored, and the Traefik Service falls back to `LoadBalancer`. If you set the Service type in a HelmChartConfig, move it to `service.spec.type` before upgrading. See the [Traefik chart v40.0.0 release notes](https://github.com/traefik/traefik-helm-chart/releases/tag/v40.0.0) for the other breaking changes.
+:::
+
 ### Gateway API
 
 Gateway API is a family of Kubernetes resources that provide dynamic infrastructure provisioning and advanced traffic routing. While the traditional Ingress API is still supported (and not planned to be deprecated), the Gateway API provides a more expressive, role-oriented, and extensible way to manage service exposure.
@@ -124,6 +149,8 @@ To select a particular subset of nodes to host pods for a LoadBalancer, add the 
 To disable ServiceLB, configure all servers in the cluster with the `--disable=servicelb` flag.
 
 This is necessary if you wish to run a different LB, such as MetalLB.
+
+When ServiceLB is disabled, LoadBalancer Services, including the packaged Traefik Service, remain `pending` until another load balancer is installed, but their NodePorts are still allocated on every node. If you expose Traefik through other means, set its Service type to `ClusterIP` as described in [Traefik Service Type](#traefik-service-type).
 
 ## Deploying an External Cloud Controller Manager
 
