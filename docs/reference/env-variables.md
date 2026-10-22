@@ -22,7 +22,7 @@ When using this method to install K3s, the following environment variables can b
 | `INSTALL_K3S_BIN_DIR` | Directory to install K3s binary, links, and uninstall script to, or use `/usr/local/bin` as the default. |
 | `INSTALL_K3S_BIN_DIR_READ_ONLY` | If set to true will not write files to `INSTALL_K3S_BIN_DIR`, forces setting `INSTALL_K3S_SKIP_DOWNLOAD=true`. |
 | `INSTALL_K3S_SYSTEMD_DIR` | Directory to install systemd service and environment files to, or use `/etc/systemd/system` as the default. |
-| `INSTALL_K3S_EXEC` | Command with flags to use for launching K3s in the service. If the command is not specified, and the `K3S_URL` is set, it will default to "agent." If `K3S_URL` not set, it will default to "server." For help, refer to [this example.](../installation/configuration.md#configuration-with-install-script) |
+| `INSTALL_K3S_EXEC` | Command with flags to use for launching K3s in the service. If the command is not specified, and the `K3S_URL` is set, it will default to "agent." If `K3S_URL` is not set, it will default to "server." For help, refer to [this example.](../installation/configuration.md#configuration-with-install-script) |
 | `INSTALL_K3S_NAME` | Name of systemd service to create, will default to 'k3s' if running k3s as a server and 'k3s-agent' if running k3s as an agent. If specified the name will be prefixed with 'k3s-'. |
 | `INSTALL_K3S_TYPE` | Type of systemd service to create, will default from the K3s exec command if not specified. |
 | `INSTALL_K3S_SELINUX_WARN` | If set to true will continue if k3s-selinux policy is not found. |
@@ -44,7 +44,7 @@ When running the agent, `K3S_TOKEN` must also be set.
 
 K3s will now use `PATH` to find alternative container runtimes, in addition to checking the default paths used by the container runtime packages. In order to use this feature, you must modify the K3s service's PATH environment variable to add the directories containing the container runtime binaries.
 
-It's recommended that you modify one of this two environment files:
+It's recommended that you modify one of these two environment files:
 
 - /etc/default/k3s # or k3s-agent
 - /etc/sysconfig/k3s # or k3s-agent

@@ -31,7 +31,7 @@ This may be desired if your cluster is in a true air-gapped environment where th
 or if you wish to have only some nodes pull from the upstream registry.
 
 Disabling the default registry endpoint applies only to registries configured via `registries.yaml`.
-If the registry is not explicitly configured via mirror entry in `registries.yaml`, the default fallback behavior will still be used.
+If the registry is not explicitly configured via a mirror entry in `registries.yaml`, the default fallback behavior will still be used.
 
 ## Registries Configuration File
 
@@ -264,7 +264,7 @@ Mirroring images to a private registry requires a host with Docker or other 3rd 
 The steps below assume you have a host with dockerd and the docker CLI tools, and access to both docker.io and your private registry.
 
 1. Obtain the `k3s-images.txt` file from GitHub for the release you are working with.
-2. Pull each of the K3s images listed on the k3s-images.txt file from docker.io.  
+2. Pull each of the K3s images listed in the k3s-images.txt file from docker.io.  
    Example: `docker pull docker.io/rancher/mirrored-pause:3.6`
 3. Retag the images to the private registry.  
    Example: `docker tag docker.io/rancher/mirrored-pause:3.6 registry.example.com:5000/rancher/mirrored-pause:3.6`

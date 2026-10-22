@@ -102,7 +102,7 @@ Options are documented on this page as CLI flags, but can also be passed as conf
 
 ### Node Labels and Taints for Agents
 
-K3s agents can be configured with the options `--node-label` and `--node-taint` which adds a label and taint to the kubelet. The two options only add labels and/or taints at registration time, so they can only be added once and not changed after that again by running K3s commands.
+K3s agents can be configured with the options `--node-label` and `--node-taint`, which add labels and taints to the kubelet. The two options only add labels and/or taints at registration time, so they can only be set once and cannot be changed afterward by running K3s commands.
 
 Below is an example showing how to add labels and a taint:
 
