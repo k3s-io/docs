@@ -64,7 +64,7 @@ For more information on backing up your cluster, see the [Backup and Restore](..
 
 ### Agent
 
-By default, the agent token is the same as the server token. The agent token can be set before or after the cluster has been started, by changing the CLI option or environment variable on all servers in the cluster. The agent token is similar to the server token in that is it statically configured, and does not expire.
+By default, the agent token is the same as the server token. The agent token can be set before or after the cluster has been started, by changing the CLI option or environment variable on all servers in the cluster. The agent token is similar to the server token in that it is statically configured, and does not expire.
 
 The agent token is written to `/var/lib/rancher/k3s/server/agent-token`, in secure format. If no agent token is specified, this file is a link to the server token.
 

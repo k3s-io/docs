@@ -10,7 +10,7 @@ This page describes K3s network configuration options, including configuration o
 
 * Flannel options can only be set on server nodes, and must be identical on all servers in the cluster.
 * The default backend for Flannel is `vxlan`. To enable encryption, use the `wireguard-native` backend.
-* Using `vxlan` on Rasperry Pi with recent versions of Ubuntu requires [additional preparation](../installation/requirements.md?os=pi#operating-systems).
+* Using `vxlan` on Raspberry Pi with recent versions of Ubuntu requires [additional preparation](../installation/requirements.md?os=pi#operating-systems).
 * Using `wireguard-native` as the Flannel backend may require additional modules on some Linux distributions. Please see the [WireGuard Install Guide](https://www.wireguard.com/install/) for details.
   The WireGuard install steps will ensure the appropriate kernel modules are installed for your operating system.
   You must ensure that WireGuard kernel modules are available on every node, both servers and agents, before attempting to use the WireGuard Flannel backend.
@@ -124,9 +124,9 @@ The egress selector mode may be configured on servers via the `--egress-selector
 ## Dual-stack (IPv4 + IPv6) Networking
 
 ```
---kubelet-arg="node-ip=0.0.0.0" # To proritize IPv4 traffic
+--kubelet-arg="node-ip=0.0.0.0" # To prioritize IPv4 traffic
 #OR
---kubelet-arg="node-ip=::" # To proritize IPv6 traffic
+--kubelet-arg="node-ip=::" # To prioritize IPv6 traffic
 ```
 
 :::
@@ -139,15 +139,15 @@ To enable dual-stack in K3s, you must provide valid dual-stack `cluster-cidr` an
 --cluster-cidr=10.42.0.0/16,2001:db8:42::/56 --service-cidr=10.43.0.0/16,2001:db8:43::/112
 ```
 
-Note that you may configure any valid `cluster-cidr` and `service-cidr` values, but the above masks are recommended. If you change the `cluster-cidr` mask, you should also change the `node-cidr-mask-size-ipv4` and `node-cidr-mask-size-ipv6` values to match the planned pods per node and total node count. The largest supported `service-cidr` mask is /12 for IPv4, and /112 for IPv6. Remember to allow ipv6 traffic if you are deploying in a public cloud.
+Note that you may configure any valid `cluster-cidr` and `service-cidr` values, but the above masks are recommended. If you change the `cluster-cidr` mask, you should also change the `node-cidr-mask-size-ipv4` and `node-cidr-mask-size-ipv6` values to match the planned pods per node and total node count. The largest supported `service-cidr` mask is /12 for IPv4, and /112 for IPv6. Remember to allow IPv6 traffic if you are deploying in a public cloud.
 
-When using IPv6 addresses that are not publicly routed, for example in the ULA range, you might want to add the `--flannel-ipv6-masq` option to enable IPv6 NAT, as per default pods use their pod IPv6 address for outgoing traffic.
-If, however, publicly routed IPv6 addresses are used you need to ensure that those addresses are routed towards your cluster. Otherwise, pods will not be able to receive responses for packets originating from their IPv6 address. While it is outside the scope of K3s to automatically communicate which addresses are used on which node to outside routing infrastructure, cluster members will forward pod traffic correctly so you can point your routes to any node belonging to the cluster.
+When using IPv6 addresses that are not publicly routed, for example in the ULA range, you might want to add the `--flannel-ipv6-masq` option to enable IPv6 NAT, as by default pods use their pod IPv6 address for outgoing traffic.
+If, however, publicly routed IPv6 addresses are used, you need to ensure that those addresses are routed towards your cluster. Otherwise, pods will not be able to receive responses for packets originating from their IPv6 address. While it is outside the scope of K3s to automatically communicate which addresses are used on which node to outside routing infrastructure, cluster members will forward pod traffic correctly so you can point your routes to any node belonging to the cluster.
 
-If you are using a custom CNI plugin, i.e. a CNI plugin other than Flannel, the additional configuration may be required. Please consult your plugin's dual-stack documentation and verify if network policies can be enabled.
+If you are using a custom CNI plugin, i.e. a CNI plugin other than Flannel, additional configuration may be required. Please consult your plugin's dual-stack documentation and verify if network policies can be enabled.
 
 :::warning Known Issue
-When defining cluster-cidr and service-cidr with IPv6 as the primary family, the node-ip of all cluster members should be explicitly set, placing node's desired IPv6 address as the first address. By default, the kubelet always uses IPv4 as the primary address family.
+When defining cluster-cidr and service-cidr with IPv6 as the primary family, the node-ip of all cluster members should be explicitly set, placing the node's desired IPv6 address as the first address. By default, the kubelet always uses IPv4 as the primary address family.
 :::
 
 ## Single-stack IPv6 Networking
@@ -162,7 +162,7 @@ Single-stack IPv6 clusters (clusters without IPv4) are supported on K3s using th
 --cluster-cidr=2001:db8:42::/56 --service-cidr=2001:db8:43::/112
 ```
 
-When using IPv6 addresses that are not publicly routed, for example in the ULA range, you might want to add the `--flannel-ipv6-masq` option to enable IPv6 NAT, as per default pods use their pod IPv6 address for outgoing traffic.
+When using IPv6 addresses that are not publicly routed, for example in the ULA range, you might want to add the `--flannel-ipv6-masq` option to enable IPv6 NAT, as by default pods use their pod IPv6 address for outgoing traffic.
 
 ## Nodes Without a Hostname
 

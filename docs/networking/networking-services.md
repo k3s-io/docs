@@ -18,7 +18,7 @@ If you don't install CoreDNS, you will need to install a cluster DNS provider yo
 
 [Traefik](https://traefik.io/) is a modern HTTP reverse proxy and load balancer made to deploy microservices with ease. It simplifies networking complexity while designing, deploying, and running applications.
 
-The Traefik ingress controller deploys a LoadBalancer Service that uses ports 80 and 443, advertises the LoadBalancer Service's External IPs in the Status of Ingress resources it manages.
+The Traefik ingress controller deploys a LoadBalancer Service that uses ports 80 and 443, and advertises the LoadBalancer Service's External IPs in the Status of Ingress resources it manages.
 
 By default, ServiceLB will use all nodes in the cluster to host the Traefik LoadBalancer Service, meaning ports 80 and 443 will not be usable for other HostPort or NodePort pods, and Ingress resources' Status will show all cluster members' node IPs.
 
@@ -141,7 +141,7 @@ To select a particular subset of nodes to host pods for a LoadBalancer, add the 
 
 1. Label Node A and Node B with `svccontroller.k3s.cattle.io/lbpool=pool1` and `svccontroller.k3s.cattle.io/enablelb=true`
 2. Label Node C and Node D with `svccontroller.k3s.cattle.io/lbpool=pool2` and `svccontroller.k3s.cattle.io/enablelb=true`
-3. Create one LoadBalancer Service on port 443 with label `svccontroller.k3s.cattle.io/lbpool=pool1`. The DaemonSet for this service only deploy Pods to Node A and Node B.
+3. Create one LoadBalancer Service on port 443 with label `svccontroller.k3s.cattle.io/lbpool=pool1`. The DaemonSet for this service will only deploy Pods to Node A and Node B.
 4. Create another LoadBalancer Service on port 443 with label `svccontroller.k3s.cattle.io/lbpool=pool2`. The DaemonSet will only deploy Pods to Node C and Node D.
 
 ### Disabling ServiceLB

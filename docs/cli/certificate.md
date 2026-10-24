@@ -22,7 +22,7 @@ Output format is configurable as of the January 2025 releases: v1.32.0+k3s1, v1.
 A new format with more information is available as of the May 2025 releases: v1.33.1+k3s1, v1.32.5+k3s1, v1.31.9+k3s1, v1.29.13+k3s1
 :::
 
-To check the node certificates and their expiration date use the `k3s certificate check --output table`:
+To check the node certificates and their expiration dates, use `k3s certificate check --output table`:
 
 ```bash
 FILENAME                    SUBJECT                     USAGES       EXPIRES                  RESIDUAL TIME   STATUS
@@ -98,7 +98,7 @@ If you ever need to revoke a certificate for any reason (for example, due to a c
 
 #### Using Custom CA Certificates
 
-If CA certificates and keys are found the correct location during initial startup of the first server in the cluster, automatic generation of CA certificates will be bypassed.
+If CA certificates and keys are found in the correct location during initial startup of the first server in the cluster, automatic generation of CA certificates will be bypassed.
 
 An example script to pre-create the appropriate certificates and keys is available [in the K3s repo at `contrib/util/generate-custom-ca-certs.sh`](https://github.com/k3s-io/k3s/blob/main/contrib/util/generate-custom-ca-certs.sh).
 This script should be run prior to starting K3s for the first time, and will create a full set of leaf CA certificates signed by common Root and Intermediate CA certificates.

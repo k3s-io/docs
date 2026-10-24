@@ -280,9 +280,9 @@ See https://rootlesscontaine.rs/ to learn more about Rootless Kubernetes.
 
 * **Ports**
 
-  When running rootless a new network namespace is created.  This means that K3s instance is running with networking fairly detached from the host.
+  When running rootless, a new network namespace is created.  This means that the K3s instance is running with networking fairly detached from the host.
   The only way to access Services run in K3s from the host is to set up port forwards to the K3s network namespace.
-  Rootless K3s includes controller that will automatically bind 6443 and service ports below 1024 to the host with an offset of 10000.
+  Rootless K3s includes a controller that will automatically bind 6443 and service ports below 1024 to the host with an offset of 10000.
 
   For example, a Service on port 80 will become 10080 on the host, but 8080 will become 8080 without any offset. Currently, only LoadBalancer Services are automatically bound.
 
@@ -332,15 +332,15 @@ See https://rootlesscontaine.rs/ to learn more about Rootless Kubernetes.
 ### Advanced Rootless Configuration
 
 Rootless K3s uses [rootlesskit](https://github.com/rootless-containers/rootlesskit) and [slirp4netns](https://github.com/rootless-containers/slirp4netns) to communicate between host and user network namespaces.
-Some of the configuration used by rootlesskit and slirp4nets can be set by environment variables. The best way to set these is to add them to the `Environment` field of the k3s-rootless systemd unit.
+Some of the configuration used by rootlesskit and slirp4netns can be set by environment variables. The best way to set these is to add them to the `Environment` field of the k3s-rootless systemd unit.
 
 | Variable                             | Default      | Description
 |--------------------------------------|--------------|------------
 | `K3S_ROOTLESS_MTU`                   | 1500         | Sets the MTU for the slirp4netns virtual interfaces.
 | `K3S_ROOTLESS_CIDR`                  | 10.41.0.0/16 | Sets the CIDR used by slirp4netns virtual interfaces.
-| `K3S_ROOTLESS_ENABLE_IPV6`           | autotedected | Enables slirp4netns IPv6 support. If not specified, it is automatically enabled if K3s is configured for dual-stack operation.
+| `K3S_ROOTLESS_ENABLE_IPV6`           | autodetected | Enables slirp4netns IPv6 support. If not specified, it is automatically enabled if K3s is configured for dual-stack operation.
 | `K3S_ROOTLESS_PORT_DRIVER`           | builtin      | Selects the rootless port driver; either `builtin` or `slirp4netns`. Builtin is faster, but masquerades the original source address of inbound packets.
-| `K3S_ROOTLESS_DISABLE_HOST_LOOPBACK` | true         | Controls whether or not access to the hosts's loopback address via the gateway interface is enabled. It is recommended that this not be changed, for security reasons.
+| `K3S_ROOTLESS_DISABLE_HOST_LOOPBACK` | true         | Controls whether or not access to the host's loopback address via the gateway interface is enabled. It is recommended that this not be changed, for security reasons.
 
 ### Troubleshooting Rootless
 
@@ -420,7 +420,7 @@ If you are installing K3s on a system where SELinux is enabled by default (such 
 <Tabs>
 <TabItem value="Automatic Installation" default>
 
-The [install script](./installation/configuration.md#configuration-with-install-script) will automatically install the SELinux RPM from the Rancher RPM repository if on a compatible system if not performing an air-gapped install. Automatic installation can be skipped by setting `INSTALL_K3S_SKIP_SELINUX_RPM=true`.
+The [install script](./installation/configuration.md#configuration-with-install-script) will automatically install the SELinux RPM from the Rancher RPM repository if on a compatible system and not performing an air-gapped install. Automatic installation can be skipped by setting `INSTALL_K3S_SKIP_SELINUX_RPM=true`.
 
 </TabItem>
 
@@ -438,7 +438,7 @@ To force the install script to log a warning rather than fail, you can set the f
 
 ### Enabling SELinux Enforcement
 
-To leverage SELinux, specify the `--selinux` flag when starting K3s servers and agents or setting the K3S_SELINUX=true environment variable.
+To leverage SELinux, specify the `--selinux` flag when starting K3s servers and agents, or set the K3S_SELINUX=true environment variable.
   
 This option can also be specified in the K3s [configuration file](./installation/configuration.md#configuration-file).
 
@@ -452,7 +452,7 @@ Using a custom `--data-dir` under SELinux is not supported. To customize it, you
 
 ### What's lazy pulling and eStargz?
 
-Pulling images is known as one of the time-consuming steps in the container lifecycle.
+Pulling images is known to be one of the most time-consuming steps in the container lifecycle.
 According to [Harter, et al.](https://www.usenix.org/conference/fast16/technical-sessions/presentation/harter),
 
 > pulling packages accounts for 76% of container start time, but only 6.4% of that data is read
@@ -464,21 +464,21 @@ Especially for large images, this technique can shorten the container startup la
 
 To enable lazy pulling, the target image needs to be formatted as [*eStargz*](https://github.com/containerd/stargz-snapshotter/blob/main/docs/stargz-estargz.md).
 This is an OCI-alternative but 100% OCI-compatible image format for lazy pulling.
-Because of the compatibility, eStargz can be pushed to standard container registries (e.g. ghcr.io) as well as this is *still runnable* even on eStargz-agnostic runtimes.
+Because of the compatibility, eStargz can be pushed to standard container registries (e.g. ghcr.io) and is *still runnable* even on eStargz-agnostic runtimes.
 
-eStargz is developed based on the [stargz format proposed by Google CRFS project](https://github.com/google/crfs) but comes with practical features including content verification and performance optimization.
-For more details about lazy pulling and eStargz, please refer to [Stargz Snapshotter project repository](https://github.com/containerd/stargz-snapshotter).
+eStargz is developed based on the [stargz format proposed by the Google CRFS project](https://github.com/google/crfs) but comes with practical features including content verification and performance optimization.
+For more details about lazy pulling and eStargz, please refer to the [Stargz Snapshotter project repository](https://github.com/containerd/stargz-snapshotter).
 
 ### Configure k3s for lazy pulling of eStargz
 
-As shown in the following, `--snapshotter=stargz` option is needed for k3s server and agent.
+As shown in the following, the `--snapshotter=stargz` option is needed for k3s server and agent.
 
 ```bash
 k3s server --snapshotter=stargz
 ```
 
 With this configuration, you can perform lazy pulling for eStargz-formatted images.
-The following example Pod manifest uses eStargz-formatted `node:13.13.0` image (`ghcr.io/stargz-containers/node:13.13.0-esgz`).
+The following example Pod manifest uses the eStargz-formatted `node:13.13.0` image (`ghcr.io/stargz-containers/node:13.13.0-esgz`).
 When the stargz snapshotter is enabled, K3s performs lazy pulling for this image.
 
 ```yaml
