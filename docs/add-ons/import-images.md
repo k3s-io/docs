@@ -64,8 +64,8 @@ Users can import images directly into the containerd image store by placing imag
 For example:
 
 ```bash
-mkdir /var/lib/rancher/k3s/agent/images
-curl  https://github.com/k3s-io/k3s/releases/download/v1.33.1%2Bk3s1/k3s-airgap-images-amd64.tar.zst -O  /var/lib/rancher/k3s/agent/images/k3s-airgap-images-amd64.tar.zst
+sudo mkdir -p /var/lib/rancher/k3s/agent/images
+sudo curl -L -o /var/lib/rancher/k3s/agent/images/k3s-airgap-images-amd64.tar.zst https://github.com/k3s-io/k3s/releases/download/v1.33.1%2Bk3s1/k3s-airgap-images-amd64.tar.zst
 ```
 
 After a few seconds, the images included in the image tarball will be available in the containerd image store of the node. 

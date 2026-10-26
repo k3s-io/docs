@@ -440,7 +440,7 @@ K3s用の[Rancherロギング](https://rancher.com/docs/rancher/v2.6/en/logging/
 ```bash
 helm repo add rancher-charts https://charts.rancher.io
 helm repo update
-helm install --create-namespace -n cattle-logging-system rancher-logging-crd rancher-charts/rancher-logging-crd
+helm install --wait --create-namespace -n cattle-logging-system rancher-logging-crd rancher-charts/rancher-logging-crd
 helm install --create-namespace -n cattle-logging-system rancher-logging --set additionalLoggingSources.k3s.enabled=true rancher-charts/rancher-logging
 ```
 
