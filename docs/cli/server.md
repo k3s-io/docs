@@ -46,7 +46,7 @@ The following options must be set to the same value on all servers in the cluste
 | `--etcd-snapshot-name` value          |                          | "etcd-snapshot-&lt;unix-timestamp&gt;" | Set the base name of etcd snapshots.                                          |
 | `--etcd-snapshot-schedule-cron` value |                          | "0 */12 \* \* \*"                      | Snapshot interval time in cron spec. eg. every 5 hours '0 */5 _ \* _'         |
 | `--etcd-snapshot-retention` value     |                          | 5                                      | Number of local snapshots to retain on each server node                       |
-| `--etcd-snapshot-dir` value           |                          | $\{data-dir\}/db/snapshots             | Directory to save db snapshots                                                |
+| `--etcd-snapshot-dir` value           |                          | $\{data-dir\}/server/db/snapshots      | Directory to save db snapshots                                                |
 | `--etcd-snapshot-restrictions` value  |                          |                                        | Enforce restrictions on snapshot configuration; when set the selected defaults cannot be overridden via 'etcd-snapshot' options (valid values: zero or more of 'snapshot-dir', 's3-endpoint', 's3-bucket', 's3-folder', 's3-proxy', 'all') |
 
 ### S3 etcd Snapshot Storage
@@ -258,7 +258,7 @@ OPTIONS:
    --etcd-snapshot-name value                 (db) Set the base name of etcd snapshots (default: etcd-snapshot-<unix-timestamp>) (default: "etcd-snapshot")
    --etcd-snapshot-schedule-cron value        (db) Snapshot interval time in cron spec. eg. every 5 hours '0 */5 * * *' (default: "0 */12 * * *")
    --etcd-snapshot-retention value            (db) Number of local snapshots to retain on each server node (default: 5)
-   --etcd-snapshot-dir value                  (db) Directory to save db snapshots. (default: ${data-dir}/db/snapshots)
+   --etcd-snapshot-dir value                  (db) Directory to save db snapshots. (default: ${data-dir}/server/db/snapshots)
    --etcd-snapshot-compress                   (db) Compress etcd snapshot
    --etcd-s3                                  (db) Enable backup to S3
    --etcd-s3-endpoint value                   (db) S3 endpoint url (default: "s3.amazonaws.com")
