@@ -2,11 +2,64 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://docs.k3s.io/ja/blog</id>
     <title>K3s Blog</title>
-    <updated>2026-10-01T00:00:00.000Z</updated>
+    <updated>2026-11-03T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://docs.k3s.io/ja/blog"/>
     <subtitle>K3s Blog</subtitle>
     <icon>https://docs.k3s.io/ja/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[Project K3s at KubeCon + CloudNativeCon North America 2026 in Salt Lake City]]></title>
+        <id>https://docs.k3s.io/ja/blog/2026/11/03/K3s-KubeCon-NA-2026</id>
+        <link href="https://docs.k3s.io/ja/blog/2026/11/03/K3s-KubeCon-NA-2026"/>
+        <updated>2026-11-03T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[K3s team at KubeCon North America 2026]]></summary>
+        <content type="html"><![CDATA[<p>The cloud-native community is heading back to Salt Lake City, Utah for <strong>KubeCon + CloudNativeCon North America 2026</strong>, running <strong>November 9–12, 2026</strong> at the Salt Palace Convention Center. With 9,000+ expected attendees from 2,100+ organizations and 400+ sessions spanning Kubernetes, security, AI infrastructure, and platform engineering — this is the biggest gathering of cloud-native practitioners of the year.</p>
+<p><strong>Project K3s</strong> will be there. If you care about lightweight Kubernetes, edge computing, IoT deployments, or simply want to meet the people building K3s, this is your event.</p>
+<h1>K3s's Presence at KubeCon NA 2026</h1>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="lightning-talk">Lightning Talk<a href="https://docs.k3s.io/ja/blog/2026/11/03/K3s-KubeCon-NA-2026#lightning-talk" class="hash-link" aria-label="Lightning Talk への直接リンク" title="Lightning Talk への直接リンク" translate="no">​</a></h2>
+<p>K3s will be kicking off the week with a <strong>Project Lightning Talk</strong> — five minutes, high signal, covering the latest progress and what's on the roadmap.</p>
+<p><strong><a href="https://kubecon-cloudnativecon-north-america-2026.sessionize.com/session/1289886" target="_blank" rel="noopener noreferrer" class="">Project Lightning Talk – K3s</a></strong><br>
+<!-- -->📅 Monday, November 9, 2026<br>
+<!-- -->🎤 Speaker: Orlin Vasilev, K3s Community Manager, SAP</p>
+<p>Expect a concise overview of how K3s continues to evolve and support modern cloud-native workloads at the edge and beyond.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="project-pavilion-kiosk">Project Pavilion Kiosk<a href="https://docs.k3s.io/ja/blog/2026/11/03/K3s-KubeCon-NA-2026#project-pavilion-kiosk" class="hash-link" aria-label="Project Pavilion Kiosk への直接リンク" title="Project Pavilion Kiosk への直接リンク" translate="no">​</a></h2>
+<p>The <strong><a href="https://events.linuxfoundation.org/kubecon-cloudnativecon-north-america/features-add-ons/project-engagement/#project-pavilion" target="_blank" rel="noopener noreferrer" class="">Project Pavilion</a></strong> is where CNCF projects set up kiosks for the duration of the conference. The K3s kiosk is your chance to meet maintainers face to face, see demos, and get answers to the questions you've been saving up.</p>
+<p>Find K3s at booth <strong>P-8A</strong> in the Project Pavilion:</p>
+<p><strong>Tuesday:</strong> 10:30 AM – 2:30 PM</p>
+<p>Come to the kiosk to:</p>
+<ul>
+<li class="">Meet contributors and maintainers</li>
+<li class="">Discover integrations and real-world use cases</li>
+<li class="">Ask questions about running K3s in production</li>
+<li class="">Explore ways to get involved</li>
+</ul>
+<p><img decoding="async" loading="lazy" alt="Project Pavilion Map – K3s at P-8A" src="https://docs.k3s.io/ja/assets/images/kubecon-na-2026-project-pavilion-map-19274441e9435cc6697d9591a36a12ed.svg" width="825" height="643" class="img_ev3q"></p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="come-find-us">Come Find Us<a href="https://docs.k3s.io/ja/blog/2026/11/03/K3s-KubeCon-NA-2026#come-find-us" class="hash-link" aria-label="Come Find Us への直接リンク" title="Come Find Us への直接リンク" translate="no">​</a></h2>
+<p>You'll find K3s maintainers and community members at KubeCon NA 2026 at the lightning talk and at the kiosk. Come say hello, challenge us with hard questions about K3s's roadmap, or just tell us how you're using it in production.</p>
+<p>We genuinely want to hear what's working, what's not, and what you wish K3s could do.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="why-k3s-in-2026">Why K3s in 2026<a href="https://docs.k3s.io/ja/blog/2026/11/03/K3s-KubeCon-NA-2026#why-k3s-in-2026" class="hash-link" aria-label="Why K3s in 2026 への直接リンク" title="Why K3s in 2026 への直接リンク" translate="no">​</a></h2>
+<p>The broader theme at KubeCon NA 2026 is production AI infrastructure — GPU scheduling, model deployment, agentic workloads, security, and cost management at scale. K3s sits at the intersection of all of it: if you need Kubernetes running close to the data source — in a factory, on a ship, at the network edge, or on a satellite — K3s is how you do it without paying the full Kubernetes tax.</p>
+<p>Key areas K3s addresses:</p>
+<ul>
+<li class=""><strong>Lightweight footprint</strong> — single binary under 100MB, minimal RAM requirements, perfect for constrained hardware</li>
+<li class=""><strong>Edge and IoT</strong> — purpose-built for environments where full Kubernetes would be too heavy or complex</li>
+<li class=""><strong>Air-gapped deployments</strong> — built-in support for disconnected environments with bundled images</li>
+<li class=""><strong>Simplified operations</strong> — embedded etcd, embedded load balancer, auto-deploying manifests, built-in Helm controller</li>
+<li class=""><strong>CNCF-certified Kubernetes</strong> — full conformance, so your existing tooling and workloads just work</li>
+</ul>
+<p>If any of that maps to a problem you're solving, find us in Salt Lake City.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="join-the-k3s-community">Join the K3s Community<a href="https://docs.k3s.io/ja/blog/2026/11/03/K3s-KubeCon-NA-2026#join-the-k3s-community" class="hash-link" aria-label="Join the K3s Community への直接リンク" title="Join the K3s Community への直接リンク" translate="no">​</a></h2>
+<p>KubeCon is not just a conference — it's where the people building K3s and the people running it in production meet face to face. Whether you're a first-time attendee curious about the project, an existing operator with sharp feedback, or a potential contributor ready to dive in — the K3s community welcomes you.</p>
+<p>K3s has grown into one of the most impactful Kubernetes distributions thanks to its vibrant and welcoming community. Whether you're running clusters at the edge, in the cloud, or somewhere entirely unexpected — there's a place for you in the K3s ecosystem.</p>
+<p><strong>See you in Salt Lake City, November 9–12, 2026!</strong></p>
+<p><a href="https://events.linuxfoundation.org/kubecon-cloudnativecon-north-america/register/" target="_blank" rel="noopener noreferrer" class=""><em>For more details and to register for KubeCon + CloudNativeCon North America 2026, visit the official event page.</em></a></p>
+<br>
+<p><a href="https://www.linkedin.com/in/orlinvasilev/" target="_blank" rel="noopener noreferrer" class="">Orlin Vasilev</a><br>
+<!-- -->K3s Community Manager</p>]]></content>
+        <author>
+            <name>orlix</name>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[K3s System Images Are Moving to GHCR]]></title>
         <id>https://docs.k3s.io/ja/blog/2026/10/01/K3s-system-images-ghcr</id>
