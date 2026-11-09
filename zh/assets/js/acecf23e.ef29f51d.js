@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkk_3_s_docs=self.webpackChunkk_3_s_docs||[]).push([[1903],{1912:s=>{s.exports=JSON.parse('{"blogBasePath":"/zh/blog","blogTitle":"k3s blog","authorsListPath":"/zh/blog/authors"}')}}]);

@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkk_3_s_docs=self.webpackChunkk_3_s_docs||[]).push([[1930],{140:e=>{e.exports=JSON.parse('{"metadata":{"permalink":"/ja/blog","page":1,"postsPerPage":10,"totalPages":2,"totalCount":12,"nextPage":"/ja/blog/page/2","blogDescription":"Blog","blogTitle":"k3s blog"}}')}}]);
