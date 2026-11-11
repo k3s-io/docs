@@ -1,106 +1,109 @@
 ---
-title: "Networking Services"
+title: "网络服务"
 ---
 
-This page explains how CoreDNS, Traefik Ingress controller, Network Policy controller, and ServiceLB load balancer controller work within K3s.
+本文主要介绍CoreDNS、Traefik Ingress控制器、网络策略控制器和ServiceLB负载均衡控制器在K3s中的工作方式。
 
-Refer to the [Installation Network Options](./basic-network-options.md) page for details on Flannel configuration options and backend selection, or how to set up your own CNI.
+有关Flannel配置选项、后端选择以及如何设置自己的CNI，请参考[基本网络选项](./basic-network-options.md) 
 
-For information on which ports need to be opened for K3s, refer to the [Networking Requirements](../installation/requirements.md#networking).
+有关K3s需要开放哪些端口，请参考[网络需求](../installation/requirements.md#networking)
 
 ## CoreDNS
 
-CoreDNS is deployed automatically on server startup. To disable it, configure all servers in the cluster with the `--disable=coredns` option.
+CoreDNS在服务器启动时就会自动部署。如需要禁用CoreDNS，请为集群中所有服务器配置`--disable=coredns`选项。
 
-If you don't install CoreDNS, you will need to install a cluster DNS provider yourself.
+如果不安装CoreDNS，则需要自行安装集群DNS提供应用。
 
-## Traefik Ingress Controller
+## Traefik Ingress控制器
 
-[Traefik](https://traefik.io/) is a modern HTTP reverse proxy and load balancer made to deploy microservices with ease. It simplifies networking complexity while designing, deploying, and running applications.
+[Traefik](https://traefik.io/)是一个现代HTTP反向代理和负载均衡器，旨在简化微服务的部署，其简化程序设计、部署及运行时的网络复杂度。
 
-The Traefik ingress controller deploys a LoadBalancer Service that uses ports 80 and 443. By default, ServiceLB will expose these ports on all cluster members, meaning these ports will not be usable for other HostPort or NodePort pods.
+Traefik Ingress控制器部署了一个负载均衡服务，该服务需要80和443端口。默认情况下，ServiceLB会在集群中的所有成员节点上公开这些端口，这也意味着其他使用HostPort和NodePort的Pod将无法使用这些端口。
 
-Traefik is deployed by default when starting the server. For more information see [Managing Packaged Components](../installation/packaged-components.md). The default config file is found in `/var/lib/rancher/k3s/server/manifests/traefik.yaml`.
+服务器启动时，K3s会默认部署Traefik，更多有关信息请参考[Managing Packaged Components](../installation/packaged-components.md)。默认的配置文件在`/var/lib/rancher/k3s/server/manifests/traefik.yaml`。
 
-The `traefik.yaml` file should not be edited manually, as K3s will replace the file with defaults at startup. Instead, you should customize Traefik by creating an additional `HelmChartConfig` manifest in `/var/lib/rancher/k3s/server/manifests`. For more details and an example see [Customizing Packaged Components with HelmChartConfig](../add-ons/helm.md#customizing-packaged-components-with-helmchartconfig). For more information on the possible configuration values, refer to the official [Traefik Helm Configuration Parameters.](https://github.com/traefik/traefik-helm-chart/tree/master/traefik).
+不要手动编辑traefik.yaml文件，因为K3s会在启动时使用默认内容替换该文件。如果需要自定义Traefik，应在`/var/lib/rancher/k3s/server/manifests`中额外创建一个`HelmChartConfig`清单。有关详细信息和示例，请参阅[使用 HelmChartConfig 自定义打包组件](../add-ons/helm.md#使用-helmchartconfig-自定义打包组件)。有关可用配置项的更多信息，请参阅官方的 [Traefik Helm 配置参数](https://github.com/traefik/traefik-helm-chart/tree/master/traefik)。
 
-To remove Traefik from your cluster, start all servers with the `--disable=traefik` flag.
+如果需要再集群中移除Traefik，请使用`--disable=traefik`参数启动所有服务器。
 
-K3s versions 1.20 and earlier include Traefik v1. K3s versions 1.21 and later install Traefik v2, unless an existing installation of Traefik v1 is found, in which case Traefik is not upgraded to v2. For more information on the specific version of Traefik included with K3s, consult the Release Notes for your version.
+K3s 1.20及更早版本使用Traefik v1。K3s 1.21及更高版本默认安装Traefik v2；但是，如果检测到已经安装Traefik v1，则不会将其升级到v2。有关特定K3s版本所包含的Traefik版本，请查阅相应版本的发行说明。
 
-To migrate from an older Traefik v1 instance please refer to the [Traefik documentation](https://doc.traefik.io/traefik/migrate/v1-to-v2/) and [migration tool](https://github.com/traefik/traefik-migration-tool).
+如需要从旧版Traefik v1迁移，请参阅[Traefik文档](https://doc.traefik.io/traefik/migrate/v1-to-v2/)和[迁移工具](https://github.com/traefik/traefik-migration-tool)。
 
-## Network Policy Controller
+## 网络策略控制器
 
-K3s includes an embedded network policy controller. The underlying implementation is [kube-router's](https://github.com/cloudnativelabs/kube-router) netpol controller library (no other kube-router functionality is present) and can be found [here](https://github.com/k3s-io/k3s/tree/main/pkg/agent/netpol). 
+K3s内置了网络策略控制器，其底层采用[kube-router](https://github.com/cloudnativelabs/kube-router)的netpol控制器库，但不包含kube-router的其他功能，相关代码可以在[此处查看](https://github.com/k3s-io/k3s/tree/main/pkg/agent/netpol)。
 
-To disable it, start each server with the `--disable-network-policy` flag.
+如果需要禁用网络控制器，使用`--disable-network-policy`参数启动每台服务器。
 
 :::note
-Network policy iptables rules are not removed if the K3s configuration is changed to disable the network policy controller. To clean up the configured kube-router network policy rules after disabling the network policy controller, use the `k3s-killall.sh` script, or clean them using `iptables-save` and `iptables-restore`. These steps must be run manually on all nodes in the cluster.
+如果通过修改K3s配置来禁用网络策略控制器，已有的iptable规则不会被自动删除。在禁用网络控制器后，如需清除已配置的kube-router网络策略，可以使用`k3s-killall.sh`脚本，或者通过`iptables-save`和`iptables-restore`命令，需要手动在集群中的所有节点上执行以下操作：
 ```
 iptables-save | grep -v KUBE-ROUTER | iptables-restore
 ip6tables-save | grep -v KUBE-ROUTER | ip6tables-restore
 ```
 :::
 
-## Service Load Balancer
+## Service负载均衡器
 
-Any LoadBalancer controller can be deployed to your K3s cluster. By default, K3s provides a load balancer known as [ServiceLB](https://github.com/k3s-io/klipper-lb) (formerly Klipper LoadBalancer) that uses available host ports.
+K3s集群中可以部署任意的负载均衡控制器，K3s默认使用[ServiceLB](https://github.com/k3s-io/klipper-lb)（之前为Klipper LoadBalancer）作为负载均衡器，其会使用宿主机上的可用端口。
 
-Upstream Kubernetes allows Services of type LoadBalancer to be created, but doesn't include a default load balancer implementation, so these services will remain `pending` until one is installed. Many hosted services require a cloud provider such as Amazon EC2 or Microsoft Azure to offer an external load balancer implementation. By contrast, the K3s ServiceLB makes it possible to use LoadBalancer Services without a cloud provider or any additional configuration.
+上游Kubernetes会允许创建LoadBalancer类型的服务，但是其并未包含默认的负载均衡的具体实现，因此在安装负载均衡控制器之前，这些Service会一直保持`Pending`状态。许多托管服务需要像Amazon EC2或Microsoft Azure等云服务商来实现外部的负载均衡。相比之下，K3s ServiceLB则无需云服务商或其他额外的配置。
 
-### How ServiceLB Works
+### ServiceLB的运行原理
 
-The ServiceLB controller watches Kubernetes [Services](https://kubernetes.io/docs/concepts/services-networking/service/) with the `spec.type` field set to `LoadBalancer`.
+ServiceLB会监视`spec.type`字段为`LoadBalancer`的Kubernetes [Services](https://kubernetes.io/docs/concepts/services-networking/service/)。
 
-For each LoadBalancer Service, a [DaemonSet](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/) is created in the `kube-system` namespace. This DaemonSet in turn creates Pods with a `svc-` prefix, on each node. These Pods use iptables to forward traffic from the Pod's NodePort, to the Service's ClusterIP address and port.
+对于每个LoadBalance Service，ServiceLB会在命名空间`kube-system`中创建一个[DaemonSet](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/)，DaemonSet随后会在每个节点上创建以名称以`svc-`开头的Pod。这些Pod使用iptables将来自该Pod的NodePort的流量转发到Service的ClusterIP的地址和端口。 
 
-If the ServiceLB Pod runs on a node that has an external IP configured, the node's external IP is populated into the Service's `status.loadBalancer.ingress` address list. Otherwise, the node's internal IP is used.
+如果SerivceLB所在的Pod配置了外部IP，则该节点的外部IP会被写入Service的`status.loadbalancer.ingress`的地址列表，否则就使用节点的内部IP。
 
-If multiple LoadBalancer Services are created, a separate DaemonSet is created for each Service.
+如果创建了多个LoadBalancer Services，则每个Service都会单独创建一个DaemonSet。
 
-It is possible to expose multiple Services on the same node, as long as they use different ports.
+如果需要在一个节点上暴露多个Service，则需要让Serivce使用不同的端口。
 
-If you try to create a LoadBalancer Service that listens on port 80, the ServiceLB will try to find a free host in the cluster for port 80. If no host with that port is available, the LB will remain Pending.
+如果尝试创建一个监听80端口的LoadBalancer Service，ServiceLB会在集群中尝试寻找一个80端口尚未被占用的节点。如果没有找到，则负载均衡器会保持Pending状态。
 
-### Usage
+### 使用方式
 
-Create a [Service of type LoadBalancer](https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer) in K3s.
+在K3s中创建一个[LoadBalancer类型的Service](https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer)。
 
-### Controlling ServiceLB Node Selection
+### 控制ServiceLB的节点选择
 
-Adding the `svccontroller.k3s.cattle.io/enablelb=true` label to one or more nodes switches the ServiceLB controller into allow-list mode, where only nodes with the label are eligible to host LoadBalancer pods. Nodes that remain unlabeled will be excluded from use by ServiceLB.
+在一个或多个节点上添加`svccontroller.k3s.cattle.io/enablelb=true`标签后，ServiceLB控制器会切换到白名单模式，只有添加了该标签的节点才可以托管LoadBalancer Pod，其余的节点将不会被ServiceLB采用。
 
 :::note
-By default, nodes are not labeled. As long as all nodes remain unlabeled, all nodes with ports available will be used by ServiceLB.
+默认情况下，节点都不会带有此标签，只有当所有节点都没有此标签时，ServiceLB才会使用所有具有可用端口的节点。
 :::
 
-### Creating ServiceLB Node Pools
-To select a particular subset of nodes to host pods for a LoadBalancer, add the `enablelb` label to the desired nodes, and set matching `lbpool` label values on the Nodes and Services. For example:
+### 创建ServiceLB节点池
 
-1. Label Node A and Node B with `svccontroller.k3s.cattle.io/lbpool=pool1` and `svccontroller.k3s.cattle.io/enablelb=true`
-2. Label Node C and Node D with `svccontroller.k3s.cattle.io/lbpool=pool2` and `svccontroller.k3s.cattle.io/enablelb=true`
-3. Create one LoadBalancer Service on port 443 with label `svccontroller.k3s.cattle.io/lbpool=pool1`. The DaemonSet for this service only deploy Pods to Node A and Node B.
-4. Create another LoadBalancer Service on port 443 with label `svccontroller.k3s.cattle.io/lbpool=pool2`. The DaemonSet will only deploy Pods to Node C and Node D.
+如果需要选择一组特定的节点去托管LoadBalancer的Pod，请为组内所有节点添加`enablelb`标签，并且在节点和Service设置相互匹配的`lbpool`标签值，例如：
 
-### Disabling ServiceLB
+1. 将节点A和节点B添加`svccontroller.k3s.cattle.io/lbpool=pool1`和`svccontroller.k3s.cattle.io/enablelb=true`标签； 
+2. 将节点C和节点D添加`svccontroller.k3s.cattle.io/lbpool=pool2`和`svccontroller.k3s.cattle.io/enablelb=true`标签； 
+3. 在443端口上创建一个LoadBalancer Serivce并添加`svccontroller.k3s.cattle.io/lbpool=pool1`标签，则该Service创建的Daemonset只会将Pod部署到节点A和B
+4. 在443端口上创建一个LoadBalancer Serivce并添加`svccontroller.k3s.cattle.io/lbpool=pool2`标签，则该Service创建的Daemonset只会将Pod部署到节点C和D
 
-To disable ServiceLB, configure all servers in the cluster with the `--disable=servicelb` flag.
+### 禁用ServiceLB
 
-This is necessary if you wish to run a different LB, such as MetalLB.
+如果需要禁用ServiceLB，可以在集群所有服务器上使用`--disable=servicelb`参数。
 
-## Deploying an External Cloud Controller Manager
+如果需要运行其他负载均衡控制器如MetalLB，则必须禁用ServiceLB。
 
-In order to reduce binary size, K3s removes all "in-tree" (built-in) cloud providers. Instead, K3s provides an embedded Cloud Controller Manager (CCM) stub that does the following:
-- Sets node InternalIP and ExternalIP address fields based on the `--node-ip` and `--node-external-ip` flags.
-- Hosts the ServiceLB LoadBalancer controller.
-- Clears the `node.cloudprovider.kubernetes.io/uninitialized` taint that is present when the cloud-provider is set to `external` 
+## 部署外部云控制器管理器
 
-Before deploying an external CCM, you must start all K3s servers with the `--disable-cloud-controller` flag to disable to embedded CCM. 
+K3s为了减少应用体积，移除了所有内置的云服务供应商。作为替代，K3s提供了一个内置的云控制管理器（CCM）stub，负责执行以下操作：
+- 根据`node-ip`和`node-external-ip`来设置节点的InternalIP地址和ExternalIP地址字段
+- 托管ServiceLB的LoadBalancer控制器
+- 清除云服务商设置为`external`时出现的`node.cloudprovider.kubernetes.io/uninitialized`污点
+
+> 这里的stub没有翻译，实在是找不到合适的词语，可以简单理解为一个替代品或者一个临时的替补
+
+如果部署外部CCM，则需要使用`--disable-cloud-controller`参数启动所有K3s服务器来禁用内置的CCM。
 
 :::note
-If you disable the built-in CCM and do not deploy and properly configure an external substitute, nodes will remain tainted and unschedulable.
+如果禁用了内置的CCM，却没有部署并且正确配置外部替代方案，节点会一直带有污点，并且无法调度工作负载。
 :::
 
 
