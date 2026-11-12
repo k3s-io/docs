@@ -350,7 +350,7 @@ Some of the configuration used by rootlesskit and slirp4netns can be set by envi
 
 ## Node Labels and Taints
 
-K3s agents can be configured with the options `--node-label` and `--node-taint` which adds a label and taint to the kubelet. The two options only add labels and/or taints [at registration time](./cli/agent.md#node-labels-and-taints-for-agents), so they can only be set when the node is first joined to the cluster.
+K3s agents can be configured with the options `--node-label` and `--node-taint` which add labels and taints to the node. Taints are only applied when the node registers with the cluster. Labels are applied at registration and again every time K3s starts, but are never removed: a label dropped from the K3s configuration stays on the node. See [Node Labels and Taints for Agents](./cli/agent.md#node-labels-and-taints-for-agents) for details.
 
 All current versions of Kubernetes restrict nodes from registering with most labels with `kubernetes.io` and `k8s.io` prefixes, specifically including the `kubernetes.io/role` label. If you attempt to start a node with a disallowed label, K3s will fail to start. As stated by the Kubernetes authors:
 
@@ -358,7 +358,7 @@ All current versions of Kubernetes restrict nodes from registering with most lab
 
 See [SIG-Auth KEP 279](https://github.com/kubernetes/enhancements/blob/master/keps/sig-auth/279-limit-node-access/README.md) for more information.
 
-If you want to change node labels and taints after node registration, or add reserved labels, you should use `kubectl`. Refer to the official Kubernetes documentation for details on how to add [taints](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) and [node labels.](https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/#add-a-label-to-a-node)
+If you want to change node labels and taints after node registration, or add reserved labels, you should use `kubectl`. When you remove or change a label with `kubectl`, also remove or change it in the K3s configuration, otherwise it is set back on the next restart. Refer to the official Kubernetes documentation for details on how to add [taints](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) and [node labels.](https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/#add-a-label-to-a-node)
 
 ## Starting the Service with the Installation Script
 
