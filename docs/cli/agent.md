@@ -102,7 +102,12 @@ Options are documented on this page as CLI flags, but can also be passed as conf
 
 ### Node Labels and Taints for Agents
 
-K3s agents can be configured with the options `--node-label` and `--node-taint`, which add labels and taints to the kubelet. The two options only add labels and/or taints at registration time, so they can only be set once and cannot be changed afterward by running K3s commands.
+K3s agents can be configured with the options `--node-label` and `--node-taint`, which add labels and taints to the node. The two options behave differently once the node has registered:
+
+- `--node-taint` is only applied when the node registers with the cluster. Adding, changing or removing a taint in the K3s configuration has no effect on a node that is already registered.
+- `--node-label` is applied when the node registers, and applied again every time K3s starts. Labels are only added or updated, never removed:
+  - A label removed from the K3s configuration is not removed from the node.
+  - A label that is still in the K3s configuration is restored with its configured value the next time K3s starts, even if it was changed or removed with `kubectl` in the meantime.
 
 Below is an example showing how to add labels and a taint:
 
@@ -112,7 +117,7 @@ Below is an example showing how to add labels and a taint:
      --node-taint key1=value1:NoExecute
 ```
 
-If you want to change node labels and taints after node registration you should use `kubectl`. Refer to the official Kubernetes documentation for details on how to add [taints](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) and [node labels.](https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/#add-a-label-to-a-node)
+If you want to change node labels and taints after node registration you should use `kubectl`. When you remove or change a label with `kubectl`, also remove or change it in the K3s configuration, otherwise it is set back on the next restart. Refer to the official Kubernetes documentation for details on how to add [taints](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) and [node labels.](https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/#add-a-label-to-a-node)
 
 ### K3s Agent CLI Help
 
