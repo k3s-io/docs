@@ -157,21 +157,13 @@ node-taint:
   - charlie=delta:NoSchedule
 ```
 
-CLI arguments are applied after all configuration files. Values passed by the CLI for repeatable arguments are added to the values from the configuration files, and override a value with the same key. For example, with this configuration file:
-
-```yaml title="/etc/rancher/k3s/config.yaml"
-node-label:
-  - ALICE=GOOD
-  - BOB=OKAY
-```
-
-Running the following command:
+CLI arguments are applied after all configuration files. Values passed by the CLI for repeatable arguments are appended to the values from the configuration files. For example, with the configuration files above, running:
 
 ```bash
-k3s server --node-label "ALICE=BAD" --node-label "CHARLIE=FINE"
+k3s server --node-label foo=four --node-label bar=baz
 ```
 
-Results in node labels of `ALICE=BAD`, `BOB=OKAY`, and `CHARLIE=FINE`.
+Results in K3s passing the labels `other=what,foo=three,foo=four,bar=baz` to the kubelet. The kubelet applies these key/value pairs in order, so the last value for a duplicate key is used, and the node is registered with the labels `other=what`, `foo=four`, and `bar=baz`. For repeatable arguments that are not key/value pairs, the values from the CLI are simply appended.
 
 ## Putting it all together
 
