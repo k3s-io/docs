@@ -80,14 +80,14 @@ spec:
         enabled: true
 #       experimentalChannel: true (read warning below)
 ```
-Traefik is compatible with [Gateway API v1.4](https://gateway-api.sigs.k8s.io/reference/api-spec/1.4/spec/).
+Traefik is compatible with [Gateway API v1.6](https://gateway-api.sigs.k8s.io/reference/api-spec/1.6/spec/).
 
 :::warning Gateway API resources
 Prior to the April 2026 releases (v1.33.11+k3s1, v1.34.7+k3s1 and v1.35.4+k3s1) Gateway API CRDs are removed if traefik is disabled after previously having been enabled. When using an affected release, avoid disabling traefik or uninstalling the traefik-crds AddOn if your cluster contains Gateway API resources that you do not want removed.
 :::
 
 :::warning
-If you need support for experimental Gateway API resources, e.g. TCPRoute, you must install the [v1.4 experimental-install.yaml](https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.0/experimental-install.yaml) from the official [gateway-api releases](https://github.com/kubernetes-sigs/gateway-api/releases/tag/v1.4.0) and use the option `providers.kubernetesGateway.experimentalChannel=true` in the k3s-traefik chart values.
+If you need support for experimental Gateway API resources, e.g. TCPRoute, you must install the [v1.6 experimental-install.yaml](https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.6.3/experimental-install.yaml) from the official [gateway-api releases](https://github.com/kubernetes-sigs/gateway-api/releases/tag/v1.6.3) and use the option `providers.kubernetesGateway.experimentalChannel=true` in the k3s-traefik chart values.
 :::
 
 ## Network Policy Controller
