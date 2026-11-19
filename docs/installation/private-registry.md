@@ -161,6 +161,11 @@ configs:
       insecure_skip_verify: true
 ```
 
+:::note
+Only the `tls` settings of the `"*"` entry in `configs` are used as defaults. The `auth` section is **not** supported on the wildcard entry: credentials are looked up by the name of the registry being pulled from, and are never inherited from `"*"`.
+To authenticate to a registry, add a `configs` entry with `auth` for that specific registry hostname (including the port, if any).
+:::
+
 ### With TLS
 
 Below are examples showing how you may configure `/etc/rancher/k3s/registries.yaml` on each node when using TLS.
