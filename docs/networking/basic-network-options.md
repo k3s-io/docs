@@ -36,6 +36,29 @@ This page describes K3s network configuration options, including configuration o
 | `--flannel-conf` value      | Override default flannel config file      |
 | `--flannel-cni-conf` value  | Override default flannel cni config file  |
 
+### Mixed Linux and Windows Clusters
+
+For Flannel VXLAN to work between Linux and Windows nodes, configure VNI `4096` and UDP port `4789` on every Linux node running Flannel, including servers with an embedded agent. 
+
+```json
+{
+  "Network": "10.42.0.0/16",
+  "EnableIPv4": true,
+  "EnableIPv6": false,
+  "Backend": {
+    "Type": "vxlan",
+    "VNI": 4096,
+    "Port": 4789
+  }
+}
+```
+
+Set `flannel-conf` to the file's path in each Linux node's K3s configuration, for example:
+
+```yaml
+flannel-conf: /etc/rancher/k3s/flannel-windows.json
+```
+
 ## Custom CNI
 
 Start K3s with `--flannel-backend=none` and install your CNI of choice. Most CNI plugins come with their own network policy engine, so it is recommended to set `--disable-network-policy` as well to avoid conflicts. Some important information to take into consideration:
