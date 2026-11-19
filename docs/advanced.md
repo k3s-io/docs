@@ -95,6 +95,21 @@ CONTAINERD_HTTPS_PROXY=http://your-proxy.example.com:8888
 CONTAINERD_NO_PROXY=127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
 ```
 
+### Using the proxy for agent connections to the server
+
+By default, K3s agents do not use the configured proxy when connecting to the K3s supervisor and Kubernetes API server on the server nodes, even if `HTTP_PROXY`, `HTTPS_PROXY` and `NO_PROXY` are set. Connections made through the embedded agent load-balancer are dialed directly.
+
+To route these connections through the proxy, set the `K3S_AGENT_HTTP_PROXY_ALLOWED` environment variable to `true` in addition to the proxy variables:
+
+```
+K3S_AGENT_HTTP_PROXY_ALLOWED=true
+HTTP_PROXY=http://your-proxy.example.com:8888
+HTTPS_PROXY=http://your-proxy.example.com:8888
+NO_PROXY=127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
+```
+
+The standard `NO_PROXY` rules apply: if the server URL matches a `NO_PROXY` entry, the connection is made directly. The proxy URL scheme must be `http`, `https`, or `socks5`; other schemes are rejected.
+
 ## Using Docker as the Container Runtime
 
 K3s includes and defaults to [containerd](https://containerd.io/), an industry-standard container runtime.
