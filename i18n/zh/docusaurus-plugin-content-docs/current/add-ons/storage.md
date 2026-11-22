@@ -28,7 +28,7 @@ K3s 删除了几个可选的卷插件和所有内置的（有时称为“in-tree
 
 Kubernetes 维护人员正在积极地将树内卷插件迁移到 CSI 驱动程序。有关此迁移的更多信息，请参阅[此处](https://kubernetes.io/blog/2021/12/10/storage-in-tree-to-csi-migration-status-update/)。
 
-## 设置本地存储提供程序
+## 设置本地存储提供程序 {#setting-up-the-local-storage-provider}
 K3s 自带 Rancher 的 Local Path Provisioner，这使得能够使用各自节点上的本地存储来开箱即用地创建持久卷声明。下面是一个简单的例子。有关更多信息，请参阅[官方文档](https://github.com/rancher/local-path-provisioner/blob/master/README.md#usage)。
 
 创建一个 hostPath 支持的持久卷声明和一个使用它的 Pod：

@@ -8,7 +8,7 @@ title: agent
 
 请注意，Server 也运行 Agent，因此本文列出的所有标志也可用于 Server。
 
-在本文中，选项作为 CLI 标志传递，但是也可以作为配置文件选项传递。有关使用 YAML 配置文件的更多信息，请参阅[配置文件](../installation/configuration.md#配置文件)文档。
+在本文中，选项作为 CLI 标志传递，但是也可以作为配置文件选项传递。有关使用 YAML 配置文件的更多信息，请参阅[配置文件](../installation/configuration.md#configuration-file)文档。
 
 ### Logging
 

@@ -8,7 +8,7 @@ title: server
 
 请注意，Server 也运行 Agent，因此 Server 也支持 [`k3s agent` 文档](agent.md)中列出的所有配置选项。
 
-在本文中，选项作为 CLI 标志传递，但是也可以作为配置文件选项传递。有关使用 YAML 配置文件的更多信息，请参阅[配置文件](../installation/configuration.md#配置文件)文档。
+在本文中，选项作为 CLI 标志传递，但是也可以作为配置文件选项传递。有关使用 YAML 配置文件的更多信息，请参阅[配置文件](../installation/configuration.md#configuration-file)文档。
 
 ## 关键配置值
 
@@ -138,7 +138,7 @@ title: server
 
 | 标志 | 描述 |
 | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| `--disable` value | 请参阅[使用 `--disable` 标志](../installation/packaged-components.md#使用---disable-标志)。 |
+| `--disable` value | 请参阅[使用 `--disable` 标志](../installation/packaged-components.md#using-the-disable-flag)。 |
 | `--disable-scheduler` | 禁用 Kubernetes 默认调度程序 |
 | `--disable-cloud-controller` | 禁用 k3s 默认云 Controller Manager |
 | `--disable-kube-proxy` | 禁用运行 kube-proxy |

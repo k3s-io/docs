@@ -306,7 +306,7 @@ firewall-cmd --permanent --zone=trusted --add-source=10.43.0.0/16 #services
 firewall-cmd --reload
 ```
 
-你可能还需要打开其他端口。有关详细信息，请参阅[入站规则](./installation/requirements.md#k3s-server-节点的入站规则)。如果更改了 pod 或服务的默认 CIDR，则需要相应地更新防火墙规则。
+你可能还需要打开其他端口。有关详细信息，请参阅[入站规则](./installation/requirements.md#inbound-rules-for-k3s-nodes)。如果更改了 pod 或服务的默认 CIDR，则需要相应地更新防火墙规则。
 
 如果启用，则需要禁用 nm-cloud-setup 并重新启动节点：
 ```bash
@@ -328,7 +328,7 @@ ufw allow from 10.42.0.0/16 to any #pods
 ufw allow from 10.43.0.0/16 to any #services
 ```
 
-你可能还需要打开其他端口。有关详细信息，请参阅[入站规则](./installation/requirements.md#k3s-server-节点的入站规则)。如果更改了 pod 或服务的默认 CIDR，则需要相应地更新防火墙规则。
+你可能还需要打开其他端口。有关详细信息，请参阅[入站规则](./installation/requirements.md#inbound-rules-for-k3s-nodes)。如果更改了 pod 或服务的默认 CIDR，则需要相应地更新防火墙规则。
 
 ### Raspberry Pi
 
@@ -387,7 +387,7 @@ sudo docker cp k3s-server-1:/etc/rancher/k3s/k3s.yaml ~/.kube/config
 </TabItem>
 </Tabs>
 
-## SELinux 支持
+## SELinux 支持 {#selinux-support}
 
 :::info 版本
 
@@ -400,7 +400,7 @@ sudo docker cp k3s-server-1:/etc/rancher/k3s/k3s.yaml ~/.kube/config
 <Tabs>
 <TabItem value="自动安装" default>
 
-如果系统兼容，而且没有进行离线安装，那么[安装脚本](./installation/configuration.md#使用安装脚本的选项)将自动从 Rancher RPM 仓库安装 SELinux RPM。你通过设置 `INSTALL_K3S_SKIP_SELINUX_RPM=true` 来跳过自动安装。
+如果系统兼容，而且没有进行离线安装，那么[安装脚本](./installation/configuration.md#configuration-with-install-script)将自动从 Rancher RPM 仓库安装 SELinux RPM。你通过设置 `INSTALL_K3S_SKIP_SELINUX_RPM=true` 来跳过自动安装。
 
 </TabItem>
 

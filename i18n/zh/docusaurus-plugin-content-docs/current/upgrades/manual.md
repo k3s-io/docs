@@ -32,7 +32,7 @@ title: "手动升级"
 安装脚本使用 `INSTALL_K3S_EXEC` 变量、`K3S_` 变量和尾随的 shell 参数来生成 systemd 单元和环境文件。
 如果你在最初运行安装脚本时进行了配置，但在重新运行安装脚本时没有重新设置，则原始值将会丢失。
 
-[配置文件](../installation/configuration.md#配置文件) 的内容不受安装脚本管理。
+[配置文件](../installation/configuration.md#configuration-file) 的内容不受安装脚本管理。
 要让你的配置独立于安装脚本，请使用配置文件而不是传递环境变量或使用安装脚本参数。
 :::
 
