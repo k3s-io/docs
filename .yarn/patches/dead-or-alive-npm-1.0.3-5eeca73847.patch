@@ -1,0 +1,27 @@
+diff --git a/lib/index.js b/lib/index.js
+index 02c63867b6c33d40c058347d0d2f5b08bee6e453..1be327036a6c520e8070aa24face937d612924fe 100644
+--- a/lib/index.js
++++ b/lib/index.js
+@@ -242,20 +242,8 @@ async function deadOrAliveInternal(state, url) {
+     if (location) {
+       const redirect = new URL(location, url)
+ 
+-      if (url.hash) {
+-        const message = new VFileMessage(
+-          'Unexpected hash in URL `' +
+-            url.href +
+-            '` that redirects to `' +
+-            redirect.href +
+-            '` losing the hash, remove the hash from the original URL',
+-          {
+-            ruleId: 'lost-hash-with-redirect',
+-            source: 'dead-or-alive'
+-          }
+-        )
+-        message.url = documentation + '#' + message.ruleId
+-        state.messages.push(message)
++      if (!location.includes('#')) {
++        redirect.hash = url.hash
+       }
+ 
+       state.redirects++
