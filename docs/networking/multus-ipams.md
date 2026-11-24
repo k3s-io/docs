@@ -20,12 +20,29 @@ An IP Address Manager (IPAM) plugin is required to assign IP addresses on the ex
 
 The helm deployment examples below will deploy a DaemonSet to create Multus pods to install the required CNI binaries in `/var/lib/rancher/k3s/data/cni/` and Multus CNI config in `/var/lib/rancher/k3s/agent/etc/cni/net.d`.
 
+:::warning
+Since version 4.3.009, rke2-multus has been split into two charts: one for the CRDs and one for the deployments and configurations.
+Splitting the CRDs into their own chart changes their ownership so you need to set `takeOwnership: true` in the HelmChart.
+:::
+
 <Tabs groupId="MultusIPAMplugins">
 <TabItem value="host-local" default>
-The host-local IPAM plugin allocates ip addresses out of a set of address ranges. It stores the state locally on the host filesystem, hence ensuring uniqueness of IP addresses on a single host. Therefore, we don't recommend it for multi-node clusters. This IPAM plugin does not require any extra deployment. For more information: https://www.cni.dev/plugins/current/ipam/host-local/.
+The host-local IPAM plugin allocates IP addresses out of a set of address ranges. It stores the state locally on the host filesystem, hence ensuring uniqueness of IP addresses on a single host. Therefore, we don't recommend it for multi-node clusters. This IPAM plugin does not require any extra deployment. For more information: https://www.cni.dev/plugins/current/ipam/host-local/.
 
 To use the host-local plugin, deploy Multus with the following configuration:
 ```yaml
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: multus-crd
+  namespace: kube-system
+spec:
+  repo: https://rke2-charts.rancher.io
+  chart: rke2-multus-crd
+  version: 4.3.204 # Always use the same version for both charts
+  targetNamespace: kube-system
+  takeOwnership: true
+---
 apiVersion: helm.cattle.io/v1
 kind: HelmChart
 metadata:
@@ -34,6 +51,7 @@ metadata:
 spec:
   repo: https://rke2-charts.rancher.io
   chart: rke2-multus
+  version: 4.3.204 # Always use the same version for both charts
   targetNamespace: kube-system
   valuesContent: |-
     config:
@@ -55,11 +73,24 @@ To use the Whereabouts IPAM plugin, deploy Multus with the following configurati
 apiVersion: helm.cattle.io/v1
 kind: HelmChart
 metadata:
+  name: multus-crd
+  namespace: kube-system
+spec:
+  repo: https://rke2-charts.rancher.io
+  chart: rke2-multus-crd
+  version: 4.3.204 # Always use the same version for both charts
+  targetNamespace: kube-system
+  takeOwnership: true
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
   name: multus
   namespace: kube-system
 spec:
   repo: https://rke2-charts.rancher.io
   chart: rke2-multus
+  version: 4.3.204 # Always use the same version for both charts
   targetNamespace: kube-system
   valuesContent: |-
     config:
@@ -110,11 +141,24 @@ To use the DHCP plugin, deploy Multus with the following configuration:
 apiVersion: helm.cattle.io/v1
 kind: HelmChart
 metadata:
+  name: multus-crd
+  namespace: kube-system
+spec:
+  repo: https://rke2-charts.rancher.io
+  chart: rke2-multus-crd
+  version: 4.3.204 # Always use the same version for both charts
+  targetNamespace: kube-system
+  takeOwnership: true
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
   name: multus
   namespace: kube-system
 spec:
   repo: https://rke2-charts.rancher.io
   chart: rke2-multus
+  version: 4.3.204 # Always use the same version for both charts
   targetNamespace: kube-system
   valuesContent: |-
     config:
