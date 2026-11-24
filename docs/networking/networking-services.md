@@ -63,6 +63,46 @@ Starting with the June 2026 releases (v1.33.13+k3s1, v1.34.9+k3s1, v1.35.6+k3s1 
 
 Gateway API is a family of Kubernetes resources that provide dynamic infrastructure provisioning and advanced traffic routing. While the traditional Ingress API is still supported (and not planned to be deprecated), the Gateway API provides a more expressive, role-oriented, and extensible way to manage service exposure.
 
+<Tabs groupId="GatewayAPI">
+<TabItem value="K3s v1.37+" default>
+The gateway API is natively bundled into K3s. When deploying, K3s installs the helm chart `gateway-api-crd`, which adds the gateway-api stable CRDs.
+
+If you don't want K3s to install them, you can disable it by setting the following configuration in the control-plane nodes:
+```bash
+disable: gateway-api-crd
+```
+
+If you want to also install the experimental CRDs, apply the following configuration:
+
+```yaml
+# /var/lib/rancher/k3s/server/manifests/gateway-api-crd-config.yaml
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: gateway-api-crd
+  namespace: kube-system
+spec:
+  valuesContent: |-
+    experimental:
+      enabled: true
+```
+</TabItem>
+<TabItem value="K3s v1.36 and earlier6">
+
+The gateway API is installed via Traefik. The Traefik helm chart automatically installs the stable Gateway API CRDs. The transition to the standalone chart on upgrade to v1.37 is designed to preserve and transfer ownership of existing CRDs.
+
+:::warning Gateway API resources
+Prior to the April 2026 releases (v1.33.11+k3s1, v1.34.7+k3s1 and v1.35.4+k3s1) Gateway API CRDs are removed if traefik is disabled after previously having been enabled. When using an affected release, avoid disabling traefik or uninstalling the traefik-crds AddOn if your cluster contains Gateway API resources that you do not want removed.
+:::
+
+:::warning
+If you need support for experimental Gateway API resources, e.g. TCPRoute, you must install the [v1.6 experimental-install.yaml](https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.6.3/experimental-install.yaml) from the official [gateway-api releases](https://github.com/kubernetes-sigs/gateway-api/releases/tag/v1.6.3) and use the option `providers.kubernetesGateway.experimentalChannel=true` in the k3s-traefik chart values.
+:::
+
+</TabItem>
+</Tabs>
+
 K3s comes with Traefik v3, which includes optional support for the Gateway API. In order to enable Gateway API support, deploy a HelmChartConfig that sets `providers.kubernetesGateway.enabled` to true. For example:
 
 ```yaml
@@ -82,13 +122,6 @@ spec:
 ```
 Traefik is compatible with [Gateway API v1.6](https://gateway-api.sigs.k8s.io/reference/api-spec/1.6/spec/).
 
-:::warning Gateway API resources
-Prior to the April 2026 releases (v1.33.11+k3s1, v1.34.7+k3s1 and v1.35.4+k3s1) Gateway API CRDs are removed if traefik is disabled after previously having been enabled. When using an affected release, avoid disabling traefik or uninstalling the traefik-crds AddOn if your cluster contains Gateway API resources that you do not want removed.
-:::
-
-:::warning
-If you need support for experimental Gateway API resources, e.g. TCPRoute, you must install the [v1.6 experimental-install.yaml](https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.6.3/experimental-install.yaml) from the official [gateway-api releases](https://github.com/kubernetes-sigs/gateway-api/releases/tag/v1.6.3) and use the option `providers.kubernetesGateway.experimentalChannel=true` in the k3s-traefik chart values.
-:::
 
 ## Network Policy Controller
 
