@@ -41,6 +41,8 @@ jobs:
         run: yarn install --immutable
       - name: Check internal links
         run: yarn run remark --use remark-validate-links --no-config --frail ./docs
+      - name: Test link redirect handling
+        run: node --test ./scripts/test-link-redirects.mjs
       - name: Check external links
         run: yarn run remark --use remark-lint-no-dead-urls --frail ./docs
       
