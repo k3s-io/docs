@@ -147,3 +147,35 @@ K3s Agent 利用率数据主要取决于容器生命周期管理控制循环的�
 工作负载存储（pod 临时存储和卷）也应该与数据存储区隔离。
 
 如果未能满足数据存储吞吐量和延迟要求，control plane 的响应可能会延迟，control plane 也可能无法维持系统状态。
+
+
+## K3s 的 Server 规模要求 {#server-sizing-requirements-for-k3s}
+
+### 环境 {#environment}
+
+- 所有 agent 均为 t3.medium AWS EC2 实例。
+   - 其中一个 agent 为 c5.4xlarge 实例，用于托管 grafana 监控栈，避免其干扰 control-plane 资源。
+- Server 为 c5 AWS EC2 实例。随着 agent 数量增加，server 会升级为更大的 c5 实例。
+
+### 方法 {#methodology}
+
+这些数据是在特定测试条件下获取的，会因环境和负载而异。以下步骤概述了为获取这些数据所执行的测试。该测试最后在 v1.31.0+k3s1 上执行。所有机器均在 AWS 中配置了标准的 20 GiB gp3 卷。测试按以下步骤运行：
+1. 使用 prometheus 数据源在 grafana 上监控资源。
+2. 以下述方式部署工作负载，以模拟持续的集群活动：
+    - 一个持续扩缩容的基础工作负载
+    - 一个循环删除并重建的工作负载
+    - 一个包含多种其他资源（包括 CRD）的稳定工作负载
+3. 每次以 50-100 个为一批加入 agent 节点。
+4. 当加入 agent 时 server CPU 峰值超过 90% 利用率，或 RAM 超过 80% 利用率时，停止添加 agent。
+
+### 观察结果 {#observations}
+
+- 加入 agent 时，server CPU 会在基线之上出现约 20% 的峰值。
+- 通常限制因素是 CPU，而不是 RAM。在大多数测试中，当 CPU 达到 90% 利用率时，RAM 利用率约为 60%。
+
+#### 关于高可用（HA）的说明 {#a-note-on-high-availability-ha}
+在每次测试结束时，会再加入两个 server（组成基本的 3 节点 HA 集群），以观察这对原 server 资源的影响。影响如下：
+- CPU 利用率明显下降，通常为 30-50%。
+- RAM 利用率保持不变。
+
+虽然未经过测试，但由于单台 server 的限制因素是 CPU，预计使用 3 节点 HA 集群时，可加入的 agent 数量将增加约 50%。

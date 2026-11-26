@@ -1,54 +1,54 @@
 ---
-title: "Managing Packaged Components"
+title: "管理打包组件"
 ---
 
-## Auto-Deploying Manifests (AddOns)
+## 自动部署清单（AddOns） {#auto-deploying-manifests-addons}
 
-On server nodes, any file found in `/var/lib/rancher/k3s/server/manifests` will automatically be deployed to Kubernetes in a manner similar to `kubectl apply`, both on startup and when the file is changed on disk. Deleting files out of this directory will not delete the corresponding resources from the cluster.
+在 server 节点上，`/var/lib/rancher/k3s/server/manifests` 中找到的任何文件都会以类似 `kubectl apply` 的方式自动部署到 Kubernetes，无论是启动时还是文件在磁盘上发生变化时都会如此。从该目录中删除文件不会从集群中删除相应的资源。
 
-Manifests are tracked as `AddOn` custom resources in the `kube-system` namespace. Any errors or warnings encountered when applying the manifest file may seen by using `kubectl describe` on the corresponding `AddOn`, or by using `kubectl get event -n kube-system` to view all events for that namespace, including those from the deploy controller.
+清单会作为 `AddOn` 自定义资源在 `kube-system` 命名空间中进行跟踪。应用清单文件时遇到的任何错误或警告，可以通过对相应的 `AddOn` 使用 `kubectl describe` 查看，或使用 `kubectl get event -n kube-system` 查看该命名空间的所有事件，包括来自部署控制器的事件。
 
-### Packaged Components
+### 打包组件 {#packaged-components}
 
-K3s comes with a number of packaged components that are deployed as AddOns via the manifests directory: `coredns`, `traefik`, `local-storage`, and `metrics-server`. The embedded `servicelb` LoadBalancer controller does not have a manifest file, but can be disabled as if it were an `AddOn` for historical reasons.
+K3s 自带若干通过 manifests 目录以 AddOn 形式部署的打包组件：`coredns`、`traefik`、`local-storage` 和 `metrics-server`。内嵌的 `servicelb` LoadBalancer 控制器没有清单文件，但出于历史原因，可以像 `AddOn` 一样禁用它。
 
-Manifests for packaged components are managed by K3s, and should not be altered. The files are re-written to disk whenever K3s is started, in order to ensure their integrity.
+打包组件的清单由 K3s 管理，不应修改。为确保其完整性，每次启动 K3s 时都会将这些文件重新写入磁盘。
 
-### User AddOns
+### 用户 AddOns {#user-addons}
 
-You may place additional files in the manifests directory for deployment as an `AddOn`. Each file may contain multiple Kubernetes resources, delimited by the `---` YAML document separator. For more information on organizing resources in manifests, see the [Managing Resources](https://kubernetes.io/docs/concepts/cluster-administration/manage-deployment/) section of the Kubernetes documentation.
+你可以在 manifests 目录中放置其他文件，作为 `AddOn` 部署。每个文件可以包含多个 Kubernetes 资源，使用 `---` YAML 文档分隔符分隔。有关在清单中组织资源的更多信息，请参阅 Kubernetes 文档的[管理资源](https://kubernetes.io/docs/concepts/cluster-administration/manage-deployment/)部分。
 
-#### File Naming Requirements
+#### 文件命名要求 {#file-naming-requirements}
 
-The `AddOn` name for each file in the manifest directory is derived from the file basename. 
-Ensure that all files within the manifests directory (or within any subdirectories) have names that are unique, and adhere to Kubernetes [object naming restrictions](https://kubernetes.io/docs/concepts/overview/working-with-objects/names/).
-Care should also be taken not to conflict with names in use by the default K3s packaged components, even if those components are disabled.
+清单目录中每个文件的 `AddOn` 名称由文件的基本名称（basename）派生。
+请确保 manifests 目录（或任何子目录）中的所有文件名称唯一，并遵守 Kubernetes 的[对象命名限制](https://kubernetes.io/docs/concepts/overview/working-with-objects/names/)。
+还应注意不要与 K3s 默认打包组件使用的名称冲突，即使这些组件已被禁用。
 
-Here is en example of an error that would be reported if the file name contains underscores:
+以下是文件名包含下划线时将报告的错误示例：
 > `Failed to process config: failed to process /var/lib/rancher/k3s/server/manifests/example_manifest.yaml:
    Addon.k3s.cattle.io "example_manifest" is invalid: metadata.name: Invalid value: "example_manifest": 
    a lowercase RFC 1123 subdomain must consist of lower case alphanumeric characters, '-' or '.', and must start and end with an alphanumeric character
    (e.g. 'example.com', regex used for validation is '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*')`
 
 :::danger
-If you have multiple server nodes, and place additional AddOn manifests on more than one server, it is your responsibility to ensure that files stay in sync across those nodes. K3s does not sync AddOn content between nodes, and cannot guarantee correct behavior if different servers attempt to deploy conflicting manifests.
+如果你有多个 server 节点，并在多个 server 上放置了额外的 AddOn 清单，则你有责任确保这些文件在各节点之间保持同步。K3s 不会在节点之间同步 AddOn 内容，如果不同 server 尝试部署相互冲突的清单，K3s 无法保证行为正确。
 :::
 
-## Disabling Manifests
+## 禁用清单 {#disabling-manifests}
 
-There are two ways to disable deployment of specific content from the manifests directory.
+有两种方法可以禁止部署 manifests 目录中的特定内容。
 
-### Using the `--disable` flag
+### 使用 `--disable` 标志 {#using-the-disable-flag}
 
-The AddOns for packaged components listed above, in addition to AddOns for any additional manifests placed in the `manifests` directory, can be disabled with the `--disable` flag. Disabled AddOns are actively uninstalled from the cluster, and the source files deleted from the `manifests` directory.
+上述打包组件的 AddOn，以及放置在 `manifests` 目录中的任何其他清单所对应的 AddOn，都可以通过 `--disable` 标志禁用。已禁用的 AddOn 会从集群中主动卸载，其源文件也会从 `manifests` 目录中删除。
 
-For example, to disable traefik from being installed on a new cluster, or to uninstall it and remove the manifest from an existing cluster, you can start K3s with `--disable=traefik`. Multiple items can be disabled by separating their names with commas, or by repeating the flag.
+例如，要在新集群中禁用 traefik 安装，或在现有集群中卸载 traefik 并删除其清单，可以使用 `--disable=traefik` 启动 K3s。可以用逗号分隔多个名称，或重复使用该标志来禁用多个项目。
 
-### Using .skip files
+### 使用 .skip 文件 {#using-skip-files}
 
-For any file under `/var/lib/rancher/k3s/server/manifests`, you can create a `.skip` file which will cause K3s to ignore the corresponding manifest. The contents of the `.skip` file do not matter, only its existence is checked. Note that creating a `.skip` file after an AddOn has already been created will not remove or otherwise modify it or the resources it created; the file is simply treated as if it did not exist.
+对于 `/var/lib/rancher/k3s/server/manifests` 下的任何文件，都可以创建一个 `.skip` 文件，使 K3s 忽略相应的清单。`.skip` 文件的内容无关紧要，只检查其是否存在。请注意，如果在 AddOn 已创建后创建 `.skip` 文件，不会删除或以其他方式修改该 AddOn 或其创建的资源；该文件只是被视为不存在。
 
-For example, creating an empty `traefik.yaml.skip` file in the manifests directory before K3s is started the first time, will cause K3s to skip deploying `traefik.yaml`:
+例如，在首次启动 K3s 之前，在 manifests 目录中创建一个空的 `traefik.yaml.skip` 文件，K3s 将跳过部署 `traefik.yaml`：
 ```bash
 $ ls /var/lib/rancher/k3s/server/manifests
 ccm.yaml      local-storage.yaml  rolebindings.yaml  traefik.yaml.skip
@@ -61,11 +61,8 @@ kube-system   metrics-server-5489f84d5d-7zwkt          1/1     Running   0      
 kube-system   coredns-85cb69466-vcq7j                  1/1     Running   0          74s
 ```
 
-If Traefik had already been deployed prior to creating the `traefik.skip` file, Traefik would stay as-is, and would not be affected by future updates when K3s is upgraded.
+如果 Traefik 在创建 `traefik.skip` 文件之前已经部署，Traefik 将保持原样，并且不会在 K3s 升级时受到未来更新的影响。
 
-## Helm AddOns
+## Helm AddOns {#helm-addons}
 
-For information about managing Helm charts via auto-deploying manifests, refer to the section about [Helm.](../add-ons/helm.md)
-
-
-
+有关通过自动部署清单管理 Helm chart 的信息，请参阅 [Helm](../add-ons/helm.md) 部分。
