@@ -122,6 +122,9 @@ spec:
 ```
 Traefik is compatible with [Gateway API v1.6](https://gateway-api.sigs.k8s.io/reference/api-spec/1.6/spec/).
 
+:::note TCPRoute and UDPRoute
+Whilst K3s include the standard v1 TCPRoute and UDPRoute CRDs, these are not currently supported by Traefik. Support for TCPRoute will be introduced in Traefik v3.8, whilst support for UDPRoute is currently unscheduled upstream, per [Traefik GitHub Issue #12322](https://github.com/traefik/traefik/issues/12322).
+:::
 
 ## Network Policy Controller
 
